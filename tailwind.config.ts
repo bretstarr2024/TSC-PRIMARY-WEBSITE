@@ -1,5 +1,8 @@
 import type { Config } from "tailwindcss";
 
+/* eslint-disable @typescript-eslint/no-require-imports */
+const brandColors = require("./styles/tailwind.brand.cjs");
+
 const config: Config = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -9,8 +12,13 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        ...brandColors,
+        background: "var(--color-background)",
+        foreground: "var(--color-text)",
+      },
+      fontFamily: {
+        sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-geist-mono)', 'monospace'],
       },
     },
   },
