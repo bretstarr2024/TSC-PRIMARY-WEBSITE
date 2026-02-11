@@ -6,8 +6,10 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "next build && npm run index-content",
+    "build": "npm run sync-kernel && next build && npm run index-content",
     "build:next": "next build",
+    "sync-kernel": "tsx scripts/sync-kernel.ts",
+    "seed-content": "dotenv -e .env.local -- tsx scripts/seed-content.ts",
     "start": "next start",
     "lint": "next lint",
     "index-content": "tsx scripts/index-content.ts"
@@ -38,9 +40,12 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "dotenv-cli": "^11.0.0",
+    "js-yaml": "^4.1.1",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "tsx": "^4.21.0",
