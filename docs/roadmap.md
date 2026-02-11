@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION IV** | Last Updated: February 11, 2026
+**Status: SESSION V** | Last Updated: February 11, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -216,7 +216,28 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 102 static pages (up from 46 — generated content is live)
 
-#### Session V (upcoming): Pipeline Infrastructure + Structured Data
+#### Session V: /book Page + Internal CTA Routing ✅ COMPLETE (Feb 11, 2026)
+
+**Pivot:** User loved the 404 motion graphics and requested the same treatment for the Cal.com booking experience. Built a dedicated `/book` page and rewired all CTAs to keep users on-site.
+
+**Layer 0 — /book Page (done):**
+- [x] Created `app/book/page.tsx` — Cal.com calendar embedded via iframe with `?embed=true&theme=dark`
+- [x] Three.js HeroParticles (same cursor-reactive stars as homepage)
+- [x] 4 concentric brand-color glow rings (rotating, pulsing) behind calendar
+- [x] Melissa floating photo with 10-sparkle constellation, dual glow rings, enhanced box-shadow
+- [x] Cal.com postMessage resize listener for dynamic iframe height
+- [x] Glass card container, 1000px iframe height, max-w-4xl layout
+
+**Layer 1 — CTA Routing Overhaul (done):**
+- [x] All CTAs rewired from external `cal.com/team/tsc/25-50` to internal `/book`
+- [x] Changed `<a>` tags to `<Link>` components (HeroSection, Header desktop + mobile, Footer)
+- [x] Removed `isExternal` from MagneticButton usages (CtaSection, ServiceCTA)
+- [x] Updated CtaStrip default `buttonHref` to `/book`
+- [x] Added `Link` import to HeroSection
+
+**Build:** 103 static pages (new `/book` route)
+
+#### Session VI (upcoming): Pipeline Infrastructure + Structured Data
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections

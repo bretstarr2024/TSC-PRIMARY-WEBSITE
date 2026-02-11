@@ -1,0 +1,106 @@
+session_id: "V"
+date: "2026-02-11"
+branch: main
+version: "0.6.0"  # MINOR: /book page with Cal.com embed + motion graphics, internal CTA routing
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "PvAf6QvQbJ3gb8lNhmKJ"
+  status: triggered
+
+build_verification:
+  next_build: PASS  # 103 static pages (up from 102)
+  index_content: SKIP  # expected locally without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "No schema or data model changes this session. Only frontend components and a new static page."
+
+commits:
+  - hash: "8a7c712"
+    message: "feat: /book page with motion graphics + all CTAs route internally"
+  - hash: "3222aa1"
+    message: "feat: /book page — star particles, taller calendar, enhanced Melissa sparkles"
+
+artifacts_updated:
+  - "app/book/page.tsx — NEW: Cal.com booking page with Three.js stars, glow rings, Melissa sparkle constellation"
+  - "components/home/HeroSection.tsx — CTA → /book (internal Link), added Link import"
+  - "components/home/CtaSection.tsx — MagneticButton → /book (removed isExternal)"
+  - "components/services/ServiceCTA.tsx — MagneticButton → /book (removed isExternal)"
+  - "components/Header.tsx — Desktop + mobile CTA → /book (Link components)"
+  - "components/Footer.tsx — Let's Talk! → /book (Link component)"
+  - "components/insights/CtaStrip.tsx — Default buttonHref → /book"
+  - "docs/roadmap.md — Session V section added"
+
+decisions_made:
+  - decision: "Created /book page with embedded Cal.com calendar via iframe"
+    rationale: "User wanted the motion graphics experience (glow rings, sparkles) around the booking calendar, keeping users on-site"
+    reversible: true
+  - decision: "All CTAs route to /book (internal) instead of external Cal.com URL"
+    rationale: "Keeps users on the TSC site with the branded motion graphics experience before booking"
+    reversible: true
+  - decision: "Three.js HeroParticles (same as homepage) added as background to /book page"
+    rationale: "User explicitly requested 'the same star motion graphics from the homepage'"
+    reversible: true
+  - decision: "Melissa photo enhanced with 10-sparkle constellation and dual glow rings"
+    rationale: "User requested 'make Melissa sparkle more' — she's the person taking the meeting"
+    reversible: true
+  - decision: "Cal.com iframe set to 1000px height with postMessage resize listener"
+    rationale: "Calendar was 'crawling off the page' at 600px when selecting dates/times"
+    reversible: true
+  - decision: "Removed 'Let's Talk!' heading and subtitle from /book page"
+    rationale: "User said 'we don't need a let's talk button on this page because they're already there'"
+    reversible: true
+
+known_risks:
+  - risk: "Cal.com iframe may not auto-resize perfectly on all browsers"
+    mitigation: "1000px default height covers most flows; postMessage listener handles Cal.com resize events"
+    severity: low
+  - risk: "Cal.com embed may have CORS or cookie restrictions in some browser configurations"
+    mitigation: "Cal.com's embed=true mode is designed for iframe use; monitor for support issues"
+    severity: low
+  - risk: "Two Three.js Canvas instances exist when user navigates from homepage to /book"
+    mitigation: "Next.js client-side navigation handles cleanup; monitor for performance on low-end devices"
+    severity: low
+  - risk: "56 AI-generated content pieces have not been manually reviewed for quality"
+    mitigation: "Spot-check a sample across content types on live site"
+    severity: medium
+  - risk: "Footer still lists 'Fractional CMO' in services column"
+    mitigation: "Remove or rename when fractional CMO service decision is finalized"
+    severity: low
+
+explicitly_deferred:
+  - "Pipeline cron infrastructure (circuit-breaker, error-classifier, stuck-detector) — Session VI"
+  - "Content guardrails at pipeline level — Session VI"
+  - "Source monitors for B2B/AI marketing news — Session VI"
+  - "BreadcrumbList, Organization, Person structured data schemas — Session VI"
+  - "Answer capsules on service pillar pages — Session VI"
+  - "Purging fractional CMO references from existing seed data — user to decide"
+  - "Work, About, Contact pages — Sessions XI-XII"
+  - "Chatbot (chaDbot) — Session XIII"
+
+next_actions:
+  - "Verify /book page on live Vercel deployment — test date selection, time picker, form flow"
+  - "Copy pipeline infrastructure from AEO (circuit-breaker, error-classifier, etc.)"
+  - "Add BreadcrumbList, Organization, Person schemas to all pages"
+  - "Decide on fractional CMO seed data — purge or leave"
+  - "Set up cron jobs: check-sources, seed-resource-queue, generate-content"
+  - "Spot-check generated content quality"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "Dark theme is non-negotiable — Heart of Darkness (#141213) base"
+  - "Creative mandate: unconventional layouts, motion as identity, copy that bites"
+  - "Multi-tenant: clientId on every MongoDB document, every query, every index"
+  - "Kernel sync: build-time YAML→JSON, CLIENT_ID env var selects tenant"
+  - "All API clients must use pure fetch (no SDK dependencies)"
+  - "All CTAs → /book (internal page with Cal.com iframe embed)"
+  - "Cal.com embed URL: cal.com/team/tsc/25-50?embed=true&theme=dark"
+  - "No fractional CMO content in generation pipeline (user directive)"
+  - "Content types: 10 total, accent colors locked"
+  - "Forbidden terms enforced at generation time: thought leader, synergy, pioneers of aeo"
