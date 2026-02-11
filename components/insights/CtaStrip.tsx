@@ -1,5 +1,3 @@
-import Link from 'next/link';
-
 interface CtaStripProps {
   headline?: string;
   buttonText?: string;
@@ -8,9 +6,11 @@ interface CtaStripProps {
 
 export function CtaStrip({
   headline = 'Ready to talk strategy?',
-  buttonText = 'Start a Conversation',
-  buttonHref = '/contact',
+  buttonText = "Let's Talk!",
+  buttonHref = 'https://cal.com/team/tsc/25-50',
 }: CtaStripProps) {
+  const isExternal = buttonHref.startsWith('http');
+
   return (
     <section className="my-16 glass rounded-2xl p-8 md:p-12 text-center">
       <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
@@ -20,12 +20,13 @@ export function CtaStrip({
         Whether you need strategic guidance, demand generation, or AI transformation —
         we should talk.
       </p>
-      <Link
+      <a
         href={buttonHref}
+        {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
         className="inline-flex items-center px-8 py-4 text-lg font-medium text-white bg-atomic-tangerine rounded-lg hover:bg-hot-sauce transition-colors hover:no-underline"
       >
         {buttonText}
-      </Link>
+      </a>
     </section>
   );
 }

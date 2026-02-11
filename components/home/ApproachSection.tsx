@@ -24,8 +24,8 @@ export function ApproachSection() {
             Our Approach
           </p>
           <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1]">
-            We reject the<br />
-            <span className="text-atomic-tangerine">false choice.</span>
+            We offer the best<br />
+            <span className="text-atomic-tangerine">of both worlds.</span>
           </h2>
         </AnimatedSection>
 

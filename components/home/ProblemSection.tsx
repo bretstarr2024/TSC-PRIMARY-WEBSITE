@@ -62,7 +62,7 @@ export function ProblemSection() {
           <p className="text-2xl md:text-3xl text-shroomy max-w-3xl leading-snug">
             All three represent the same risk: partners who{' '}
             <span className="text-white font-semibold">can&apos;t lead transformation</span>.
-            They force a false choice — fundamentals or innovation.
+            They either fake AI adaptation or force a choice between fundamentals and innovation.
           </p>
         </AnimatedSection>
       </div>

@@ -13,10 +13,7 @@ const serviceLinks = [
 ];
 
 const companyLinks = [
-  { href: '/about', label: 'About' },
-  { href: '/work', label: 'Work' },
   { href: '/insights', label: 'Insights' },
-  { href: '/contact', label: 'Contact' },
 ];
 
 export function Footer() {
@@ -96,12 +93,14 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <Link
-                  href="/contact"
+                <a
+                  href="https://cal.com/team/tsc/25-50"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-sm text-atomic-tangerine hover:text-hot-sauce transition-colors hover:no-underline"
                 >
-                  Let&apos;s Talk →
-                </Link>
+                  Let&apos;s Talk! →
+                </a>
               </li>
             </ul>
           </div>

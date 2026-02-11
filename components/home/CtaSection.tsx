@@ -34,11 +34,8 @@ export function CtaSection() {
         </AnimatedSection>
 
         <AnimatedSection delay={0.2} className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <MagneticButton href="/contact" variant="primary">
-            Start a Conversation
-          </MagneticButton>
-          <MagneticButton href="/work" variant="secondary">
-            See Our Work
+          <MagneticButton href="https://cal.com/team/tsc/25-50" variant="primary" isExternal>
+            Let&apos;s Talk!
           </MagneticButton>
         </AnimatedSection>
       </div>

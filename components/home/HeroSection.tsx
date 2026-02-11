@@ -69,8 +69,8 @@ export function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.2 }}
         >
-          The B2B marketing agency where fundamentals meet AI transformation.
-          We deliver the best of both worlds.
+          The B2B marketing agency where fundamentals meet the future.
+          We deliver transformational marketing solutions by fusing our award-winning foundational principles with AI expertise.
         </motion.p>
 
         {/* CTA buttons */}
@@ -81,16 +81,12 @@ export function HeroSection() {
           transition={{ duration: 0.8, delay: 1.5 }}
         >
           <a
-            href="/contact"
+            href="https://cal.com/team/tsc/25-50"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center px-8 py-4 text-base font-medium text-white bg-atomic-tangerine rounded-lg hover:bg-hot-sauce transition-colors hover:no-underline"
           >
-            Start a Conversation
-          </a>
-          <a
-            href="/work"
-            className="inline-flex items-center px-8 py-4 text-base font-medium text-white border border-white/20 rounded-lg hover:bg-white/5 hover:border-white/40 transition-all hover:no-underline"
-          >
-            See Our Work
+            Let&apos;s Talk!
           </a>
         </motion.div>
       </div>

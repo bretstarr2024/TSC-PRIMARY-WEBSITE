@@ -7,10 +7,7 @@ import Image from 'next/image';
 
 const navLinks = [
   { href: '/services', label: 'Services' },
-  { href: '/work', label: 'Work' },
   { href: '/insights', label: 'Insights' },
-  { href: '/about', label: 'About' },
-  { href: '/contact', label: 'Contact' },
 ];
 
 export function Header() {
@@ -68,12 +65,14 @@ export function Header() {
                 {link.label}
               </Link>
             ))}
-            <Link
-              href="/contact"
+            <a
+              href="https://cal.com/team/tsc/25-50"
+              target="_blank"
+              rel="noopener noreferrer"
               className="ml-4 inline-flex items-center px-5 py-2.5 text-sm font-medium text-white bg-atomic-tangerine rounded-lg hover:bg-hot-sauce transition-colors hover:no-underline"
             >
-              Let&apos;s Talk
-            </Link>
+              Let&apos;s Talk!
+            </a>
           </nav>
 
           <button
@@ -133,13 +132,15 @@ export function Header() {
                 exit={{ opacity: 0 }}
                 transition={{ delay: navLinks.length * 0.08, duration: 0.4 }}
               >
-                <Link
-                  href="/contact"
+                <a
+                  href="https://cal.com/team/tsc/25-50"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   onClick={() => setMenuOpen(false)}
                   className="mt-4 inline-flex items-center px-8 py-4 text-lg font-medium text-white bg-atomic-tangerine rounded-lg hover:bg-hot-sauce transition-colors hover:no-underline"
                 >
-                  Let&apos;s Talk
-                </Link>
+                  Let&apos;s Talk!
+                </a>
               </motion.div>
             </nav>
           </motion.div>
