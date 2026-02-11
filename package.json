@@ -12,7 +12,8 @@
     "seed-content": "dotenv -e .env.local -- tsx scripts/seed-content.ts",
     "start": "next start",
     "lint": "next lint",
-    "index-content": "tsx scripts/index-content.ts"
+    "index-content": "tsx scripts/index-content.ts",
+    "generate-content": "dotenv -e .env.local -- tsx scripts/generate-content.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.37.3",

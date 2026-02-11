@@ -14,6 +14,8 @@ import {
   createNewsItem,
   createCaseStudy,
   createIndustryBrief,
+  createVideo,
+  createTool,
   ensureResourcesIndexes,
 } from '../lib/resources-db';
 import { closeConnection } from '../lib/mongodb';
@@ -467,6 +469,221 @@ async function seed() {
     status: 'published',
     origin: 'manual',
     publishedAt: new Date('2026-02-06'),
+  });
+
+  // =========================================
+  // Videos (2)
+  // =========================================
+  console.log('[seed] Seeding videos...');
+
+  await createVideo({
+    videoId: 'growth-engine-fundamentals',
+    title: 'Growth Engine Fundamentals: Why Marketing Plans Fail and Systems Win',
+    description: 'Bret Starr breaks down why most B2B marketing plans collect dust — and what to build instead. This talk covers the three components of a self-sustaining growth engine: feedback loops, compounding assets, and integrated execution.',
+    videoUrl: 'https://www.youtube.com/watch?v=example1',
+    embedUrl: 'https://www.youtube.com/embed/example1',
+    duration: '18:42',
+    transcript: 'Every B2B company I talk to has a marketing plan. Beautiful slide decks, detailed timelines, impressive budgets. And about six months later, most of those plans are sitting in a folder somewhere, untouched. Here\'s why: marketing plans assume the world holds still while you execute them. Growth engines don\'t make that assumption. A growth engine is a system that compounds — every piece of content, every campaign, every client interaction feeds back into the machine. Let me walk you through the three components that separate an engine from a plan...',
+    answerCapsule: 'A growth engine differs from a marketing plan because it compounds — feedback loops, compounding assets, and integrated execution create self-sustaining momentum rather than static tactical checklists.',
+    speaker: 'Bret Starr',
+    tags: ['growth-strategy', 'b2b-marketing', 'marketing-strategy'],
+    clusterName: 'Build Growth Engine',
+    status: 'published',
+    origin: 'manual',
+    publishedAt: new Date('2026-01-28'),
+  });
+
+  await createVideo({
+    videoId: 'ai-native-marketing-reality-check',
+    title: 'AI-Native Marketing: A Reality Check for B2B Leaders',
+    description: 'JJ La Pata separates AI marketing hype from practical application. Learn the three levels of AI maturity in marketing operations and how to identify where your organization actually stands — not where you think you stand.',
+    videoUrl: 'https://www.youtube.com/watch?v=example2',
+    embedUrl: 'https://www.youtube.com/embed/example2',
+    duration: '22:15',
+    transcript: 'I want to start with an uncomfortable truth: most companies claiming to be AI-powered in their marketing are really just using ChatGPT to write blog posts. And that\'s fine — it\'s a start. But it\'s Level 1 out of 3, and calling it AI-native is like calling a calculator a computer. Let me walk you through what each level actually looks like, and more importantly, how to know which level you\'re really at...',
+    answerCapsule: 'AI-native marketing has three maturity levels — assisted, integrated, and native — and most B2B companies overestimate their position by at least one level.',
+    speaker: 'JJ La Pata',
+    tags: ['ai-transformation', 'marketing-strategy', 'ai-native'],
+    clusterName: 'Navigate AI Transformation',
+    status: 'published',
+    origin: 'manual',
+    publishedAt: new Date('2026-02-03'),
+  });
+
+  // =========================================
+  // Tools (2 — one checklist, one assessment)
+  // =========================================
+  console.log('[seed] Seeding tools...');
+
+  await createTool({
+    toolId: 'growth-engine-readiness-checklist',
+    title: 'Growth Engine Readiness Checklist',
+    description: 'Assess whether your B2B marketing operation has the foundations in place to build a self-sustaining growth engine. This checklist covers strategy, content, data, and team readiness across 15 critical dimensions.',
+    toolType: 'checklist',
+    checklistItems: [
+      { id: 'strat-1', text: 'Documented ICP with specific buyer personas and jobs-to-be-done', category: 'Strategy Foundation', description: 'Your ICP should be specific enough that your sales team can name real companies that fit.', order: 1 },
+      { id: 'strat-2', text: 'Clear competitive positioning that differentiates from top 3 competitors', category: 'Strategy Foundation', description: 'If your positioning could apply to any competitor, it\'s not positioning.', order: 2 },
+      { id: 'strat-3', text: 'Defined pipeline goals with marketing attribution model', category: 'Strategy Foundation', description: 'Multi-touch attribution is ideal, but even first-touch/last-touch is better than nothing.', order: 3 },
+      { id: 'content-1', text: 'Content strategy mapped to buyer journey stages', category: 'Content Engine', description: 'Most companies over-invest in top-of-funnel and under-invest in mid-funnel evaluation content.', order: 4 },
+      { id: 'content-2', text: 'Regular content production cadence (minimum weekly)', category: 'Content Engine', description: 'Consistency matters more than volume. One great piece per week beats five mediocre ones.', order: 5 },
+      { id: 'content-3', text: 'Content performance tracking with clear success metrics', category: 'Content Engine', description: 'Track leading indicators (engagement, shares) and lagging indicators (pipeline influenced).', order: 6 },
+      { id: 'content-4', text: 'SEO and AEO optimization process in place', category: 'Content Engine', description: 'Structure content for both traditional search engines and AI answer engines.', order: 7 },
+      { id: 'data-1', text: 'CRM with clean, current data and regular hygiene process', category: 'Data & Infrastructure', description: 'Bad data in = bad decisions out. Schedule monthly data quality reviews.', order: 8 },
+      { id: 'data-2', text: 'Marketing automation platform configured and actively used', category: 'Data & Infrastructure', description: 'An unused marketing automation platform is an expensive email tool.', order: 9 },
+      { id: 'data-3', text: 'Lead scoring model based on behavioral signals', category: 'Data & Infrastructure', description: 'Score based on what prospects do (pages visited, content consumed), not just who they are.', order: 10 },
+      { id: 'data-4', text: 'Dashboard connecting marketing activity to pipeline metrics', category: 'Data & Infrastructure', description: 'Your CEO should be able to see marketing\'s pipeline impact in under 60 seconds.', order: 11 },
+      { id: 'team-1', text: 'Marketing team has strategic leadership (CMO, VP, or equivalent)', category: 'Team & Process', description: 'Execution without strategy is expensive. A fractional CMO can fill this gap cost-effectively.', order: 12 },
+      { id: 'team-2', text: 'Cross-functional alignment between marketing and sales', category: 'Team & Process', description: 'Regular pipeline review meetings with shared metrics are the minimum.', order: 13 },
+      { id: 'team-3', text: 'Documented marketing processes that don\'t depend on tribal knowledge', category: 'Team & Process', description: 'If a key team member left tomorrow, could someone else run the campaigns?', order: 14 },
+      { id: 'team-4', text: 'Budget allocated for experimentation (10-20% of total)', category: 'Team & Process', description: 'Growth engines need fuel for testing. Companies that only fund "proven" tactics stop growing.', order: 15 },
+    ],
+    downloadable: false,
+    tags: ['growth-strategy', 'marketing-audit', 'b2b-marketing', 'readiness'],
+    clusterName: 'Build Growth Engine',
+    status: 'published',
+    origin: 'manual',
+    publishedAt: new Date('2026-02-01'),
+  });
+
+  await createTool({
+    toolId: 'ai-marketing-maturity-assessment',
+    title: 'AI Marketing Maturity Assessment',
+    description: 'Discover where your marketing organization falls on the AI maturity spectrum — from AI-curious to AI-native. Answer 8 questions to get your score, personalized insights, and a recommended next step.',
+    toolType: 'assessment',
+    assessmentQuestions: [
+      {
+        id: 'q1', order: 1,
+        question: 'How does your team primarily use AI in marketing today?',
+        options: [
+          { text: 'We don\'t use AI tools yet', value: 0 },
+          { text: 'Individual team members use AI for specific tasks (writing, research)', value: 1 },
+          { text: 'AI is embedded in our workflows with defined processes', value: 2 },
+          { text: 'Our marketing operations are designed around AI capabilities', value: 3 },
+        ],
+      },
+      {
+        id: 'q2', order: 2,
+        question: 'How do you approach content creation with AI?',
+        options: [
+          { text: 'All content is human-created', value: 0 },
+          { text: 'AI assists with drafts that humans heavily edit', value: 1 },
+          { text: 'AI generates content within brand voice guidelines with human review', value: 2 },
+          { text: 'Automated content pipelines produce and optimize content at scale', value: 3 },
+        ],
+      },
+      {
+        id: 'q3', order: 3,
+        question: 'How does AI factor into your marketing strategy decisions?',
+        options: [
+          { text: 'It doesn\'t — strategy is entirely human-driven', value: 0 },
+          { text: 'We use AI for data analysis that informs human decisions', value: 1 },
+          { text: 'AI provides recommendations that we evaluate and act on', value: 2 },
+          { text: 'AI continuously optimizes campaigns and resource allocation', value: 3 },
+        ],
+      },
+      {
+        id: 'q4', order: 4,
+        question: 'What best describes your AI governance approach?',
+        options: [
+          { text: 'No formal AI governance or guidelines', value: 0 },
+          { text: 'Basic usage guidelines exist', value: 1 },
+          { text: 'Comprehensive AI policy with brand voice rules and review processes', value: 2 },
+          { text: 'Automated guardrails with quality monitoring and continuous improvement', value: 3 },
+        ],
+      },
+      {
+        id: 'q5', order: 5,
+        question: 'How do you measure AI\'s impact on marketing performance?',
+        options: [
+          { text: 'We don\'t measure AI impact specifically', value: 0 },
+          { text: 'We track time saved and output volume', value: 1 },
+          { text: 'We measure quality, efficiency, and business outcomes', value: 2 },
+          { text: 'AI impact is embedded in all marketing KPIs with A/B testing', value: 3 },
+        ],
+      },
+      {
+        id: 'q6', order: 6,
+        question: 'What is your team\'s AI skill level?',
+        options: [
+          { text: 'Most team members are unfamiliar with AI tools', value: 0 },
+          { text: 'A few champions use AI; others are learning', value: 1 },
+          { text: 'Most team members are proficient with AI tools for their role', value: 2 },
+          { text: 'Team builds custom AI workflows and contributes to tool development', value: 3 },
+        ],
+      },
+      {
+        id: 'q7', order: 7,
+        question: 'How does AI integrate with your marketing technology stack?',
+        options: [
+          { text: 'Standalone AI tools not connected to our stack', value: 0 },
+          { text: 'Some AI tools connect to our CRM or automation platform', value: 1 },
+          { text: 'AI is integrated across major platforms with data flowing between them', value: 2 },
+          { text: 'AI-native architecture where systems learn from each other', value: 3 },
+        ],
+      },
+      {
+        id: 'q8', order: 8,
+        question: 'How do you approach AI experimentation?',
+        options: [
+          { text: 'We haven\'t experimented with AI', value: 0 },
+          { text: 'Ad hoc experiments when someone tries a new tool', value: 1 },
+          { text: 'Structured experimentation program with budget allocation', value: 2 },
+          { text: 'Continuous experimentation is built into operations', value: 3 },
+        ],
+      },
+    ],
+    assessmentResults: [
+      {
+        minScore: 0, maxScore: 6,
+        title: 'AI Curious',
+        description: 'Your organization is in the early stages of AI adoption. This is a fine place to start — but the gap between you and AI-native competitors is widening.',
+        recommendations: [
+          'Start with a single high-impact use case (content drafting or data analysis)',
+          'Identify 2-3 AI champions on your team and invest in their training',
+          'Set aside 10% of marketing budget for AI tool experimentation',
+          'Book a strategy session to map your AI transformation roadmap',
+        ],
+      },
+      {
+        minScore: 7, maxScore: 12,
+        title: 'AI Assisted',
+        description: 'You\'re using AI tools but haven\'t yet transformed how marketing operates. You\'re at Level 1 — which is where 75% of B2B companies are.',
+        recommendations: [
+          'Move from individual tool usage to team-wide AI workflows',
+          'Implement brand voice guidelines and quality frameworks for AI content',
+          'Connect AI tools to your CRM and automation platform',
+          'Build a measurement framework that tracks AI\'s impact on business outcomes',
+        ],
+      },
+      {
+        minScore: 13, maxScore: 18,
+        title: 'AI Integrated',
+        description: 'AI is embedded in your marketing operations and informing decisions. You\'re ahead of most competitors. The next step is making AI foundational, not supplemental.',
+        recommendations: [
+          'Identify workflows that could be fully automated with AI',
+          'Build compounding systems where AI outputs improve AI inputs',
+          'Invest in custom AI models trained on your brand voice and market data',
+          'Develop an AI center of excellence to share learnings across the organization',
+        ],
+      },
+      {
+        minScore: 19, maxScore: 24,
+        title: 'AI Native',
+        description: 'Your marketing operation is designed around AI capabilities. You\'re in the top 12% of B2B organizations. Focus on maintaining your lead and pushing the frontier.',
+        recommendations: [
+          'Share your learnings — write about what\'s working (it builds authority)',
+          'Explore emerging AI capabilities (agents, multi-modal, reasoning)',
+          'Help your sales and product teams reach AI-native maturity',
+          'Consider productizing your AI marketing capabilities as a competitive moat',
+        ],
+      },
+    ],
+    downloadable: false,
+    tags: ['ai-transformation', 'marketing-assessment', 'ai-maturity', 'readiness'],
+    clusterName: 'Navigate AI Transformation',
+    status: 'published',
+    origin: 'manual',
+    publishedAt: new Date('2026-02-05'),
   });
 
   console.log('[seed] All content seeded successfully!');
