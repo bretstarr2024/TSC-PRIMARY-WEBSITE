@@ -1,0 +1,483 @@
+{
+  "clientId": "tsc",
+  "version": "1.0.0",
+  "generatedAt": "2026-02-11T19:31:14.010Z",
+  "brand": {
+    "name": {
+      "full": "The Starr Conspiracy",
+      "short": "TSC",
+      "abbreviation": "TSC"
+    },
+    "archetype": {
+      "primary": "Sage",
+      "secondary": "Rebel"
+    },
+    "values": [
+      {
+        "value": "Truth over comfort",
+        "definition": "We tell clients what they need to hear, not what they want to hear"
+      },
+      {
+        "value": "Fundamentals + Innovation",
+        "definition": "AI enhances but doesn't replace marketing fundamentals"
+      },
+      {
+        "value": "Results over activity",
+        "definition": "Measured by outcomes, not effort or deliverables"
+      }
+    ],
+    "purpose": {
+      "mission": "Help B2B tech companies grow through strategic marketing that works",
+      "vision": "Define the future of AI-augmented B2B marketing"
+    },
+    "brandPromise": "Strategic clarity that drives measurable growth",
+    "personality": {
+      "traits": [
+        "Direct",
+        "Strategic",
+        "Irreverent",
+        "Thoughtful",
+        "Practical"
+      ],
+      "weAre": [
+        "Candid advisors",
+        "Strategic partners",
+        "AI pragmatists"
+      ],
+      "weAreNot": [
+        "Yes-people",
+        "Commodity vendors",
+        "AI hype merchants"
+      ]
+    }
+  },
+  "message": {
+    "coreClaims": [
+      {
+        "claim": "We combine strategy and execution—most agencies do one or the other",
+        "proof": "logic",
+        "whenToUse": "Differentiation conversations"
+      },
+      {
+        "claim": "We're years ahead on AI transformation",
+        "proof": "authority",
+        "whenToUse": "AI transformation discussions"
+      },
+      {
+        "claim": "25+ years of B2B marketing pattern recognition",
+        "proof": "authority",
+        "whenToUse": "Credibility building"
+      }
+    ],
+    "narrativeFrames": [
+      {
+        "name": "Fundamentals + AI",
+        "before": "Choosing between AI hype and traditional marketing",
+        "after": "AI-augmented marketing grounded in what works"
+      },
+      {
+        "name": "Partner, Not Vendor",
+        "before": "Transactional agency relationships",
+        "after": "Strategic partnership with embedded team"
+      }
+    ],
+    "terminology": {
+      "preferred": [
+        {
+          "term": "clients",
+          "insteadOf": "customers"
+        },
+        {
+          "term": "engagement",
+          "insteadOf": "contract"
+        },
+        {
+          "term": "partner",
+          "insteadOf": "vendor"
+        }
+      ],
+      "forbidden": [
+        {
+          "term": "thought leader",
+          "replacement": "Expert, authority, practitioner"
+        },
+        {
+          "term": "synergy",
+          "replacement": "Integration, alignment"
+        }
+      ],
+      "proprietary": [
+        "GTM Kernel",
+        "Answer Engine Optimization (AEO)"
+      ]
+    },
+    "elevatorPitches": {
+      "tenSecond": "We help B2B tech companies grow through strategic marketing that combines fundamentals with AI transformation.",
+      "thirtySecond": "The Starr Conspiracy is a strategic marketing partner for B2B tech companies. We combine 25 years of marketing fundamentals with AI leadership to help CMOs build pipeline, differentiate their brand, and navigate transformation—without choosing between strategy and execution."
+    },
+    "taglines": [
+      "Strategic marketing for B2B tech"
+    ]
+  },
+  "content": {
+    "voiceRules": [
+      {
+        "rule": "Be direct—say what you mean",
+        "exampleGood": "Most B2B content fails because it's boring.",
+        "exampleBad": "There are opportunities to enhance content engagement through various optimization strategies.",
+        "rationale": "Clarity builds trust"
+      },
+      {
+        "rule": "Use 'you' and 'we'—make it conversational",
+        "exampleGood": "Here's what you need to know",
+        "exampleBad": "It is important that organizations understand",
+        "rationale": "Personal connection"
+      },
+      {
+        "rule": "Lead with insight, not setup",
+        "exampleGood": "AI will eat traditional SEO within 3 years.",
+        "exampleBad": "In this post, we'll explore the future of SEO.",
+        "rationale": "Respect reader's time"
+      }
+    ],
+    "structuralPatterns": [
+      {
+        "patternName": "Insight First",
+        "structure": "Bold claim → Evidence → Implication → Action",
+        "whenToUse": "Thought leadership, POV pieces"
+      },
+      {
+        "patternName": "Problem-Solution",
+        "structure": "Pain point → Why it exists → Solution → Proof",
+        "whenToUse": "Service-related content"
+      }
+    ],
+    "stylisticMarkers": {
+      "sentenceLength": "Mix short punchy sentences with longer explanatory ones",
+      "paragraphLength": "2-4 sentences, break up for scanning",
+      "useOfLists": "Frequent—makes content scannable",
+      "useOfQuestions": "Occasionally—to prompt reflection",
+      "useOfHumor": "Dry wit, occasional—not forced",
+      "useOfJargon": "Minimal—explain when necessary"
+    }
+  },
+  "visual": {
+    "colorPalette": {
+      "primary": [
+        "#000000",
+        "#FFFFFF"
+      ],
+      "secondary": [
+        "#1E3A5F"
+      ],
+      "accent": [
+        "#FF6B35"
+      ]
+    },
+    "typography": {
+      "primaryFont": "Modern sans-serif",
+      "headingStyle": "Bold, impactful",
+      "bodyStyle": "Clean, readable"
+    }
+  },
+  "icp": {
+    "primary": {
+      "label": "AI Pragmatist (CMO/VP Marketing)",
+      "titles": [
+        "CMO",
+        "Chief Marketing Officer",
+        "VP of Marketing",
+        "VP Marketing",
+        "Head of Marketing",
+        "Marketing Director"
+      ],
+      "seniority": "C-level or VP",
+      "painPoints": [
+        "Budget pressure + 'do more with less' while hitting growth targets",
+        "Proving ROI in messy 200+ touchpoint buying journeys",
+        "Standing out in over-saturated tech markets",
+        "Content personalization expectations at scale",
+        "Sales-marketing misalignment and pipeline anxiety",
+        "Lead quality, CAC, and pipeline efficiency challenges",
+        "Tech stack sprawl and data quality issues",
+        "Adapting to digital-first, self-serve, skeptical buyers",
+        "Talent gaps, capacity constraints, and change fatigue",
+        "AI governance, privacy, and trust concerns"
+      ],
+      "successMetrics": [
+        "Pipeline generated",
+        "Marketing-sourced revenue",
+        "CAC efficiency",
+        "Brand awareness/share of voice",
+        "Marketing ROI"
+      ],
+      "worldview": "Marketing should be a strategic growth engine, not a cost center. AI is an opportunity, not a threat."
+    },
+    "companyProfile": {
+      "industries": [
+        "Cybersecurity",
+        "FinTech",
+        "HR Tech/HCM",
+        "HealthTech",
+        "Enterprise SaaS",
+        "DevTools",
+        "Cloud Infrastructure",
+        "AI/ML Platforms"
+      ],
+      "employeeRange": "",
+      "revenueRange": ""
+    }
+  },
+  "jtbd": [
+    {
+      "jobName": "Build a Growth Engine",
+      "startingState": "Marketing is a cost center with unpredictable results",
+      "desiredState": "Marketing is a predictable pipeline machine with measurable ROI",
+      "obstacles": [
+        "Don't know what good looks like",
+        "Can't hire the right talent",
+        "Don't have proven processes"
+      ],
+      "hiringCriteria": [
+        "Proven track record with similar companies",
+        "Full-stack capability (strategy + execution)",
+        "Measurable results orientation"
+      ]
+    },
+    {
+      "jobName": "Navigate AI Transformation",
+      "startingState": "Uncertain how AI applies to our marketing",
+      "desiredState": "AI-augmented marketing function with competitive advantage",
+      "obstacles": [
+        "Don't know where to start",
+        "Fear of making wrong bets",
+        "Governance and compliance concerns"
+      ],
+      "hiringCriteria": [
+        "Real AI expertise, not just hype",
+        "Practical implementation experience",
+        "Balance innovation with fundamentals"
+      ]
+    },
+    {
+      "jobName": "Fill Leadership Gap",
+      "startingState": "No senior marketing leadership",
+      "desiredState": "Strategic marketing guidance with experienced leadership",
+      "obstacles": [
+        "Can't afford full-time CMO",
+        "Don't know what to look for",
+        "Need results while searching"
+      ],
+      "hiringCriteria": [
+        "Senior-level experience",
+        "Availability and engagement level",
+        "Chemistry with leadership team"
+      ]
+    }
+  ],
+  "offerings": [
+    {
+      "categoryKey": "strategic_foundational",
+      "services": [
+        {
+          "name": "Brand Strategy & Positioning",
+          "description": "Market positioning, brand architecture, messaging frameworks",
+          "deliveryModel": "Project-based or embedded",
+          "typicalScope": "8-12 weeks"
+        },
+        {
+          "name": "Go-to-Market Strategy",
+          "description": "GTM planning, ICP development, competitive positioning",
+          "deliveryModel": "Project-based",
+          "typicalScope": "6-10 weeks"
+        },
+        {
+          "name": "Thought Leadership Strategy",
+          "description": "Executive visibility, POV development, authority building",
+          "deliveryModel": "Retainer",
+          "typicalScope": "Ongoing"
+        }
+      ]
+    },
+    {
+      "categoryKey": "demand_pipeline",
+      "services": [
+        {
+          "name": "Demand Generation",
+          "description": "Full-funnel demand gen, lead gen, pipeline marketing",
+          "deliveryModel": "Retainer",
+          "typicalScope": "6+ month engagements"
+        },
+        {
+          "name": "Account-Based Marketing",
+          "description": "ABM strategy and execution, target account programs",
+          "deliveryModel": "Retainer",
+          "typicalScope": "Annual programs"
+        },
+        {
+          "name": "Marketing Automation",
+          "description": "Lifecycle marketing, nurture programs, lead scoring",
+          "deliveryModel": "Retainer",
+          "typicalScope": "Ongoing optimization"
+        }
+      ]
+    },
+    {
+      "categoryKey": "digital_performance",
+      "services": [
+        {
+          "name": "Paid Media",
+          "description": "Google Ads, LinkedIn Ads, programmatic, retargeting",
+          "deliveryModel": "Retainer + media spend",
+          "typicalScope": "Ongoing management"
+        },
+        {
+          "name": "SEO",
+          "description": "Technical SEO, content SEO, link building",
+          "deliveryModel": "Retainer",
+          "typicalScope": "6+ months"
+        },
+        {
+          "name": "Social Media",
+          "description": "LinkedIn marketing, organic social, community",
+          "deliveryModel": "Retainer",
+          "typicalScope": "Ongoing"
+        }
+      ]
+    },
+    {
+      "categoryKey": "content_creative",
+      "services": [
+        {
+          "name": "Content Marketing",
+          "description": "Content strategy, thought leadership content, research reports",
+          "deliveryModel": "Retainer",
+          "typicalScope": "Ongoing production"
+        },
+        {
+          "name": "Creative Services",
+          "description": "Campaign creative, brand creative, design",
+          "deliveryModel": "Project or retainer",
+          "typicalScope": "As needed"
+        }
+      ]
+    },
+    {
+      "categoryKey": "advisory_transformation",
+      "services": [
+        {
+          "name": "Fractional CMO",
+          "description": "Part-time marketing leadership, strategic advisory",
+          "deliveryModel": "Retainer",
+          "typicalScope": "6-12 month engagements"
+        },
+        {
+          "name": "Marketing Transformation",
+          "description": "Team structure, capability building, process optimization",
+          "deliveryModel": "Project",
+          "typicalScope": "3-6 months"
+        }
+      ]
+    },
+    {
+      "categoryKey": "ai_services",
+      "services": [
+        {
+          "name": "AI Marketing Strategy",
+          "description": "AI roadmap, transformation strategy, governance",
+          "deliveryModel": "Project + retainer",
+          "typicalScope": "Discovery + implementation"
+        },
+        {
+          "name": "AI Content Engines",
+          "description": "Custom AI models, brand voice AI, content automation",
+          "deliveryModel": "Build + maintain",
+          "typicalScope": "Custom scoping"
+        },
+        {
+          "name": "Answer Engine Optimization (AEO)",
+          "description": "AI search optimization, ChatGPT visibility, GEO",
+          "deliveryModel": "Retainer",
+          "typicalScope": "Ongoing"
+        }
+      ]
+    }
+  ],
+  "constraints": {
+    "forbiddenTopics": [
+      "Client confidential information",
+      "Unreleased client campaigns"
+    ],
+    "forbiddenClaims": [
+      "Guaranteed results",
+      "Specific ROI percentages without data"
+    ],
+    "brandGuardrails": [
+      {
+        "guardrail": "Maintain irreverent-but-professional tone",
+        "rationale": "Core brand differentiator"
+      },
+      {
+        "guardrail": "Always ground AI discussions in fundamentals",
+        "rationale": "Core strategic position"
+      }
+    ],
+    "filteringRules": {
+      "includeKeywords": [
+        "CMO",
+        "VP marketing",
+        "B2B",
+        "demand generation",
+        "brand positioning",
+        "AI transformation",
+        "fractional CMO"
+      ],
+      "excludeKeywords": [
+        "B2C",
+        "consumer",
+        "retail",
+        "e-commerce",
+        "small business",
+        "freelancer",
+        "solopreneur"
+      ],
+      "requireTopicMarkers": [
+        "marketing",
+        "brand",
+        "demand",
+        "strategy",
+        "B2B",
+        "agency",
+        "CMO",
+        "growth",
+        "content",
+        "positioning"
+      ],
+      "qualityThresholds": {
+        "minRelevanceScore": 0.7,
+        "minQualityScore": 0.6
+      }
+    }
+  },
+  "leaders": [
+    {
+      "name": "Bret Starr",
+      "title": "Founder & CEO",
+      "shortBio": "25+ years in B2B marketing. Built and led agencies, launched products, and helped hundreds of companies find their market position.",
+      "linkedIn": "https://www.linkedin.com/in/bretstarr/",
+      "youTube": "https://www.youtube.com/@TheStarrConspiracy"
+    },
+    {
+      "name": "Racheal Bates",
+      "title": "Chief Experience Officer",
+      "shortBio": "Leads client delivery and experience design. Ensures every engagement delivers measurable strategic outcomes.",
+      "linkedIn": "https://www.linkedin.com/in/rachealbates/"
+    },
+    {
+      "name": "JJ La Pata",
+      "title": "Chief Strategy Officer",
+      "shortBio": "Drives go-to-market strategy and demand generation for TSC clients. Expert in building B2B growth engines.",
+      "linkedIn": "https://www.linkedin.com/in/jjlapata/"
+    }
+  ]
+}
