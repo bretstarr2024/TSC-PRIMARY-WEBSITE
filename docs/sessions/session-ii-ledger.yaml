@@ -7,7 +7,8 @@ deployment:
   platform: vercel
   url: "tsc-primary-website.vercel.app"
   environment: production
-  status: pending  # will be triggered after final commit
+  job_id: "ptC5BqvxDUKwVQYw4YHE"
+  status: triggered
 
 build_verification:
   next_build: PASS
@@ -37,6 +38,8 @@ commits:
     message: "feat: Insights hub + 16 content type pages (8 types x listing + detail)"
   - hash: "3e500db"
     message: "feat: MongoDB seed script + build pipeline update"
+  - hash: "7467f24"
+    message: "docs: Session II closeout — ledger, handoff, roadmap update"
 
 artifacts_updated:
   - "lib/kernel/types.ts — TypeScript types for kernel data"
