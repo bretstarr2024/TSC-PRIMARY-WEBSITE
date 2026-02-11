@@ -1,12 +1,12 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION II** | Last Updated: February 11, 2026
+**Status: SESSION III** | Last Updated: February 11, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
 - Stack: Next.js 14 (App Router, TS, Tailwind), Framer Motion, Three.js, MongoDB (`tsc`), Vercel
 - Grounded in the full GTM Kernel (20 components, 5 domains, 3 JTBD clusters)
-- 9 content types, 10 cron jobs, video pipeline, RAG chatbot, analytics dashboard
+- 10 content types, 10 cron jobs, video pipeline, RAG chatbot, analytics dashboard
 - Donor platform: AEO site at `/Volumes/Queen Amara/AnswerEngineOptimization.com/`
 
 ---
@@ -149,21 +149,49 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 - `lib/resources-db.ts` → adapted (added `clientId`, added case_study + industry_brief types)
 - `components/insights/*` patterns from AEO `components/` (adapted to dark theme)
 
-#### Session III (upcoming): Content Pipeline Plumbing
+#### Session III: Videos + Tools + Content Generation + SEO/AEO ✅ COMPLETE (Feb 11, 2026)
+
+**Pivot:** User directive added Videos and Tools as content types 9 and 10, plus kernel-driven content generation and SEO/AEO infrastructure — ahead of pipeline cron plumbing.
+
+**Layer 0 — Data Layer (done):**
+- [x] `lib/resources-db.ts` — Added Video interface + CRUD (create, getById, getPublished, getAllIds) and Tool interface + sub-types (ChecklistItem, AssessmentQuestion, AssessmentResult, CalculatorConfig) + CRUD
+- [x] Updated `getResourceCounts()` and `ensureResourcesIndexes()` for both new types
+- [x] `lib/content-db.ts` — Added `'tool'` to ContentType union
+- [x] `lib/related-content.ts` — Added `'video'` + `'tool'` to RelatedItemType union + TYPE_CONFIG
+
+**Layer 1 — Pages + Components (done):**
+- [x] Updated InsightCard, RelatedContent, breadcrumbs, Insights hub for Video (#10B981) + Tool (#F472B6)
+- [x] `app/insights/videos/page.tsx` + `app/insights/videos/[videoId]/page.tsx` — Video listing + detail (embed, transcript, answer capsule)
+- [x] `app/insights/tools/page.tsx` + `app/insights/tools/[toolId]/page.tsx` — Tool listing + detail (interactive renderers)
+- [x] `components/insights/ChecklistRenderer.tsx` — Interactive checklist with progress bar (copied from AEO, dark theme)
+- [x] `components/insights/AssessmentRenderer.tsx` — Interactive quiz with scoring + results (copied from AEO, dark theme)
+
+**Layer 2 — SEO/AEO Infrastructure (done):**
+- [x] `app/robots.ts` — AI crawler allowlist (GPTBot, ClaudeBot, PerplexityBot, Google-Extended, etc.)
+- [x] `app/sitemap.ts` — Dynamic sitemap querying all 10 content collections
+- [x] `app/llms.txt/route.ts` — Structured markdown for LLM consumption (1hr cache)
+
+**Layer 3 — Content Generation (done):**
+- [x] `lib/pipeline/content-prompts.ts` — TSC brand voice context + citability guidelines + per-type prompt functions (all 10 types)
+- [x] `scripts/generate-content.ts` — Kernel-driven content generation via OpenAI (pure fetch, ~55 pieces)
+- [x] `scripts/seed-content.ts` — Updated with 2 video + 2 tool sample documents (24 total seed docs)
+- [x] `package.json` — Added `generate-content` script
+
+**Build:** 46 static pages (up from 41). New routes: `/insights/videos`, `/insights/tools`, `/robots.txt`, `/sitemap.xml`, `/llms.txt`
+
+**Donor files referenced:**
+- `components/insights/ChecklistRenderer.tsx`, `AssessmentRenderer.tsx` — copied from AEO, restyled dark theme
+- `lib/pipeline/content-prompts.ts` — adapted for TSC brand voice and 10 content types
+- `lib/resources-db.ts` — Tool/Video types adapted from AEO
+
+#### Session IV (upcoming): Content Pipeline Crons + Structured Data
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
-- [ ] Adapt `content-prompts.ts`:
-  - New `BRAND_VOICE_CONTEXT` from kernel Identity domain (Components 14–16)
-  - New `CITABILITY_GUIDELINES` (broader than AEO_GUIDELINES)
-  - Per-type prompts for all 9 content types
 - [ ] Adapt `content-guardrails.ts` for new collections
 - [ ] Create source monitors for B2B/AI marketing news
-- [ ] Set up `app/robots.ts`, `app/sitemap.ts`, `app/llms.txt/route.ts`
-
-#### Session IV: Structured Data and AEO Effectiveness
+- [ ] Run `npm run generate-content` to populate ~55 pieces from kernel
 - [ ] Add BreadcrumbList, Organization, Person schemas to all pages
 - [ ] Add answer capsules to service pillar pages
-- [ ] Set up AI crawler allowlist in robots.ts
 
 ---
 
@@ -235,6 +263,7 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 - [ ] Copy video infrastructure (HeyGen, Cloudinary, ElevenLabs, YouTube upload)
 - [ ] Adapt video scripts for broader content
 - [ ] Create video crons
+- Note: Video listing + detail pages already built in Session III
 
 #### Session XV: Email Distribution
 - [ ] Weekly digest email
@@ -244,7 +273,7 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 #### Session XVI: YouTube Integration
 - [ ] YouTube upload pipeline
 - [ ] Video sitemap
-- [ ] Video pages and embed views
+- Note: Video embed views already built in Session III (`/insights/videos/[videoId]`)
 
 ---
 

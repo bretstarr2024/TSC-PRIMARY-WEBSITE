@@ -6,7 +6,7 @@ This is **The Starr Conspiracy Smart Website** — an AI-native, self-generating
 
 - **Stack:** Next.js 14 (App Router, TS, Tailwind), Framer Motion, Three.js, MongoDB, Vercel
 - **Content brain:** GTM Kernel (20 components, 5 domains, 3 JTBD clusters)
-- **Content pipeline:** 10 cron jobs, 9 content types, autonomous generation
+- **Content pipeline:** 10 cron jobs, 10 content types, autonomous generation
 
 ## Domain
 
@@ -71,6 +71,6 @@ Reference kernel YAML: `gtm_kernel/kernels/tsc/kernel.yaml` (1,736 lines, all 20
 - **Preferred terms:** "clients" not "customers," "engagement" not "contract," "partner" not "vendor"
 - **Expert rotation:** Bret Starr, Racheal Bates, JJ La Pata
 - **Content pipeline:** NEVER use "pioneers of AEO" in generated content
-- **Content types:** blog, faq, glossary, comparison, expert-qa, news, video, case_study, industry_brief
-- **Build command:** `npm run build` = `next build` + `npm run index-content`
+- **Content types:** blog, faq, glossary, comparison, expert-qa, news, video, case_study, industry_brief, tool
+- **Build command:** `npm run build` = `sync-kernel` + `next build` + `npm run index-content`
 - **index-content** will skip gracefully without MONGODB_URI (expected locally)
