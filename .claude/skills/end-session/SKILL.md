@@ -83,10 +83,8 @@ git push origin main
 Trigger the Vercel deploy hook (auto-deploy is disabled):
 
 ```bash
-curl -X POST "[DEPLOY_HOOK_TBD]"
+curl -X POST "https://api.vercel.com/v1/integrations/deploy/prj_nC50CRWORPDcPorbaenM52x3kwt0/V5Pb4PA4Rr"
 ```
-
-**NOTE:** If the deploy hook URL has not been configured yet, skip this step and note it in the ledger. The deploy hook will be added once the Vercel project is created.
 
 Report the response. If the deployment was triggered successfully, note the job ID from the response.
 

@@ -23,10 +23,8 @@ This is **The Starr Conspiracy Smart Website** — an AI-native, self-generating
 After pushing to GitHub, ALWAYS trigger the Vercel deploy hook:
 
 ```bash
-curl -X POST "[DEPLOY_HOOK_TBD]"
+curl -X POST "https://api.vercel.com/v1/integrations/deploy/prj_nC50CRWORPDcPorbaenM52x3kwt0/V5Pb4PA4Rr"
 ```
-
-The deploy hook URL will be added once the Vercel project is created.
 
 Do this EVERY. SINGLE. TIME. after `git push`.
 
