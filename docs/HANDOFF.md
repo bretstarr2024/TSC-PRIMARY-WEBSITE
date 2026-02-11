@@ -1,16 +1,72 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 11, 2026 (Session III)
+**Last Updated:** February 11, 2026 (Session IV)
 
 ---
 
-## Current Phase: Phase 1 — Frontend Foundation COMPLETE + Content Generation Ready
+## Current Phase: Phase 1 COMPLETE — Content Live, Ready for Pipeline Infrastructure
 
-The site now has a homepage, services section, and a complete Insights section with **10 content types** backed by MongoDB. Multi-tenant architecture is baked in from day one. The GTM Kernel drives brand identity, messaging, JTBD clusters, and leader data at build time. SEO/AEO infrastructure is live (robots.txt, sitemap.xml, llms.txt). A content generation script is ready to produce ~55 kernel-driven content pieces via OpenAI.
+The site is live with **102 static pages** across 10 content types, populated by 56 AI-generated kernel-driven content pieces plus 24 seed documents. All CTAs link to Cal.com booking. Homepage copy has been refined per colleague feedback. Custom 404 page features Melissa with a Charlie's Angels 70s treatment. Next priority is pipeline infrastructure (crons, circuit breakers) for autonomous content generation.
 
-- **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 8 collections, 20+4 seed documents)
-- **Next actions:** Run `npm run generate-content` to populate ~55 content pieces, then build pipeline crons
-- **Roadmap:** See `docs/roadmap.md` Session III
+- **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10 collections, ~80 documents)
+- **Next actions:** Copy pipeline infrastructure from AEO, add structured data schemas
+- **Roadmap:** See `docs/roadmap.md` Session IV
+
+### Session IV Summary (February 11, 2026)
+
+**Focus:** Content population (56 pieces via OpenAI), colleague copy feedback, Cal.com CTA integration, custom 404 page
+
+**What was done:**
+
+1. **Content generation** (1 modified file, 56 docs written to MongoDB):
+   - `scripts/generate-content.ts` — Removed all fractional CMO topics (user directive). Replaced comparison with "Brand Strategy vs. Demand Generation", news with "B2B agency relationships". Filtered "Fractional CMO" from glossary.
+   - Ran `npm run generate-content` — 56 pieces generated, 3 skipped (existing), 1 rejected (forbidden term "synergy")
+   - Content breakdown: 10 FAQs, 14 glossary, 8 blogs, 3 comparisons, 6 expert Q&A, 3 news, 3 case studies, 3 industry briefs, 3 videos, 3 tools
+
+2. **Homepage copy feedback** (3 modified files):
+   - `components/home/HeroSection.tsx` — Tagline: "fundamentals meet the future" + expanded value prop
+   - `components/home/ProblemSection.tsx` — Updated summary: "fake AI adaptation or force a choice"
+   - `components/home/ApproachSection.tsx` — Subheader: "We offer the best of both worlds"
+
+3. **CTA overhaul** (6 modified files):
+   - All CTA buttons → "Let's Talk!" linking to `cal.com/team/tsc/25-50` (external, target=_blank)
+   - Updated: HeroSection, CtaSection, ServiceCTA, Header (desktop + mobile), Footer, CtaStrip
+   - Collapsed dual-button CTAs to single button (both would go to same URL)
+   - Removed 404 nav links (Work, About, Contact) from Header and Footer
+
+4. **Custom 404 page** (1 new file, 1 new asset):
+   - `app/not-found.tsx` — "Hi, Melissa!" with Charlie's Angels 70s treatment
+   - Circular photo with mix-blend-mode screen, 4 concentric brand-color glow rings (rotating, pulsing), sparkle accents, radial background glow, gradient text, Framer Motion entrance animations
+   - `public/images/melissa.jpeg` — Photo for 404 page
+
+**Commits this session:**
+- `af3584e` — feat: Content generation — remove fractional CMO, populate 56 pieces via OpenAI
+- `d896cff` — feat: Homepage copy feedback + all CTAs to Cal.com booking
+- `1ef89fa` — feat: Custom 404 page — Hi Melissa with Charlie's Angels 70s treatment
+- `be90f2d` — docs: Update roadmap for Session IV
+
+**Results:**
+- 102 static pages (up from 46)
+- 56 AI-generated content pieces live in MongoDB across all 10 types
+- All CTAs route to Cal.com booking
+- No 404 nav links remaining in header/footer
+- Custom 404 page with motion graphics
+- Build passes cleanly
+
+**Key decisions:**
+- All CTAs → Cal.com booking (single conversion action)
+- No fractional CMO content in generation pipeline (user directive)
+- Removed Work/About/Contact nav links (pages don't exist yet)
+- Homepage copy updated per colleague feedback
+- 404 page is a fun Easter egg featuring Melissa
+
+**What NOT to re-debate:**
+- Cal.com booking URL is the single CTA destination site-wide
+- No fractional CMO content generated (existing seed data still has some — decision pending on purge)
+- Homepage copy changes are approved by colleague
+- Dual CTA buttons collapsed to single — don't re-add secondary buttons
+
+---
 
 ### Session III Summary (February 11, 2026)
 

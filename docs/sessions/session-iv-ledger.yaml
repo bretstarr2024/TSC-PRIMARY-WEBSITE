@@ -1,0 +1,112 @@
+session_id: "IV"
+date: "2026-02-11"
+branch: main
+version: "0.5.0"  # MINOR: Content population (56 pieces), copy feedback, Cal.com CTAs, custom 404
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "pending"
+  status: pending
+
+build_verification:
+  next_build: PASS  # 102 static pages (up from 46)
+  index_content: SKIP  # expected locally without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "No schema changes this session. generate-content.ts writes via existing CRUD functions. Only frontend component and topic selection changes."
+
+commits:
+  - hash: "af3584e"
+    message: "feat: Content generation — remove fractional CMO, populate 56 pieces via OpenAI"
+  - hash: "d896cff"
+    message: "feat: Homepage copy feedback + all CTAs to Cal.com booking"
+  - hash: "1ef89fa"
+    message: "feat: Custom 404 page — Hi Melissa with Charlie's Angels 70s treatment"
+  - hash: "be90f2d"
+    message: "docs: Update roadmap for Session IV"
+
+artifacts_updated:
+  - "scripts/generate-content.ts — Removed fractional CMO topics, filtered glossary service"
+  - "components/home/HeroSection.tsx — New tagline copy, single Let's Talk! CTA to Cal.com"
+  - "components/home/ProblemSection.tsx — Updated Luddites/Tourists/Zealots summary"
+  - "components/home/ApproachSection.tsx — 'We offer the best of both worlds'"
+  - "components/home/CtaSection.tsx — Single Let's Talk! MagneticButton to Cal.com"
+  - "components/services/ServiceCTA.tsx — Single Let's Talk! MagneticButton to Cal.com"
+  - "components/Header.tsx — Let's Talk! to Cal.com, removed Work/About/Contact nav links"
+  - "components/Footer.tsx — Let's Talk! to Cal.com, removed About/Work/Contact company links"
+  - "components/insights/CtaStrip.tsx — Default button → Let's Talk! to Cal.com, external URL support"
+  - "app/not-found.tsx — NEW: Custom 404 with Melissa photo, Charlie's Angels 70s glow treatment"
+  - "public/images/melissa.jpeg — NEW: Melissa photo for 404 page"
+  - "docs/roadmap.md — Session IV section added"
+
+decisions_made:
+  - decision: "All CTAs site-wide link to Cal.com booking (cal.com/team/tsc/25-50)"
+    rationale: "User directive — single conversion action, external booking page"
+    reversible: true
+  - decision: "Removed fractional CMO content from generation pipeline"
+    rationale: "User directive — no fractional CMO positioning for TSC"
+    reversible: true
+  - decision: "Collapsed dual CTA buttons (primary + secondary) to single Let's Talk! button"
+    rationale: "Both buttons would link to same Cal.com URL — redundant"
+    reversible: true
+  - decision: "Removed Work, About, Contact nav links from Header and Footer"
+    rationale: "Pages don't exist yet (Sessions XI-XII) — avoid 404s for visitors"
+    reversible: true
+  - decision: "Custom 404 page features Melissa (internal joke/Easter egg)"
+    rationale: "User directive — fun colleague recognition"
+    reversible: true
+  - decision: "Homepage copy changes per colleague feedback (tagline, problem, approach)"
+    rationale: "Internal review feedback — clearer value prop messaging"
+    reversible: true
+
+known_risks:
+  - risk: "56 AI-generated content pieces have not been manually reviewed for quality"
+    mitigation: "Spot-check a sample across content types on live site"
+    severity: medium
+  - risk: "1 blog post rejected by forbidden term guardrail (synergy) — 'obstacles to building a growth engine' topic has no content"
+    mitigation: "Could regenerate with stricter prompt or manually create"
+    severity: low
+  - risk: "Existing seed content still contains fractional CMO references (blog, FAQ, comparison, tool checklist)"
+    mitigation: "Decide whether to purge seed data or leave as-is"
+    severity: low
+  - risk: "No pagination on listing pages — 102 pages with growing content volume"
+    mitigation: "Add cursor-based pagination when any collection exceeds ~30 items"
+    severity: low
+  - risk: "Footer still lists 'Fractional CMO' in services column (links to valid service subpage)"
+    mitigation: "Remove or rename when fractional CMO service decision is finalized"
+    severity: low
+
+explicitly_deferred:
+  - "Pipeline cron infrastructure (circuit-breaker, error-classifier, stuck-detector) — Session V"
+  - "Content guardrails at pipeline level — Session V"
+  - "Source monitors for B2B/AI marketing news — Session V"
+  - "BreadcrumbList, Organization, Person structured data schemas — Session V"
+  - "Answer capsules on service pillar pages — Session V"
+  - "Purging fractional CMO references from existing seed data — user to decide"
+  - "Work, About, Contact pages — Sessions XI-XII"
+  - "Chatbot (chaDbot) — Session XIII"
+
+next_actions:
+  - "Spot-check generated content quality on live Vercel deployment"
+  - "Copy pipeline infrastructure from AEO (circuit-breaker, error-classifier, etc.)"
+  - "Add BreadcrumbList, Organization, Person schemas to all pages"
+  - "Decide on fractional CMO seed data — purge or leave"
+  - "Set up cron jobs: check-sources, seed-resource-queue, generate-content"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "Dark theme is non-negotiable — Heart of Darkness (#141213) base"
+  - "Creative mandate: unconventional layouts, motion as identity, copy that bites"
+  - "Multi-tenant: clientId on every MongoDB document, every query, every index"
+  - "Kernel sync: build-time YAML→JSON, CLIENT_ID env var selects tenant"
+  - "All API clients must use pure fetch (no SDK dependencies)"
+  - "All CTAs → cal.com/team/tsc/25-50 (external, target=_blank)"
+  - "No fractional CMO content in generation pipeline (user directive)"
+  - "Content types: 10 total, accent colors locked"
+  - "Forbidden terms enforced at generation time: thought leader, synergy, pioneers of aeo"
