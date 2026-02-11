@@ -191,7 +191,10 @@ async function generateGlossary() {
   // Add proprietary terms
   terms.push('GTM Kernel', 'Answer Engine Optimization');
 
-  for (const term of terms) {
+  // Filter out Fractional CMO — user directive
+  const filteredTerms = terms.filter(t => !t.toLowerCase().includes('fractional cmo'));
+
+  for (const term of filteredTerms) {
     const termId = term
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
@@ -333,8 +336,8 @@ async function generateComparisons() {
       context: `TSC value prop: Strategy + execution integrated\nCore claim: ${kernel.message.coreClaims[0].claim}\nNarrative: ${kernel.message.narrativeFrames[1].name} — from ${kernel.message.narrativeFrames[1].before} to ${kernel.message.narrativeFrames[1].after}`,
     },
     {
-      topic: 'Fractional CMO vs. Full-Time CMO: Which Is Right for You?',
-      context: `JTBD: Fill Leadership Gap\nService: Fractional CMO — ${kernel.offerings[4].services[0].description}\nObstacles: ${kernel.jtbd[2].obstacles.join(', ')}`,
+      topic: 'Brand Strategy vs. Demand Generation: Where Should B2B Companies Invest First?',
+      context: `TSC POV: You need both, but sequencing matters\nBrand strategy: ${kernel.offerings[0].services[0].description}\nDemand gen: ${kernel.offerings[1].services[0].description}\nNarrative: ${kernel.message.narrativeFrames[0].name} — from ${kernel.message.narrativeFrames[0].before} to ${kernel.message.narrativeFrames[0].after}`,
     },
     {
       topic: 'Traditional SEO vs. Answer Engine Optimization (AEO)',
@@ -465,8 +468,8 @@ async function generateNews() {
       context: `Market force: Economic uncertainty\nPain point: ${kernel.icp.primary.painPoints[0]}\nPain point: ${kernel.icp.primary.painPoints[1]}`,
     },
     {
-      topic: 'The fractional CMO market is booming — and most companies still don\'t know how to evaluate one',
-      context: `JTBD: Fill Leadership Gap\nService: ${kernel.offerings[4].services[0].description}\nObstacles: ${kernel.jtbd[2].obstacles.join(', ')}`,
+      topic: 'B2B companies are rethinking agency relationships — and demanding integrated strategy plus execution',
+      context: `JTBD: Build Growth Engine\nCore claim: ${kernel.message.coreClaims[0].claim}\nPain points: ${kernel.icp.primary.painPoints.slice(0, 3).join(', ')}`,
     },
   ];
 
