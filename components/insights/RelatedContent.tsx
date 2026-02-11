@@ -15,6 +15,8 @@ const TYPE_COLORS: Record<RelatedItemType, string> = {
   news: '#088BA0',
   'case-study': '#7C3AED',
   'industry-brief': '#D97706',
+  video: '#10B981',
+  tool: '#F472B6',
 };
 
 const TYPE_LABELS: Record<RelatedItemType, string> = {
@@ -26,6 +28,8 @@ const TYPE_LABELS: Record<RelatedItemType, string> = {
   news: 'News',
   'case-study': 'Case Study',
   'industry-brief': 'Industry Brief',
+  video: 'Video',
+  tool: 'Tool',
 };
 
 interface RelatedContentProps {

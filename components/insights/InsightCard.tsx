@@ -11,7 +11,9 @@ export type InsightType =
   | 'expert-qa'
   | 'news'
   | 'case-study'
-  | 'industry-brief';
+  | 'industry-brief'
+  | 'video'
+  | 'tool';
 
 const TYPE_LABELS: Record<InsightType, string> = {
   blog: 'Blog',
@@ -22,6 +24,8 @@ const TYPE_LABELS: Record<InsightType, string> = {
   news: 'News',
   'case-study': 'Case Study',
   'industry-brief': 'Industry Brief',
+  video: 'Video',
+  tool: 'Tool',
 };
 
 const TYPE_COLORS: Record<InsightType, string> = {
@@ -33,6 +37,8 @@ const TYPE_COLORS: Record<InsightType, string> = {
   news: '#088BA0',
   'case-study': '#7C3AED',
   'industry-brief': '#D97706',
+  video: '#10B981',
+  tool: '#F472B6',
 };
 
 interface InsightCardProps {
