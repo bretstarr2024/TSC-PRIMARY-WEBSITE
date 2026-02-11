@@ -1,0 +1,49 @@
+{
+  "name": "tsc-smart-website",
+  "version": "1.0.0",
+  "description": "The Starr Conspiracy Smart Website — AI-native, self-generating content engine",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build && npm run index-content",
+    "build:next": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "index-content": "tsx scripts/index-content.ts"
+  },
+  "dependencies": {
+    "@clerk/nextjs": "^6.37.3",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.5.0",
+    "@sentry/nextjs": "^10.38.0",
+    "@vercel/analytics": "^1.6.1",
+    "@vercel/blob": "^2.2.0",
+    "@vercel/speed-insights": "^1.3.1",
+    "cloudinary": "^2.9.0",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.34.0",
+    "gray-matter": "^4.0.3",
+    "lenis": "^1.3.17",
+    "mongodb": "^7.1.0",
+    "next": "14.2.35",
+    "openai": "^6.21.0",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-markdown": "^10.1.0",
+    "recharts": "^3.7.0",
+    "resend": "^6.9.2",
+    "sharp": "^0.34.5",
+    "three": "^0.182.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5"
+  }
+}
