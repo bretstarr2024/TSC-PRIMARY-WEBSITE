@@ -1,16 +1,86 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 11, 2026 (Session II)
+**Last Updated:** February 11, 2026 (Session III)
 
 ---
 
-## Current Phase: Phase 1 — Frontend Foundation + Content Rendering COMPLETE
+## Current Phase: Phase 1 — Frontend Foundation COMPLETE + Content Generation Ready
 
-The site now has a homepage, services section, and a complete Insights section with 8 content types backed by MongoDB. Multi-tenant architecture is baked in from day one — every MongoDB document includes `clientId`, every query filters by it. The GTM Kernel drives brand identity, messaging, JTBD clusters, and leader data at build time.
+The site now has a homepage, services section, and a complete Insights section with **10 content types** backed by MongoDB. Multi-tenant architecture is baked in from day one. The GTM Kernel drives brand identity, messaging, JTBD clusters, and leader data at build time. SEO/AEO infrastructure is live (robots.txt, sitemap.xml, llms.txt). A content generation script is ready to produce ~55 kernel-driven content pieces via OpenAI.
 
-- **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 8 collections, 20 seed documents)
-- **Next actions:** Verify Vercel deployment with MongoDB content, then build content pipeline
-- **Roadmap:** See `docs/roadmap.md` Session II
+- **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 8 collections, 20+4 seed documents)
+- **Next actions:** Run `npm run generate-content` to populate ~55 content pieces, then build pipeline crons
+- **Roadmap:** See `docs/roadmap.md` Session III
+
+### Session III Summary (February 11, 2026)
+
+**Focus:** Added Videos + Tools content types, SEO/AEO infrastructure, kernel-driven content generation script
+
+**What was done:**
+
+1. **Video + Tool data layer** (4 modified files):
+   - `lib/resources-db.ts` — Added Video interface (videoId, embed, transcript, answerCapsule, speaker) + Tool interface with sub-types (ChecklistItem, AssessmentQuestion, AssessmentResult, CalculatorConfig). Full CRUD + indexes for both.
+   - `lib/content-db.ts` — Added `'tool'` to ContentType union
+   - `lib/related-content.ts` — Added `'video'` + `'tool'` to RelatedItemType + TYPE_CONFIG
+   - `lib/schema/breadcrumbs.ts` — Added `videoBreadcrumb()` + `toolBreadcrumb()`
+
+2. **Video + Tool pages** (6 new files, 3 modified):
+   - `app/insights/videos/page.tsx` — Video listing page
+   - `app/insights/videos/[videoId]/page.tsx` — Video detail with embed, transcript, answer capsule
+   - `app/insights/tools/page.tsx` — Tool listing page grouped by type
+   - `app/insights/tools/[toolId]/page.tsx` — Tool detail with interactive ChecklistRenderer or AssessmentRenderer
+   - `components/insights/ChecklistRenderer.tsx` — Interactive checklist (from AEO, dark theme)
+   - `components/insights/AssessmentRenderer.tsx` — Interactive quiz (from AEO, dark theme)
+   - Updated: InsightCard, RelatedContent, Insights hub for Video (#10B981) + Tool (#F472B6)
+
+3. **SEO/AEO infrastructure** (3 new files):
+   - `app/robots.ts` — AI crawler allowlist (GPTBot, ClaudeBot, PerplexityBot, Google-Extended, etc.)
+   - `app/sitemap.ts` — Dynamic sitemap querying all 10 content collections
+   - `app/llms.txt/route.ts` — Structured markdown for LLM consumption (1hr cache)
+
+4. **Content generation pipeline** (2 new files, 2 modified):
+   - `lib/pipeline/content-prompts.ts` — TSC brand voice (Sage+Rebel), citability guidelines, per-type prompt functions for all 10 content types
+   - `scripts/generate-content.ts` — Reads kernel JSON, generates ~55 content pieces via OpenAI (pure fetch). Maps: ICP pain points → FAQs, offerings → glossary, JTBD → blogs, leaders x JTBD → expert Q&A, etc.
+   - `scripts/seed-content.ts` — Added 2 video + 2 tool sample documents (24 total)
+   - `package.json` — Added `generate-content` script
+
+**Commits this session:**
+- `aceed8e` — feat: Video + Tool data layer — types, CRUD, indexes, related content
+- `da91740` — feat: Video + Tool pages with interactive components
+- `73d2c36` — feat: SEO/AEO infrastructure — robots.ts, sitemap.ts, llms.txt
+- `764d7a5` — feat: Kernel-driven content generation + seed script update
+- `2ae1e12` — docs: Update roadmap, CLAUDE.md for Session III (10 content types)
+
+**Results:**
+- 46 static pages generated (up from 41)
+- 10 content types with pages (up from 8)
+- SEO/AEO endpoints live: `/robots.txt`, `/sitemap.xml`, `/llms.txt`
+- Content generation script ready (~55 pieces pending execution)
+- Build passes cleanly
+
+**Donor files referenced:**
+- `components/insights/ChecklistRenderer.tsx`, `AssessmentRenderer.tsx` — copied from AEO, restyled dark theme
+- `lib/pipeline/content-prompts.ts` — adapted for TSC brand voice and 10 content types
+- `lib/resources-db.ts` — Tool/Video types adapted from AEO
+
+**Key decisions:**
+- Videos (#10B981) and Tools (#F472B6) are content types 9 and 10
+- Content generation uses pure fetch to OpenAI (no SDK)
+- Content generation is a CLI script, not a cron (bulk generation first, crons later)
+- Tool types: checklist, assessment, calculator (calculator is stub)
+- Video pages pulled forward from Phase 4 to Phase 1
+- AI crawler allowlist includes GPTBot, ClaudeBot, PerplexityBot, Google-Extended, Amazonbot, cohere-ai
+
+**What NOT to re-debate:**
+- 10 content types is the final count (video + tool are committed)
+- Content type accent colors are locked (10 colors assigned)
+- ChecklistItem uses `text`/`description`/`order` (not `label`/`tip`) — matches AEO donor
+- AssessmentQuestion options use `{ text, value }` (not `{ label, score }`)
+- AssessmentResult uses `minScore`/`maxScore` (not `range: { min, max }`)
+- Tool requires `downloadable: boolean` field
+- Content generation is CLI-first (not cron) — crons come in Phase 2
+
+---
 
 ### Session II Summary (February 11, 2026)
 
@@ -47,25 +117,6 @@ The site now has a homepage, services section, and a complete Insights section w
 
 6. **Build pipeline update**: `npm run build` = `sync-kernel` → `next build` → `index-content` (41 pages generated)
 
-**Commits this session:**
-- `1a33e8f` — feat: Multi-tenant kernel sync
-- `20968d4` — feat: MongoDB infrastructure
-- `7e4c016` — feat: Insights components and schema helpers
-- `5edcf92` — feat: Insights hub + 16 content type pages
-- `3e500db` — feat: MongoDB seed script + build pipeline update
-
-**Results:**
-- 41 static pages generated (up from 12)
-- 8 MongoDB collections created with proper indexes
-- 20 seed documents (all with `clientId: "tsc"`, `status: "published"`)
-- Build passes cleanly: sync-kernel + next build + index-content
-
-**Donor files referenced:**
-- `lib/rag/mongodb.ts` → adapted to `lib/mongodb.ts`
-- `lib/content-db.ts` → adapted (added `clientId`, removed AEO-specific fields)
-- `lib/resources-db.ts` → adapted (added `clientId`, added case_study + industry_brief)
-- Component patterns from AEO `components/` (adapted to dark theme)
-
 **Key decisions:**
 - Multi-tenant architecture from day one (clientId on every document/query/index)
 - Build-time kernel sync (YAML → JSON) — no runtime Python dependency
@@ -78,7 +129,6 @@ The site now has a homepage, services section, and a complete Insights section w
 - Multi-tenant architecture is committed — clientId is on every document
 - Build-time kernel sync is the approach — not runtime kernel access
 - Shared database with clientId isolation — not per-client databases
-- All 8 content types have pages — video pages deferred until video pipeline exists
 - TypeScript `let` variables MUST have explicit types (narrowing issue)
 
 ---
@@ -95,58 +145,26 @@ The site now has a homepage, services section, and a complete Insights section w
 4. Brand assets: logos to `public/images/`, full brand kit to `docs/brand-kit/`
 5. Header: transparent → glass on scroll, ocho logo, uppercase nav, mobile fullscreen takeover menu
 6. Footer: 4-column dark layout, "Built by an AI content engine" easter egg
-7. Homepage (`/`): 6 sections — Hero (3000 cursor-reactive Three.js particles, word-by-word animated headline, gradient text), Problem (Luddites/Tourists/Zealots manifesto), Approach (Fundamentals vs Innovation split), Services (6 horizontal-scroll cards), Credibility (animated counting stats + quote), CTA (pulsing glow + MagneticButtons)
-8. Services data layer: `lib/services-data.ts` — 6 categories, 21 services with full detail
-9. Services hub (`/services`): cinematic hero with fork SVG animation, dual universe intro, 5 strategic category strips with expandable cards, AI cascade waterfall layout, bridge statement, CTA
-10. 6 service sub-pages (`/services/[slug]`): category hero, service detail sections, related services, CTA
+7. Homepage (`/`): 6 sections — Hero (3000 cursor-reactive Three.js particles), Problem (Luddites/Tourists/Zealots manifesto), Approach (Fundamentals vs Innovation), Services (6 horizontal-scroll cards), Credibility (animated stats + quote), CTA (pulsing glow + MagneticButtons)
+8. Services data layer: `lib/services-data.ts` — 6 categories, 21 services
+9. Services hub (`/services`): cinematic hero, dual universe intro, 5 strategic category strips, AI cascade layout
+10. 6 service sub-pages (`/services/[slug]`): category hero, service detail, related services, CTA
 11. Fixed react-three compatibility: downgraded to v8/v9 for React 18
 
-**Commits this session:**
-- `7c6a4aa` — chore: Update deploy hook URL
-- `587b478` — feat: Dark theme foundation
-- `5e6369a` — feat: Animation components from AEO
-- `dc8774f` — feat: Brand assets
-- `647e41a` — feat: Header and Footer
-- `52c1c48` — feat: Homepage (6 sections)
-- `7e2f848` — feat: Services hub + 6 sub-pages
-- `63d030c` — fix: react-three downgrade
-
 **Key decisions:**
-- Dark-first theme (user: "Hell yes, go dark")
-- Creative mandate: unconventional, motion-heavy, "badass expensive creative agency"
-- 6 kernel service categories (user chose over current-site taxonomy)
-- AI-Native as single expanded category with 8 services
-- Services as static TypeScript data (not MongoDB)
+- Dark-first theme, creative mandate: "badass expensive creative agency"
+- 6 kernel service categories, AI-Native as expanded category
 - react-three pinned to v8/v9 until React 19 migration
-
-**What NOT to re-debate:**
-- Dark theme is locked in — it's the creative mandate
-- Service taxonomy uses kernel's 6 categories, not the current site's structure
-- Three.js particles on the homepage are intentional, not decoration
-- The "Luddites, Tourists, and Zealots" manifesto is intentionally confrontational
 
 ---
 
 ### Phase 0 Summary (February 10, 2026)
 
-**Focus:** Full project scaffolding — everything needed for autonomous session-by-session building.
+**Focus:** Full project scaffolding.
 
-**What was done:**
+**What was done:** Initialized Next.js 14 project, installed dependencies, wrote product brief + CLAUDE.md, created session skills, initialized git.
 
-1. Initialized Next.js 14 project in `/Volumes/Queen Amara/The Starr Conspiracy Smart Website/`
-2. Installed all dependencies matching AEO donor codebase (mongodb, openai, framer-motion, three, clerk, sentry, etc.)
-3. Wrote comprehensive product brief (`docs/product-brief.md`) covering vision, IA, content strategy, tech stack
-4. Wrote `CLAUDE.md` with project instructions
-5. Created 3 session skills (begin-session, end-session, stuck)
-6. Created `docs/roadmap.md` with 6-phase build plan
-7. Created `scripts/index-content.ts` placeholder
-8. Initialized git repository
-
-**Key decisions:**
-- Database name: `tsc` (separate from AEO's `aeo`, same Atlas cluster)
-- Content hub path: `/insights/`
-- 9 content types (AEO's 7 + case_study + industry_brief)
-- Multi-cluster seeding: all 3 JTBD clusters in weighted round-robin
+**Key decisions:** Database name `tsc`, content hub path `/insights/`, 10 content types, multi-cluster seeding.
 
 **Donor platform:** `/Volumes/Queen Amara/AnswerEngineOptimization.com/`
 **GTM Kernel:** `/Volumes/Queen Amara/GTM Kernel/`

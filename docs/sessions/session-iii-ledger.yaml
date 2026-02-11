@@ -1,0 +1,124 @@
+session_id: "III"
+date: "2026-02-11"
+branch: main
+version: "0.4.0"  # MINOR: Videos + Tools content types, SEO/AEO infrastructure, kernel-driven content generation
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "TBD"
+  status: pending
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # expected locally without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "Video and Tool types added to code but no documents written to MongoDB this session. New collections (videos, tools) will be created when seed or generate-content runs. Existing 8 collections unchanged."
+
+commits:
+  - hash: "aceed8e"
+    message: "feat: Video + Tool data layer — types, CRUD, indexes, related content"
+  - hash: "da91740"
+    message: "feat: Video + Tool pages with interactive components"
+  - hash: "73d2c36"
+    message: "feat: SEO/AEO infrastructure — robots.ts, sitemap.ts, llms.txt"
+  - hash: "764d7a5"
+    message: "feat: Kernel-driven content generation + seed script update"
+  - hash: "2ae1e12"
+    message: "docs: Update roadmap, CLAUDE.md for Session III (10 content types)"
+
+artifacts_updated:
+  - "lib/resources-db.ts — Added Video + Tool interfaces, CRUD, indexes"
+  - "lib/content-db.ts — Added 'tool' to ContentType union"
+  - "lib/related-content.ts — Added 'video' + 'tool' to RelatedItemType + TYPE_CONFIG"
+  - "lib/schema/breadcrumbs.ts — Added videoBreadcrumb() + toolBreadcrumb()"
+  - "components/insights/InsightCard.tsx — Added video + tool to InsightType, TYPE_LABELS, TYPE_COLORS"
+  - "components/insights/RelatedContent.tsx — Added video + tool to color/label maps"
+  - "components/insights/ChecklistRenderer.tsx — NEW: Interactive checklist (dark theme, from AEO)"
+  - "components/insights/AssessmentRenderer.tsx — NEW: Interactive quiz (dark theme, from AEO)"
+  - "app/insights/page.tsx — Added Videos (#09) + Tools (#10) to hub"
+  - "app/insights/videos/page.tsx — NEW: Video listing page"
+  - "app/insights/videos/[videoId]/page.tsx — NEW: Video detail (embed, transcript, answer capsule)"
+  - "app/insights/tools/page.tsx — NEW: Tool listing page"
+  - "app/insights/tools/[toolId]/page.tsx — NEW: Tool detail (ChecklistRenderer or AssessmentRenderer)"
+  - "app/robots.ts — NEW: AI crawler allowlist + sitemap pointer"
+  - "app/sitemap.ts — NEW: Dynamic sitemap (10 content collections)"
+  - "app/llms.txt/route.ts — NEW: LLM-friendly content listing"
+  - "lib/pipeline/content-prompts.ts — NEW: TSC brand voice + per-type prompt functions"
+  - "scripts/generate-content.ts — NEW: Kernel-driven OpenAI content generation (~55 pieces)"
+  - "scripts/seed-content.ts — Added 2 video + 2 tool seed documents (24 total)"
+  - "package.json — Added generate-content script"
+  - "CLAUDE.md — Updated content types to 10, build command"
+  - "docs/roadmap.md — Session III section added"
+
+decisions_made:
+  - decision: "Added Videos (#10B981 emerald) and Tools (#F472B6 pink) as content types 9 and 10"
+    rationale: "User requested videos + tools to match AEO resource section capabilities"
+    reversible: true
+  - decision: "Content generation uses pure fetch to OpenAI (no SDK)"
+    rationale: "Project constraint inherited from AEO — avoids SDK dependency issues"
+    reversible: true
+  - decision: "SEO/AEO infrastructure (robots, sitemap, llms.txt) added in Phase 1"
+    rationale: "Should be in place before content volume grows; AI crawlers need allowlisting early"
+    reversible: true
+  - decision: "Content generation script is a CLI tool (not a cron job)"
+    rationale: "Initial bulk generation is one-time; cron-based pipeline is Session IV+"
+    reversible: true
+  - decision: "Tool interface supports 3 sub-types: checklist, assessment, calculator"
+    rationale: "Matches AEO donor pattern; calculator is stub for now"
+    reversible: true
+  - decision: "Pulled video pages forward from Phase 4 to Phase 1"
+    rationale: "User wanted all content types visible now; video pipeline comes later"
+    reversible: false
+
+known_risks:
+  - risk: "generate-content.ts has not been run yet — no AI-generated content in MongoDB"
+    mitigation: "Run npm run generate-content with OPENAI_API_KEY + MONGODB_URI next session"
+    severity: medium
+  - risk: "Video seed documents use placeholder YouTube URLs (example1, example2)"
+    mitigation: "Replace with real video URLs when actual content is produced"
+    severity: low
+  - risk: "No pagination on listing pages — will be needed when content volume grows past ~20 items"
+    mitigation: "Add cursor-based pagination when any collection exceeds ~30 items"
+    severity: low
+  - risk: "llms.txt and sitemap.ts query all collections on every request (1hr cache)"
+    mitigation: "Monitor response times; add MongoDB caching layer if needed"
+    severity: low
+
+explicitly_deferred:
+  - "Running generate-content.ts — requires OPENAI_API_KEY in env, planned for Session IV"
+  - "Pipeline cron infrastructure (circuit-breaker, error-classifier, stuck-detector) — Session IV+"
+  - "Content guardrails (forbidden term checking at pipeline level) — Session IV+"
+  - "Source monitors for B2B/AI marketing news — Session V"
+  - "Calculator tool type renderer — stub only, build when calculator content exists"
+  - "Pagination on listing pages — when content volume warrants it"
+  - "Industry pages (/industries/) — Session XI"
+  - "About, Contact, Work pages — Session XII"
+  - "Chatbot (chaDbot) — Session XIII"
+
+next_actions:
+  - "Run npm run generate-content to populate ~55 kernel-driven content pieces in MongoDB"
+  - "Verify Vercel deployment renders new video/tool pages and SEO endpoints"
+  - "Run seed script to add video + tool sample documents"
+  - "Copy pipeline infrastructure from AEO (circuit-breaker, error-classifier, etc.)"
+  - "Set up cron jobs: check-sources, seed-resource-queue, generate-content"
+  - "Add BreadcrumbList, Organization, Person schemas to all pages"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "Dark theme is non-negotiable — Heart of Darkness (#141213) base"
+  - "Creative mandate: unconventional layouts, motion as identity, copy that bites"
+  - "Multi-tenant: clientId on every MongoDB document, every query, every index"
+  - "Kernel sync: build-time YAML→JSON, CLIENT_ID env var selects tenant"
+  - "All API clients must use pure fetch (no SDK dependencies)"
+  - "Content types: 10 total (blog, faq, glossary, comparison, expert-qa, news, case_study, industry_brief, video, tool)"
+  - "Content type colors locked: Video=#10B981, Tool=#F472B6 (added to existing 8)"
+  - "Tool ChecklistItem uses text/description/order (not label/tip)"
+  - "AssessmentQuestion options use text/value (not label/score)"
+  - "AssessmentResult uses minScore/maxScore (not range)"
