@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION III** | Last Updated: February 11, 2026
+**Status: SESSION IV** | Last Updated: February 11, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -184,12 +184,43 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 - `lib/pipeline/content-prompts.ts` — adapted for TSC brand voice and 10 content types
 - `lib/resources-db.ts` — Tool/Video types adapted from AEO
 
-#### Session IV (upcoming): Content Pipeline Crons + Structured Data
+#### Session IV: Content Population + Copy Feedback + CTA Integration ✅ COMPLETE (Feb 11, 2026)
+
+**Pivot:** User directive prioritized running content generation, applying colleague homepage copy feedback, wiring all CTAs to Cal.com booking, and creating a custom 404 page — ahead of pipeline cron plumbing.
+
+**Layer 0 — Content Generation (done):**
+- [x] Ran `npm run generate-content` — populated 56 kernel-driven content pieces in MongoDB via OpenAI
+- [x] Removed all fractional CMO content from generation script (user directive)
+  - Replaced comparison topic with "Brand Strategy vs. Demand Generation"
+  - Replaced news topic with "B2B agency relationships" piece
+  - Filtered "Fractional CMO" service from glossary generation
+- [x] Forbidden term guardrail caught 1 "synergy" violation (rejected automatically)
+
+**Layer 1 — Homepage Copy Feedback (done):**
+- [x] Hero tagline: "fundamentals meet AI transformation" → "fundamentals meet the future" + expanded copy
+- [x] Problem section: updated Luddites/Tourists/Zealots summary copy
+- [x] Approach section: "We reject the false choice" → "We offer the best of both worlds"
+
+**Layer 2 — CTA + Navigation Overhaul (done):**
+- [x] All CTA buttons → "Let's Talk!" linking to `cal.com/team/tsc/25-50` (external, target="_blank")
+- [x] Updated: HeroSection, CtaSection, ServiceCTA, Header (desktop + mobile), Footer, CtaStrip
+- [x] Removed 404 nav links (Work, About, Contact) from Header and Footer
+- [x] Collapsed dual-button CTAs to single "Let's Talk!" button
+
+**Layer 3 — Custom 404 Page (done):**
+- [x] Created `app/not-found.tsx` — "Hi, Melissa!" with Charlie's Angels 70s treatment
+- [x] Melissa photo with mix-blend-mode screen, 70s contrast/saturation filter
+- [x] 4 concentric glow rings in brand colors (rotating, pulsing)
+- [x] Sparkle accents, radial background glow, gradient text
+- [x] Full Framer Motion entrance animations
+
+**Build:** 102 static pages (up from 46 — generated content is live)
+
+#### Session V (upcoming): Pipeline Infrastructure + Structured Data
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
 - [ ] Create source monitors for B2B/AI marketing news
-- [ ] Run `npm run generate-content` to populate ~55 pieces from kernel
 - [ ] Add BreadcrumbList, Organization, Person schemas to all pages
 - [ ] Add answer capsules to service pillar pages
 
