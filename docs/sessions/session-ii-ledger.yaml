@@ -1,0 +1,136 @@
+session_id: "II"
+date: "2026-02-11"
+branch: main
+version: "0.3.0"  # MINOR: Multi-tenant kernel sync + insights section + MongoDB infrastructure
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  status: pending  # will be triggered after final commit
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # expected locally without MONGODB_URI in build env
+
+data_structure_consistency:
+  status: "pass"
+  collections_checked:
+    - blog_posts
+    - faq_items
+    - glossary_terms
+    - comparisons
+    - expert_qa
+    - news_items
+    - case_studies
+    - industry_briefs
+  notes: "All collections created fresh this session. All documents created by same code path (seed script → DB layer). Structural audit confirms uniform field sets across all documents in each collection."
+
+commits:
+  - hash: "1a33e8f"
+    message: "feat: Multi-tenant kernel sync — build-time YAML→JSON extraction"
+  - hash: "20968d4"
+    message: "feat: MongoDB infrastructure — clientId-scoped multi-tenant DB layer"
+  - hash: "7e4c016"
+    message: "feat: Insights components and schema helpers"
+  - hash: "5edcf92"
+    message: "feat: Insights hub + 16 content type pages (8 types x listing + detail)"
+  - hash: "3e500db"
+    message: "feat: MongoDB seed script + build pipeline update"
+
+artifacts_updated:
+  - "lib/kernel/types.ts — TypeScript types for kernel data"
+  - "scripts/sync-kernel.ts — Build-time kernel YAML → JSON sync"
+  - "lib/kernel/generated/tsc.json — Generated TSC kernel extraction"
+  - "lib/kernel/client.ts — Runtime config accessor with fallback"
+  - "lib/mongodb.ts — MongoDB connection singleton"
+  - "lib/content-db.ts — Content queue + blog posts (clientId-scoped)"
+  - "lib/resources-db.ts — 7 resource types (clientId-scoped)"
+  - "lib/related-content.ts — Cross-type related content engine"
+  - "lib/schema/people.ts — Kernel-driven leadership structured data"
+  - "lib/schema/breadcrumbs.ts — Breadcrumb generators for /insights/"
+  - "components/insights/ContentRenderer.tsx — Markdown→React (dark theme)"
+  - "components/insights/InsightCard.tsx — Reusable glass card with type colors"
+  - "components/insights/FaqAccordion.tsx — Expandable FAQ with schema.org"
+  - "components/insights/CtaStrip.tsx — Configurable CTA banner"
+  - "components/insights/AuthorBio.tsx — Kernel-driven author bio"
+  - "components/insights/RelatedContent.tsx — Cross-type related content"
+  - "app/insights/page.tsx — Insights hub"
+  - "app/insights/blog/ — Blog listing + detail pages"
+  - "app/insights/faq/ — FAQ listing + detail pages"
+  - "app/insights/glossary/ — Glossary listing + detail pages"
+  - "app/insights/comparisons/ — Comparison listing + detail pages"
+  - "app/insights/expert-qa/ — Expert Q&A listing + detail pages"
+  - "app/insights/news/ — News listing + detail pages"
+  - "app/insights/case-studies/ — Case study listing + detail pages"
+  - "app/insights/industry-briefs/ — Industry brief listing + detail pages"
+  - "scripts/seed-content.ts — MongoDB seed script (20 documents)"
+  - "package.json — Build pipeline, new scripts, new dev deps"
+  - "docs/roadmap.md — Session II section added"
+
+decisions_made:
+  - decision: "Multi-tenant architecture from day one (clientId on every MongoDB document)"
+    rationale: "User wants same codebase to power website for any client based on their GTM Kernel"
+    reversible: false
+  - decision: "Build-time kernel sync (YAML → JSON) rather than runtime kernel access"
+    rationale: "Avoids Python dependency at runtime; generated JSON is fast and cacheable"
+    reversible: true
+  - decision: "One Vercel project per client (same codebase, CLIENT_ID env var)"
+    rationale: "Simpler than multi-domain routing; each client gets isolated deployment"
+    reversible: true
+  - decision: "Shared tsc database with clientId field isolation (not per-client databases)"
+    rationale: "Matches USG pattern; simpler operations; single connection string"
+    reversible: true
+  - decision: "Content rendering pulled forward from Phase 2 Session VIII to Session II"
+    rationale: "User wanted insights section functional now, not after pipeline plumbing"
+    reversible: false
+  - decision: "8 content types with type-specific accent colors"
+    rationale: "Blog=#FF5910, FAQ=#E1FF00, Glossary=#73F5FF, Comparisons=#ED0AD2, Expert Q&A=#FFBDAE, News=#088BA0, Case Studies=#7C3AED, Industry Briefs=#D97706"
+    reversible: true
+  - decision: "ISR with 1hr revalidation for all content pages"
+    rationale: "Balances freshness with build performance; news could go shorter later"
+    reversible: true
+
+known_risks:
+  - risk: "Generated kernel JSON checked into git — could become stale if kernel changes without re-sync"
+    mitigation: "sync-kernel runs on every build; re-run manually after kernel edits"
+    severity: low
+  - risk: "Seed content is placeholder — needs real TSC content before launch"
+    mitigation: "Content pipeline (Phase 2) will generate real content autonomously"
+    severity: low
+  - risk: "No pagination on listing pages — will need it when content volume grows"
+    mitigation: "Add cursor-based pagination when any collection exceeds ~20 items"
+    severity: low
+  - risk: "Vercel deployment hasn't been tested with MONGODB_URI for SSG data fetching"
+    mitigation: "Verify after deploy that seeded content renders on production"
+    severity: medium
+
+explicitly_deferred:
+  - "Content pipeline plumbing (crons, prompts, guardrails) — Session III+"
+  - "robots.ts, sitemap.ts, llms.txt — Session III"
+  - "Pagination on listing pages — when content volume warrants it"
+  - "Video content type pages — no video pipeline yet"
+  - "Industry pages (/industries/) — Session XI"
+  - "About, Contact, Work pages — Session XII"
+  - "Chatbot (chaDbot) — Session XIII"
+
+next_actions:
+  - "Verify Vercel deployment renders insights pages with seeded MongoDB content"
+  - "Copy pipeline infrastructure from AEO (circuit-breaker, error-classifier, etc.)"
+  - "Adapt content-prompts.ts with TSC brand voice from kernel"
+  - "Set up cron jobs: check-sources, seed-resource-queue, generate-content"
+  - "Add robots.ts, sitemap.ts, and llms.txt"
+  - "Add pagination to listing pages when needed"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "Dark theme is non-negotiable — Heart of Darkness (#141213) base"
+  - "Creative mandate: unconventional layouts, motion as identity, copy that bites"
+  - "Multi-tenant: clientId on every MongoDB document, every query, every index"
+  - "Kernel sync: build-time YAML→JSON, CLIENT_ID env var selects tenant"
+  - "All API clients must use pure fetch (no SDK dependencies)"
+  - "TypeScript let vars must have explicit types (narrowing issue from AEO)"
+  - "Content types: blog, faq, glossary, comparison, expert-qa, news, case_study, industry_brief"

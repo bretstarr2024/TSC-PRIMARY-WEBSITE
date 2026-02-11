@@ -1,16 +1,87 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 11, 2026 (Session I)
+**Last Updated:** February 11, 2026 (Session II)
 
 ---
 
-## Current Phase: Phase 1 — Frontend Foundation IN PROGRESS
+## Current Phase: Phase 1 — Frontend Foundation + Content Rendering COMPLETE
 
-The homepage and services pages are built and deployed. Dark theme, motion-heavy, unconventional — Three.js particles, scroll-triggered animations, glassmorphic cards, expandable service details. 8 pages total (homepage + services hub + 6 service sub-pages). Build passes. No database layer yet.
+The site now has a homepage, services section, and a complete Insights section with 8 content types backed by MongoDB. Multi-tenant architecture is baked in from day one — every MongoDB document includes `clientId`, every query filters by it. The GTM Kernel drives brand identity, messaging, JTBD clusters, and leader data at build time.
 
-- **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE)
-- **Next actions:** Visual QA of homepage + services, then database layer
-- **Roadmap:** See `docs/roadmap.md` Session I
+- **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 8 collections, 20 seed documents)
+- **Next actions:** Verify Vercel deployment with MongoDB content, then build content pipeline
+- **Roadmap:** See `docs/roadmap.md` Session II
+
+### Session II Summary (February 11, 2026)
+
+**Focus:** Multi-tenant kernel sync, MongoDB infrastructure, complete Insights section (8 content types x listing + detail pages)
+
+**What was done:**
+
+1. **Multi-tenant kernel sync** (4 files):
+   - `lib/kernel/types.ts` — TypeScript types for all kernel-driven data
+   - `scripts/sync-kernel.ts` — Build-time: reads `/Volumes/Queen Amara/GTM Kernel/gtm_kernel/kernels/{clientId}/kernel.yaml` → extracts brand, offerings, ICP, JTBD, constraints, leaders → writes `lib/kernel/generated/{clientId}.json`
+   - `lib/kernel/generated/tsc.json` — Generated TSC extraction (brand "The Starr Conspiracy", 3 JTBD clusters, 6 offering categories, 16 services, 3 leaders)
+   - `lib/kernel/client.ts` — `getClientConfig()` returns typed config for current `CLIENT_ID`
+
+2. **MongoDB infrastructure** (4 files):
+   - `lib/mongodb.ts` — Connection singleton (shared `tsc` database)
+   - `lib/content-db.ts` — Content queue + blog posts with `clientId` on every document/query
+   - `lib/resources-db.ts` — 7 resource types (FAQ, glossary, comparison, expert-qa, news, case study, industry brief) with `clientId` everywhere
+   - `lib/related-content.ts` — Cross-type related content engine (tag matching + JTBD cluster boost)
+
+3. **Components and schema** (8 files):
+   - `components/insights/` — ContentRenderer, InsightCard, FaqAccordion, CtaStrip, AuthorBio, RelatedContent
+   - `lib/schema/people.ts` — Kernel-driven Person, Organization, Article schemas
+   - `lib/schema/breadcrumbs.ts` — Breadcrumb generators for all `/insights/` routes
+
+4. **17 Insights pages**:
+   - Hub (`/insights`) — hero, JTBD clusters from kernel, content type grid
+   - Blog, FAQ, Glossary, Comparisons, Expert Q&A, News, Case Studies, Industry Briefs — each with listing + detail page
+   - All pages: ISR (1hr revalidation), dark theme, glass cards, type-specific accent colors, RelatedContent cross-linking
+
+5. **MongoDB setup**:
+   - 8 collections with clientId-prefixed indexes (unique constraints on `{clientId, typeId}`)
+   - 20 seed documents: 3 blogs, 3 FAQs, 3 glossary, 2 comparisons, 3 expert Q&A, 2 news, 2 case studies, 2 industry briefs
+   - `scripts/seed-content.ts` — reusable seed script
+
+6. **Build pipeline update**: `npm run build` = `sync-kernel` → `next build` → `index-content` (41 pages generated)
+
+**Commits this session:**
+- `1a33e8f` — feat: Multi-tenant kernel sync
+- `20968d4` — feat: MongoDB infrastructure
+- `7e4c016` — feat: Insights components and schema helpers
+- `5edcf92` — feat: Insights hub + 16 content type pages
+- `3e500db` — feat: MongoDB seed script + build pipeline update
+
+**Results:**
+- 41 static pages generated (up from 12)
+- 8 MongoDB collections created with proper indexes
+- 20 seed documents (all with `clientId: "tsc"`, `status: "published"`)
+- Build passes cleanly: sync-kernel + next build + index-content
+
+**Donor files referenced:**
+- `lib/rag/mongodb.ts` → adapted to `lib/mongodb.ts`
+- `lib/content-db.ts` → adapted (added `clientId`, removed AEO-specific fields)
+- `lib/resources-db.ts` → adapted (added `clientId`, added case_study + industry_brief)
+- Component patterns from AEO `components/` (adapted to dark theme)
+
+**Key decisions:**
+- Multi-tenant architecture from day one (clientId on every document/query/index)
+- Build-time kernel sync (YAML → JSON) — no runtime Python dependency
+- One Vercel project per client, same codebase, `CLIENT_ID` env var
+- Shared `tsc` database with clientId field isolation (not per-client databases)
+- 8 content type accent colors locked in (Blog=#FF5910, FAQ=#E1FF00, etc.)
+- Content rendering pulled forward from Session VIII to Session II
+
+**What NOT to re-debate:**
+- Multi-tenant architecture is committed — clientId is on every document
+- Build-time kernel sync is the approach — not runtime kernel access
+- Shared database with clientId isolation — not per-client databases
+- All 8 content types have pages — video pages deferred until video pipeline exists
+- TypeScript `let` variables MUST have explicit types (narrowing issue)
+
+---
 
 ### Session I Summary (February 11, 2026)
 
@@ -39,16 +110,6 @@ The homepage and services pages are built and deployed. Dark theme, motion-heavy
 - `52c1c48` — feat: Homepage (6 sections)
 - `7e2f848` — feat: Services hub + 6 sub-pages
 - `63d030c` — fix: react-three downgrade
-
-**Results:**
-- 12 static pages generated (homepage, services hub, 6 service sub-pages, 404)
-- Build passes: next build + index-content (skip without MONGODB_URI)
-- Homepage: 5.85 kB page JS, 155 kB first load
-- Services hub: 11.2 kB page JS, 161 kB first load
-
-**Donor files referenced:**
-- `components/AnimatedSection.tsx`, `AnimatedText.tsx`, `MagneticButton.tsx`, `SmoothScroll.tsx`, `CustomCursor.tsx`, `GradientBackground.tsx`, `PageTransition.tsx` — from AEO
-- `components/Hero3D.tsx` → adapted to `HeroParticles.tsx`
 
 **Key decisions:**
 - Dark-first theme (user: "Hell yes, go dark")

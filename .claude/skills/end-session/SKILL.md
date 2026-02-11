@@ -47,7 +47,74 @@ This runs `next build` + `npm run index-content`.
 
 ---
 
-## Step 3: Version and commit
+## Step 3: Verify data structure consistency
+
+Every schema change must be applied globally — not just to new records. If a session added fields to MongoDB document creation paths, every existing record needs that field backfilled with its default value. This step catches schema drift before it accumulates.
+
+### 3a. Determine if data model changes were made this session
+
+Check whether this session:
+- Added new fields to any MongoDB document creation path (`insertOne`/`insertMany`/`updateMany` calls in `lib/content-db.ts`, `lib/videos-db.ts`, `lib/gtm-kernel-db.ts`, etc.)
+- Modified TypeScript types that map to MongoDB documents
+- Added new fields to API routes that write to MongoDB
+- Modified cron jobs or webhook handlers that write to collections
+
+If **none** of the above apply, record `data_structure_consistency: "not modified"` in the ledger and skip to Step 4.
+
+### 3b. Run structural audit
+
+Use the MongoDB MCP `aggregate` tool to compare structural key sets across all records in the affected collection(s) within the `tsc` database:
+
+```javascript
+// For each affected collection (blog_posts, videos, etc.):
+db.collection.aggregate([
+  { $facet: {
+    total: [{ $count: "n" }],
+    keys: [
+      { $project: { keys: { $objectToArray: "$$ROOT" } } },
+      { $unwind: "$keys" },
+      { $group: { _id: "$keys.k", count: { $sum: 1 } } },
+      { $sort: { count: -1 } }
+    ]
+  }}
+])
+```
+
+Any field where `count < total` indicates structural divergence — some documents have the field, others don't.
+
+### 3c. If divergence is found
+
+1. **If the session introduced the divergence** (new fields added to creation path but not backfilled):
+   - **BLOCKING**: Write a targeted `updateMany` to backfill the missing field(s) with default values before committing.
+   - Use the "defaults-first, existing-wins" pattern: `{ $set: { newField: defaultValue } }` with filter `{ newField: { $exists: false } }`.
+
+2. **If the divergence is pre-existing** (from before this session):
+   - **NOT BLOCKING**: Record the divergence in the ledger and continue.
+
+### 3d. Record result in ledger
+
+Add to the session ledger YAML:
+```yaml
+data_structure_consistency:
+  status: "pass | divergence-found | backfill-applied | not modified"
+  collections_checked: []  # list of collection names checked
+  divergent_fields: []  # or list of {collection, field, missing_count}
+  notes: ""
+```
+
+**Gate:** If the session introduced data model changes AND structural drift is detected in the affected collection(s), the backfill MUST run before committing. Do not commit schema-drifted code.
+
+### Cross-project principle: Global schema consistency
+
+This check enforces a principle shared across all TSC projects (GTM Kernel, USG, Smart Website):
+
+> **Every schema change must be applied globally — not just to new records.** If you add a field to the creation path, every existing record needs that field backfilled with its default value. No per-org customization of schema structure. If a change applies to one org's data, it applies to ALL orgs. Code changes alone are not enough — the database must match.
+
+The USG project runs this check via `scripts/backfill_structural_consistency.py`. The GTM Kernel checks 6 critical nested paths across all kernel documents.
+
+---
+
+## Step 4: Version and commit
 
 ### Determine version bump
 
@@ -78,7 +145,7 @@ git push origin main
 
 ---
 
-## Step 4: Deploy
+## Step 5: Deploy
 
 Trigger the Vercel deploy hook (auto-deploy is disabled):
 
@@ -90,7 +157,7 @@ Report the response. If the deployment was triggered successfully, note the job 
 
 ---
 
-## Step 5: Generate session ledger (YAML)
+## Step 6: Generate session ledger (YAML)
 
 Determine the session number: read the latest ledger to get the previous session ID (Roman numeral), then increment by one. If no ledgers exist, this is Session I.
 
@@ -114,6 +181,12 @@ deployment:
 build_verification:
   next_build: "[PASS/FAIL]"
   index_content: "[PASS/SKIP/FAIL]"
+
+data_structure_consistency:
+  status: "pass | divergence-found | backfill-applied | not modified"
+  collections_checked: []
+  divergent_fields: []
+  notes: ""
 
 commits:
   - hash: "[short hash]"
@@ -150,7 +223,7 @@ Omit sections that don't apply. Don't include empty arrays — just omit the key
 
 ---
 
-## Step 6: Write human-readable handoff
+## Step 7: Write human-readable handoff
 
 Update `docs/HANDOFF.md`. This file is cumulative — add the new session summary at the top (below the header), pushing previous sessions down.
 
@@ -203,7 +276,7 @@ The handoff must be **self-contained**: copy-pasteable into a brand new Claude C
 
 ---
 
-## Step 7: Continuity guardrails
+## Step 8: Continuity guardrails
 
 Add to the ledger's `invariants` field and call out in the handoff:
 
@@ -213,7 +286,7 @@ Add to the ledger's `invariants` field and call out in the handoff:
 
 ---
 
-## Step 8: Final integrity check
+## Step 9: Final integrity check
 
 Verify all of the following before declaring the session complete:
 
@@ -221,6 +294,7 @@ Verify all of the following before declaring the session complete:
 - [ ] All actions traceable to artifacts or commits
 - [ ] Working tree clean (`git status` shows nothing)
 - [ ] Pushed to remote (`git push` succeeded)
+- [ ] If data model changed: structural consistency check passed (Step 3)
 - [ ] Deploy triggered (or noted as TBD)
 - [ ] Session ledger written to `docs/sessions/`
 - [ ] `docs/HANDOFF.md` updated
@@ -239,3 +313,4 @@ Report the final checklist with pass/fail for each item.
 - If a step can't be completed, explicitly state what's blocked and why.
 - Always trigger the deploy hook after pushing — auto-deploy is disabled.
 - Database is `tsc` (never `aeo`).
+- Every schema change must be applied globally. No per-org customization — if it changes for one org, it changes for all.

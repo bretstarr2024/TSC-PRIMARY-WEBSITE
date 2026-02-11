@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION I** | Last Updated: February 11, 2026
+**Status: SESSION II** | Last Updated: February 11, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -102,40 +102,68 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 - `AnimatedSection.tsx`, `AnimatedText.tsx`, `MagneticButton.tsx`, `SmoothScroll.tsx`, `CustomCursor.tsx`, `GradientBackground.tsx`, `PageTransition.tsx` — all from AEO `components/`
 - `Hero3D.tsx` → adapted to `HeroParticles.tsx`
 
-#### Session II (upcoming): Database and Library Layer
-- [ ] Copy pipeline infrastructure:
-  - All `lib/pipeline/*.ts` files (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
+#### Session II: Multi-Tenant Kernel Sync + Insights Section + MongoDB ✅ COMPLETE (Feb 11, 2026)
+
+**Pivot:** User directive added multi-tenant architecture from day one, aligned with GTM Kernel and USG (AI GTM Engine). Also pulled content rendering (originally Session VIII) forward to deliver a complete Insights section with all 8 content types.
+
+**Layer 0 — Multi-Tenant Kernel Sync (done):**
+- [x] `lib/kernel/types.ts` — TypeScript types for kernel data (brand, offerings, ICP, JTBD, constraints, leaders)
+- [x] `scripts/sync-kernel.ts` — Build-time: reads kernel YAML → generates JSON config
+- [x] `lib/kernel/generated/tsc.json` — Generated TSC kernel extraction (brand, 3 JTBD, 6 offering categories, 16 services, 3 leaders)
+- [x] `lib/kernel/client.ts` — Runtime config accessor (`getClientConfig()`) with fallback for builds without kernel
+
+**Layer 1 — Database Infrastructure (done):**
+- [x] `lib/mongodb.ts` — MongoDB connection singleton (shared `tsc` database, clientId-scoped queries)
+- [x] `lib/content-db.ts` — Content queue + blog posts with `clientId` on every document and query
+- [x] `lib/resources-db.ts` — 7 resource types (FAQ, glossary, comparison, expert-qa, news, case study, industry brief) with `clientId` everywhere
+- [x] `lib/related-content.ts` — Cross-type related content engine (tag matching + JTBD cluster boost)
+
+**Layer 2 — Schema + Components (done):**
+- [x] `lib/schema/people.ts` — Kernel-driven leadership structured data
+- [x] `lib/schema/breadcrumbs.ts` — Breadcrumb generators for all `/insights/` routes
+- [x] 6 shared components: ContentRenderer, InsightCard, FaqAccordion, CtaStrip, AuthorBio, RelatedContent
+
+**Layer 3 — 17 Insights Pages (done):**
+- [x] `/insights` — Hub with hero, JTBD clusters (from kernel), content type grid
+- [x] `/insights/blog` + `/insights/blog/[slug]` — Listing + detail with author bios
+- [x] `/insights/faq` + `/insights/faq/[faqId]` — Accordion listing + detail with FAQ schema
+- [x] `/insights/glossary` + `/insights/glossary/[termId]` — A-Z listing + detail
+- [x] `/insights/comparisons` + `/insights/comparisons/[comparisonId]` — Listing + detail with comparison tables
+- [x] `/insights/expert-qa` + `/insights/expert-qa/[qaId]` — Listing + detail with expert bios
+- [x] `/insights/news` + `/insights/news/[newsId]` — Listing + detail with source attribution
+- [x] `/insights/case-studies` + `/insights/case-studies/[caseStudyId]` — Listing + detail with metrics
+- [x] `/insights/industry-briefs` + `/insights/industry-briefs/[briefId]` — Listing + detail
+
+**Layer 4 — MongoDB Setup (done):**
+- [x] 8 collections created with clientId-prefixed indexes
+- [x] 20 seed documents (3 blogs, 3 FAQs, 3 glossary, 2 comparisons, 3 expert Q&A, 2 news, 2 case studies, 2 industry briefs)
+- [x] `scripts/seed-content.ts` — Reusable seed script using project's own DB layer
+
+**Build pipeline update:**
+- [x] `npm run build` = `sync-kernel` → `next build` → `index-content`
+- [x] 41 static pages generated (up from 12)
+
+**Donor files referenced:**
+- `lib/rag/mongodb.ts` → adapted to `lib/mongodb.ts`
+- `lib/content-db.ts` → adapted (added `clientId`, removed AEO-specific fields)
+- `lib/resources-db.ts` → adapted (added `clientId`, added case_study + industry_brief types)
+- `components/insights/*` patterns from AEO `components/` (adapted to dark theme)
+
+#### Session III (upcoming): Content Pipeline Plumbing
+- [ ] Copy pipeline infrastructure from AEO:
+  - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-prompts.ts`:
   - New `BRAND_VOICE_CONTEXT` from kernel Identity domain (Components 14–16)
   - New `CITABILITY_GUIDELINES` (broader than AEO_GUIDELINES)
   - Per-type prompts for all 9 content types
 - [ ] Adapt `content-guardrails.ts` for new collections
-- [ ] Create `scripts/sync-gtm-kernel.ts`
-- [ ] Create `scripts/seed-source-monitors.ts` — new source monitors for B2B/AI marketing news
-
-**Donor files:**
-- `/Volumes/Queen Amara/AnswerEngineOptimization.com/lib/pipeline/*.ts` (12 files)
-- `/Volumes/Queen Amara/AnswerEngineOptimization.com/lib/pipeline/content-prompts.ts` (major rewrite)
-
-#### Session III: Basic Layout and Routing
-- [ ] Copy UI components from AEO:
-  - Framer Motion: AnimatedSection, AnimatedText, MagneticButton, PageTransition, SmoothScroll
-  - Three.js: Hero3D (adapt), Murmuration (adapt)
-  - UI: CustomCursor, GradientBackground, NoiseOverlay, Skeleton
-  - Data: RelatedContent, FaqAccordion, CtaStrip
-- [ ] Create `app/layout.tsx` — new metadata
-- [ ] Create `components/Header.tsx` — nav: Services, Industries, Insights, Work, About, Contact
-- [ ] Create `components/Footer.tsx` — new links
-- [ ] Create placeholder pages for all routes
-- [ ] Set up `app/robots.ts` and `app/sitemap.ts`
-- [ ] Set up `app/llms.txt/route.ts`
+- [ ] Create source monitors for B2B/AI marketing news
+- [ ] Set up `app/robots.ts`, `app/sitemap.ts`, `app/llms.txt/route.ts`
 
 #### Session IV: Structured Data and AEO Effectiveness
-- [ ] Create `lib/schema/people.ts` — TSC leadership structured data
-- [ ] Add BreadcrumbList, Organization, Person schemas
+- [ ] Add BreadcrumbList, Organization, Person schemas to all pages
 - [ ] Add answer capsules to service pillar pages
 - [ ] Set up AI crawler allowlist in robots.ts
-- [ ] First deploy to Vercel, verify build
 
 ---
 
@@ -165,18 +193,10 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 - [ ] Create `app/api/cron/send-digest/route.ts`
 - [ ] Set up `vercel.json` with all cron schedules
 
-#### Session VIII: Content Rendering
-- [ ] Create content detail pages:
-  - `app/insights/blog/[slug]/page.tsx`
-  - `app/insights/faq/[slug]/page.tsx`
-  - `app/insights/glossary/[slug]/page.tsx`
-  - `app/insights/comparisons/[slug]/page.tsx`
-  - `app/insights/expert-qa/[slug]/page.tsx`
-  - `app/insights/news/[slug]/page.tsx`
-- [ ] Create content listing pages (paginated)
-- [ ] Wire RelatedContent to all detail pages
-- [ ] Add structured data to content pages
-- **MILESTONE: Site goes live with autonomous content generation**
+#### Session VIII: Content Rendering ✅ PULLED FORWARD to Session II
+(See Phase 1 Session II above — all 17 Insights pages built with RelatedContent, schema.org, and 8 content types)
+
+- **MILESTONE: Content rendering complete. Pipeline generation is next.**
 
 ---
 
