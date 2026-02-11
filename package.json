@@ -14,8 +14,8 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.37.3",
-    "@react-three/drei": "^10.7.7",
-    "@react-three/fiber": "^9.5.0",
+    "@react-three/drei": "^9.122.0",
+    "@react-three/fiber": "^8.18.0",
     "@sentry/nextjs": "^10.38.0",
     "@vercel/analytics": "^1.6.1",
     "@vercel/blob": "^2.2.0",
