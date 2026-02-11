@@ -93,14 +93,12 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <a
-                  href="https://cal.com/team/tsc/25-50"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  href="/book"
                   className="text-sm text-atomic-tangerine hover:text-hot-sauce transition-colors hover:no-underline"
                 >
                   Let&apos;s Talk! →
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

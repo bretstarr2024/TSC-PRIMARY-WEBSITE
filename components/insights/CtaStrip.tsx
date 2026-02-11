@@ -7,7 +7,7 @@ interface CtaStripProps {
 export function CtaStrip({
   headline = 'Ready to talk strategy?',
   buttonText = "Let's Talk!",
-  buttonHref = 'https://cal.com/team/tsc/25-50',
+  buttonHref = '/book',
 }: CtaStripProps) {
   const isExternal = buttonHref.startsWith('http');
 

@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import { GradientText } from '@/components/AnimatedText';
 
 const HeroParticles = dynamic(
@@ -80,14 +81,12 @@ export function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.5 }}
         >
-          <a
-            href="https://cal.com/team/tsc/25-50"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/book"
             className="inline-flex items-center px-8 py-4 text-base font-medium text-white bg-atomic-tangerine rounded-lg hover:bg-hot-sauce transition-colors hover:no-underline"
           >
             Let&apos;s Talk!
-          </a>
+          </Link>
         </motion.div>
       </div>
 

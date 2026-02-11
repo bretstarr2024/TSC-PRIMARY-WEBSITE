@@ -33,7 +33,7 @@ export function ServiceCTA() {
         </AnimatedSection>
 
         <AnimatedSection delay={0.2} className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <MagneticButton href="https://cal.com/team/tsc/25-50" variant="primary" isExternal>
+          <MagneticButton href="/book" variant="primary">
             Let&apos;s Talk!
           </MagneticButton>
         </AnimatedSection>
