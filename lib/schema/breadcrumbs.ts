@@ -84,3 +84,19 @@ export const industryBriefBreadcrumb = (title?: string) =>
     { name: 'Industry Briefs', url: '/insights/industry-briefs' },
     ...(title ? [{ name: title, url: '#' }] : []),
   ]);
+
+export const videoBreadcrumb = (title?: string) =>
+  breadcrumb([
+    { name: 'Home', url: '/' },
+    { name: 'Insights', url: '/insights' },
+    { name: 'Videos', url: '/insights/videos' },
+    ...(title ? [{ name: title, url: '#' }] : []),
+  ]);
+
+export const toolBreadcrumb = (title?: string) =>
+  breadcrumb([
+    { name: 'Home', url: '/' },
+    { name: 'Insights', url: '/insights' },
+    { name: 'Tools', url: '/insights/tools' },
+    ...(title ? [{ name: title, url: '#' }] : []),
+  ]);

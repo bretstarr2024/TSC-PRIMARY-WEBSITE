@@ -1,7 +1,7 @@
 /**
  * MongoDB helpers for resource types.
  * Manages: faq_items, glossary_terms, comparisons, expert_qa,
- *          news_items, case_studies, industry_briefs, query_coverage
+ *          news_items, case_studies, industry_briefs, videos, tools, query_coverage
  * Multi-tenant: all documents include clientId, all queries filter by it.
  * Adapted from AEO donor codebase (lib/resources-db.ts) + 2 new types.
  */
@@ -38,6 +38,7 @@ export interface QueryCoverage {
     caseStudies: string[];
     industryBriefs: string[];
     videos: string[];
+    tools: string[];
   };
   coverageScore: number;
   createdAt: Date;
@@ -242,6 +243,104 @@ export interface IndustryBrief {
 }
 
 // ===========================================
+// Videos
+// ===========================================
+
+export interface Video {
+  _id?: ObjectId;
+  clientId: string;
+  videoId: string;
+  title: string;
+  description: string;
+  thumbnailUrl?: string;
+  videoUrl?: string;
+  embedUrl?: string;
+  duration?: string;
+  transcript?: string;
+  answerCapsule?: string;
+  speaker?: string;
+  tags: string[];
+  seedId?: number;
+  clusterName?: string;
+  status: ResourceStatus;
+  origin: ResourceOrigin;
+  createdAt: Date;
+  publishedAt?: Date;
+  updatedAt: Date;
+}
+
+// ===========================================
+// Tools
+// ===========================================
+
+export type ToolType = 'checklist' | 'assessment' | 'calculator';
+
+export interface ChecklistItem {
+  id: string;
+  text: string;
+  description?: string;
+  category?: string;
+  order: number;
+}
+
+export interface AssessmentQuestion {
+  id: string;
+  question: string;
+  options: { text: string; value: number }[];
+  category?: string;
+  order: number;
+}
+
+export interface AssessmentResult {
+  minScore: number;
+  maxScore: number;
+  title: string;
+  description: string;
+  recommendations: string[];
+}
+
+export interface CalculatorInput {
+  id: string;
+  label: string;
+  type: 'number' | 'select' | 'range';
+  defaultValue: number;
+  min?: number;
+  max?: number;
+  step?: number;
+  options?: { label: string; value: number }[];
+}
+
+export interface CalculatorConfig {
+  inputs: CalculatorInput[];
+  formula: string;
+  outputLabel: string;
+  outputFormat: 'number' | 'currency' | 'percentage';
+}
+
+export interface Tool {
+  _id?: ObjectId;
+  clientId: string;
+  toolId: string;
+  title: string;
+  description: string;
+  toolType: ToolType;
+  checklistItems?: ChecklistItem[];
+  assessmentQuestions?: AssessmentQuestion[];
+  assessmentResults?: AssessmentResult[];
+  calculatorConfig?: CalculatorConfig;
+  downloadable: boolean;
+  downloadUrl?: string;
+  tags: string[];
+  seedId?: number;
+  clusterName?: string;
+  status: ResourceStatus;
+  origin: ResourceOrigin;
+  createdAt: Date;
+  publishedAt?: Date;
+  updatedAt: Date;
+}
+
+// ===========================================
 // Collection Helpers
 // ===========================================
 
@@ -257,6 +356,8 @@ export const getExpertQaCollection = () => getCollection<ExpertQaItem>('expert_q
 export const getNewsCollection = () => getCollection<NewsItem>('news_items');
 export const getCaseStudyCollection = () => getCollection<CaseStudy>('case_studies');
 export const getIndustryBriefCollection = () => getCollection<IndustryBrief>('industry_briefs');
+export const getVideoCollection = () => getCollection<Video>('videos');
+export const getToolCollection = () => getCollection<Tool>('tools');
 export const getQueryCoverageCollection = () => getCollection<QueryCoverage>('query_coverage');
 
 // ===========================================
@@ -484,13 +585,82 @@ export async function getAllIndustryBriefIds(): Promise<string[]> {
 }
 
 // ===========================================
+// Video Operations
+// ===========================================
+
+export async function createVideo(item: Omit<Video, '_id' | 'clientId' | 'createdAt' | 'updatedAt'>): Promise<string> {
+  const collection = await getVideoCollection();
+  const clientId = getClientId();
+  const result = await collection.insertOne({ ...item, clientId, createdAt: new Date(), updatedAt: new Date() });
+  return result.insertedId.toString();
+}
+
+export async function getVideoById(videoId: string): Promise<Video | null> {
+  const collection = await getVideoCollection();
+  return collection.findOne({ clientId: getClientId(), videoId });
+}
+
+export async function getPublishedVideoById(videoId: string): Promise<Video | null> {
+  const collection = await getVideoCollection();
+  return collection.findOne({ clientId: getClientId(), videoId, status: 'published' });
+}
+
+export async function getAllPublishedVideos(): Promise<Video[]> {
+  const collection = await getVideoCollection();
+  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ createdAt: -1 }).toArray();
+}
+
+export async function getAllVideoIds(): Promise<string[]> {
+  const collection = await getVideoCollection();
+  const items = await collection.find({ clientId: getClientId(), status: 'published' }).project({ videoId: 1 }).toArray();
+  return items.map((i) => i.videoId);
+}
+
+// ===========================================
+// Tool Operations
+// ===========================================
+
+export async function createTool(item: Omit<Tool, '_id' | 'clientId' | 'createdAt' | 'updatedAt'>): Promise<string> {
+  const collection = await getToolCollection();
+  const clientId = getClientId();
+  const result = await collection.insertOne({ ...item, clientId, createdAt: new Date(), updatedAt: new Date() });
+  return result.insertedId.toString();
+}
+
+export async function getToolById(toolId: string): Promise<Tool | null> {
+  const collection = await getToolCollection();
+  return collection.findOne({ clientId: getClientId(), toolId });
+}
+
+export async function getPublishedToolById(toolId: string): Promise<Tool | null> {
+  const collection = await getToolCollection();
+  return collection.findOne({ clientId: getClientId(), toolId, status: 'published' });
+}
+
+export async function getAllPublishedTools(): Promise<Tool[]> {
+  const collection = await getToolCollection();
+  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ createdAt: -1 }).toArray();
+}
+
+export async function getAllToolIds(): Promise<string[]> {
+  const collection = await getToolCollection();
+  const items = await collection.find({ clientId: getClientId(), status: 'published' }).project({ toolId: 1 }).toArray();
+  return items.map((i) => i.toolId);
+}
+
+export async function getToolsByType(toolType: ToolType): Promise<Tool[]> {
+  const collection = await getToolCollection();
+  return collection.find({ clientId: getClientId(), toolType, status: 'published' }).sort({ createdAt: -1 }).toArray();
+}
+
+// ===========================================
 // Resource Counts (for hub page)
 // ===========================================
 
 export async function getResourceCounts(): Promise<Record<string, number>> {
   const clientId = getClientId();
 
-  const [faqs, glossary, comparisons, expertQa, news, caseStudies, industryBriefs] = await Promise.all([
+  const [faqs, glossary, comparisons, expertQa, news, caseStudies, industryBriefs, videos, tools] = await Promise.all([
     (await getFaqCollection()).countDocuments({ clientId, status: 'published' }),
     (await getGlossaryCollection()).countDocuments({ clientId, status: 'published' }),
     (await getComparisonCollection()).countDocuments({ clientId, status: 'published' }),
@@ -498,9 +668,11 @@ export async function getResourceCounts(): Promise<Record<string, number>> {
     (await getNewsCollection()).countDocuments({ clientId, status: 'published' }),
     (await getCaseStudyCollection()).countDocuments({ clientId, status: 'published' }),
     (await getIndustryBriefCollection()).countDocuments({ clientId, status: 'published' }),
+    (await getVideoCollection()).countDocuments({ clientId, status: 'published' }),
+    (await getToolCollection()).countDocuments({ clientId, status: 'published' }),
   ]);
 
-  return { faqs, glossary, comparisons, expertQa, news, caseStudies, industryBriefs };
+  return { faqs, glossary, comparisons, expertQa, news, caseStudies, industryBriefs, videos, tools };
 }
 
 // ===========================================
@@ -525,7 +697,7 @@ export async function upsertQueryCoverage(
         queryNormalized,
         coverage: {
           faqItems: [], glossaryTerms: [], blogPosts: [], comparisons: [],
-          expertQa: [], newsItems: [], caseStudies: [], industryBriefs: [], videos: [],
+          expertQa: [], newsItems: [], caseStudies: [], industryBriefs: [], videos: [], tools: [],
         },
         coverageScore: 0,
         createdAt: new Date(),
@@ -608,6 +780,19 @@ export async function ensureResourcesIndexes(): Promise<void> {
   await industryBrief.createIndex({ clientId: 1, briefId: 1 }, { unique: true });
   await industryBrief.createIndex({ clientId: 1, status: 1 });
   await industryBrief.createIndex({ clientId: 1, tags: 1 });
+
+  // Video indexes
+  const video = await getVideoCollection();
+  await video.createIndex({ clientId: 1, videoId: 1 }, { unique: true });
+  await video.createIndex({ clientId: 1, status: 1 });
+  await video.createIndex({ clientId: 1, tags: 1 });
+
+  // Tool indexes
+  const tool = await getToolCollection();
+  await tool.createIndex({ clientId: 1, toolId: 1 }, { unique: true });
+  await tool.createIndex({ clientId: 1, status: 1 });
+  await tool.createIndex({ clientId: 1, toolType: 1, status: 1 });
+  await tool.createIndex({ clientId: 1, tags: 1 });
 
   // Query coverage indexes
   await coverage.createIndex({ clientId: 1, queryNormalized: 1 }, { unique: true });

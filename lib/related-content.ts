@@ -16,7 +16,9 @@ export type RelatedItemType =
   | 'expert-qa'
   | 'news'
   | 'case-study'
-  | 'industry-brief';
+  | 'industry-brief'
+  | 'video'
+  | 'tool';
 
 export interface RelatedItem {
   type: RelatedItemType;
@@ -39,6 +41,8 @@ const TYPE_CONFIG: Record<
   news: { collection: 'news_items', idField: 'newsId', titleField: 'headline', descField: 'summary', pathPrefix: '/insights/news/' },
   'case-study': { collection: 'case_studies', idField: 'caseStudyId', titleField: 'title', descField: 'challenge', pathPrefix: '/insights/case-studies/' },
   'industry-brief': { collection: 'industry_briefs', idField: 'briefId', titleField: 'title', descField: 'summary', pathPrefix: '/insights/industry-briefs/' },
+  video: { collection: 'videos', idField: 'videoId', titleField: 'title', descField: 'description', pathPrefix: '/insights/videos/' },
+  tool: { collection: 'tools', idField: 'toolId', titleField: 'title', descField: 'description', pathPrefix: '/insights/tools/' },
 };
 
 /**

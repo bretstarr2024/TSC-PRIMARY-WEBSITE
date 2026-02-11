@@ -22,7 +22,8 @@ export type ContentType =
   | 'news_item'
   | 'case_study'
   | 'industry_brief'
-  | 'video';
+  | 'video'
+  | 'tool';
 
 export type ContentQueueStatus =
   | 'pending'
