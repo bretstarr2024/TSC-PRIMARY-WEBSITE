@@ -2,11 +2,117 @@
 @tailwind components;
 @tailwind utilities;
 
-/* TSC Brand Kit — imported from GTM Kernel */
+/* TSC Brand Kit */
 @import '../styles/brand.css';
 
+/* ===== DARK THEME OVERRIDES ===== */
+:root {
+  --color-background: #141213;
+  --color-text: #ffffff;
+  --color-text-secondary: #d1d1c6;
+  --color-border: rgba(209, 209, 198, 0.15);
+  --color-selection: rgba(225, 255, 0, 0.4);
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-feature-settings: "kern" 1, "liga" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Selection color */
+::selection {
+  background-color: var(--color-selection);
+  color: #141213;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #141213;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #FF5910;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #BD3A00;
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #FF5910 #141213;
+}
+
+/* ===== UTILITY CLASSES ===== */
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+
+  /* Animated gradient text */
+  .text-gradient {
+    background: linear-gradient(135deg, #FF5910, #E1FF00, #73F5FF, #ED0AD2);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradient-shift 5s ease infinite;
+  }
+
+  /* Glassmorphic card */
+  .glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .glass-hover:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  /* Section container */
+  .section-wide {
+    max-width: 80rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  @media (min-width: 1024px) {
+    .section-wide {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+}
+
+/* ===== DARK THEME LINK OVERRIDES ===== */
+a {
+  color: var(--color-text-secondary);
+  transition: color 150ms ease;
+}
+
+a:hover {
+  color: #FF5910;
+}
+
+/* Override brand.css body styles for dark mode */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-text);
+}
+
+p {
+  color: var(--color-text-secondary);
 }
