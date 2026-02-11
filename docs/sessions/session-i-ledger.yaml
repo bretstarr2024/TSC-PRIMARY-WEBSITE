@@ -1,0 +1,108 @@
+session_id: "I"
+date: "2026-02-11"
+branch: main
+version: "0.2.0"  # MINOR: Homepage + services pages with full creative mandate
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP
+
+commits:
+  - hash: "7c6a4aa"
+    message: "chore: Update deploy hook URL in CLAUDE.md and end-session skill"
+  - hash: "587b478"
+    message: "feat: Dark theme foundation — Tailwind config, globals, root layout"
+  - hash: "5e6369a"
+    message: "feat: Copy and adapt animation components from AEO donor"
+  - hash: "dc8774f"
+    message: "feat: Add brand assets — logos and brand kit docs"
+  - hash: "647e41a"
+    message: "feat: Header and Footer — unconventional nav with scroll effects"
+  - hash: "52c1c48"
+    message: "feat: Homepage — 6 sections with Three.js particles and scroll animations"
+  - hash: "7e2f848"
+    message: "feat: Services hub + 6 sub-pages — 21 services across Strategic + AI-Native"
+  - hash: "63d030c"
+    message: "fix: Downgrade react-three to v8/v9 for React 18 compatibility"
+
+artifacts_updated:
+  - "tailwind.config.ts — Inter font, type scale, animations, brand colors"
+  - "app/globals.css — Dark theme vars, utilities, scrollbar"
+  - "app/layout.tsx — Inter font, dark body, providers, metadata"
+  - "app/page.tsx — Homepage composition (6 sections)"
+  - "components/*.tsx — 7 animation components from AEO"
+  - "components/Header.tsx — Transparent → glass nav with mobile takeover"
+  - "components/Footer.tsx — 4-column dark footer"
+  - "components/home/*.tsx — 7 homepage sections (Hero, Problem, Approach, Services, Credibility, CTA, HeroParticles)"
+  - "lib/services-data.ts — 6 categories, 21 services, full detail"
+  - "components/services/*.tsx — 10 service page components"
+  - "app/services/page.tsx — Services hub page"
+  - "app/services/[slug]/page.tsx — Dynamic service sub-pages"
+  - "public/images/ — Logo assets (ocho, wordmark, positive)"
+  - "docs/brand-kit/ — Full brand kit documentation"
+  - "CLAUDE.md — Deploy hook URL"
+  - ".claude/skills/end-session/SKILL.md — Deploy hook URL"
+  - "package.json — react-three downgrade"
+  - ".npmrc — legacy-peer-deps for React 18"
+
+decisions_made:
+  - decision: "Pivot Session I from database layer to homepage + services"
+    rationale: "User directive: 'Build something beautiful and weird' — creative mandate takes priority"
+    reversible: false
+  - decision: "Dark-first theme with Heart of Darkness background"
+    rationale: "User chose 'Hell yes, go dark' — brand kit supports dark palette"
+    reversible: true
+  - decision: "Downgrade @react-three/fiber to v8 and @react-three/drei to v9"
+    rationale: "v9/v10 require React 19; project uses React 18"
+    reversible: true
+  - decision: "6 kernel service categories as primary service taxonomy"
+    rationale: "User chose kernel categories over current-site taxonomy"
+    reversible: true
+  - decision: "AI-Native as single expanded category with 8 services"
+    rationale: "Merged kernel AI services + current site AI services for depth"
+    reversible: true
+  - decision: "Services data as static TypeScript (not MongoDB)"
+    rationale: "Services don't change frequently; static generation is faster"
+    reversible: true
+
+known_risks:
+  - risk: "Three.js particle field adds ~150KB to homepage JS bundle"
+    mitigation: "Dynamic import with ssr:false; monitor Lighthouse scores"
+    severity: medium
+  - risk: "react-three v8 is not the latest; may miss upstream fixes"
+    mitigation: "Upgrade to v9 when project migrates to React 19"
+    severity: low
+  - risk: "No visual QA completed — user hasn't reviewed all pages yet"
+    mitigation: "Visual review should be first priority next session"
+    severity: medium
+
+explicitly_deferred:
+  - "Database layer (MongoDB connection, content-db, resources-db) — moved to Session II"
+  - "Content pipeline plumbing — moved to later sessions per original roadmap"
+  - "Visual QA and responsive testing — user hasn't reviewed the full site yet"
+  - "Individual service page answer capsules for AEO effectiveness"
+  - "robots.ts, sitemap.ts, llms.txt — not yet created"
+
+next_actions:
+  - "Visual QA: review homepage and all service pages on localhost"
+  - "Copy and adapt database layer from AEO (lib/mongodb.ts, content-db.ts, etc.)"
+  - "Build remaining pillar pages: /about, /work, /insights, /contact, /industries"
+  - "Add robots.ts, sitemap.ts, and llms.txt for SEO/AEO"
+  - "Consider React 19 migration to unlock react-three v9"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "Dark theme is non-negotiable — Heart of Darkness (#141213) base"
+  - "Creative mandate: unconventional layouts, motion as identity, copy that bites"
+  - "Services data source of truth: lib/services-data.ts (21 services, 6 categories)"
+  - "react-three pinned to v8/v9 until React 19 migration"
+  - "All API clients must use pure fetch (no SDK dependencies)"

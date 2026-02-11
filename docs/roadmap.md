@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SCAFFOLDING** | Last Updated: February 10, 2026 (Phase 0)
+**Status: SESSION I** | Last Updated: February 11, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -8,6 +8,46 @@
 - Grounded in the full GTM Kernel (20 components, 5 domains, 3 JTBD clusters)
 - 9 content types, 10 cron jobs, video pipeline, RAG chatbot, analytics dashboard
 - Donor platform: AEO site at `/Volumes/Queen Amara/AnswerEngineOptimization.com/`
+
+---
+
+## CREATIVE MANDATE (Non-Negotiable)
+
+**This is not a conventional agency website. This is a statement piece.**
+
+The site must scream "We're a badass, expensive, creative agency" at every scroll position. The Sage + Rebel archetype means deep expertise delivered with irreverence — the website is the proof of that claim.
+
+### Design Direction
+
+- **Dark-first theme.** Heart of Darkness (#141213) background with neon brand accents (Atomic Tangerine, Neon Cactus, Sprinkles, Tidal Wave). Content/reading pages may use light theme for readability.
+- **Unconventional layouts.** Break the grid. Asymmetric compositions. Oversized typography. Horizontal scroll sections where appropriate. Nothing should look like a template.
+- **Motion as identity.** Framer Motion + Three.js are not decoration — they ARE the brand experience. Cursor-reactive particle fields, scroll-triggered reveals, physics-based springs, magnetic buttons, custom cursor. 60fps non-negotiable.
+- **Texture and depth.** Noise/grain overlays, SVG filters, radial gradients, layered parallax. Premium feel in every pixel.
+- **Copy that bites.** The messaging framework ("Luddites, Tourists, and Zealots") is confrontational by design. The typography and layout should match that energy — bold claims deserve bold presentation.
+
+### Color System (Dark Theme)
+
+| Role | Color | Hex |
+|------|-------|-----|
+| Background | Heart of Darkness | #141213 |
+| Primary accent | Atomic Tangerine | #FF5910 |
+| Electric highlight | Neon Cactus | #E1FF00 |
+| Cool accent | Tidal Wave | #73F5FF |
+| Hot accent | Sprinkles | #ED0AD2 |
+| Primary text | White | #FFFFFF |
+| Secondary text | Shroomy | #d1d1c6 |
+| Muted text | Greige | #6D6D69 |
+
+### Service Presentation
+
+Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Advisory, AI) with full detail pages. The kernel's Offerings (Component 3) is the source of truth for service scope.
+
+### Brand Assets
+
+- Logos: `docs/brand-kit/logos/` (ocho mascot + TSC wordmarks)
+- Font: Inter (Google Fonts) — the only font
+- Full brand kit: `docs/brand-kit/`
+- Placeholder content sourced from kernel messaging framework until real assets provided
 
 ## Phases
 
@@ -20,37 +60,49 @@
 - [x] Create placeholder `scripts/index-content.ts` for build script
 - [x] Initialize git repository
 
-**Not yet done:**
-- [ ] Create GitHub repository and push
-- [ ] Create Vercel project and configure deploy hook
-- [ ] Set up environment variables on Vercel
+- [x] Create GitHub repository (`bretstarr2024/TSC-PRIMARY-WEBSITE`) and push
+- [x] Create Vercel project (`tsc-primary-website`) and configure deploy hook
+- [x] Set up environment variables on Vercel (MONGODB_URI, OPENAI_API_KEY)
+- [x] Add `.npmrc` with `legacy-peer-deps=true` for React 18 compat
+- [x] Set up local `.env.local`
+- [x] Add brand kit to `docs/brand-kit/`
 
 ---
 
-### Phase 1: Core Platform (Sessions I–IV)
+### Phase 1: Frontend Foundation (Sessions I–IV)
 
-**Goal:** MongoDB connected, basic layout rendering, content pipeline plumbing.
+**Goal:** Homepage, service pages, and core layout rendering with full creative mandate execution.
 
-#### Session I: Database and Library Layer
-- [ ] Copy and adapt from AEO:
-  - `lib/mongodb.ts` — connection helper (change default DB to `tsc`)
-  - `lib/content-db.ts` — add `case_study`, `industry_brief` to ContentType
-  - `lib/resources-db.ts` — add methods for new content types
-  - `lib/jtbd-seeds.ts` — copy as-is (already multi-tenant)
-  - `lib/gtm-kernel-db.ts` — copy as-is
-  - `lib/content-relevance.ts` — widen for full TSC scope
-  - `lib/utils.ts` — copy as-is
-- [ ] Set up `.env.local` with MongoDB connection string, OpenAI key
-- [ ] Verify database connectivity
+#### Session I: Homepage + Services ✅ COMPLETE (Feb 11, 2026)
 
-**Donor files:**
-- `/Volumes/Queen Amara/AnswerEngineOptimization.com/lib/content-db.ts`
-- `/Volumes/Queen Amara/AnswerEngineOptimization.com/lib/resources-db.ts`
-- `/Volumes/Queen Amara/AnswerEngineOptimization.com/lib/jtbd-seeds.ts`
-- `/Volumes/Queen Amara/AnswerEngineOptimization.com/lib/gtm-kernel-db.ts`
-- `/Volumes/Queen Amara/AnswerEngineOptimization.com/lib/content-relevance.ts`
+**Pivot:** User directive changed Session I scope from database layer to homepage + services. Creative mandate established: "beautiful and weird, badass expensive creative agency."
 
-#### Session II: Pipeline Core
+**Homepage (done):**
+- [x] Tailwind config: Inter font, extended type scale, animation keyframes, brand colors
+- [x] Globals: dark theme CSS vars, scrollbar styling, `.glass` / `.text-gradient` / `.section-wide` utilities
+- [x] 7 animation components copied/adapted from AEO donor (AnimatedSection, AnimatedText, MagneticButton, SmoothScroll, CustomCursor, GradientBackground, PageTransition)
+- [x] Logo assets copied to `public/images/`
+- [x] Root layout: Inter font, dark body, SmoothScroll, CustomCursor, NoiseOverlay
+- [x] Header: transparent → glass on scroll, mobile fullscreen takeover menu
+- [x] Hero: 3000 cursor-reactive Three.js particles, word-by-word animated type, gradient text
+- [x] Problem section: Luddites / Tourists / Zealots confrontational manifesto
+- [x] Approach section: Fundamentals + AI split with animated center divider
+- [x] Services section: 6 horizontal-scroll cards with category colors
+- [x] Credibility section: animated counting stats + Bret Starr quote
+- [x] CTA section: pulsing tangerine glow + MagneticButtons
+- [x] Footer: 4-column dark footer with AI content engine easter egg
+
+**Services (/services + 6 sub-pages, done):**
+- [x] Service data layer: 6 categories, 21 services, full detail (`lib/services-data.ts`)
+- [x] Services hub: cinematic hero with fork SVG animation, dual universe intro, 5 strategic category strips with expandable cards, AI cascade waterfall layout, bridge statement, CTA
+- [x] 6 dynamic sub-pages (`/services/[slug]`) with full service detail, outcomes, related services
+- [x] Downgraded @react-three/fiber to v8 + @react-three/drei to v9 for React 18 compat
+
+**Donor files referenced:**
+- `AnimatedSection.tsx`, `AnimatedText.tsx`, `MagneticButton.tsx`, `SmoothScroll.tsx`, `CustomCursor.tsx`, `GradientBackground.tsx`, `PageTransition.tsx` — all from AEO `components/`
+- `Hero3D.tsx` → adapted to `HeroParticles.tsx`
+
+#### Session II (upcoming): Database and Library Layer
 - [ ] Copy pipeline infrastructure:
   - All `lib/pipeline/*.ts` files (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-prompts.ts`:
@@ -132,17 +184,11 @@
 
 **Goal:** All pillar pages built, chatbot operational, design polish.
 
-#### Session IX: Home Page
-- [ ] Hero section (Three.js adapted from AEO)
-- [ ] Value proposition from kernel's Essential Value
-- [ ] Service overview cards
-- [ ] Social proof section
-- [ ] CTA strip
+#### Session IX: Home Page ✅ PULLED FORWARD to Session I
+(See Phase 1 Session I above)
 
-#### Session X: Service Pages
-- [ ] 6 service sub-pages with content from kernel's Offerings
-- [ ] Each page: hero, description, outcomes, related content, CTA
-- [ ] Answer capsules for each service
+#### Session X: Service Pages ✅ PULLED FORWARD to Session I
+(See Phase 1 Session I above)
 
 #### Session XI: Industry Pages
 - [ ] 8 industry pages from kernel's ICP industries
