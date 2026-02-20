@@ -51,11 +51,7 @@ From the GTM Kernel (Component 3: Offerings & Exclusions):
 - Content Marketing
 - Creative Services
 
-### 5. Advisory & Transformation
-- Fractional CMO
-- Marketing Transformation
-
-### 6. AI Services
+### 5. AI Services
 - AI Marketing Strategy
 - AI Content Engines
 - Answer Engine Optimization (AEO)
@@ -81,7 +77,6 @@ Home | Services | Industries | Insights | Work | About | Contact
 | `/services/demand-generation` | Demand & Pipeline |
 | `/services/digital-performance` | Digital Performance |
 | `/services/content-marketing` | Content & Creative |
-| `/services/fractional-cmo` | Advisory & Transformation |
 | `/services/ai-marketing` | AI Services (includes AEO) |
 | `/industries` | Industry verticals hub |
 | `/industries/cybersecurity` | Per-industry pages (8 total) |
@@ -119,10 +114,6 @@ Three JTBD clusters, seeded in weighted round-robin:
 2. **Navigate AI Transformation** — AI-augmented marketing function
    - Starting state: "Uncertain how AI applies to our marketing"
    - Desired state: "AI-augmented marketing function with competitive advantage"
-
-3. **Fill Leadership Gap** — Fractional CMO / strategic leadership
-   - Starting state: "No senior marketing leadership"
-   - Desired state: "Strategic marketing guidance with experienced leadership"
 
 ### Demand-State-Aware Content Selection
 

@@ -5,7 +5,7 @@
 This is **The Starr Conspiracy Smart Website** — an AI-native, self-generating content engine for The Starr Conspiracy (TSC), a B2B marketing agency.
 
 - **Stack:** Next.js 14 (App Router, TS, Tailwind), Framer Motion, Three.js, MongoDB, Vercel
-- **Content brain:** GTM Kernel (20 components, 5 domains, 3 JTBD clusters)
+- **Content brain:** GTM Kernel (20 components, 5 domains, 2 buyer goal clusters)
 - **Content pipeline:** 10 cron jobs, 10 content types, autonomous generation
 
 ## Domain

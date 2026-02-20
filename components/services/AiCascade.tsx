@@ -105,12 +105,6 @@ export function AiCascade() {
                             ))}
                           </div>
 
-                          {/* Meta */}
-                          <div className="flex flex-wrap gap-4 text-xs text-greige">
-                            <span>{service.deliveryModel}</span>
-                            <span>·</span>
-                            <span>{service.typicalScope}</span>
-                          </div>
                         </div>
                       </div>
                     </div>

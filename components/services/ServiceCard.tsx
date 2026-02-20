@@ -63,17 +63,6 @@ export function ServiceCard({ service, accentColor, borderClass }: ServiceCardPr
                   </ul>
                 </div>
 
-                <div className="flex flex-wrap gap-4 text-xs text-greige">
-                  <div>
-                    <span className="text-white font-medium">Delivery:</span>{' '}
-                    {service.deliveryModel}
-                  </div>
-                  <div>
-                    <span className="text-white font-medium">Scope:</span>{' '}
-                    {service.typicalScope}
-                  </div>
-                </div>
-
                 <p className="mt-4 text-sm text-shroomy/80 italic">{service.whoItsFor}</p>
               </div>
             </motion.div>

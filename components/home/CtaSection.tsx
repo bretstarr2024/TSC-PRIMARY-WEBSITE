@@ -28,8 +28,8 @@ export function CtaSection() {
             <span className="text-atomic-tangerine">compromising?</span>
           </h2>
           <p className="text-xl text-shroomy max-w-xl mx-auto mb-12 leading-relaxed">
-            We help B2B tech companies grow through strategic marketing
-            that combines fundamentals with AI transformation.
+            Sharper positioning. Faster pipeline. AI that actually works.
+            Tell us where you&apos;re stuck — we&apos;ll tell you what moves the needle.
           </p>
         </AnimatedSection>
 

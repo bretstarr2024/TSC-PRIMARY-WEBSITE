@@ -55,22 +55,62 @@ export function CredibilitySection() {
           ))}
         </div>
 
-        <AnimatedSection className="max-w-4xl mx-auto text-center">
-          <div className="relative">
-            <span className="absolute -top-8 -left-4 text-8xl text-atomic-tangerine/10 font-serif">&ldquo;</span>
-            <blockquote className="text-2xl md:text-3xl text-white font-semibold leading-snug">
-              Marketing transformation doesn&apos;t mean choosing between fundamentals and innovation.
-              It means mastering both.
-            </blockquote>
-            <div className="mt-8 flex items-center justify-center gap-3">
-              <div className="w-10 h-px bg-atomic-tangerine" />
-              <p className="text-sm text-shroomy">
-                <span className="text-white font-medium">Bret Starr</span>
-                <span className="text-greige"> · Founder, The Starr Conspiracy</span>
-              </p>
+        <div className="space-y-16 max-w-4xl mx-auto">
+          {/* Bret — visionary, bold, declarative */}
+          <AnimatedSection className="text-center">
+            <div className="relative">
+              <span className="absolute -top-8 -left-4 text-8xl text-atomic-tangerine/10 font-serif">&ldquo;</span>
+              <blockquote className="text-2xl md:text-3xl text-white font-semibold leading-snug">
+                I wrote the book on brand, marketing, and sales fundamentals.
+                Then we built the AI systems that make those fundamentals scale.
+                That&apos;s not a pivot — that&apos;s the whole point.
+              </blockquote>
+              <div className="mt-8 flex items-center justify-center gap-3">
+                <div className="w-10 h-px bg-atomic-tangerine" />
+                <p className="text-sm text-shroomy">
+                  <span className="text-white font-medium">Bret Starr</span>
+                  <span className="text-greige"> · Founder</span>
+                </p>
+              </div>
             </div>
-          </div>
-        </AnimatedSection>
+          </AnimatedSection>
+
+          {/* Racheal — precision-focused, outcome-driven, client-centric */}
+          <AnimatedSection delay={0.15} className="text-center">
+            <div className="relative">
+              <span className="absolute -top-8 -left-4 text-8xl text-neon-cactus/10 font-serif">&ldquo;</span>
+              <blockquote className="text-xl md:text-2xl text-white font-semibold leading-snug">
+                Every engagement has a measurable outcome attached to it before we start.
+                If we can&apos;t define what success looks like, we don&apos;t take the work.
+              </blockquote>
+              <div className="mt-8 flex items-center justify-center gap-3">
+                <div className="w-10 h-px bg-neon-cactus" />
+                <p className="text-sm text-shroomy">
+                  <span className="text-white font-medium">Racheal Bates</span>
+                  <span className="text-greige"> · Brand Strategy & Client Experience</span>
+                </p>
+              </div>
+            </div>
+          </AnimatedSection>
+
+          {/* JJ — analytical, systems-thinking, digital-native */}
+          <AnimatedSection delay={0.3} className="text-center">
+            <div className="relative">
+              <span className="absolute -top-8 -left-4 text-8xl text-tidal-wave/10 font-serif">&ldquo;</span>
+              <blockquote className="text-xl md:text-2xl text-white font-semibold leading-snug">
+                The tech stack is only as good as the strategy feeding it.
+                We build systems where every channel, touchpoint, and data signal connects back to pipeline.
+              </blockquote>
+              <div className="mt-8 flex items-center justify-center gap-3">
+                <div className="w-10 h-px bg-tidal-wave" />
+                <p className="text-sm text-shroomy">
+                  <span className="text-white font-medium">JJ La Pata</span>
+                  <span className="text-greige"> · Strategy & Digital Performance</span>
+                </p>
+              </div>
+            </div>
+          </AnimatedSection>
+        </div>
       </div>
     </section>
   );

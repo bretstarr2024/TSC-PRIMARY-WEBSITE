@@ -79,20 +79,12 @@ const CONTENT_TYPES = [
     icon: '08',
   },
   {
-    type: 'videos',
-    label: 'Videos',
-    description: 'Strategic video perspectives on B2B marketing and growth.',
-    href: '/insights/videos',
-    color: '#10B981',
-    icon: '09',
-  },
-  {
     type: 'tools',
     label: 'Tools',
     description: 'Checklists, assessments, and calculators for B2B marketing leaders.',
     href: '/insights/tools',
     color: '#F472B6',
-    icon: '10',
+    icon: '09',
   },
 ];
 
@@ -119,7 +111,7 @@ export default function InsightsPage() {
           </AnimatedSection>
         </section>
 
-        {/* JTBD Clusters */}
+        {/* Buyer Goal Clusters */}
         {config.jtbd.length > 0 && (
           <section className="section-wide mb-20">
             <AnimatedSection>

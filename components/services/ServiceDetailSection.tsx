@@ -61,16 +61,6 @@ export function ServiceDetailSection({ service, accentColor, index }: ServiceDet
               ))}
             </ul>
 
-            <div className="mt-6 pt-4 border-t border-white/5 flex flex-wrap gap-4 text-xs text-greige">
-              <div>
-                <span className="text-white font-medium">Delivery:</span>{' '}
-                {service.deliveryModel}
-              </div>
-              <div>
-                <span className="text-white font-medium">Scope:</span>{' '}
-                {service.typicalScope}
-              </div>
-            </div>
           </div>
         </div>
       </div>

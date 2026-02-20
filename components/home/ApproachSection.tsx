@@ -96,7 +96,26 @@ export function ApproachSection() {
           </AnimatedSection>
         </div>
 
-        <AnimatedSection delay={0.4} className="text-center mt-24">
+        {/* Convergence row — both sides meet in execution */}
+        <AnimatedSection delay={0.3} className="mt-20 mb-8">
+          <div className="glass rounded-2xl p-8 md:p-10 text-center border border-white/5">
+            <div className="flex items-center justify-center gap-4 mb-4">
+              <div className="h-px flex-1 max-w-24 bg-gradient-to-r from-transparent to-tidal-wave/50" />
+              <p className="text-xs font-semibold text-atomic-tangerine uppercase tracking-[0.3em]">
+                Where it all converges
+              </p>
+              <div className="h-px flex-1 max-w-24 bg-gradient-to-l from-transparent to-neon-cactus/50" />
+            </div>
+            <p className="text-xl md:text-2xl text-white font-semibold leading-snug max-w-2xl mx-auto">
+              Deep expertise and frontier AI — unified into a single execution layer that delivers outcomes, not just outputs.
+            </p>
+            <p className="mt-4 text-sm text-greige italic max-w-xl mx-auto">
+              This website was built from our own GTM Kernel — a live example of not compromising.
+            </p>
+          </div>
+        </AnimatedSection>
+
+        <AnimatedSection delay={0.4} className="text-center mt-8">
           <p className="text-2xl md:text-3xl font-semibold text-white max-w-2xl mx-auto leading-snug">
             You don&apos;t have to compromise.{' '}
             <span className="text-atomic-tangerine">You get both.</span>

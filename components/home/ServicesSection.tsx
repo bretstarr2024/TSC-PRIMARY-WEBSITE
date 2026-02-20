@@ -1,15 +1,20 @@
 'use client';
 
-import { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef, useState, useCallback } from 'react';
 import { AnimatedSection } from '@/components/AnimatedSection';
 
 const services = [
   {
-    category: 'Strategic & Foundational',
-    items: ['Brand Strategy & Positioning', 'Go-to-Market Strategy', 'Thought Leadership'],
+    category: 'Brand & Positioning',
+    items: ['Brand Strategy & Positioning', 'Visual Brand Development', 'Thought Leadership'],
     color: '#FF5910',
     borderColor: 'border-atomic-tangerine/30',
+  },
+  {
+    category: 'GTM Strategy & Architecture',
+    items: ['Go-to-Market Strategy'],
+    color: '#FFBDAE',
+    borderColor: 'border-fing-peachy/30',
   },
   {
     category: 'Demand & Pipeline',
@@ -19,38 +24,43 @@ const services = [
   },
   {
     category: 'Digital Performance',
-    items: ['Paid Media', 'SEO', 'Social Media'],
+    items: ['Paid Media', 'Earned Media', 'Owned Media'],
     color: '#E1FF00',
     borderColor: 'border-neon-cactus/30',
   },
   {
     category: 'Content & Creative',
-    items: ['Content Marketing', 'Creative Services', 'Research Reports'],
+    items: ['Content Marketing', 'Creative Services'],
     color: '#ED0AD2',
     borderColor: 'border-sprinkles/30',
   },
   {
-    category: 'Advisory & Transformation',
-    items: ['Fractional CMO', 'Marketing Transformation', 'Team Building'],
-    color: '#FFBDAE',
-    borderColor: 'border-fing-peachy/30',
-  },
-  {
-    category: 'AI Services',
-    items: ['AI Marketing Strategy', 'AI Content Engines', 'Answer Engine Optimization'],
+    category: 'AI-Native Solutions',
+    items: ['AI Marketing Strategy', 'AI GTM Activation', 'AI Content Studio', 'AI Design Studio', 'Answer Engine Optimization', 'Autonomous Outbound AI', 'AI Managed Services'],
     color: '#088BA0',
     borderColor: 'border-hurricane-sky/30',
   },
 ];
 
 export function ServicesSection() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start end', 'end start'],
-  });
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
 
-  const x = useTransform(scrollYProgress, [0, 1], ['5%', '-40%']);
+  const checkScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 10);
+    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 10);
+  }, []);
+
+  const scroll = useCallback((direction: 'left' | 'right') => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const amount = 400;
+    el.scrollBy({ left: direction === 'left' ? -amount : amount, behavior: 'smooth' });
+    setTimeout(checkScroll, 350);
+  }, [checkScroll]);
 
   return (
     <section className="relative py-32 md:py-40 overflow-hidden">
@@ -58,20 +68,50 @@ export function ServicesSection() {
 
       <div className="relative z-10">
         <AnimatedSection className="section-wide mb-16">
-          <p className="text-xs font-semibold text-greige uppercase tracking-[0.3em] mb-6">
-            What We Build
-          </p>
-          <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1]">
-            Full-stack marketing<br />
-            <span className="text-atomic-tangerine">for full-stack companies.</span>
-          </h2>
+          <div className="flex items-end justify-between gap-8">
+            <div>
+              <p className="text-xs font-semibold text-greige uppercase tracking-[0.3em] mb-6">
+                What We Build
+              </p>
+              <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1]">
+                Full-stack marketing<br />
+                <span className="text-atomic-tangerine">for full-stack companies.</span>
+              </h2>
+            </div>
+
+            {/* Arrow controls — desktop only */}
+            <div className="hidden md:flex items-center gap-3">
+              <button
+                onClick={() => scroll('left')}
+                disabled={!canScrollLeft}
+                className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:border-white/30 transition-all disabled:opacity-20 disabled:cursor-not-allowed"
+                aria-label="Scroll left"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <button
+                onClick={() => scroll('right')}
+                disabled={!canScrollRight}
+                className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:border-white/30 transition-all disabled:opacity-20 disabled:cursor-not-allowed"
+                aria-label="Scroll right"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </div>
         </AnimatedSection>
 
         {/* Horizontal scroll on desktop */}
-        <div ref={containerRef} className="relative">
-          <motion.div
-            className="hidden md:flex gap-6 pl-8 pr-32"
-            style={{ x }}
+        <div className="relative">
+          <div
+            ref={scrollRef}
+            onScroll={checkScroll}
+            className="hidden md:flex gap-6 pl-8 pr-32 overflow-x-auto scrollbar-hide"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {services.map((service) => (
               <div
@@ -95,7 +135,15 @@ export function ServicesSection() {
                 </ul>
               </div>
             ))}
-          </motion.div>
+          </div>
+
+          {/* Fade edges for scroll hint */}
+          {canScrollRight && (
+            <div className="hidden md:block absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#0f1015] to-transparent pointer-events-none" />
+          )}
+          {canScrollLeft && (
+            <div className="hidden md:block absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[#0f1015] to-transparent pointer-events-none" />
+          )}
 
           {/* Mobile: stacked */}
           <div className="md:hidden section-wide grid gap-4">

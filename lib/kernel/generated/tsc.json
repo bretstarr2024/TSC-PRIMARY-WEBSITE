@@ -258,21 +258,6 @@
         "Practical implementation experience",
         "Balance innovation with fundamentals"
       ]
-    },
-    {
-      "jobName": "Fill Leadership Gap",
-      "startingState": "No senior marketing leadership",
-      "desiredState": "Strategic marketing guidance with experienced leadership",
-      "obstacles": [
-        "Can't afford full-time CMO",
-        "Don't know what to look for",
-        "Need results while searching"
-      ],
-      "hiringCriteria": [
-        "Senior-level experience",
-        "Availability and engagement level",
-        "Chemistry with leadership team"
-      ]
     }
   ],
   "offerings": [
@@ -363,23 +348,6 @@
       ]
     },
     {
-      "categoryKey": "advisory_transformation",
-      "services": [
-        {
-          "name": "Fractional CMO",
-          "description": "Part-time marketing leadership, strategic advisory",
-          "deliveryModel": "Retainer",
-          "typicalScope": "6-12 month engagements"
-        },
-        {
-          "name": "Marketing Transformation",
-          "description": "Team structure, capability building, process optimization",
-          "deliveryModel": "Project",
-          "typicalScope": "3-6 months"
-        }
-      ]
-    },
-    {
       "categoryKey": "ai_services",
       "services": [
         {
@@ -430,7 +398,7 @@
         "demand generation",
         "brand positioning",
         "AI transformation",
-        "fractional CMO"
+        "go-to-market strategy"
       ],
       "excludeKeywords": [
         "B2C",

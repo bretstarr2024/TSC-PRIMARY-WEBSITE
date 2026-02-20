@@ -4,22 +4,22 @@ import { AnimatedSection, StaggerContainer, StaggerItem } from '@/components/Ani
 
 const archetypes = [
   {
-    name: 'The Luddites',
-    description: 'Dismiss AI as overhyped. Cling to manual processes while protesting that "humans still matter" — as if anyone argued otherwise.',
+    name: 'The Holdouts',
+    description: 'Still betting that AI is a passing phase. Clinging to manual processes while the market moves on without them.',
     color: 'border-tidal-wave/30',
     glow: 'shadow-tidal-wave/10',
     accent: 'text-tidal-wave',
   },
   {
-    name: 'The Tourists',
-    description: 'Suddenly claim AI expertise but offer no proof. No clients, no case studies, no depth. Just buzzwords covering their late-to-the-party position.',
+    name: 'The Bandwagoners',
+    description: 'Slapped "AI-powered" on the homepage and called it a strategy. No implementations, no results, no depth — just a fresh coat of buzzwords.',
     color: 'border-neon-cactus/30',
     glow: 'shadow-neon-cactus/10',
     accent: 'text-neon-cactus',
   },
   {
-    name: 'The Zealots',
-    description: 'Believe fundamentals no longer matter and only AI can save us. Bulldoze everything worth preserving in a mad dash to automate.',
+    name: 'The Overcorrectors',
+    description: 'Convinced that AI replaces everything. Tossing out brand strategy, messaging frameworks, and decades of what works in a rush to automate.',
     color: 'border-sprinkles/30',
     glow: 'shadow-sprinkles/10',
     accent: 'text-sprinkles',

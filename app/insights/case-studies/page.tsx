@@ -66,10 +66,10 @@ export default async function CaseStudiesListingPage() {
                   </p>
 
                   {cs.metrics.length > 0 && (
-                    <div className="flex flex-wrap gap-3">
+                    <div className="space-y-2">
                       {cs.metrics.slice(0, 3).map((metric, i) => (
-                        <div key={i} className="text-center">
-                          <span className="text-atomic-tangerine font-bold text-lg block">{metric.value}</span>
+                        <div key={i} className="flex items-baseline gap-3">
+                          <span className="text-atomic-tangerine font-bold text-lg flex-shrink-0">{metric.value}</span>
                           <span className="text-greige text-xs">{metric.label}</span>
                         </div>
                       ))}

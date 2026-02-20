@@ -676,7 +676,6 @@ async function generateTools() {
   const toolTopics = [
     { job: kernel.jtbd[0], type: 'checklist' as const, topic: 'Growth Engine Readiness Checklist' },
     { job: kernel.jtbd[1], type: 'assessment' as const, topic: 'AI Marketing Maturity Assessment' },
-    { job: kernel.jtbd[2], type: 'checklist' as const, topic: 'Marketing Leadership Gap Assessment Checklist' },
   ];
 
   for (const item of toolTopics) {

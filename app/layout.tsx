@@ -30,7 +30,6 @@ export const metadata: Metadata = {
     "brand strategy",
     "demand generation",
     "go-to-market strategy",
-    "fractional CMO",
     "answer engine optimization",
     "marketing transformation",
   ],

@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useRef, useState, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { Header } from '@/components/Header';
@@ -21,8 +21,18 @@ const rings = [
   { color: '#ED0AD2', size: 820, delay: 0.3 },
 ];
 
-// Melissa sparkle constellation
-const melissaSparkles = [
+// Team members for the rotating photo carousel
+const teamMembers = [
+  { name: 'Bret', image: '/images/Bret Headshot.jpg', initials: 'BS', color: '#FF5910' },
+  { name: 'Melissa', image: '/images/melissa.jpeg', initials: 'M', color: '#E1FF00' },
+  { name: 'JJ', image: '/images/JJ La Pata.jpeg', initials: 'JJ', color: '#73F5FF' },
+  { name: 'Ocho', image: '/images/ocho-color.png', initials: 'O', color: '#ED0AD2' },
+  { name: 'Dan', image: '/images/Dan McCarron.jpeg', initials: 'D', color: '#FFBDAE' },
+  { name: 'Racheal', image: '/images/Racheal Bates.jpeg', initials: 'RB', color: '#088BA0' },
+];
+
+// Sparkle constellation around the photo
+const photoSparkles = [
   { x: -12, y: -10, size: 3, color: '#E1FF00', delay: 0 },
   { x: 105, y: -8, size: 2.5, color: '#73F5FF', delay: 0.3 },
   { x: -8, y: 100, size: 2, color: '#ED0AD2', delay: 0.6 },
@@ -37,6 +47,19 @@ const melissaSparkles = [
 
 export default function BookPage() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  // Auto-rotate team members every 4 seconds
+  const advance = useCallback(() => {
+    setActiveIndex((prev) => (prev + 1) % teamMembers.length);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(advance, 4000);
+    return () => clearInterval(interval);
+  }, [advance]);
+
+  const activeMember = teamMembers[activeIndex];
 
   // Listen for Cal.com embed resize messages so the calendar never overflows
   useEffect(() => {
@@ -144,23 +167,23 @@ export default function BookPage() {
 
         {/* Content */}
         <div className="relative z-10 section-wide">
-          {/* Calendar + Melissa layout */}
+          {/* Calendar + Team Photo layout */}
           <motion.div
             className="relative max-w-4xl mx-auto"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
-            {/* Melissa floating photo — top right of calendar */}
+            {/* Rotating team photo — top right of calendar */}
             <motion.div
               className="absolute -top-8 -right-4 md:-right-24 z-20"
               initial={{ opacity: 0, scale: 0.5, rotate: 10 }}
               animate={{ opacity: 1, scale: 1, rotate: 0 }}
               transition={{ duration: 0.8, delay: 0.8, ease: [0.25, 0.4, 0.25, 1] }}
             >
-              {/* Sparkle constellation around Melissa */}
+              {/* Sparkle constellation around photo */}
               <div className="relative w-24 h-24 md:w-28 md:h-28">
-                {melissaSparkles.map((spark, i) => (
+                {photoSparkles.map((spark, i) => (
                   <motion.div
                     key={`m-spark-${i}`}
                     className="absolute rounded-full"
@@ -185,32 +208,54 @@ export default function BookPage() {
                   />
                 ))}
 
-                {/* Photo */}
+                {/* Photo / Placeholder */}
                 <div
                   className="relative w-full h-full rounded-full overflow-hidden"
                   style={{
                     boxShadow: `
-                      0 0 25px #FF591070,
-                      0 0 50px #ED0AD240,
-                      0 0 75px #73F5FF25,
-                      0 0 100px #E1FF0015
+                      0 0 25px ${activeMember.color}70,
+                      0 0 50px ${activeMember.color}40,
+                      0 0 75px ${activeMember.color}25,
+                      0 0 100px ${activeMember.color}15
                     `,
                   }}
                 >
-                  <Image
-                    src="/images/melissa.jpeg"
-                    alt="Melissa"
-                    width={112}
-                    height={112}
-                    className="object-cover w-full h-full"
-                    style={{
-                      filter: 'contrast(1.15) saturate(1.2) brightness(1.1)',
-                    }}
-                  />
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={activeIndex}
+                      className="absolute inset-0"
+                      initial={{ opacity: 0, scale: 1.1 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      transition={{ duration: 0.5 }}
+                    >
+                      {activeMember.image ? (
+                        <Image
+                          src={activeMember.image}
+                          alt={activeMember.name}
+                          width={112}
+                          height={112}
+                          className="object-cover w-full h-full"
+                          style={{
+                            filter: 'contrast(1.15) saturate(1.2) brightness(1.1)',
+                          }}
+                        />
+                      ) : (
+                        <div
+                          className="w-full h-full flex items-center justify-center text-white font-bold text-2xl"
+                          style={{
+                            background: `linear-gradient(135deg, ${activeMember.color}40, ${activeMember.color}15)`,
+                          }}
+                        >
+                          {activeMember.initials}
+                        </div>
+                      )}
+                    </motion.div>
+                  </AnimatePresence>
                   <div
-                    className="absolute inset-0 rounded-full"
+                    className="absolute inset-0 rounded-full pointer-events-none"
                     style={{
-                      background: 'linear-gradient(135deg, #FF591015 0%, #ED0AD210 50%, #73F5FF10 100%)',
+                      background: `linear-gradient(135deg, ${activeMember.color}15 0%, transparent 50%)`,
                       mixBlendMode: 'overlay',
                     }}
                   />
@@ -220,8 +265,8 @@ export default function BookPage() {
                 <motion.div
                   className="absolute -inset-1.5 rounded-full pointer-events-none"
                   style={{
-                    border: '1.5px solid #FF5910',
-                    boxShadow: '0 0 20px #FF591050, 0 0 40px #FF591020',
+                    border: `1.5px solid ${activeMember.color}`,
+                    boxShadow: `0 0 20px ${activeMember.color}50, 0 0 40px ${activeMember.color}20`,
                   }}
                   animate={{
                     opacity: [0.5, 1, 0.5],
@@ -234,8 +279,8 @@ export default function BookPage() {
                 <motion.div
                   className="absolute -inset-3.5 rounded-full pointer-events-none"
                   style={{
-                    border: '1px solid #E1FF00',
-                    boxShadow: '0 0 15px #E1FF0030, 0 0 30px #E1FF0015',
+                    border: `1px solid ${activeMember.color}`,
+                    boxShadow: `0 0 15px ${activeMember.color}30, 0 0 30px ${activeMember.color}15`,
                   }}
                   animate={{
                     opacity: [0.2, 0.6, 0.2],
@@ -250,17 +295,22 @@ export default function BookPage() {
                 />
 
                 {/* Name label */}
-                <motion.p
-                  className="absolute -bottom-7 left-1/2 -translate-x-1/2 text-xs font-medium text-atomic-tangerine whitespace-nowrap"
-                  style={{
-                    textShadow: '0 0 10px #FF591060',
-                  }}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 1.2 }}
-                >
-                  Melissa
-                </motion.p>
+                <AnimatePresence mode="wait">
+                  <motion.p
+                    key={activeMember.name}
+                    className="absolute -bottom-7 left-1/2 -translate-x-1/2 text-xs font-medium whitespace-nowrap"
+                    style={{
+                      color: activeMember.color,
+                      textShadow: `0 0 10px ${activeMember.color}60`,
+                    }}
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {activeMember.name}
+                  </motion.p>
+                </AnimatePresence>
               </div>
             </motion.div>
 

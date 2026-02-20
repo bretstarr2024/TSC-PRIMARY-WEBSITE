@@ -53,22 +53,22 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
           'B2B tech companies entering new markets, repositioning after acquisitions, or preparing for a major growth phase where the old story no longer fits.',
       },
       {
-        name: 'Go-to-Market Strategy',
-        slug: 'go-to-market-strategy',
-        tagline: 'Turn marketing from cost center to growth engine.',
+        name: 'Visual Brand Development',
+        slug: 'visual-brand-development',
+        tagline: 'A visual identity system that works as hard as your strategy.',
         description:
-          'The strategic blueprint that aligns product, marketing, and sales around a shared growth thesis. GTM planning, ICP development, competitive positioning, and channel strategy — all built to generate pipeline, not just awareness.',
+          'Logo systems, visual identity, brand guidelines, and design systems built to scale across every touchpoint. We translate strategic positioning into visual language that makes your brand instantly recognizable — from pitch decks to product UI to trade show booths.',
         deliveryModel: 'Project-based',
         typicalScope: '6–10 weeks',
         outcomes: [
-          'ICP definition with firmographic and psychographic profiles',
-          'Competitive landscape analysis and positioning',
-          'Channel strategy and prioritization matrix',
-          'GTM launch timeline with milestones and owners',
-          'Marketing-to-revenue model with measurable KPIs',
+          'Logo system with usage guidelines and lockups',
+          'Visual identity system: color, typography, imagery, iconography',
+          'Brand guidelines document with application examples',
+          'Design system components for digital and print',
+          'Template library for sales, marketing, and internal use',
         ],
         whoItsFor:
-          'B2B tech companies launching new products, entering new segments, or restructuring their marketing function to actually drive revenue.',
+          'B2B tech companies that need a visual identity matching the sophistication of their product — or are post-rebrand and need the visual system to catch up with the strategy.',
       },
       {
         name: 'Thought Leadership Strategy',
@@ -87,6 +87,37 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
         ],
         whoItsFor:
           'Executives and founders who need to build personal authority in their category — especially in competitive markets where expertise is the differentiator.',
+      },
+    ],
+  },
+  {
+    name: 'Go-to-Market Strategy & Architecture',
+    slug: 'gtm-strategy',
+    universe: 'strategic',
+    tagline: 'The blueprint that connects everything to revenue.',
+    description:
+      'Go-to-market strategy, ICP development, competitive positioning, and channel architecture — built by a team that has designed GTM for hundreds of B2B tech companies. We don\'t just plan launches. We architect growth systems.',
+    color: '#FFBDAE',
+    colorName: 'fing-peachy',
+    borderClass: 'border-fing-peachy/30',
+    services: [
+      {
+        name: 'Go-to-Market Strategy',
+        slug: 'go-to-market-strategy',
+        tagline: 'Turn marketing from cost center to growth engine.',
+        description:
+          'The strategic blueprint that aligns product, marketing, and sales around a shared growth thesis. GTM planning, ICP development, competitive positioning, and channel strategy — all built to generate pipeline, not just awareness.',
+        deliveryModel: 'Project-based',
+        typicalScope: '6–10 weeks',
+        outcomes: [
+          'ICP definition with firmographic and psychographic profiles',
+          'Competitive landscape analysis and positioning',
+          'Channel strategy and prioritization matrix',
+          'GTM launch timeline with milestones and owners',
+          'Marketing-to-revenue model with measurable KPIs',
+        ],
+        whoItsFor:
+          'B2B tech companies launching new products, entering new segments, or restructuring their marketing function to actually drive revenue.',
       },
     ],
   },
@@ -173,7 +204,7 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
         slug: 'paid-media',
         tagline: 'B2B media buying that actually understands B2B.',
         description:
-          'Google Ads, LinkedIn Ads, programmatic, and retargeting managed by strategists who know that B2B buying cycles are long, committees are real, and impressions mean nothing without downstream conversion.',
+          'Google Ads, LinkedIn Ads, programmatic, and retargeting managed by strategists who know that B2B buying cycles are long, committees are real, and impressions mean nothing without downstream conversion. We manage spend against pipeline — not clicks.',
         deliveryModel: 'Retainer + media spend',
         typicalScope: 'Ongoing management',
         outcomes: [
@@ -187,40 +218,40 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
           'B2B companies spending $50K+ monthly on paid media who need strategic management — not just someone pushing buttons in Google Ads.',
       },
       {
-        name: 'SEO',
-        slug: 'seo',
-        tagline: 'Organic visibility that compounds quarter over quarter.',
+        name: 'Earned Media',
+        slug: 'earned-media',
+        tagline: 'Coverage you can\'t buy. Credibility you can\'t fake.',
         description:
-          'Technical SEO, content SEO, and link building for B2B companies that need to own their category in search. We build SEO programs that drive qualified traffic — not vanity rankings for keywords nobody converts on.',
-        deliveryModel: 'Retainer',
-        typicalScope: '6+ months',
-        outcomes: [
-          'Technical SEO audit and remediation roadmap',
-          'Keyword strategy mapped to buying intent',
-          'Content optimization and pillar page architecture',
-          'Link building and domain authority program',
-          'Monthly ranking and traffic-to-pipeline reporting',
-        ],
-        whoItsFor:
-          'B2B tech companies that want to own organic search for high-intent keywords in their category — and understand that SEO is a compounding investment.',
-      },
-      {
-        name: 'Social Media',
-        slug: 'social-media',
-        tagline: 'LinkedIn strategy that builds authority, not just followers.',
-        description:
-          'Organic social strategy focused on LinkedIn — where your B2B buyers actually live. We build programs that position your company and executives as category authorities through strategic content, community engagement, and employee advocacy.',
+          'Strategic public relations, analyst relations, and media placement for B2B tech companies that need third-party validation. We build earned media programs that land coverage in the publications your buyers and analysts actually read — Tier 1 press, trade media, and influential voices in your category.',
         deliveryModel: 'Retainer',
         typicalScope: 'Ongoing',
         outcomes: [
-          'Social strategy aligned to brand positioning',
-          'Content calendar with executive and company content',
-          'Employee advocacy program and guidelines',
-          'Community engagement and conversation strategy',
-          'Monthly engagement and attribution reporting',
+          'PR strategy with targeted media list and pitch calendar',
+          'Analyst relations program with briefing preparation',
+          'Executive media training and spokesperson readiness',
+          'Share of voice tracking and competitive benchmarking',
+          'Crisis communications framework and response protocols',
         ],
         whoItsFor:
-          'B2B companies that know their buyers are on LinkedIn but don\'t have a strategy more sophisticated than "post more."',
+          'B2B tech companies that need market credibility beyond what they can self-publish — especially those entering new categories, raising capital, or announcing major milestones.',
+      },
+      {
+        name: 'Owned Media',
+        slug: 'owned-media',
+        tagline: 'Channels you control. Audiences you build.',
+        description:
+          'SEO, social media, email, and web properties — the channels where your brand owns the conversation. We build owned media strategies that compound over time: organic search visibility, LinkedIn authority, email engagement, and website conversion — all integrated into a single system that works without paying for every impression.',
+        deliveryModel: 'Retainer',
+        typicalScope: '6+ months',
+        outcomes: [
+          'SEO strategy with technical audit and content roadmap',
+          'Social media program (LinkedIn focus) with executive + company content',
+          'Email nurture architecture and segmentation strategy',
+          'Website optimization for conversion and engagement',
+          'Monthly owned channel performance and attribution reporting',
+        ],
+        whoItsFor:
+          'B2B companies ready to build durable distribution channels they actually own — instead of renting attention from platforms indefinitely.',
       },
     ],
   },
@@ -240,14 +271,14 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
         slug: 'content-marketing',
         tagline: 'Strategic content that moves pipeline, not just pageviews.',
         description:
-          'Content strategy, thought leadership content, research reports, and editorial programs built to support the full buyer journey. Every piece serves a strategic purpose — awareness, education, conversion, or retention.',
+          'Content strategy, thought leadership content, research reports, and editorial programs built to support the full buyer journey. Every piece serves a strategic purpose — awareness, education, conversion, or retention. We tie content strategy directly to Answer Engine Optimization, ensuring your content is structured for both human readers and AI-powered discovery channels.',
         deliveryModel: 'Retainer',
         typicalScope: 'Ongoing production',
         outcomes: [
-          'Content strategy aligned to buyer journey and JTBD',
+          'Content strategy aligned to buyer journey and core buyer goals',
           'Editorial calendar with content-to-campaign mapping',
           'Thought leadership articles, guides, and research',
-          'Gated content for demand gen programs',
+          'AEO-optimized content architecture for AI search visibility',
           'Content performance and pipeline attribution',
         ],
         whoItsFor:
@@ -273,56 +304,6 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
       },
     ],
   },
-  {
-    name: 'Advisory & Transformation',
-    slug: 'fractional-cmo',
-    universe: 'strategic',
-    tagline: 'Senior marketing leadership without the full-time overhead.',
-    description:
-      'Fractional CMO services and marketing transformation programs. We embed senior strategists inside your organization to build the marketing function you need — then help your team learn to run it.',
-    color: '#FFBDAE',
-    colorName: 'fing-peachy',
-    borderClass: 'border-fing-peachy/30',
-    services: [
-      {
-        name: 'Fractional CMO',
-        slug: 'fractional-cmo',
-        tagline: 'A real CMO. Part-time commitment. Full strategic weight.',
-        description:
-          'Part-time marketing leadership for companies that need senior strategic guidance without the $400K+ full-time commitment. We embed experienced marketing executives who build strategy, manage teams, and drive results — with the same accountability as a full-time hire.',
-        deliveryModel: 'Retainer',
-        typicalScope: '6–12 month engagements',
-        outcomes: [
-          'Marketing strategy development and execution oversight',
-          'Team structure assessment and hiring plan',
-          'Board and executive reporting cadence',
-          'Vendor evaluation, selection, and management',
-          'Marketing-to-revenue alignment with sales leadership',
-        ],
-        whoItsFor:
-          'B2B tech companies ($10M–$200M) that need a strategic marketing leader but aren\'t ready for — or can\'t find — a full-time CMO.',
-      },
-      {
-        name: 'Marketing Transformation',
-        slug: 'marketing-transformation',
-        tagline: 'Rebuild your marketing function from the inside out.',
-        description:
-          'Team structure, capability building, process optimization, and technology stack rationalization. We help companies that know their marketing isn\'t working but can\'t figure out why — and build the organizational capability to make it work.',
-        deliveryModel: 'Project-based',
-        typicalScope: '3–6 months',
-        outcomes: [
-          'Marketing capability assessment and gap analysis',
-          'Team structure and role design recommendations',
-          'Process documentation and workflow optimization',
-          'Technology stack audit and rationalization plan',
-          'Change management and training program',
-        ],
-        whoItsFor:
-          'Companies going through rapid growth, post-acquisition integration, or leadership transitions where the marketing function needs a reset.',
-      },
-    ],
-  },
-
   // ─── AI-NATIVE B2B MARKETING SOLUTIONS ──────────────────────────
   {
     name: 'AI-Native Solutions',
@@ -354,11 +335,29 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
           'Marketing leaders who know AI matters but need a clear-eyed strategic partner — not a vendor selling tools.',
       },
       {
-        name: 'AI Content Engines',
-        slug: 'ai-content-engines',
+        name: 'AI GTM Activation',
+        slug: 'ai-gtm-activation',
+        tagline: 'Launch faster. Target sharper. Convert smarter.',
+        description:
+          'AI-powered go-to-market execution that compresses timelines and sharpens targeting. We build activation systems that use AI to identify ideal accounts, personalize outreach at scale, and optimize channel mix in real-time — turning your GTM strategy into a live, learning system.',
+        deliveryModel: 'Project + retainer',
+        typicalScope: '8–12 weeks + ongoing',
+        outcomes: [
+          'AI-powered ICP scoring and account prioritization',
+          'Dynamic audience segmentation and targeting models',
+          'Personalized multi-channel activation sequences',
+          'Real-time campaign optimization and A/B testing',
+          'GTM performance analytics with pipeline attribution',
+        ],
+        whoItsFor:
+          'B2B companies launching products or entering markets who want AI to compress their time-to-pipeline instead of waiting quarters for results.',
+      },
+      {
+        name: 'AI Content Studio',
+        slug: 'ai-content-studio',
         tagline: 'Human-quality output at non-human scale.',
         description:
-          'Custom AI content generation systems trained on your brand voice, messaging frameworks, and domain expertise. We build engines that produce publication-ready content across formats — blog, social, email, research — with human editorial oversight baked into the workflow.',
+          'Custom AI content generation systems trained on your brand voice, messaging frameworks, and domain expertise. We build content studios that produce publication-ready assets across formats — blog, social, email, research, sales enablement — with human editorial oversight baked into every workflow.',
         deliveryModel: 'Build + maintain',
         typicalScope: 'Custom scoping',
         outcomes: [
@@ -370,6 +369,24 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
         ],
         whoItsFor:
           'Companies that need 10x content output without 10x headcount — and won\'t accept generic AI slop as a substitute for quality.',
+      },
+      {
+        name: 'AI Design Studio',
+        slug: 'ai-design-studio',
+        tagline: 'Creative at the speed of strategy.',
+        description:
+          'AI-powered design systems that produce on-brand visual assets at scale. From campaign creative to social graphics to presentation decks — we build design workflows where AI handles production while your team focuses on creative direction. Brand guidelines enforced automatically. No more bottlenecks.',
+        deliveryModel: 'Build + retainer',
+        typicalScope: 'Custom scoping',
+        outcomes: [
+          'AI design system trained on your brand guidelines',
+          'Automated creative production for campaigns and social',
+          'Template-based asset generation with brand enforcement',
+          'Design workflow integration with marketing operations',
+          'Quality control protocols and creative review processes',
+        ],
+        whoItsFor:
+          'Marketing teams drowning in design requests who need brand-consistent creative output without scaling the design team linearly.',
       },
       {
         name: 'Answer Engine Optimization',
@@ -390,58 +407,22 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
           'Companies that understand the search landscape is shifting from links to answers — and want to be the brand AI recommends.',
       },
       {
-        name: 'AI Foundations',
-        slug: 'ai-foundations',
-        tagline: 'Build the intelligence layer beneath your marketing.',
+        name: 'Autonomous Outbound AI System',
+        slug: 'autonomous-outbound-ai',
+        tagline: 'Outbound that runs itself. Pipeline that doesn\'t stop.',
         description:
-          'The groundwork for AI-native marketing operations. Data infrastructure, knowledge management, and foundational AI capabilities that turn your marketing organization into one that can actually leverage AI at scale — not just experiment with ChatGPT prompts.',
-        deliveryModel: 'Project-based',
-        typicalScope: '8–12 weeks',
+          'Fully autonomous AI outbound systems that identify prospects, craft personalized sequences, manage cadences, and optimize based on engagement signals — without human bottlenecks. We build the system, tune the models, and let it run. Your team handles the conversations that matter.',
+        deliveryModel: 'Build + retainer',
+        typicalScope: 'Build (6–8 weeks) + ongoing optimization',
         outcomes: [
-          'Marketing data audit and quality assessment',
-          'Knowledge base architecture and content taxonomy',
-          'Data pipeline design for AI model training',
-          'Integration mapping across marketing technology stack',
-          'AI readiness scorecard with improvement roadmap',
+          'Autonomous prospect identification and qualification system',
+          'AI-generated personalized outreach sequences',
+          'Multi-channel cadence management (email, LinkedIn, phone)',
+          'Engagement signal detection and response optimization',
+          'Pipeline contribution reporting and system tuning',
         ],
         whoItsFor:
-          'Companies that tried AI tools and hit a wall — because the foundation wasn\'t there. Data scattered, knowledge tribal, processes manual.',
-      },
-      {
-        name: 'AI-Native Strategy',
-        slug: 'ai-native-strategy',
-        tagline: 'Architect your marketing for how buyers actually discover now.',
-        description:
-          'Strategic design for how your brand interacts with AI systems — the ones your buyers use to research, evaluate, and decide. We build strategies that ensure your company is present, accurate, and authoritative across every AI-mediated touchpoint.',
-        deliveryModel: 'Project + retainer',
-        typicalScope: '6–10 weeks + ongoing',
-        outcomes: [
-          'AI buyer journey mapping across discovery channels',
-          'Brand presence strategy for AI-mediated touchpoints',
-          'Content architecture optimized for AI consumption',
-          'Competitive AI visibility analysis',
-          'Quarterly strategy refresh based on AI platform evolution',
-        ],
-        whoItsFor:
-          'Forward-thinking marketing leaders who see that AI isn\'t just a tool — it\'s a new channel, a new buyer behavior, and a new competitive landscape.',
-      },
-      {
-        name: 'AI Enablement',
-        slug: 'ai-enablement',
-        tagline: 'Move from experimenting to operating.',
-        description:
-          'The bridge between AI pilots and production AI systems. We take the experiments that showed promise and turn them into reliable, scalable marketing operations — with proper workflows, quality controls, and team adoption built in.',
-        deliveryModel: 'Project-based',
-        typicalScope: '3–6 months',
-        outcomes: [
-          'AI pilot assessment and production readiness evaluation',
-          'Workflow design for AI-assisted marketing operations',
-          'Quality assurance frameworks and human oversight protocols',
-          'Team training and adoption program',
-          'Performance benchmarks and optimization cadence',
-        ],
-        whoItsFor:
-          'Marketing teams that ran successful AI experiments but can\'t figure out how to make them part of daily operations at scale.',
+          'B2B companies that need predictable outbound pipeline without scaling SDR teams — or want their existing SDRs focused on high-value conversations instead of cold outreach.',
       },
       {
         name: 'AI Managed Services',
@@ -460,24 +441,6 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
         ],
         whoItsFor:
           'Companies with AI marketing systems in production that need dedicated expertise to keep them performing — without hiring a full AI ops team.',
-      },
-      {
-        name: 'AI Transformation & Leadership',
-        slug: 'ai-transformation-leadership',
-        tagline: 'Restructure your organization around what AI makes possible.',
-        description:
-          'Organizational transformation programs that go beyond tools and workflows to fundamentally rethink how marketing teams are structured, how budgets are allocated, and how value is created in an AI-native world. This is change management for the AI era.',
-        deliveryModel: 'Project + advisory retainer',
-        typicalScope: '6–12 months',
-        outcomes: [
-          'Organizational design for AI-native marketing operations',
-          'Role evolution framework: what changes, what stays, what\'s new',
-          'Budget reallocation strategy for AI investment',
-          'Executive alignment and board communication program',
-          'Phased transformation roadmap with change management',
-        ],
-        whoItsFor:
-          'CMOs and marketing VPs who see AI as an organizational transformation, not just a technology upgrade — and need a strategic partner who has done it.',
       },
     ],
   },

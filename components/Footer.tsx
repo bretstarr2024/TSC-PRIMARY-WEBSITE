@@ -4,12 +4,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 const serviceLinks = [
-  { href: '/services/brand-strategy', label: 'Brand Strategy' },
-  { href: '/services/demand-generation', label: 'Demand Generation' },
+  { href: '/services/brand-strategy', label: 'Brand & Positioning' },
+  { href: '/services/gtm-strategy', label: 'GTM Strategy' },
+  { href: '/services/demand-generation', label: 'Demand & Pipeline' },
   { href: '/services/digital-performance', label: 'Digital Performance' },
   { href: '/services/content-marketing', label: 'Content & Creative' },
-  { href: '/services/fractional-cmo', label: 'Fractional CMO' },
-  { href: '/services/ai-marketing', label: 'AI Services' },
+  { href: '/services/ai-marketing', label: 'AI-Native Solutions' },
 ];
 
 const companyLinks = [

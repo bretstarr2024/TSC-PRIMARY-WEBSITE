@@ -2,8 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { InsightCard } from '@/components/insights/InsightCard';
-import { FaqAccordion } from '@/components/insights/FaqAccordion';
+import { FaqFlipCard } from '@/components/insights/FaqFlipCard';
 import { getAllPublishedFaqs, FaqItem } from '@/lib/resources-db';
 
 export const revalidate = 3600;
@@ -31,10 +30,30 @@ export default async function FaqListingPage() {
 
   const categories = Object.keys(grouped).sort();
 
+  // Build FAQPage schema for SEO/AEO
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: f.answer,
+      },
+    })),
+  };
+
   return (
     <>
       <Header />
       <main className="min-h-screen pt-32 pb-20">
+        <script
+          type="application/ld+json"
+          id="faq-schema"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+
         <section className="section-wide mb-12">
           <nav className="flex items-center gap-2 text-sm text-greige mb-8">
             <Link href="/" className="hover:text-atomic-tangerine">Home</Link>
@@ -56,24 +75,13 @@ export default async function FaqListingPage() {
               {categories.map((category) => (
                 <div key={category}>
                   <h2 className="text-2xl font-semibold text-white mb-6">{category}</h2>
-                  <div className="glass rounded-xl p-6 mb-6">
-                    <FaqAccordion
-                      items={grouped[category].map((f) => ({
-                        question: f.question,
-                        answer: f.answer,
-                        faqId: f.faqId,
-                      }))}
-                      schemaId={`faq-schema-${category.toLowerCase().replace(/\s+/g, '-')}`}
-                    />
-                  </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {grouped[category].map((faq) => (
-                      <InsightCard
+                      <FaqFlipCard
                         key={faq.faqId}
-                        type="faq"
-                        title={faq.question}
-                        description={faq.answer.slice(0, 160) + '...'}
-                        href={`/insights/faq/${faq.faqId}`}
+                        question={faq.question}
+                        answer={faq.answer}
+                        faqId={faq.faqId}
                         tags={faq.tags}
                       />
                     ))}
