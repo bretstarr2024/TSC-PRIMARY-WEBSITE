@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XV** | Last Updated: February 24, 2026
+**Status: SESSION XVI** | Last Updated: February 24, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -383,7 +383,17 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 108 static pages (unchanged count)
 
-#### Session XVI (upcoming): Pipeline Infrastructure
+#### Session XVI: Client Marquee Car Teaser ✅ COMPLETE (Feb 24, 2026)
+
+**Focus:** Replace pill badges in the client marquee with CSS car shapes matching the Frogger game aesthetic, serving as a visual teaser for the hidden game.
+
+- [x] **CSS CarBadge component** — New `CarBadge` component in `ClientMarquee.tsx` renders each client name inside a miniature car shape: boxy body (border-radius 6px), colored hood/bumper, tinted windshield, yellow headlights, red taillights, dark semicircle wheels. Matches the canvas `drawCar` function from `FroggerGame.tsx`.
+- [x] **Lane-colored rows** — Row 1 (left-moving) uses tangerine, row 2 (right-moving) uses tidal, matching the first two Frogger lanes. Direction-aware: headlights face the direction of travel.
+- [x] **Frogger teaser effect** — The two opposing rows of car-shaped client badges create a "two lanes of traffic" visual that directly hints at the Frogger gameplay.
+
+**Build:** 108 static pages (unchanged count)
+
+#### Session XVII (upcoming): Pipeline Infrastructure
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
