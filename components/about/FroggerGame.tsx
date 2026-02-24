@@ -79,7 +79,7 @@ function buildLane(
 ): Lane {
   const pills: Pill[] = [];
   let x = dir === 1 ? -canvasW * 0.3 : 0;
-  const gap = pillH * 1.8 + Math.random() * pillH * 1.2;
+  const gap = pillH * 4.5 + Math.random() * pillH * 3;
 
   for (let i = 0; i < clientSubset.length; i++) {
     const label = clientSubset[i];
@@ -105,18 +105,19 @@ export function FroggerGame({ onClose }: { onClose: () => void }) {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const w = canvas.width;
-    const h = canvas.height;
+    const dpr = window.devicePixelRatio || 1;
+    const w = canvas.width / dpr;
+    const h = canvas.height / dpr;
     const NUM_LANES = 5;
     const laneH = h / (NUM_LANES + 2); // +2 for top/bottom safe zones
     const pillH = Math.min(laneH * 0.55, 38);
 
     const lanes: Lane[] = [];
-    const baseSpeed = 1.2;
+    const baseSpeed = 0.35;
 
     for (let i = 0; i < NUM_LANES; i++) {
       const dir: 1 | -1 = i % 2 === 0 ? 1 : -1;
-      const speed = baseSpeed + Math.random() * 0.8 + i * 0.15;
+      const speed = baseSpeed + Math.random() * 0.25 + i * 0.08;
       const laneY = h - laneH * (i + 1) - laneH; // bottom safe zone offset
       const start = (i * 10) % allClients.length;
       const subset = [...allClients.slice(start), ...allClients.slice(0, start)];
@@ -136,7 +137,7 @@ export function FroggerGame({ onClose }: { onClose: () => void }) {
       shake: 0,
       laneH,
       pillH,
-      started: true,
+      started: false,
       touchActive: false,
     };
   }, []);
@@ -153,9 +154,12 @@ export function FroggerGame({ onClose }: { onClose: () => void }) {
     if (!canvas) return;
 
     const parent = canvas.parentElement;
+    const dpr = window.devicePixelRatio || 1;
     if (parent) {
-      canvas.width = parent.clientWidth;
-      canvas.height = parent.clientHeight;
+      canvas.width = parent.clientWidth * dpr;
+      canvas.height = parent.clientHeight * dpr;
+      canvas.style.width = `${parent.clientWidth}px`;
+      canvas.style.height = `${parent.clientHeight}px`;
     }
 
     // Load Ocho
@@ -167,32 +171,33 @@ export function FroggerGame({ onClose }: { onClose: () => void }) {
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
+    ctx.scale(dpr, dpr);
 
     function loop() {
       const g = gameRef.current;
       if (!g || !ctx || !canvas) return;
 
-      const w = canvas.width;
-      const h = canvas.height;
+      const dprLoop = window.devicePixelRatio || 1;
+      const w = canvas.width / dprLoop;
+      const h = canvas.height / dprLoop;
 
       // --- Update ---
-      if (!g.over) {
-        // Move pills & wrap
-        for (const lane of g.lanes) {
-          const speedMult = 1 + (g.level - 1) * 0.15;
-          for (const pill of lane.pills) {
-            pill.x += lane.speed * lane.dir * speedMult;
-          }
-          // Wrap pills
-          for (const pill of lane.pills) {
-            if (lane.dir === 1 && pill.x > w + 100) {
-              pill.x = -pill.w - 80 - Math.random() * 200;
-            } else if (lane.dir === -1 && pill.x + pill.w < -100) {
-              pill.x = w + 80 + Math.random() * 200;
-            }
+      // Always drift pills (even on start screen for visual backdrop)
+      for (const lane of g.lanes) {
+        const speedMult = g.started ? 1 + (g.level - 1) * 0.08 : 0.5;
+        for (const pill of lane.pills) {
+          pill.x += lane.speed * lane.dir * speedMult;
+        }
+        for (const pill of lane.pills) {
+          if (lane.dir === 1 && pill.x > w + 100) {
+            pill.x = -pill.w - 80 - Math.random() * 200;
+          } else if (lane.dir === -1 && pill.x + pill.w < -100) {
+            pill.x = w + 80 + Math.random() * 200;
           }
         }
+      }
 
+      if (g.started && !g.over) {
         // Collision check
         if (g.respawning > 0) {
           g.respawning--;
@@ -236,7 +241,7 @@ export function FroggerGame({ onClose }: { onClose: () => void }) {
           g.playerX = w / 2;
           // Speed up existing lanes
           for (const lane of g.lanes) {
-            lane.speed += 0.2;
+            lane.speed += 0.06;
           }
         }
       }
@@ -318,51 +323,53 @@ export function FroggerGame({ onClose }: { onClose: () => void }) {
         }
       }
 
-      // Draw player (Ocho)
-      const py = getPlayerY(g, h);
-      const playerSize = g.laneH * 0.45;
-      const blinkOn = g.respawning === 0 || Math.floor(g.respawning / 4) % 2 === 0;
+      // Draw player (Ocho) — only when game has started
+      if (g.started) {
+        const py = getPlayerY(g, h);
+        const playerSize = g.laneH * 0.45;
+        const blinkOn = g.respawning === 0 || Math.floor(g.respawning / 4) % 2 === 0;
 
-      if (blinkOn) {
-        if (ochoImg.current && ochoImg.current.complete && ochoImg.current.naturalWidth > 0) {
-          // Glow
-          ctx.shadowColor = SPRINKLES;
-          ctx.shadowBlur = 18;
-          ctx.drawImage(
-            ochoImg.current,
-            g.playerX - playerSize / 2,
-            py - playerSize / 2,
-            playerSize,
-            playerSize,
-          );
-          ctx.shadowBlur = 0;
-        } else {
-          // Fallback circle
-          ctx.fillStyle = SPRINKLES;
-          ctx.beginPath();
-          ctx.arc(g.playerX, py, playerSize / 3, 0, Math.PI * 2);
-          ctx.fill();
+        if (blinkOn) {
+          if (ochoImg.current && ochoImg.current.complete && ochoImg.current.naturalWidth > 0) {
+            // Glow
+            ctx.shadowColor = SPRINKLES;
+            ctx.shadowBlur = 18;
+            ctx.drawImage(
+              ochoImg.current,
+              g.playerX - playerSize / 2,
+              py - playerSize / 2,
+              playerSize,
+              playerSize,
+            );
+            ctx.shadowBlur = 0;
+          } else {
+            // Fallback circle
+            ctx.fillStyle = SPRINKLES;
+            ctx.beginPath();
+            ctx.arc(g.playerX, py, playerSize / 3, 0, Math.PI * 2);
+            ctx.fill();
+          }
         }
-      }
 
-      // HUD
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'top';
+        // HUD
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'top';
 
-      // Score
-      ctx.fillStyle = CACTUS;
-      ctx.font = `bold ${Math.min(20, w * 0.025)}px Inter, system-ui, sans-serif`;
-      ctx.fillText(`SCORE: ${g.score}`, 16, 16);
+        // Score
+        ctx.fillStyle = CACTUS;
+        ctx.font = `bold ${Math.min(20, w * 0.025)}px Inter, system-ui, sans-serif`;
+        ctx.fillText(`SCORE: ${g.score}`, 16, 16);
 
-      // Level
-      ctx.fillStyle = TIDAL;
-      ctx.fillText(`LEVEL ${g.level}`, 16, 42);
+        // Level
+        ctx.fillStyle = TIDAL;
+        ctx.fillText(`LEVEL ${g.level}`, 16, 42);
 
-      // Lives
-      ctx.textAlign = 'right';
-      ctx.fillStyle = TANGERINE;
-      for (let i = 0; i < g.lives; i++) {
-        ctx.fillText('♥', w - 16 - i * 24, 16);
+        // Lives
+        ctx.textAlign = 'right';
+        ctx.fillStyle = TANGERINE;
+        for (let i = 0; i < g.lives; i++) {
+          ctx.fillText('♥', w - 16 - i * 24, 16);
+        }
       }
 
       // Game over
@@ -385,8 +392,50 @@ export function FroggerGame({ onClose }: { onClose: () => void }) {
         ctx.fillText('Press ENTER to play again  |  ESC to exit', w / 2, h / 2 + 50);
       }
 
+      // Start screen
+      if (!g.started) {
+        ctx.fillStyle = 'rgba(20,18,19,0.75)';
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        // Ocho icon
+        const iconSize = Math.min(64, w * 0.08);
+        if (ochoImg.current && ochoImg.current.complete && ochoImg.current.naturalWidth > 0) {
+          ctx.shadowColor = SPRINKLES;
+          ctx.shadowBlur = 20;
+          ctx.drawImage(ochoImg.current, w / 2 - iconSize / 2, h / 2 - 100 - iconSize / 2, iconSize, iconSize);
+          ctx.shadowBlur = 0;
+        }
+
+        // Title
+        ctx.fillStyle = TANGERINE;
+        ctx.font = `bold ${Math.min(44, w * 0.055)}px Inter, system-ui, sans-serif`;
+        ctx.fillText('CLIENT FROGGER', w / 2, h / 2 - 20);
+
+        // Instructions
+        ctx.fillStyle = SHROOMY;
+        ctx.font = `${Math.min(16, w * 0.02)}px Inter, system-ui, sans-serif`;
+        ctx.fillText('Navigate Ocho through the client traffic', w / 2, h / 2 + 20);
+        ctx.fillText('Arrow keys or WASD to move', w / 2, h / 2 + 44);
+
+        // Call to action (pulsing)
+        const pulse = 0.6 + Math.sin(Date.now() * 0.004) * 0.4;
+        ctx.globalAlpha = pulse;
+        ctx.fillStyle = CACTUS;
+        ctx.font = `bold ${Math.min(20, w * 0.025)}px Inter, system-ui, sans-serif`;
+        ctx.fillText('Press any key or tap to start', w / 2, h / 2 + 84);
+        ctx.globalAlpha = 1;
+
+        // ESC hint
+        ctx.fillStyle = GREIGE;
+        ctx.font = `${Math.min(13, w * 0.016)}px Inter, system-ui, sans-serif`;
+        ctx.fillText('ESC to exit', w / 2, h / 2 + 116);
+      }
+
       // Touch controls (if touch active)
-      if (g.touchActive && !g.over) {
+      if (g.touchActive && !g.over && g.started) {
         drawTouchControls(ctx, w, h);
       }
 
@@ -442,6 +491,11 @@ export function FroggerGame({ onClose }: { onClose: () => void }) {
         return;
       }
 
+      if (!g.started) {
+        g.started = true;
+        return;
+      }
+
       if (g.over) {
         if (e.key === 'Enter') initGame();
         return;
@@ -492,6 +546,11 @@ export function FroggerGame({ onClose }: { onClose: () => void }) {
       if (!g || !canvas) return;
 
       g.touchActive = true;
+
+      if (!g.started) {
+        g.started = true;
+        return;
+      }
 
       if (g.over) {
         initGame();
