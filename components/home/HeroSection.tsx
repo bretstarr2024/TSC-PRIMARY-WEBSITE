@@ -46,15 +46,73 @@ export function HeroSection() {
             xmlns="http://www.w3.org/2000/svg"
             className="transition-all duration-300 drop-shadow-[0_0_6px_rgba(255,89,16,0.3)] group-hover:drop-shadow-[0_0_14px_rgba(255,89,16,0.8)]"
             animate={{
-              y: [0, -6, 0],
-              rotate: [-2, 2, -2],
+              y: [0, 0, -1, -2, -1, 0, 0, -1, -2, 0],
+              rotate: [0, 0, -4, -4, 0, 0, 0, 3.5, 3.5, 0],
             }}
             transition={{
-              duration: 4,
+              duration: 8,
               repeat: Infinity,
               ease: 'easeInOut',
+              times: [0, 0.12, 0.2, 0.3, 0.42, 0.5, 0.62, 0.7, 0.8, 1],
             }}
           >
+            <defs>
+              <linearGradient id="flameOuter" x1="18" y1="10" x2="18" y2="0" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stopColor="#FF5910" />
+                <stop offset="60%" stopColor="#FF8C00" stopOpacity="0.7" />
+                <stop offset="100%" stopColor="#FFD700" stopOpacity="0" />
+              </linearGradient>
+              <linearGradient id="flameInner" x1="18" y1="10" x2="18" y2="3" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.9" />
+                <stop offset="50%" stopColor="#FFD700" stopOpacity="0.7" />
+                <stop offset="100%" stopColor="#FF5910" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+
+            {/* Thruster exhaust — intermittent bursts synced to rotation */}
+            <motion.g
+              animate={{
+                opacity: [0, 0, 0.9, 0.7, 0.3, 0, 0, 0.9, 0.7, 0],
+              }}
+              transition={{
+                duration: 8,
+                repeat: Infinity,
+                ease: 'easeInOut',
+                times: [0, 0.12, 0.18, 0.3, 0.38, 0.5, 0.62, 0.68, 0.8, 1],
+              }}
+            >
+              {/* Outer flame */}
+              <motion.polygon
+                points="13,8 18,1 23,8"
+                fill="url(#flameOuter)"
+                animate={{ scaleY: [0.7, 1, 0.6, 1.1, 0.8, 1, 0.7] }}
+                style={{ transformOrigin: '18px 8px' }}
+                transition={{ duration: 0.35, repeat: Infinity }}
+              />
+              {/* Inner flame — hotter core */}
+              <motion.polygon
+                points="15.5,9 18,4 20.5,9"
+                fill="url(#flameInner)"
+                animate={{ scaleY: [0.5, 1.1, 0.7, 0.9, 0.5] }}
+                style={{ transformOrigin: '18px 9px' }}
+                transition={{ duration: 0.2, repeat: Infinity }}
+              />
+            </motion.g>
+
+            {/* Exhaust sparks — tiny particles that drift during burns */}
+            <motion.circle r="1" fill="#FFD700"
+              animate={{ cy: [7, -2], cx: [16, 13], opacity: [0.8, 0] }}
+              transition={{ duration: 1, repeat: Infinity, repeatDelay: 5.5, delay: 1.5 }}
+            />
+            <motion.circle r="0.8" fill="#FF8C00"
+              animate={{ cy: [7, -1], cx: [20, 24], opacity: [0.7, 0] }}
+              transition={{ duration: 0.9, repeat: Infinity, repeatDelay: 4.8, delay: 5 }}
+            />
+            <motion.circle r="1.1" fill="#FF5910"
+              animate={{ cy: [6, -3], cx: [18, 17], opacity: [0.9, 0] }}
+              transition={{ duration: 1.2, repeat: Infinity, repeatDelay: 5, delay: 3 }}
+            />
+
             {/* Ship body — matches AsteroidsGame canvas ship exactly, rotated to point down */}
             <path
               d="M18 46 L32 6 L18 14 L4 6 Z"
