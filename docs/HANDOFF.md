@@ -1,16 +1,55 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 24, 2026 (Session VII)
+**Last Updated:** February 24, 2026 (Session VIII)
 
 ---
 
-## Current Phase: Phase 1 COMPLETE — About Page Live, Remaining Stubs Need Content
+## Current Phase: Phase 1 COMPLETE + Easter Egg — Asteroids Game on Homepage
 
-The site is live with **108 static pages** across 10 content types. The About page now has full content: 10 leadership bios, 52-client scrolling marquee, founding story, values, FAQ, and AEO-optimized structured data. Remaining stub pages (Work, Industries, Contact, Careers) need content. Work page is last priority per user directive.
+The site is live with **108 static pages** across 10 content types. Session VIII added a hidden Asteroids video game easter egg to the homepage hero — the "THE STARR CONSPIRACY" pre-headline was replaced with a classic Asteroids ship SVG that launches a full game on click. Also enhanced the About page origin story with Amazon book link and newsletter CTA.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10 collections, ~80 documents)
-- **Next actions:** Add headshot photos to leadership section, build Industries page content, pipeline infrastructure from AEO
-- **Roadmap:** See `docs/roadmap.md` Session VII
+- **Next actions:** Play-test Asteroids game, add leadership headshots, build Industries page, pipeline infrastructure from AEO
+- **Roadmap:** See `docs/roadmap.md` Session VIII
+
+### Session VIII Summary (February 24, 2026)
+
+**Focus:** Hidden Asteroids easter egg game on homepage hero + origin story book section enhancement.
+
+**What was done:**
+
+1. **Asteroids easter egg** (1 new file, 1 modified file):
+   - `components/home/AsteroidsGame.tsx` — Full canvas-based Asteroids clone with brand colors (Tangerine ship/bullets, Tidal Wave asteroids, Neon Cactus score, all-brand particle explosions). Classic mechanics: ship rotation/thrust, bullet physics, asteroid splitting (large→medium→small), screen wrapping, level progression, lives, score HUD, game over/restart. Screen shake on death, thrust flame flicker, invulnerability blink.
+   - `components/home/HeroSection.tsx` — Replaced "The Starr Conspiracy" pre-headline text with clickable Asteroids ship SVG. Ship floats with subtle bob animation, glows Atomic Tangerine on hover, shows "click me" tooltip. On click, lazy-loads and launches the full-screen game overlay. ESC exits back to homepage.
+
+2. **Origin story enhancement** (1 modified file, pre-existing changes committed):
+   - `components/about/OriginStory.tsx` — Stats grid changed from 2-col to 3-col (removed redundant "25+ years"). Book section enhanced with expanded description, Amazon 4.6-star rating, "Get the Book" Amazon link, and "Subscribe to Newsletter" LinkedIn link.
+
+**Commits this session:**
+- `506db8d` — fix: Enhance origin story book section with Amazon link and newsletter CTA
+- `88993ab` — feat: Add Asteroids easter egg game to homepage hero
+
+**Results:**
+- 108 static pages (unchanged — no new routes)
+- Asteroids game lazy-loaded via `next/dynamic` — zero bundle cost until clicked
+- Homepage hero ship replaces redundant brand name text
+- Origin story book section now has actionable CTAs
+
+**Donor files referenced:**
+- None — all new code
+
+**Key decisions:**
+- "THE STARR CONSPIRACY" pre-headline removed (redundant — brand name in header)
+- Game is desktop keyboard-only (arrow/WASD + space) — no touch controls for easter egg
+- Game uses brand color palette for on-brand feel even in the easter egg
+- No sound effects (can add later)
+
+**What NOT to re-debate:**
+- Pre-headline removal — user explicitly said "don't need to say 'THE STARR CONSPIRACY' again"
+- Easter egg is intentionally hidden — no navigation or docs should point to it
+- Desktop-only controls — appropriate for a hidden game
+
+---
 
 ### Session VII Summary (February 24, 2026)
 

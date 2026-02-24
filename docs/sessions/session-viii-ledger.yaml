@@ -1,0 +1,75 @@
+session_id: "VIII"
+date: "2026-02-24"
+branch: main
+version: "0.9.0"  # MINOR: Asteroids easter egg game on homepage hero
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "TBD"
+  status: pending
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "Purely frontend — no MongoDB schema modifications"
+
+commits:
+  - hash: "506db8d"
+    message: "fix: Enhance origin story book section with Amazon link and newsletter CTA"
+  - hash: "88993ab"
+    message: "feat: Add Asteroids easter egg game to homepage hero"
+
+artifacts_updated:
+  - "components/home/AsteroidsGame.tsx — NEW: Full canvas-based Asteroids game (ship, asteroids, bullets, particles, HUD, levels)"
+  - "components/home/HeroSection.tsx — Replaced 'The Starr Conspiracy' pre-headline with clickable ship SVG + game launcher"
+  - "components/about/OriginStory.tsx — Enhanced book section with Amazon link, newsletter CTA, 4.6-star rating, 3-col stats grid"
+  - "docs/roadmap.md — Session VIII entry added"
+
+decisions_made:
+  - decision: "Remove 'THE STARR CONSPIRACY' pre-headline from hero"
+    rationale: "User said it's redundant — brand name already in header. Space used for ship easter egg."
+    reversible: true
+  - decision: "Asteroids game lazy-loaded via next/dynamic"
+    rationale: "Zero bundle cost until user clicks the ship — game code only loads on demand"
+    reversible: false
+  - decision: "Game uses brand colors (Tangerine ship, Tidal Wave asteroids, Neon Cactus score)"
+    rationale: "Easter egg still reinforces brand identity"
+    reversible: true
+  - decision: "Desktop keyboard-only controls (no touch)"
+    rationale: "Easter egg — not a core feature. Touch controls would add complexity for minimal payoff."
+    reversible: true
+
+known_risks:
+  - risk: "Ship SVG may not be immediately recognized as clickable"
+    mitigation: "Hover glow effect + 'click me' tooltip on hover provide discoverability hints"
+    severity: low
+  - risk: "Game overlay captures all keyboard input"
+    mitigation: "ESC key always exits. Body scroll disabled while game is active."
+    severity: low
+
+explicitly_deferred:
+  - "Sound effects for Asteroids game — could add later if user wants"
+  - "Mobile touch controls for game — desktop-only easter egg for now"
+  - "High score persistence — could use localStorage later"
+  - "Pipeline infrastructure — moved to Session IX"
+
+next_actions:
+  - "Play-test the Asteroids game and tune difficulty/feel"
+  - "Add headshot images to leadership section when user provides photos"
+  - "Build Industries page content (8 industry sub-pages from kernel ICP)"
+  - "Build Contact page with form (Resend integration)"
+  - "Copy pipeline infrastructure from AEO donor"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All CTAs -> /book (internal Cal.com iframe)"
+  - "Asteroids game is an easter egg — no navigation or docs pointing to it"
+  - "Ship SVG replaces the pre-headline text (not added alongside it)"

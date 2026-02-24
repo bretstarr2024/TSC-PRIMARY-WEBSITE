@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION VII** | Last Updated: February 24, 2026
+**Status: SESSION VIII** | Last Updated: February 24, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -297,12 +297,26 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 108 static pages (same count — About page replaced stub)
 
-#### Session VIII (upcoming): Pipeline Infrastructure
+#### Session VIII: Asteroids Easter Egg ✅ COMPLETE (Feb 24, 2026)
+
+**Focus:** Add hidden Asteroids video game easter egg to homepage hero.
+
+- [x] `components/home/AsteroidsGame.tsx` — Full canvas-based Asteroids clone: classic triangle ship, jagged polygon asteroids (split large→medium→small), bullet physics, particle explosions, screen wrapping, level progression, score/lives/HUD
+- [x] Brand-colored game: ship/bullets in Atomic Tangerine, asteroids in Tidal Wave, score in Neon Cactus, explosions in all brand colors
+- [x] `components/home/HeroSection.tsx` — Replaced "THE STARR CONSPIRACY" pre-headline with clickable Asteroids ship SVG that floats above headline, glows on hover, launches game on click
+- [x] Game lazy-loaded via `next/dynamic` — zero bundle cost until activated
+- [x] Controls: Arrow keys/WASD + Space to fire, ESC to exit, Enter to restart
+- [x] Screen shake, thrust flame flicker, invulnerability blink, particle effects
+
+**Build:** 108 static pages (unchanged count)
+
+#### Session IX (upcoming): Pipeline Infrastructure
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
 - [ ] Create source monitors for B2B/AI marketing news
 - [ ] Add answer capsules to service pillar pages
+- [ ] Build Industries page content
 
 ---
 
