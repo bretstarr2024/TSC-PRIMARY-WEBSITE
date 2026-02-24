@@ -1,0 +1,99 @@
+session_id: "VII"
+date: "2026-02-24"
+branch: main
+version: "0.8.0"  # MINOR: Complete About page with leadership, clients, FAQ, AEO schemas
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "LBTVjcHJGBhoDPykbZ4o"
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "Purely frontend changes — no MongoDB schema modifications"
+
+commits:
+  - hash: "a41bdd4"
+    message: "fix: Add animated headlines to Work and Industries pages"
+  - hash: "fd17b34"
+    message: "feat: Build complete About page with leadership, clients, FAQ, AEO schemas"
+  - hash: "bf5a240"
+    message: "docs: Update roadmap for Session VII — About page complete"
+
+artifacts_updated:
+  - "app/about/page.tsx — Complete page with 7 sections, metadata, JSON-LD schemas"
+  - "app/work/page.tsx — Added AnimatedSection + GradientText wrappers"
+  - "app/industries/page.tsx — Added AnimatedSection + GradientText wrappers"
+  - "components/about/AboutHero.tsx — NEW: Word-by-word 3D animated headline + AEO answer capsule"
+  - "components/about/OriginStory.tsx — NEW: 1999 founding story, stats grid, book callout"
+  - "components/about/ApproachSection.tsx — NEW: Three kernel values as animated cards"
+  - "components/about/LeadershipSection.tsx — NEW: 10 leaders, expand-on-click bios, LinkedIn links"
+  - "components/about/ClientMarquee.tsx — NEW: 52 client names, dual-row infinite scroll marquee"
+  - "components/about/AboutFaq.tsx — NEW: 6 FAQ items with animated accordion"
+  - "lib/schema/about-faq.ts — NEW: FAQ data + FAQPage JSON-LD schema generator"
+  - "lib/schema/breadcrumbs.ts — Added aboutBreadcrumb()"
+  - "docs/roadmap.md — Session VII entry, Phase 3 About marked complete"
+
+decisions_made:
+  - decision: "Leadership section framed as 'Leadership' not 'Team'"
+    rationale: "User requested positioning to imply a larger organization behind the listed leaders"
+    reversible: true
+  - decision: "52 clients highlighted from 500+ CRM list"
+    rationale: "Curated for brand recognition, scale, and 'wow factor' — mix of enterprise giants, major HR tech, and high-growth startups"
+    reversible: true
+  - decision: "Stats claim '3,000+ B2B tech companies since 1999 (and counting)'"
+    rationale: "User-provided number representing total client relationships over 25+ years"
+    reversible: false
+  - decision: "FAQ schema lives in lib/schema/about-faq.ts (not in client component)"
+    rationale: "Server-rendered JSON-LD requires server-accessible module — client components can't export functions for SSR"
+    reversible: false
+  - decision: "Reuse ServiceCTA component for About page CTA"
+    rationale: "Consistent conversion pattern, no need for custom CTA"
+    reversible: true
+  - decision: "Bret's bio excludes WorkEasy Software mention and book publisher"
+    rationale: "User directive — keep focus on TSC"
+    reversible: true
+
+known_risks:
+  - risk: "Leadership bios are hardcoded in LeadershipSection.tsx"
+    mitigation: "Move to kernel config or CMS when team changes — currently 10 people with stable roles"
+    severity: low
+  - risk: "Client names are hardcoded in ClientMarquee.tsx"
+    mitigation: "Easy to update as needed — consider CMS or kernel integration later"
+    severity: low
+  - risk: "No headshot images — using gradient initials avatars"
+    mitigation: "Can add photos later when available — component structure supports it"
+    severity: low
+
+explicitly_deferred:
+  - "AI partnership credentials section — user to clarify which are formal partnerships vs API usage tiers"
+  - "Team headshot photos — designing around text-only for now"
+  - "Industries page content — stub only"
+  - "Work page content — stub only (lowest priority per user)"
+  - "Contact page content — stub only"
+  - "Careers page content — stub only"
+  - "Pipeline infrastructure — moved to Session VIII"
+
+next_actions:
+  - "Add headshot images to leadership section when user provides photos"
+  - "Clarify and add AI partnership credentials section"
+  - "Build Industries page content (8 industry sub-pages from kernel ICP)"
+  - "Build Contact page with form (Resend integration)"
+  - "Copy pipeline infrastructure from AEO donor"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All CTAs → /book (internal Cal.com iframe)"
+  - "Leadership section labeled 'Leadership' (not 'Team')"
+  - "Stats: 3,000+ B2B tech clients since 1999"
+  - "Bret bio: no WorkEasy Software, no book publisher name"
+  - "FAQ schema must live in server-accessible module (lib/schema/), not in use-client components"
