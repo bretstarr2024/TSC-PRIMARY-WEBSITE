@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XIV** | Last Updated: February 24, 2026
+**Status: SESSION XV** | Last Updated: February 24, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -373,7 +373,17 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 108 static pages (unchanged count)
 
-#### Session XV (upcoming): Pipeline Infrastructure
+#### Session XV: Frogger UX — Cars, Ocho Trigger, Overlap Fix ✅ COMPLETE (Feb 24, 2026)
+
+**Focus:** Three Frogger easter egg UX improvements per user feedback: discoverable trigger, fix overlapping obstacles, turn pills into cars.
+
+- [x] **Ocho trigger moved below client list** — Moved from hidden absolute-positioned bottom-right to centered below marquee rows. Added "Start" text beneath bobbing Ocho. More discoverable while still subtle.
+- [x] **Overlap fix** — Wrapping logic now checks positions of all other cars in the lane before placing. Ensures minimum `pillH * 3` gap + random variance. No more overlapping/blurred client names.
+- [x] **Cars instead of pills** — Side-view car shapes: rounded body with boxy corners, colored hood/bumper, tinted windshield, semicircle wheels with rims, yellow headlights, red taillights. Direction-aware (headlights face travel direction). Client names in bold on car body. Wider padding for hood/windshield accommodation.
+
+**Build:** 108 static pages (unchanged count)
+
+#### Session XVI (upcoming): Pipeline Infrastructure
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
