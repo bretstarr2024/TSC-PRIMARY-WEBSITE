@@ -26,7 +26,7 @@ export function PricingCards() {
           {/* Subscription */}
           <AnimatedSection delay={0.1}>
             <motion.div
-              className="relative glass rounded-2xl p-8 md:p-10 h-full overflow-hidden border border-atomic-tangerine/30"
+              className="relative glass rounded-2xl p-8 md:p-10 h-full flex flex-col overflow-hidden border border-atomic-tangerine/30"
               whileHover={{ y: -4 }}
               transition={{ duration: 0.3 }}
             >
@@ -36,26 +36,23 @@ export function PricingCards() {
                 style={{ background: '#FF5910' }}
               />
 
-              <div className="relative z-10">
-                <span className="inline-block px-3 py-1 text-[10px] font-bold uppercase tracking-widest bg-atomic-tangerine/15 text-atomic-tangerine rounded-full mb-6">
-                  Most Popular
-                </span>
+              <div className="relative z-10 flex flex-col h-full">
                 <h3 className="text-2xl font-bold text-white mb-2">Subscription</h3>
                 <div className="flex items-baseline gap-1 mb-1">
                   <span className="text-4xl md:text-5xl font-black text-white">$15K</span>
                   <span className="text-shroomy text-lg">/month</span>
                 </div>
-                <p className="text-sm text-greige mb-6">Starting at</p>
+                <p className="text-sm text-greige mb-6">minimum</p>
 
                 <div className="w-full h-px bg-white/10 mb-6" />
 
                 <ul className="space-y-3 mb-8">
                   {[
                     'Dedicated senior team',
-                    'Continuous context accumulation',
-                    'Iterative improvement over time',
-                    'AI infrastructure + custom builds',
-                    'Strategy, execution, and integration',
+                    'Strategic planning',
+                    'Opportunity prioritization',
+                    'Traditional agency services',
+                    'AI workflows and custom builds',
                   ].map((item) => (
                     <li key={item} className="flex items-start gap-3 text-sm text-shroomy">
                       <span className="text-atomic-tangerine mt-0.5 flex-shrink-0">&#10003;</span>
@@ -70,10 +67,10 @@ export function PricingCards() {
                 </p>
 
                 <Link
-                  href="/book"
-                  className="block text-center px-6 py-3 bg-atomic-tangerine text-white font-medium rounded-lg hover:bg-hot-sauce transition-colors hover:no-underline"
+                  href="/book?service=Subscription"
+                  className="mt-auto block text-center px-6 py-3 bg-atomic-tangerine text-white font-medium rounded-lg hover:bg-hot-sauce transition-colors hover:no-underline"
                 >
-                  Let&apos;s Talk!
+                  Let&apos;s talk about a subscription
                 </Link>
               </div>
             </motion.div>
@@ -82,20 +79,16 @@ export function PricingCards() {
           {/* Project */}
           <AnimatedSection delay={0.2}>
             <motion.div
-              className="glass rounded-2xl p-8 md:p-10 h-full border border-white/10"
+              className="glass rounded-2xl p-8 md:p-10 h-full flex flex-col border border-white/10"
               whileHover={{ y: -4 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="relative z-10">
-                <span className="inline-block px-3 py-1 text-[10px] font-bold uppercase tracking-widest bg-white/5 text-greige rounded-full mb-6">
-                  Defined Scope
-                </span>
+              <div className="relative z-10 flex flex-col h-full">
                 <h3 className="text-2xl font-bold text-white mb-2">Project</h3>
                 <div className="flex items-baseline gap-1 mb-1">
                   <span className="text-4xl md:text-5xl font-black text-white">$30K</span>
-                  <span className="text-shroomy text-lg">minimum</span>
                 </div>
-                <p className="text-sm text-greige mb-6">Starting at</p>
+                <p className="text-sm text-greige mb-6">minimum</p>
 
                 <div className="w-full h-px bg-white/10 mb-6" />
 
@@ -120,10 +113,10 @@ export function PricingCards() {
                 </p>
 
                 <Link
-                  href="/book"
-                  className="block text-center px-6 py-3 bg-white/10 text-white font-medium rounded-lg hover:bg-white/20 transition-colors hover:no-underline"
+                  href="/book?service=Project"
+                  className="mt-auto block text-center px-6 py-3 bg-white/10 text-white font-medium rounded-lg hover:bg-white/20 transition-colors hover:no-underline"
                 >
-                  Let&apos;s Talk!
+                  Let&apos;s talk about a project
                 </Link>
               </div>
             </motion.div>
