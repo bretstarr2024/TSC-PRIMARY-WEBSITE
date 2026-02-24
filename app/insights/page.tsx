@@ -8,6 +8,7 @@ import { AnswerCapsulesSection } from '@/components/AnswerCapsulesSection';
 import { getClientConfig } from '@/lib/kernel/client';
 import { insightsCapsules } from '@/lib/schema/hub-faqs';
 import { getFaqSchema } from '@/lib/schema/service-faq';
+import { SnakeGameTrigger } from '@/components/insights/SnakeGameTrigger';
 
 export const revalidate = 3600;
 
@@ -179,6 +180,8 @@ export default function InsightsPage() {
             ))}
           </StaggerContainer>
         </section>
+
+        <SnakeGameTrigger />
 
         <AnswerCapsulesSection
           capsules={insightsCapsules}

@@ -6,6 +6,7 @@ import { IndustryCard } from '@/components/industries/IndustryCard';
 import { AnswerCapsulesSection } from '@/components/AnswerCapsulesSection';
 import { ServiceCTA } from '@/components/services/ServiceCTA';
 import { INDUSTRIES } from '@/lib/industries-data';
+import { SpaceInvadersGameTrigger } from '@/components/industries/SpaceInvadersGameTrigger';
 import { verticalsCapsules } from '@/lib/schema/hub-faqs';
 import { getFaqSchema } from '@/lib/schema/service-faq';
 
@@ -40,6 +41,8 @@ export default function VerticalsPage() {
             </div>
           </div>
         </section>
+
+        <SpaceInvadersGameTrigger />
 
         <AnswerCapsulesSection
           capsules={verticalsCapsules}

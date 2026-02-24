@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { PacManGameTrigger } from '@/components/careers/PacManGameTrigger';
 
 export const metadata: Metadata = {
   title: 'Careers | The Starr Conspiracy',
@@ -25,6 +26,8 @@ export default function CareersPage() {
           <p className="text-xl text-shroomy max-w-2xl">
             Coming soon.
           </p>
+
+          <PacManGameTrigger />
         </div>
       </main>
       <Footer />

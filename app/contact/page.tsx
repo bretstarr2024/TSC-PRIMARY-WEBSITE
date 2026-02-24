@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { PongGameTrigger } from '@/components/contact/PongGameTrigger';
 
 export const metadata: Metadata = {
   title: 'Contact | The Starr Conspiracy',
@@ -26,6 +27,8 @@ export default function ContactPage() {
             Coming soon.
           </p>
         </div>
+
+        <PongGameTrigger />
       </main>
       <Footer />
     </>

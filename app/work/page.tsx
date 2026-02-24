@@ -3,6 +3,7 @@ import { AnimatedSection } from '@/components/AnimatedSection';
 import { GradientText } from '@/components/AnimatedText';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { GalagaGameTrigger } from '@/components/work/GalagaGameTrigger';
 
 export const metadata: Metadata = {
   title: 'Work | The Starr Conspiracy',
@@ -29,6 +30,8 @@ export default function WorkPage() {
               Coming soon.
             </p>
           </AnimatedSection>
+
+          <GalagaGameTrigger />
         </div>
       </main>
       <Footer />
