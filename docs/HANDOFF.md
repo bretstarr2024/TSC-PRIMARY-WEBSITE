@@ -1,16 +1,60 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 24, 2026 (Session IX)
+**Last Updated:** February 24, 2026 (Session X)
 
 ---
 
-## Current Phase: Phase 1 COMPLETE + Easter Egg Enhanced — Asteroids with UFO, High Scores
+## Current Phase: Phase 1 COMPLETE + Asteroids Fully Featured (Sound, Touch, Bullet Fix)
 
-The site is live with **108 static pages** across 10 content types. Session IX enhanced the hidden Asteroids easter egg with five gameplay improvements: bullets now cross the full screen, the Ocho mascot appears as a UFO enemy that fires at the player, a classic arcade high score table with 3-initial entry persists in localStorage, the game over shake bug was fixed, and a brief input delay prevents accidental skip-through on game over.
+The site is live with **108 static pages** across 10 content types. Session X completed the Asteroids easter egg with three major features: Web Audio API retro sound effects (10 distinct synth sounds), mobile touch controls with multi-touch support, and a bullet physics fix so ammunition stops at the screen edge instead of wrapping.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10 collections, ~80 documents)
-- **Next actions:** Play-test enhanced Asteroids, add leadership headshots, build Industries page, pipeline infrastructure from AEO
-- **Roadmap:** See `docs/roadmap.md` Session IX
+- **Next actions:** Play-test on mobile, add leadership headshots, build Industries page, pipeline infrastructure from AEO
+- **Roadmap:** See `docs/roadmap.md` Session X
+
+### Session X Summary (February 24, 2026)
+
+**Focus:** Three enhancements to the hidden Asteroids easter egg: sound effects, mobile touch controls, and bullet physics fix.
+
+**What was done:**
+
+1. **Web Audio API sound engine** (new class in existing file):
+   - `components/home/AsteroidsGame.tsx` — `SFX` class generates all sounds programmatically via oscillators and noise buffers. No external audio files. Discrete sounds: shoot (square wave 880→220Hz), rock explosion (filtered white noise, size-dependent duration/volume), ship explosion (deep LP filtered noise, 0.6s), UFO shoot (sawtooth 600→200Hz), UFO explosion (mid-frequency noise burst), level up (ascending 4-note arpeggio A4→A5), game over (descending 4-note A4→A3). Continuous sounds: thrust (looping LP white noise, starts/stops with key/button), UFO hum (dual detuned square oscillators 120/126Hz, creates warble effect). Mute toggle via M key on keyboard or ♪ touch button.
+
+2. **Mobile touch controls** (new touch handling in existing file):
+   - `components/home/AsteroidsGame.tsx` — Virtual buttons rendered on canvas with semi-transparent glass styling. Gameplay: 4 buttons (◀ rotate left, ▶ rotate right, ▲ thrust, ● fire) at bottom of screen. Game over initials entry: 5 buttons (◀ ▶ ▲ ▼ ✓) for cursor movement, letter cycling, and confirm. Game over restart: single ▶ button. Always visible on touch: ✕ close (top-left), ♪ mute (top-right). Multi-touch supported (thrust + fire + rotate simultaneously). Auto-appear on first touch event (hidden on desktop). `touch-action: none` on container and canvas prevents browser scroll/zoom.
+
+3. **Bullets stop at screen edge** (behavior change in existing file):
+   - `components/home/AsteroidsGame.tsx` — Player bullets and UFO bullets no longer call `wrap()`. Instead, they travel in a straight line and are removed when they exit the screen bounds (with 4px grace margin so they visually leave before removal). Ship and asteroids still wrap as before. The `bulletLife` field is retained as a safety cap but bullets die from bounds checking first.
+
+**Commits this session:**
+- `4e37e3b` — feat: Asteroids — sound effects, mobile touch controls, bullets stop at screen edge
+- `a518464` — docs: Update roadmap for Session X — sound, touch controls, bullet fix
+
+**Results:**
+- 108 static pages (unchanged — no new routes)
+- All changes contained in a single file (`AsteroidsGame.tsx`, +453/-27 lines)
+- No MongoDB, API, or build pipeline changes
+- Asteroids game now has: sound, touch controls, non-wrapping bullets, UFO enemy, high scores
+
+**Donor files referenced:**
+- None — all new code (Web Audio API, canvas touch rendering)
+
+**Key decisions:**
+- Web Audio API synth sounds, no audio files — retro aesthetic, zero asset management
+- Continuous audio nodes for thrust and UFO hum — discrete bursts sounded stuttery
+- Touch controls auto-appear on first touch event — no unnecessary UI on desktop
+- Mute via M key and touch button — sound can be disruptive
+- During initials entry, M key types the letter M (not mute) — context-aware
+
+**What NOT to re-debate:**
+- Web Audio API over audio files — programmatic generation is cleaner and more retro
+- Bullets do NOT wrap — user explicitly requested this behavior change
+- Touch controls hidden on desktop — they auto-appear on first touch, no feature detection needed
+- Mute default is unmuted — sound effects are a feature, user can mute if desired
+- Ship and asteroids still wrap — only bullets were changed per user request
+
+---
 
 ### Session IX Summary (February 24, 2026)
 
