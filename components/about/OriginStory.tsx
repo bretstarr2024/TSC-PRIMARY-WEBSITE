@@ -48,15 +48,14 @@ export function OriginStory() {
           {/* Right: stats */}
           <div>
             <AnimatedSection delay={0.2}>
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-3 gap-4">
                 {[
                   { stat: '1999', label: 'Founded' },
                   { stat: '3,000+', label: 'B2B tech clients' },
-                  { stat: '25+', label: 'Years of experience' },
                   { stat: '100+', label: 'Brands repositioned' },
                 ].map((item) => (
                   <div key={item.label} className="glass rounded-xl p-6">
-                    <p className="text-3xl md:text-4xl font-bold text-atomic-tangerine mb-2">
+                    <p className="text-2xl md:text-3xl font-bold text-atomic-tangerine mb-2">
                       {item.stat}
                     </p>
                     <p className="text-sm text-greige">{item.label}</p>
@@ -67,14 +66,38 @@ export function OriginStory() {
 
             <AnimatedSection delay={0.3}>
               <div className="glass rounded-xl p-8 mt-6">
-                <p className="text-sm text-greige uppercase tracking-wider mb-3">The book</p>
-                <p className="text-white font-semibold text-lg mb-2">
+                <p className="text-sm text-greige uppercase tracking-wider mb-4">The book</p>
+                <p className="text-white font-semibold text-xl mb-3">
                   A Humble Guide to Fixing Everything in Brand, Marketing, and Sales
                 </p>
-                <p className="text-shroomy text-sm leading-relaxed">
-                  Bret Starr&apos;s definitive take on what&apos;s broken in B2B marketing and how to fix it.
-                  The playbook behind 25 years of work.
+                <p className="text-shroomy text-sm leading-relaxed mb-3">
+                  Nearly every tech company is experiencing performance declines from their
+                  tried-and-true sales and marketing strategies. Many don&apos;t know why. Bret
+                  Starr&apos;s definitive take on what&apos;s broken in B2B marketing and how to fix
+                  it — the playbook behind 3,000+ client engagements.
                 </p>
+                <div className="flex items-center gap-3 mb-5">
+                  <span className="text-atomic-tangerine font-semibold">4.6 ★</span>
+                  <span className="text-greige text-sm">45 ratings on Amazon</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <a
+                    href="https://www.amazon.com/Humble-Guide-Fixing-Everything-Marketing/dp/B0CJL6LBQF/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-atomic-tangerine/10 border border-atomic-tangerine/30 rounded-lg text-atomic-tangerine text-sm font-medium hover:bg-atomic-tangerine/20 transition-colors"
+                  >
+                    Get the Book &rarr;
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/newsletters/7114623320527929345/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-shroomy text-sm font-medium hover:bg-white/10 transition-colors"
+                  >
+                    Subscribe to Newsletter
+                  </a>
+                </div>
               </div>
             </AnimatedSection>
           </div>
