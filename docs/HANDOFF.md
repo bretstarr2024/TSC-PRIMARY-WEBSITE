@@ -1,6 +1,60 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 24, 2026 (Session XXII)
+**Last Updated:** February 24, 2026 (Session XXIII)
+
+---
+
+## Current Phase: Phase 1 COMPLETE + Verticals + Pricing + Answer Capsules Sitewide
+
+The site is live with **118 static pages** across 10 content types, 9 verticals (formerly "Industries"), a full Pricing page, and **89 answer capsules** across 21 pages optimized for AI search citation. Session XXIII renamed the "Industries" section to "Verticals" sitewide (including URL paths) and added answer capsule FAQ sections to the homepage, services hub, verticals hub, and insights hub.
+
+- **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10 collections, ~80 documents)
+- **Next actions:** Build Contact page with form, pipeline infrastructure from AEO, chatbot (chaDbot)
+- **Roadmap:** See `docs/roadmap.md` Session XXIII
+
+### Session XXIII Summary (February 24, 2026)
+
+**Focus:** Rename "Industries" section to "Verticals" sitewide. Add answer capsules to all major hub pages and homepage.
+
+**What was done:**
+
+1. **Industries → Verticals rename** (11 modified files, 2 new route files):
+   - `app/verticals/page.tsx` + `app/verticals/[slug]/page.tsx` — New routes replacing `/industries` paths. Old `app/industries/` directory removed.
+   - `components/Header.tsx` + `components/Footer.tsx` — Nav label "Industries" → "Verticals", href `/industries` → `/verticals`.
+   - `components/industries/IndustryCard.tsx` — Card links → `/verticals/[slug]`.
+   - `components/industries/IndustryHero.tsx` — Back link "← All Industries" → "← All Verticals", href → `/verticals`.
+   - `components/industries/RelatedIndustries.tsx` — Heading "Related Industries" → "Related Verticals", links → `/verticals/[slug]`.
+   - `lib/schema/breadcrumbs.ts` — `industriesBreadcrumb`/`industryBreadcrumb` → `verticalsBreadcrumb`/`verticalBreadcrumb`, URLs updated.
+   - `lib/schema/about-faq.ts` — "What industries does TSC serve?" → "What verticals does TSC specialize in?"
+   - `app/sitemap.ts` — Added `/verticals` hub + 9 sub-pages (were missing before), imported `INDUSTRIES` data.
+   - Internal types (`Industry`, `INDUSTRIES`, `lib/industries-data.ts`, `components/industries/` directory) kept as-is — implementation detail.
+
+2. **Hub page answer capsules** (1 new file, 4 modified files):
+   - `lib/schema/hub-faqs.ts` — New data file with 18 answer capsules across 4 page sets: `homepageCapsules` (5), `servicesCapsules` (5), `verticalsCapsules` (4), `insightsCapsules` (4).
+   - `app/page.tsx` — AnswerCapsulesSection between CredibilitySection and CtaSection. Atomic Tangerine accent. FAQPage JSON-LD.
+   - `app/services/page.tsx` — AnswerCapsulesSection between BridgeStatement and ServiceCTA. Atomic Tangerine accent. FAQPage JSON-LD.
+   - `app/verticals/page.tsx` — AnswerCapsulesSection between industry cards grid and ServiceCTA. Sprinkles accent. FAQPage JSON-LD.
+   - `app/insights/page.tsx` — AnswerCapsulesSection after content type grid. Tidal Wave accent. FAQPage JSON-LD.
+
+**Commits this session:**
+- `b09275e` — feat: Rename Industries section to Verticals sitewide
+- `c8a0dfb` — feat: Add 18 answer capsules to homepage, services, verticals, and insights hubs
+- `fc3ab47` — docs: Session XXIII roadmap update — verticals rename + hub answer capsules
+
+**Results:**
+- "Industries" → "Verticals" in all user-facing text, navigation, URLs, breadcrumbs, metadata, sitemap
+- 18 new answer capsules added to 4 hub pages (homepage, services, verticals, insights)
+- 89 total answer capsules across 21 pages with FAQPage JSON-LD schema
+- Sitemap now includes `/verticals` hub + 9 sub-pages (were missing before)
+- Build passes: 118 static pages, no new routes (1:1 swap)
+
+**Key decisions (do not re-debate):**
+- Section is called "Verticals" not "Industries" — user directive, B2B SaaS positioning language
+- URLs are `/verticals` and `/verticals/[slug]` — old `/industries` routes removed
+- Internal types/data files (`Industry`, `INDUSTRIES`, `lib/industries-data.ts`, `components/industries/`) kept unchanged — renaming adds churn with no user-facing benefit
+- Hub page FAQ data centralized in `lib/schema/hub-faqs.ts` — one file for all hub capsules
+- Homepage capsules placed between Credibility and CTA sections (objection handling before conversion)
+- Each hub uses a distinct brand color accent: homepage/services = Atomic Tangerine, verticals = Sprinkles, insights = Tidal Wave
 
 ---
 

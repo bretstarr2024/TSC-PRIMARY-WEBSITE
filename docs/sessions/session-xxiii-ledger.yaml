@@ -1,0 +1,86 @@
+session_id: "XXIII"
+date: "2026-02-24"
+branch: main
+version: "0.16.0"  # MINOR: Industries→Verticals rename + 18 hub answer capsules (89 total sitewide)
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "rrX6iFEP7Lwikn2ZqICc"
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "Pure frontend session — no MongoDB schema modifications"
+
+commits:
+  - hash: "b09275e"
+    message: "feat: Rename Industries section to Verticals sitewide"
+  - hash: "c8a0dfb"
+    message: "feat: Add 18 answer capsules to homepage, services, verticals, and insights hubs"
+  - hash: "fc3ab47"
+    message: "docs: Session XXIII roadmap update — verticals rename + hub answer capsules"
+
+artifacts_updated:
+  - "app/verticals/page.tsx — New route (replaces app/industries/page.tsx), wired with AnswerCapsulesSection + FAQPage JSON-LD"
+  - "app/verticals/[slug]/page.tsx — New route (replaces app/industries/[slug]/page.tsx), updated breadcrumb import"
+  - "app/page.tsx — Added AnswerCapsulesSection (5 homepage capsules) + FAQPage JSON-LD"
+  - "app/services/page.tsx — Added AnswerCapsulesSection (5 services capsules) + FAQPage JSON-LD"
+  - "app/insights/page.tsx — Added AnswerCapsulesSection (4 insights capsules) + FAQPage JSON-LD"
+  - "lib/schema/hub-faqs.ts — New file: 18 answer capsules across 4 page sets (homepage, services, verticals, insights)"
+  - "components/Header.tsx — Nav label 'Industries'→'Verticals', href /industries→/verticals"
+  - "components/Footer.tsx — Company link 'Industries'→'Verticals', href /industries→/verticals"
+  - "components/industries/IndustryCard.tsx — Link href /industries/→/verticals/"
+  - "components/industries/IndustryHero.tsx — Back link href + text: '← All Verticals' → /verticals"
+  - "components/industries/RelatedIndustries.tsx — Link hrefs /industries/→/verticals/, heading 'Related Verticals'"
+  - "lib/schema/breadcrumbs.ts — industriesBreadcrumb→verticalsBreadcrumb, industryBreadcrumb→verticalBreadcrumb"
+  - "lib/schema/about-faq.ts — Question text 'What industries does TSC serve?'→'What verticals does TSC specialize in?'"
+  - "app/sitemap.ts — Added /verticals hub + 9 sub-pages (were missing), imported INDUSTRIES data"
+  - "docs/roadmap.md — Session XXIII entry added, upcoming session renumbered to XXIV"
+
+decisions_made:
+  - decision: "Rename 'Industries' to 'Verticals' including URL paths"
+    rationale: "User directive — 'verticals' is more precise B2B SaaS positioning language. No live external links to break (no domain configured yet)."
+    reversible: false
+  - decision: "Keep internal type names (Industry, INDUSTRIES, industries-data.ts) unchanged"
+    rationale: "Internal implementation detail — renaming types/files across dozens of imports adds churn with zero user-facing benefit."
+    reversible: true
+  - decision: "Keep components/industries/ directory name unchanged"
+    rationale: "Same as above — internal directory structure doesn't affect users or URLs."
+    reversible: true
+  - decision: "Homepage capsules placed between CredibilitySection and CtaSection"
+    rationale: "FAQ section reinforces credibility before final CTA — natural reading flow."
+    reversible: true
+  - decision: "Services hub capsules placed between BridgeStatement and ServiceCTA"
+    rationale: "After the narrative arc (hero→categories→AI→bridge), FAQ answers objections before CTA."
+    reversible: true
+  - decision: "Verticals hub uses Sprinkles accent, Insights hub uses Tidal Wave accent"
+    rationale: "Each hub gets a distinct brand color to differentiate sections visually."
+    reversible: true
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All CTAs -> /book (internal Cal.com iframe)"
+  - "Section is now called 'Verticals' not 'Industries' in all user-facing text"
+  - "URLs are /verticals and /verticals/[slug] — old /industries routes removed"
+  - "Internal types (Industry, INDUSTRIES, industries-data.ts) still use 'industry' naming"
+  - "AnswerCapsule interface lives in lib/services-data.ts — single source of truth"
+  - "Every answer capsule's first sentence must be a standalone quotable 20-25 word capsule"
+  - "Hub page FAQ data lives in lib/schema/hub-faqs.ts"
+  - "About page retains its own FAQ (AboutFaq component) — not replaced by AnswerCapsulesSection"
+  - "Asteroids game is an easter egg — no navigation or docs pointing to it"
+  - "Frogger game is an easter egg — Ocho trigger only, no navigation pointing to it"
+
+next_actions:
+  - "Build Contact page with form (Resend integration)"
+  - "Copy pipeline infrastructure from AEO donor"
+  - "Build chatbot (chaDbot) — copy RAG from AEO"
+  - "Create source monitors for B2B/AI marketing news"
