@@ -3,21 +3,24 @@ import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { IndustriesHero } from '@/components/industries/IndustriesHero';
 import { IndustryCard } from '@/components/industries/IndustryCard';
+import { AnswerCapsulesSection } from '@/components/AnswerCapsulesSection';
 import { ServiceCTA } from '@/components/services/ServiceCTA';
 import { INDUSTRIES } from '@/lib/industries-data';
+import { verticalsCapsules } from '@/lib/schema/hub-faqs';
+import { getFaqSchema } from '@/lib/schema/service-faq';
 
 export const metadata: Metadata = {
-  title: 'Industries | The Starr Conspiracy',
+  title: 'Verticals | The Starr Conspiracy',
   description:
-    'B2B marketing expertise across HR Tech, SaaS, FinTech, Cybersecurity, HealthTech, MarTech, DevTools, Cloud Infrastructure, and AI/ML platforms. Industry-specific strategies grounded in 25+ years of experience.',
+    'B2B marketing expertise across HR Tech, SaaS, FinTech, Cybersecurity, HealthTech, MarTech, DevTools, Cloud Infrastructure, and AI/ML platforms. Vertical-specific strategies grounded in 25+ years of experience.',
   openGraph: {
-    title: 'Industries | The Starr Conspiracy',
+    title: 'Verticals | The Starr Conspiracy',
     description:
       'We work exclusively with B2B technology companies. If you sell software or services to businesses, we probably already understand your market.',
   },
 };
 
-export default function IndustriesPage() {
+export default function VerticalsPage() {
   return (
     <>
       <Header />
@@ -38,9 +41,23 @@ export default function IndustriesPage() {
           </div>
         </section>
 
+        <AnswerCapsulesSection
+          capsules={verticalsCapsules}
+          accentColor="#ED0AD2"
+          heading={<>Questions about our <span className="text-sprinkles">vertical expertise.</span></>}
+          subheading="How deep B2B technology specialization translates into better marketing results."
+        />
+
         <ServiceCTA />
       </main>
       <Footer />
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(getFaqSchema(verticalsCapsules)),
+        }}
+      />
     </>
   );
 }

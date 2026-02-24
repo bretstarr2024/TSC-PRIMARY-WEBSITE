@@ -19,7 +19,7 @@ export function RelatedIndustries({ industries }: RelatedIndustriesProps) {
             Other Verticals
           </p>
           <h2 className="text-3xl md:text-4xl font-bold text-white">
-            Related Industries
+            Related Verticals
           </h2>
         </AnimatedSection>
 
@@ -27,7 +27,7 @@ export function RelatedIndustries({ industries }: RelatedIndustriesProps) {
           {industries.map((ind) => (
             <StaggerItem key={ind.slug}>
               <Link
-                href={`/industries/${ind.slug}`}
+                href={`/verticals/${ind.slug}`}
                 className="block glass rounded-xl p-6 border group hover:no-underline transition-all duration-300"
                 style={{ borderColor: `${ind.color}20` }}
               >

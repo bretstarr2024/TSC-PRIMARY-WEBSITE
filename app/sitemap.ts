@@ -1,4 +1,5 @@
 import { MetadataRoute } from 'next';
+import { INDUSTRIES } from '@/lib/industries-data';
 import { getAllPublishedBlogPosts } from '@/lib/content-db';
 import {
   getAllPublishedFaqs,
@@ -19,6 +20,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPages: MetadataRoute.Sitemap = [
     { url: `${BASE_URL}/`, changeFrequency: 'weekly', priority: 1 },
     { url: `${BASE_URL}/services`, changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${BASE_URL}/verticals`, changeFrequency: 'monthly', priority: 0.9 },
+    ...INDUSTRIES.map((ind) => ({
+      url: `${BASE_URL}/verticals/${ind.slug}`,
+      changeFrequency: 'monthly' as const,
+      priority: 0.8,
+    })),
     { url: `${BASE_URL}/insights`, changeFrequency: 'daily', priority: 0.9 },
     { url: `${BASE_URL}/insights/blog`, changeFrequency: 'daily', priority: 0.8 },
     { url: `${BASE_URL}/insights/faq`, changeFrequency: 'daily', priority: 0.8 },

@@ -107,12 +107,12 @@ export const aboutBreadcrumb = () =>
 export const pricingBreadcrumb = () =>
   breadcrumb([{ name: 'Home', url: '/' }, { name: 'Pricing', url: '/pricing' }]);
 
-export const industriesBreadcrumb = () =>
-  breadcrumb([{ name: 'Home', url: '/' }, { name: 'Industries', url: '/industries' }]);
+export const verticalsBreadcrumb = () =>
+  breadcrumb([{ name: 'Home', url: '/' }, { name: 'Verticals', url: '/verticals' }]);
 
-export const industryBreadcrumb = (name?: string) =>
+export const verticalBreadcrumb = (name?: string) =>
   breadcrumb([
     { name: 'Home', url: '/' },
-    { name: 'Industries', url: '/industries' },
+    { name: 'Verticals', url: '/verticals' },
     ...(name ? [{ name, url: '#' }] : []),
   ]);

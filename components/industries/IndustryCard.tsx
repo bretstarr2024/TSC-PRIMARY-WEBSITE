@@ -22,7 +22,7 @@ export function IndustryCard({ industry, index }: IndustryCardProps) {
       }}
     >
       <Link
-        href={`/industries/${industry.slug}`}
+        href={`/verticals/${industry.slug}`}
         className="block glass rounded-xl p-6 md:p-8 border group hover:no-underline transition-all duration-300 h-full"
         style={{ borderColor: `${industry.color}20` }}
       >

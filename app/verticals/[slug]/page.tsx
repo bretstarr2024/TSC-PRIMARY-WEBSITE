@@ -11,7 +11,7 @@ import {
   getIndustryBySlug,
   getRelatedIndustries,
 } from '@/lib/industries-data';
-import { industryBreadcrumb } from '@/lib/schema/breadcrumbs';
+import { verticalBreadcrumb } from '@/lib/schema/breadcrumbs';
 import { getFaqSchema } from '@/lib/schema/service-faq';
 
 interface PageProps {
@@ -29,7 +29,7 @@ export function generateMetadata({ params }: PageProps): Metadata {
   if (!industry) return {};
 
   return {
-    title: `${industry.name} Marketing | Industries | The Starr Conspiracy`,
+    title: `${industry.name} Marketing | Verticals | The Starr Conspiracy`,
     description: `${industry.tagline} ${industry.description}`,
     openGraph: {
       title: `${industry.name} Marketing | The Starr Conspiracy`,
@@ -38,7 +38,7 @@ export function generateMetadata({ params }: PageProps): Metadata {
   };
 }
 
-export default function IndustryPage({ params }: PageProps) {
+export default function VerticalPage({ params }: PageProps) {
   const industry = getIndustryBySlug(params.slug);
   if (!industry) notFound();
 
@@ -51,7 +51,7 @@ export default function IndustryPage({ params }: PageProps) {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(industryBreadcrumb(industry.name)),
+            __html: JSON.stringify(verticalBreadcrumb(industry.name)),
           }}
         />
 

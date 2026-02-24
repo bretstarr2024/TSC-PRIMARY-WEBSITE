@@ -10,7 +10,7 @@ export const aboutFaqs = [
       'The Starr Conspiracy is a strategic B2B marketing agency that helps technology companies grow through brand strategy, demand generation, digital performance, content marketing, and AI transformation. We combine 25+ years of marketing fundamentals with AI-native capabilities — strategy and execution under one roof.',
   },
   {
-    question: 'What industries does TSC serve?',
+    question: 'What verticals does TSC specialize in?',
     answer:
       'We work exclusively with B2B technology companies. Our deepest expertise spans HR Tech, SaaS, FinTech, Cybersecurity, HealthTech, MarTech, DevTools, Cloud Infrastructure, and AI/ML platforms. If you sell software or services to businesses, we probably already understand your market.',
   },

@@ -32,10 +32,10 @@ export function IndustryHero({ industry }: IndustryHeroProps) {
           className="mb-8"
         >
           <Link
-            href="/industries"
+            href="/verticals"
             className="text-xs font-semibold text-greige uppercase tracking-[0.3em] hover:text-white transition-colors hover:no-underline"
           >
-            ← All Industries
+            ← All Verticals
           </Link>
         </motion.div>
 
