@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XXII** | Last Updated: February 24, 2026
+**Status: SESSION XXIII** | Last Updated: February 24, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -467,7 +467,7 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 - [x] **Generic AnswerCapsulesSection component** — `components/AnswerCapsulesSection.tsx` — Reusable accordion component with configurable heading, subheading, accent color. Glass cards, Framer Motion expand/collapse, staggered entrance animations. Replaced initial service-specific component.
 - [x] **Service answer capsules** — 24 Q&As (4 per service category) added to `lib/services-data.ts`. `AnswerCapsule` interface defined. Wired into `/services/[slug]` pages with FAQPage JSON-LD schema.
-- [x] **Industry answer capsules** — 36 Q&As (4 per industry vertical) added to `lib/industries-data.ts`. Wired into `/industries/[slug]` pages with FAQPage JSON-LD schema. Subheading personalized per buyer title.
+- [x] **Industry answer capsules** — 36 Q&As (4 per industry vertical) added to `lib/industries-data.ts`. Wired into `/verticals/[slug]` pages with FAQPage JSON-LD schema. Subheading personalized per buyer title.
 - [x] **Pricing answer capsules** — 5 Q&As about engagement models, ROI, and pricing rationale. `lib/schema/pricing-faq.ts` created. Wired into `/pricing` page with FAQPage JSON-LD schema.
 - [x] **Schema infrastructure** — `lib/schema/service-faq.ts` updated with `getFaqSchema` alias for cross-section reuse.
 
@@ -477,7 +477,34 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 118 static pages (unchanged — no new routes)
 
-#### Session XXIII (upcoming): Pipeline Infrastructure + Contact
+#### Session XXIII: Industries → Verticals Rename + Hub Page Answer Capsules ✅ COMPLETE (Feb 24, 2026)
+
+**Focus:** Rename "Industries" section to "Verticals" sitewide. Add answer capsules (FAQ accordions with FAQPage JSON-LD) to all major hub pages and homepage.
+
+**Rename — Industries → Verticals (done):**
+- [x] Route change: `app/industries/` → `app/verticals/` (new URL paths: `/verticals` and `/verticals/[slug]`)
+- [x] Navigation: Header + Footer labels and hrefs updated to "Verticals" / `/verticals`
+- [x] Sub-page components: "← All Industries" → "← All Verticals", "Related Industries" → "Related Verticals"
+- [x] IndustryCard links: `/industries/[slug]` → `/verticals/[slug]`
+- [x] Breadcrumb schema: `industriesBreadcrumb`/`industryBreadcrumb` → `verticalsBreadcrumb`/`verticalBreadcrumb`
+- [x] Page metadata: "Industries | TSC" → "Verticals | TSC" in titles
+- [x] About FAQ: "What industries does TSC serve?" → "What verticals does TSC specialize in?"
+- [x] Sitemap: Added `/verticals` hub + 9 sub-pages (were missing before)
+- [x] Internal types/data files (`Industry`, `INDUSTRIES`, `lib/industries-data.ts`) kept as-is — implementation detail
+
+**Hub page answer capsules (done):**
+- [x] **Homepage** — 5 Q&As (agency-level buyer questions): why hire agency, what types of companies, AI approach, timeline to impact, getting started. Accent: Atomic Tangerine.
+- [x] **Services hub** — 5 Q&As (service model questions): what services offered, starting with one, AI-native meaning, measurement. Accent: Atomic Tangerine.
+- [x] **Verticals hub** — 4 Q&As (vertical expertise questions): which verticals, only these, how expertise helps, longest vertical. Accent: Sprinkles.
+- [x] **Insights hub** — 4 Q&As (content engine questions): content types, how different, using insights, who creates. Accent: Tidal Wave.
+- [x] **New data file** — `lib/schema/hub-faqs.ts` with all 18 capsules across 4 page sets.
+- [x] FAQPage JSON-LD schema on all 4 pages.
+
+**Coverage:** 89 total answer capsules across 21 pages (6 service sub + 9 vertical sub + 1 pricing + 1 about + 1 homepage + 1 services hub + 1 verticals hub + 1 insights hub).
+
+**Build:** 118 static pages (unchanged — route rename is 1:1 swap)
+
+#### Session XXIV (upcoming): Pipeline Infrastructure + Contact
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
@@ -530,10 +557,11 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 #### Session X: Service Pages ✅ PULLED FORWARD to Session I
 (See Phase 1 Session I above)
 
-#### Session XI: Industry Pages ✅ COMPLETE (Session XVII)
-- [x] `/industries` stub page created (Session VI)
-- [x] 9 industry sub-pages from kernel ICP + FAQ industries (Session XVII)
-- [x] Each: industry-specific pain points, how TSC helps, relevant services, related industries, BreadcrumbList JSON-LD
+#### Session XI: Vertical Pages ✅ COMPLETE (Session XVII, renamed Session XXIII)
+- [x] `/verticals` hub page (originally `/industries`, renamed Session XXIII)
+- [x] 9 vertical sub-pages from kernel ICP + FAQ verticals (Session XVII)
+- [x] Each: vertical-specific pain points, how TSC helps, relevant services, related verticals, BreadcrumbList JSON-LD
+- [x] Answer capsules on hub + all sub-pages with FAQPage JSON-LD (Sessions XXII–XXIII)
 
 #### Session XII: About, Contact, Work, Careers
 - [x] `/about`, `/contact`, `/work`, `/careers` stub pages created (Session VI)
