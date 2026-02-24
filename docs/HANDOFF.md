@@ -1,16 +1,54 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 24, 2026 (Session XIII)
+**Last Updated:** February 24, 2026 (Session XIV)
 
 ---
 
-## Current Phase: Phase 1 COMPLETE + Frogger Polished
+## Current Phase: Phase 1 COMPLETE + Frogger Functional
 
-The site is live with **108 static pages** across 10 content types. Session XIII fixed four critical UX issues with the client Frogger easter egg: blurry canvas on Retina, excessive speed, cramped pill spacing, and no start screen.
+The site is live with **108 static pages** across 10 content types. Session XIV fixed three critical bugs that made the Frogger easter egg completely non-functional: collisions never fired, scoring was broken, and input bounds were wrong on Retina displays.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10 collections, ~80 documents)
-- **Next actions:** Review Frogger on live site, build Industries page, pipeline infrastructure from AEO
-- **Roadmap:** See `docs/roadmap.md` Session XIII
+- **Next actions:** Verify Frogger on live site, build Industries page, pipeline infrastructure from AEO
+- **Roadmap:** See `docs/roadmap.md` Session XIV
+
+### Session XIV Summary (February 24, 2026)
+
+**Focus:** Fix three critical bugs that made the client Frogger easter egg completely non-functional.
+
+**What was done:**
+
+1. **Player position fix — root cause** (1 modified file):
+   - `components/about/FroggerGame.tsx` — `getPlayerY` formula had an extra `- laneH` term: `h - laneH * (playerLane + 1) - laneH + laneH * 0.5`. This placed the player one full lane above their actual position. The collision hitbox (centered on the player's computed Y) never overlapped with the pill hitboxes in the player's current lane, so collisions never fired. The player walked through all traffic unharmed and scoring felt meaningless. Fixed to `h - laneH * (playerLane + 0.5)`.
+
+2. **Keyboard DPR fix** (same file):
+   - `handleKeyDown` used raw `canvas.width` (which includes `devicePixelRatio` scaling) for horizontal movement bounds. On Retina (DPR=2), the max X was 2× the logical width — the player could move completely off-screen to the right. Now divides `canvas.width` by DPR.
+
+3. **Touch DPR fix** (same file):
+   - Touch handler computed button hit-test positions using DPR-scaled canvas dimensions, but `drawTouchControls` rendered the visual buttons in logical (CSS) coordinates. Touch targets didn't align with their visual positions on Retina. Now uses logical coordinates for both hit-testing and rendering.
+
+**Commits this session:**
+- `d40afba` — fix: Frogger game — collision detection, scoring, and input DPR bugs
+- `01e5a32` — docs: Update roadmap for Session XIV — Frogger critical bug fixes
+
+**Results:**
+- 108 static pages (unchanged — no new routes)
+- Frogger game now actually works: collisions fire, lives decrement, game over triggers, scoring rewards reaching the safe zone, input stays within screen bounds
+- All changes contained in 1 component file + docs
+
+**Donor files referenced:**
+- None — all modifications to existing code
+
+**Key decisions:**
+- Simplified `getPlayerY` to `h - laneH * (playerLane + 0.5)` — works for all 7 positions (bottom safe, 5 traffic lanes, top safe) without special cases
+- All input handlers use logical (DPR-divided) coordinates — same coordinate space as rendering
+
+**What NOT to re-debate:**
+- The `getPlayerY` formula fix — the old formula was mathematically wrong (off by one laneH), not a tuning choice
+- DPR handling in input — canvas dimensions include DPR, game logic uses logical pixels, input must use logical pixels
+- This was purely a bug fix session — no gameplay tuning, no new features
+
+---
 
 ### Session XIII Summary (February 24, 2026)
 
