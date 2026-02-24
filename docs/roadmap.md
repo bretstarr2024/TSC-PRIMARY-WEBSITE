@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XI** | Last Updated: February 24, 2026
+**Status: SESSION XII** | Last Updated: February 24, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -342,7 +342,17 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 108 static pages (unchanged count)
 
-#### Session XII (upcoming): Pipeline Infrastructure
+#### Session XII: About Page UX — Leadership Modal + Client Frogger ✅ COMPLETE (Feb 24, 2026)
+
+**Focus:** Three UX improvements to the About page: cinematic leadership bio modal, client list Frogger easter egg, and tequila stat update.
+
+- [x] **Leadership bio modal** — Replaced in-card bio expansion (which stretched grid cells and was unreadable) with a cinematic centered modal overlay. Features: backdrop blur, spring-animated entrance, 80px scaled-up generative avatar, gradient accent bar in leader's brand colors, readable `text-base` bio typography, gradient divider, prev/next navigation to browse between leaders, keyboard support (ESC close, arrow keys navigate), body scroll lock. Grid stays undisturbed.
+- [x] **Client Frogger easter egg** — Turned the scrolling client marquee into a playable Frogger game. The Ocho mascot appears at bottom-right of the client section (subtle bob + pink glow, 40%→100% opacity on hover). Click to play: 5 lanes of scrolling client name pills as traffic, Ocho as the frog, navigate from START to SAFE ZONE. Level progression (speed increases), 3 lives, score multiplied by level, screen shake on hit, invulnerability blink on respawn. Canvas-based, lazy-loaded via `next/dynamic`. Keyboard (arrows/WASD) + mobile touch D-pad. ESC exits.
+- [x] **Tequila stat update** — "1,000+ Shots of tequila" → "100,000 Shots of tequila"
+
+**Build:** 108 static pages (unchanged count)
+
+#### Session XIII (upcoming): Pipeline Infrastructure
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections

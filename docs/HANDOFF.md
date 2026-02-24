@@ -1,16 +1,59 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 24, 2026 (Session XI)
+**Last Updated:** February 24, 2026 (Session XII)
 
 ---
 
-## Current Phase: Phase 1 COMPLETE + About Page Polished with Generative Avatars
+## Current Phase: Phase 1 COMPLETE + About Page UX Overhauled
 
-The site is live with **108 static pages** across 10 content types. Session XI polished the About page: replaced static gradient-circle initials in the leadership section with animated generative SVG avatars (unique per person, deterministic via name-seeded PRNG), updated origin story stats, and corrected book ratings.
+The site is live with **108 static pages** across 10 content types. Session XII overhauled About page UX: leadership bios now open in a cinematic modal overlay instead of broken in-card expansion, the client marquee has a hidden Frogger easter egg (Ocho-triggered), and the tequila stat was updated to 100,000.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10 collections, ~80 documents)
-- **Next actions:** Review avatars on live site, build Industries page, pipeline infrastructure from AEO
-- **Roadmap:** See `docs/roadmap.md` Session XI
+- **Next actions:** Review modal + Frogger on live site, build Industries page, pipeline infrastructure from AEO
+- **Roadmap:** See `docs/roadmap.md` Session XII
+
+### Session XII Summary (February 24, 2026)
+
+**Focus:** About page UX — leadership bio modal, client Frogger easter egg, tequila stat update.
+
+**What was done:**
+
+1. **Leadership bio modal** (1 modified file):
+   - `components/about/LeadershipSection.tsx` — Replaced in-card bio expansion (which stretched grid cells and was unreadable) with a cinematic centered modal overlay. Features: `bg-black/70 backdrop-blur-md` backdrop, spring-animated entrance (`scale: 0.9→1`), 80px scaled-up generative avatar, gradient accent bar using leader's brand color pair, name/title/LinkedIn with color-matched accent, gradient divider, bio text at readable `text-base leading-relaxed`, prev/next navigation buttons to browse between leaders, keyboard support (ESC close, left/right arrow navigate), body scroll lock when open. Grid cards stay pristine — no layout disruption. `GenerativeAvatar` component updated with optional `size` prop (default 56px, modal uses 80px).
+
+2. **Client Frogger easter egg** (1 new file, 1 modified file):
+   - `components/about/FroggerGame.tsx` — NEW: Canvas-based Frogger game. 5 horizontal lanes of scrolling client name pills as traffic obstacles. Ocho mascot as the player character (loaded from `/images/ocho-color.png` with pink glow). Navigate from bottom START zone through traffic to top SAFE ZONE. Each successful crossing scores `10 × level` and increases lane speeds. 3 lives — collision triggers screen shake, respawn with 60-frame invulnerability blink. Lane colors use brand palette (Tangerine, Tidal, Sprinkles, Cactus). HUD shows score, level, lives. Game over screen with score summary. Controls: arrow keys/WASD + mobile touch D-pad (auto-appears on first touch). ESC exits, Enter restarts.
+   - `components/about/ClientMarquee.tsx` — Added Ocho mascot as play trigger at bottom-right of section (subtle bob animation, `drop-shadow(0 0 8px #ED0AD2)`, 40%→100% opacity on hover). Click launches FroggerGame via `next/dynamic` lazy loading. Game replaces marquee rows in a rounded container. Normal marquee restored on close.
+
+3. **Tequila stat update** (1 modified file):
+   - `components/about/OriginStory.tsx` — Changed "1,000+ Shots of tequila" to "100,000 Shots of tequila".
+
+**Commits this session:**
+- `c54e6bf` — feat: Leadership bio modal, client Frogger easter egg, tequila stat update
+
+**Results:**
+- 108 static pages (unchanged — no new routes)
+- Leadership section now has a proper modal UX instead of broken card expansion
+- Client section has a hidden Frogger game (2nd easter egg after Asteroids)
+- All changes contained in 4 component files + docs
+
+**Donor files referenced:**
+- None — all new code (canvas game, modal overlay)
+
+**Key decisions:**
+- Modal overlay over in-card expansion — the card expansion was "shit" (user's words), modal provides readable bios without wrecking grid
+- Frogger triggered by Ocho mascot — subtle discovery mechanic matching the Asteroids ship trigger pattern
+- Canvas-based game (not DOM) — consistent with Asteroids implementation, performant for animated game loop
+- Lazy-loaded via next/dynamic — zero bundle cost until played
+- Touch D-pad auto-appears on first touch — no unnecessary UI on desktop
+
+**What NOT to re-debate:**
+- Modal over in-card expansion — user explicitly said card expansion "looks like shit"
+- Frogger concept — user saw the Frogger parallel in the scrolling pills and requested it
+- 100,000 shots of tequila — user's exact number
+- Ocho as Frogger player — consistent with Ocho as UFO in Asteroids
+
+---
 
 ### Session XI Summary (February 24, 2026)
 

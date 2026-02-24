@@ -1,0 +1,77 @@
+session_id: "XII"
+date: "2026-02-24"
+branch: main
+version: "0.10.0"  # MINOR: Leadership bio modal, client Frogger easter egg
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "TBD"
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "Purely frontend — no MongoDB schema modifications"
+
+commits:
+  - hash: "c54e6bf"
+    message: "feat: Leadership bio modal, client Frogger easter egg, tequila stat update"
+
+artifacts_updated:
+  - "components/about/LeadershipSection.tsx — Replaced in-card bio expansion with cinematic modal overlay (backdrop blur, spring animation, 80px avatar, gradient accent bar, prev/next nav, keyboard/ESC support, body scroll lock)"
+  - "components/about/FroggerGame.tsx — NEW: Canvas-based Frogger game using client name pills as traffic lanes, Ocho mascot as player, 5 lanes, level progression, touch controls"
+  - "components/about/ClientMarquee.tsx — Added Ocho play trigger + FroggerGame integration via next/dynamic lazy loading"
+  - "components/about/OriginStory.tsx — Tequila stat: 1,000+ → 100,000"
+  - "docs/roadmap.md — Session XII entry added"
+
+decisions_made:
+  - decision: "Cinematic modal overlay for leadership bios instead of in-card expansion"
+    rationale: "In-card expansion stretched grid cells vertically, made bios unreadable in narrow columns, and wrecked adjacent card layout. Modal provides: proper readable typography, scaled-up avatar, prev/next browsing, keyboard nav, and keeps grid pristine."
+    reversible: true
+  - decision: "Frogger game triggered by Ocho mascot in client section"
+    rationale: "User noticed scrolling client pills resemble Frogger traffic lanes. Matches the Asteroids easter egg pattern — hidden game that rewards exploration. Canvas-based, lazy-loaded, zero bundle cost until played."
+    reversible: true
+  - decision: "GenerativeAvatar accepts size prop for modal rendering"
+    rationale: "Modal needs 80px avatar vs 56px in grid cards. Added optional size param with 56 default — backwards compatible."
+    reversible: true
+  - decision: "100,000 shots of tequila"
+    rationale: "User directive — escalation of the irreverent stat."
+    reversible: true
+
+known_risks:
+  - risk: "Frogger collision detection uses simple AABB — edge cases possible with fast-moving pills at high levels"
+    mitigation: "Player has invulnerability frames on respawn (60 frames). Speed scaling is gradual (+0.15 per lane per level). Playable well past level 10."
+    severity: low
+  - risk: "Modal AnimatePresence may conflict with layoutId if Framer Motion version changes"
+    mitigation: "layoutId is on cards but not actively used for shared layout animation — it's a future-proofing hook. Can remove safely if issues arise."
+    severity: low
+
+explicitly_deferred:
+  - "Pipeline infrastructure — moved to Session XIII"
+  - "Industries page content"
+  - "Contact page with form"
+  - "Leadership headshot photos — still using generative avatars"
+
+next_actions:
+  - "Review leadership modal and Frogger game on live site"
+  - "Build Industries page content (8 industry sub-pages from kernel ICP)"
+  - "Build Contact page with form (Resend integration)"
+  - "Copy pipeline infrastructure from AEO donor"
+  - "Add answer capsules to service pillar pages"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All CTAs -> /book (internal Cal.com iframe)"
+  - "Asteroids game is an easter egg — no navigation or docs pointing to it"
+  - "Frogger game is an easter egg — Ocho trigger only, no navigation pointing to it"
+  - "Leadership modal uses index-based selection — if leader order changes, no data loss"
+  - "GenerativeAvatar size prop defaults to 56 — existing usages unaffected"
+  - "Stats on About page: Founded 1999, 3,000+ B2B tech clients, 100,000 Shots of tequila"
