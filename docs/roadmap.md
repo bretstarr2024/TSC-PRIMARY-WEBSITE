@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XXIV** | Last Updated: February 24, 2026
+**Status: SESSION XXV** | Last Updated: February 24, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -524,7 +524,19 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 119 pages (added `/api/arcade-boss` route)
 
-#### Session XXV (upcoming): Pipeline Infrastructure + Contact
+#### Session XXV: Tron Light Cycle Game on Pricing Page ✅ COMPLETE (Feb 24, 2026)
+
+**Focus:** Add Tron light cycle racing game as 4th arcade easter egg on the Pricing page. Same pattern as all other games: OchoTrigger, SFX, high scores, boss celebration, touch controls, lazy loading.
+
+**New files:**
+- [x] `components/pricing/TronGame.tsx` — Full Tron light cycle game. Player vs AI cycles on a grid, neon glow trails, tick-based movement, levels (1–4 enemies), Web Audio SFX (engine hum, turn clicks, crash, enemy crash, countdown, level-up, game-over), high scores with initials, boss overlay on #1, touch D-pad, 3-2-1 countdown.
+
+**Modified files:**
+- [x] `components/pricing/WhyDifferent.tsx` — Added game state, dynamic import of TronGame, OchoTrigger below "The Combination" card.
+
+**Build:** 119 pages (unchanged — no new routes)
+
+#### Session XXVI (upcoming): Pipeline Infrastructure + Contact
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
