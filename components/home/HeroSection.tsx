@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
@@ -10,24 +11,58 @@ const HeroParticles = dynamic(
   { ssr: false }
 );
 
+const AsteroidsGame = dynamic(
+  () => import('./AsteroidsGame').then((mod) => ({ default: mod.AsteroidsGame })),
+  { ssr: false }
+);
+
 export function HeroSection() {
   const words = ['See', 'marketing', 'in', 'a'];
   const gradientWords = ['whole', 'new', 'light.'];
+  const [playing, setPlaying] = useState(false);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <HeroParticles />
 
+      {playing && <AsteroidsGame onClose={() => setPlaying(false)} />}
+
       <div className="relative z-10 section-wide text-center px-4">
-        {/* Pre-headline */}
-        <motion.p
-          className="text-xs font-semibold text-shroomy uppercase tracking-[0.3em] mb-8"
+        {/* Asteroids ship — easter egg trigger */}
+        <motion.button
+          aria-label="Launch Asteroids"
+          onClick={() => setPlaying(true)}
+          className="group relative mb-6 mx-auto block cursor-pointer bg-transparent border-none outline-none"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          The Starr Conspiracy
-        </motion.p>
+          {/* The classic Asteroids ship, pointing down toward the headline */}
+          <motion.svg
+            width="40"
+            height="44"
+            viewBox="0 0 40 44"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="transition-all duration-300 drop-shadow-none group-hover:drop-shadow-[0_0_12px_rgba(255,89,16,0.8)]"
+            animate={{ y: [0, -4, 0] }}
+            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            {/* Ship body — classic triangle pointing down */}
+            <path
+              d="M20 40 L8 12 L16 18 L20 4 L24 18 L32 12 Z"
+              stroke="#FF5910"
+              strokeWidth="2"
+              strokeLinejoin="round"
+              fill="none"
+              className="transition-all duration-300 group-hover:stroke-[#FF8855]"
+            />
+          </motion.svg>
+          {/* Hover tooltip */}
+          <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[10px] text-shroomy/0 group-hover:text-shroomy/60 transition-all duration-300 whitespace-nowrap tracking-widest uppercase font-mono">
+            click me
+          </span>
+        </motion.button>
 
         {/* Main headline */}
         <h1 className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-tight leading-[0.95]">
