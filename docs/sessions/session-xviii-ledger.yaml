@@ -1,0 +1,54 @@
+session_id: "XVIII"
+date: "2026-02-24"
+branch: main
+version: "0.13.1"  # PATCH: Homepage hero ship SVG matched to game shape + subtle animation
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "2ouhrHNsWs4AoFEuen8T"
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "Pure frontend SVG/animation change — no MongoDB schema modifications"
+
+commits:
+  - hash: "11391ea"
+    message: "fix: Match homepage hero ship SVG to exact Asteroids game shape"
+  - hash: "49aa64b"
+    message: "docs: Update roadmap for Session XVIII — homepage ship SVG fix"
+
+artifacts_updated:
+  - "components/home/HeroSection.tsx — Ship SVG path replaced (6-point → 4-point game shape), animation enhanced (float + rotation + ambient glow)"
+  - "docs/roadmap.md — Session XVIII entry added"
+
+decisions_made:
+  - decision: "Ship SVG uses exact game ship proportions rotated 90° to point downward"
+    rationale: "User wanted the homepage ship to match the actual Asteroids game ship exactly. Game ship vertices (nose, wings, rear notch) converted from canvas coordinates to SVG path."
+    reversible: true
+  - decision: "Subtle animation: ±6px float + ±2° rotation on 4s cycle with ambient glow"
+    rationale: "User requested subtle movement to draw attention without being distracting. Gentle float + rotation creates a 'breathing' effect."
+    reversible: true
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All CTAs -> /book (internal Cal.com iframe)"
+  - "Asteroids game is an easter egg — no navigation or docs pointing to it"
+  - "Frogger game is an easter egg — Ocho trigger only, no navigation pointing to it"
+  - "Industries data is static (lib/industries-data.ts), not MongoDB"
+  - "Homepage hero ship SVG matches AsteroidsGame.tsx canvas ship shape exactly"
+
+next_actions:
+  - "Build Contact page with form (Resend integration)"
+  - "Copy pipeline infrastructure from AEO donor"
+  - "Add answer capsules to service pillar pages"
+  - "Build chatbot (chaDbot) — copy RAG from AEO"

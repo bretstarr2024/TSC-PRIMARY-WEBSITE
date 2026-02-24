@@ -1,16 +1,50 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 24, 2026 (Session XVII)
+**Last Updated:** February 24, 2026 (Session XVIII)
 
 ---
 
 ## Current Phase: Phase 1 COMPLETE + Industries Section
 
-The site is live with **117 static pages** across 10 content types plus 9 industry verticals. Session XVII built the full Industries section with vertical-specific landing pages seeded from the About FAQ industries answer.
+The site is live with **117 static pages** across 10 content types plus 9 industry verticals. Session XVIII was a cosmetic fix to match the homepage hero ship SVG to the exact Asteroids game ship shape.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10 collections, ~80 documents)
 - **Next actions:** Build Contact page with form, pipeline infrastructure from AEO, answer capsules for service pages
-- **Roadmap:** See `docs/roadmap.md` Session XVII
+- **Roadmap:** See `docs/roadmap.md` Session XVIII
+
+### Session XVIII Summary (February 24, 2026)
+
+**Focus:** Match homepage hero ship SVG to exact Asteroids game shape + subtle animation.
+
+**What was done:**
+
+1. **Ship SVG replaced** (1 modified file):
+   - `components/home/HeroSection.tsx` — Old 6-point diamond/arrow path (`M20 40 L8 12 L16 18 L20 4 L24 18 L32 12 Z`) replaced with the exact 4-point Asteroids game ship geometry rotated to point downward (`M18 46 L32 6 L18 14 L4 6 Z`). The SVG path now matches the canvas `drawShip` proportions in `AsteroidsGame.tsx` — nose, two wings, rear notch.
+
+2. **Subtle ambient animation** (same file):
+   - Float increased from ±4px to ±6px vertical bob
+   - Added ±2° gentle rotation oscillation
+   - Slowed cycle from 3s to 4s for a relaxed breathing feel
+   - Added always-on soft orange glow (0.3 opacity drop-shadow) that brightens on hover (0.8 opacity)
+
+**Commits this session:**
+- `11391ea` — fix: Match homepage hero ship SVG to exact Asteroids game shape
+- `49aa64b` — docs: Update roadmap for Session XVIII — homepage ship SVG fix
+
+**Results:**
+- 117 static pages (unchanged — cosmetic fix only)
+- Homepage hero ship now visually matches the in-game Asteroids ship
+- Subtle animation draws attention to the easter egg trigger without being distracting
+
+**Donor files referenced:**
+- None — adapted existing code based on `AsteroidsGame.tsx` canvas ship geometry
+
+**What NOT to re-debate:**
+- Ship SVG path `M18 46 L32 6 L18 14 L4 6 Z` — exact match to game ship proportions
+- Animation is intentionally subtle — ±2° rotation, ±6px float, 4s cycle
+- Ambient glow at 0.3 opacity — visible but not distracting
+
+---
 
 ### Session XVII Summary (February 24, 2026)
 
