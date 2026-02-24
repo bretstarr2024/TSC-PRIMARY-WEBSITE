@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION IX** | Last Updated: February 24, 2026
+**Status: SESSION X** | Last Updated: February 24, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -322,7 +322,17 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 108 static pages (unchanged count)
 
-#### Session X (upcoming): Pipeline Infrastructure
+#### Session X: Asteroids — Sound Effects + Mobile Touch Controls + Bullet Fix ✅ COMPLETE (Feb 24, 2026)
+
+**Focus:** Three enhancements to the hidden Asteroids easter egg: Web Audio API sound effects, mobile touch controls, and bullet physics fix.
+
+- [x] **Sound engine (Web Audio API)** — `SFX` class in `components/home/AsteroidsGame.tsx`. Retro synth sounds generated programmatically (no audio files). Discrete sounds: shoot (square wave 880→220Hz), rock explosion (filtered white noise, size-dependent), ship explosion (deep LP noise), UFO shoot (sawtooth 600→200Hz), UFO explosion, level up (ascending arpeggio), game over (descending arpeggio). Continuous sounds: thrust (looping LP white noise), UFO hum (dual detuned square oscillators 120/126Hz). Mute toggle via M key or touch button.
+- [x] **Mobile touch controls** — Virtual buttons rendered on canvas. Gameplay: 4 buttons (◀ rotate left, ▶ rotate right, ▲ thrust, ● fire). Game over initials entry: 5 buttons (◀ ▶ ▲ ▼ ✓). Game over restart: single ▶ button. Always visible: ✕ close (top-left), ♪ mute (top-right). Multi-touch supported. Auto-appear on first touch event (hidden on desktop). `touch-action: none` prevents browser gestures.
+- [x] **Bullets stop at screen edge** — Player bullets and UFO bullets no longer wrap around the screen. They travel in a straight line and are removed when they exit the screen bounds (4px grace margin). Ship and asteroids still wrap as before.
+
+**Build:** 108 static pages (unchanged count)
+
+#### Session XI (upcoming): Pipeline Infrastructure
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
