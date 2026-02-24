@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION VIII** | Last Updated: February 24, 2026
+**Status: SESSION IX** | Last Updated: February 24, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -310,7 +310,19 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 108 static pages (unchanged count)
 
-#### Session IX (upcoming): Pipeline Infrastructure
+#### Session IX: Asteroids Game Enhancements ✅ COMPLETE (Feb 24, 2026)
+
+**Focus:** Five gameplay improvements to the hidden Asteroids easter egg per user feedback.
+
+- [x] **Bullets cross the screen** — Bullet life now computed dynamically from screen diagonal (`Math.hypot(w,h) * 0.8 / BULLET_V`), scales with any display resolution. Was 400px (BULLET_LIFE=50), now ~1760px on 1080p, ~3520px on 4K.
+- [x] **Ocho UFO enemy** — The ocho pixel-art mascot (`/images/ocho-color.png`) spawns every 10-20 seconds, flies across the screen with sinusoidal bobbing, fires pink (Sprinkles) bullets at the player. Accuracy increases with level. Worth 300 points. Rendered with pink glow effect via canvas shadow. Fallback ellipse if image hasn't loaded.
+- [x] **High score table with 3-initial entry** — Classic arcade-style. Top 10 scores persisted in localStorage (`tsc-asteroids-scores`). On game over, qualifying scores get the initial entry screen (up/down cycle letters, left/right move cursor, or type directly). Player's entry highlighted in Neon Cactus on the leaderboard.
+- [x] **Game over shake fix** — Shake decay (`g.shake *= 0.9`) was inside the `if (!g.over)` block, so it froze at 15 and shook violently forever on game over. Moved decay outside, with faster rate (0.8) when game is over. Settles in ~0.25 seconds.
+- [x] **Game over input delay** — 40-frame delay (~0.67s) before accepting input on game over screen, prevents accidental Enter-mashing through the initial entry.
+
+**Build:** 108 static pages (unchanged count)
+
+#### Session X (upcoming): Pipeline Infrastructure
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections

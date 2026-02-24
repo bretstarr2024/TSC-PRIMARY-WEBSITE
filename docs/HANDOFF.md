@@ -1,15 +1,63 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 24, 2026 (Session VIII)
+**Last Updated:** February 24, 2026 (Session IX)
 
 ---
 
-## Current Phase: Phase 1 COMPLETE + Easter Egg — Asteroids Game on Homepage
+## Current Phase: Phase 1 COMPLETE + Easter Egg Enhanced — Asteroids with UFO, High Scores
 
-The site is live with **108 static pages** across 10 content types. Session VIII added a hidden Asteroids video game easter egg to the homepage hero — the "THE STARR CONSPIRACY" pre-headline was replaced with a classic Asteroids ship SVG that launches a full game on click. Also enhanced the About page origin story with Amazon book link and newsletter CTA.
+The site is live with **108 static pages** across 10 content types. Session IX enhanced the hidden Asteroids easter egg with five gameplay improvements: bullets now cross the full screen, the Ocho mascot appears as a UFO enemy that fires at the player, a classic arcade high score table with 3-initial entry persists in localStorage, the game over shake bug was fixed, and a brief input delay prevents accidental skip-through on game over.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10 collections, ~80 documents)
-- **Next actions:** Play-test Asteroids game, add leadership headshots, build Industries page, pipeline infrastructure from AEO
+- **Next actions:** Play-test enhanced Asteroids, add leadership headshots, build Industries page, pipeline infrastructure from AEO
+- **Roadmap:** See `docs/roadmap.md` Session IX
+
+### Session IX Summary (February 24, 2026)
+
+**Focus:** Five gameplay enhancements to the hidden Asteroids easter egg per user feedback.
+
+**What was done:**
+
+1. **Full-screen bullets** (tuning change in existing file):
+   - `components/home/AsteroidsGame.tsx` — Bullet life computed dynamically from screen diagonal (`Math.hypot(w,h) * 0.8 / BULLET_V`). On 1080p: ~220 frames / ~1760px travel. On 4K: ~440 frames / ~3520px. Previously was constant 50 frames / 400px ("a few inches").
+
+2. **Ocho UFO enemy** (new game mechanic):
+   - `components/home/AsteroidsGame.tsx` — Ocho pixel-art mascot (`/images/ocho-color.png`) spawns every 10-20 seconds, enters from random edge, floats across with sinusoidal vertical bobbing, fires pink (Sprinkles #ED0AD2) bullets at the player. Accuracy increases with level (±31° at level 1, ±6° by level 10). Worth 300 points. Rendered with pink canvas shadow glow. Fallback ellipse if image hasn't loaded. Player can destroy it with bullets or die by touching it.
+
+3. **High score table with 3-initial entry** (new feature):
+   - `components/home/AsteroidsGame.tsx` — Top 10 scores stored in localStorage (`tsc-asteroids-scores`). On game over, qualifying scores trigger the classic arcade initial entry screen: arrow up/down cycles letters, left/right moves cursor, or type letters directly on keyboard. Enter confirms. Player's entry highlighted in Neon Cactus on the leaderboard. Non-qualifying scores see the existing leaderboard + restart prompt.
+
+4. **Game over shake fix** (bug fix):
+   - `components/home/AsteroidsGame.tsx` — The shake decay (`g.shake *= 0.9; if (g.shake < 0.5) g.shake = 0`) was inside the `if (!g.over)` block, meaning it NEVER ran after game over. The shake value froze at 15 and the entire game over screen shook violently forever. Fix: moved decay outside the block. Uses faster decay rate (0.8) when game is over, settles in ~0.25 seconds.
+
+5. **Game over input delay** (UX improvement):
+   - `components/home/AsteroidsGame.tsx` — 40-frame (~0.67 second) delay before the game over screen accepts any input. Prevents the player from accidentally pressing Enter (which they might be mashing during gameplay) and either submitting "AAA" as their initials or skipping the high score screen entirely.
+
+**Commits this session:**
+- `ba9c9da` — feat: Enhance Asteroids game — full-screen bullets, Ocho UFO, high scores, shake fix
+
+**Results:**
+- 108 static pages (unchanged — no new routes)
+- Asteroids game now has 5 major improvements
+- All changes contained in a single file (`AsteroidsGame.tsx`, +338/-23 lines)
+- No MongoDB, API, or build pipeline changes
+
+**Donor files referenced:**
+- None — all new game code
+
+**Key decisions:**
+- High scores in localStorage (not MongoDB) — appropriate for an easter egg game
+- Ocho mascot as UFO — uses existing `/images/ocho-color.png` asset
+- UFO accuracy scales with level — adds progressive difficulty
+- 40-frame input delay on game over — prevents accidental skip
+
+**What NOT to re-debate:**
+- High scores in localStorage — server-side persistence is overkill for an easter egg
+- Ocho as UFO enemy — user explicitly requested "the ocho logo" as the UFO
+- Bullet life is screen-relative — constant values break on different resolutions
+- Game over shake fix — the previous behavior was a clear bug (decay inside wrong block)
+
+---
 - **Roadmap:** See `docs/roadmap.md` Session VIII
 
 ### Session VIII Summary (February 24, 2026)

@@ -1,0 +1,76 @@
+session_id: "IX"
+date: "2026-02-24"
+branch: main
+version: "0.9.1"  # PATCH: Asteroids game enhancements (bullets, UFO, high scores, shake fix)
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "TBD"
+  status: pending
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "Purely frontend — no MongoDB schema modifications"
+
+commits:
+  - hash: "ba9c9da"
+    message: "feat: Enhance Asteroids game — full-screen bullets, Ocho UFO, high scores, shake fix"
+
+artifacts_updated:
+  - "components/home/AsteroidsGame.tsx — Bullet life dynamic from screen size, Ocho UFO enemy, high score table with localStorage, shake decay fix, game over input delay"
+  - "docs/roadmap.md — Session IX entry added"
+
+decisions_made:
+  - decision: "Bullet life computed dynamically from screen diagonal"
+    rationale: "Fixed resolution — a constant BULLET_LIFE looked fine on small screens but 'a few inches' on large/4K displays. Now always crosses ~80% of the screen."
+    reversible: true
+  - decision: "Ocho mascot as the UFO enemy"
+    rationale: "User requested 'UFO like the original but with the ocho logo'. Uses /images/ocho-color.png with pink glow. Canvas shadow effect for visual flair."
+    reversible: true
+  - decision: "High scores in localStorage (not MongoDB)"
+    rationale: "Easter egg game — server-side persistence is overkill. localStorage gives per-device persistence which is appropriate for a hidden game."
+    reversible: true
+  - decision: "UFO accuracy increases with level"
+    rationale: "Mimics original Asteroids progression (large saucer random, small saucer aimed). Spread starts at ±31° and narrows to ±6° by level 10."
+    reversible: true
+  - decision: "40-frame input delay after game over"
+    rationale: "Prevents Enter-mashing from accidentally submitting 'AAA' as initials or skipping the high score screen."
+    reversible: true
+
+known_risks:
+  - risk: "Ocho image may not load on first game launch (cold cache)"
+    mitigation: "Fallback ellipse shape drawn if image not loaded. Image preloaded in useEffect so it's ready by the time a UFO spawns (10-20 sec into gameplay)."
+    severity: low
+  - risk: "localStorage not available in incognito/restricted browsers"
+    mitigation: "loadHighScores/saveHighScores wrapped in try/catch. Game works fine without persistence — just no saved scores."
+    severity: low
+
+explicitly_deferred:
+  - "Sound effects for Asteroids game — could add later"
+  - "Mobile touch controls — desktop-only easter egg"
+  - "Pipeline infrastructure — moved to Session X"
+  - "Industries page content"
+  - "Contact page with form"
+
+next_actions:
+  - "Play-test the enhanced Asteroids game (UFO spawning, high scores, bullet range)"
+  - "Add headshot images to leadership section when user provides photos"
+  - "Build Industries page content (8 industry sub-pages from kernel ICP)"
+  - "Build Contact page with form (Resend integration)"
+  - "Copy pipeline infrastructure from AEO donor"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All CTAs -> /book (internal Cal.com iframe)"
+  - "Asteroids game is an easter egg — no navigation or docs pointing to it"
+  - "High scores stored in localStorage key 'tsc-asteroids-scores'"
+  - "Ocho UFO uses /images/ocho-color.png — if image path changes, update AsteroidsGame.tsx"
