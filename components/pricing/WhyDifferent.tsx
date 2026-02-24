@@ -1,11 +1,22 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
+import dynamic from 'next/dynamic';
 import { AnimatedSection } from '@/components/AnimatedSection';
+import { OchoTrigger } from '@/components/OchoTrigger';
+
+const TronGame = dynamic(
+  () => import('./TronGame').then((mod) => ({ default: mod.TronGame })),
+  { ssr: false }
+);
 
 export function WhyDifferent() {
+  const [playing, setPlaying] = useState(false);
+
   return (
     <section className="relative py-24 md:py-32 overflow-hidden">
+      {playing && <TronGame onClose={() => setPlaying(false)} />}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/[0.02] to-transparent" />
 
       <div className="relative z-10 section-wide">
@@ -95,6 +106,10 @@ export function WhyDifferent() {
             </div>
           </motion.div>
         </AnimatedSection>
+
+        {!playing && (
+          <OchoTrigger onClick={() => setPlaying(true)} delay={0.5} className="mt-10 mx-auto" />
+        )}
       </div>
     </section>
   );
