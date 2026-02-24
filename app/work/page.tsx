@@ -1,4 +1,6 @@
 import { Metadata } from 'next';
+import { AnimatedSection } from '@/components/AnimatedSection';
+import { GradientText } from '@/components/AnimatedText';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 
@@ -19,12 +21,14 @@ export default function WorkPage() {
       <Header />
       <main className="min-h-screen pt-32 pb-20">
         <div className="section-wide">
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-            Work
-          </h1>
-          <p className="text-xl text-shroomy max-w-2xl">
-            Coming soon.
-          </p>
+          <AnimatedSection>
+            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
+              <GradientText>Work</GradientText>
+            </h1>
+            <p className="text-xl text-shroomy max-w-2xl">
+              Coming soon.
+            </p>
+          </AnimatedSection>
         </div>
       </main>
       <Footer />
