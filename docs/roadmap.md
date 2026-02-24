@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XXVIII** | Last Updated: February 24, 2026
+**Status: SESSION XXIX** | Last Updated: February 24, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -585,7 +585,18 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 119 pages (unchanged — all games are lazy-loaded, zero bundle cost until played)
 
-#### Session XXIX (upcoming): Pipeline Infrastructure + Contact
+#### Session XXIX: Arcade Game Enhancements — Space Invaders, Asteroids, Snake ✅ COMPLETE (Feb 24, 2026)
+
+**Focus:** Visual and gameplay upgrades to 3 arcade games: classic arcade aesthetic for Space Invaders, UFO standardization across games, multi-food system for Snake.
+
+**Modified files:**
+- [x] `components/industries/SpaceInvadersGame.tsx` — Classic arcade visual overhaul: deep navy CRT background (#0a0a1e), Neon Cactus shields with glow, Atomic Tangerine ground line, scanlines. Reduced UFO frequency (timer 500→1200 base, all 4 reset points fixed). Added Ocho mascot rendering for commander row (type 0 enemies) with Sprinkles glow and bob animation.
+- [x] `components/home/AsteroidsGame.tsx` — UFO standardization: replaced Ocho image UFO with drawn classic saucer (ellipse body + dome arc). Changed UFO hum from square to sawtooth oscillators to match Space Invaders. Removed unused ochoImg ref and image loading code.
+- [x] `components/insights/SnakeGame.tsx` — Multi-food system overhaul: 3 regular foods always present (was 1), bonus food (cyan diamond, +5pts, spawns every ~12s, lasts ~7s), golden food (orange star, +10pts, spawns every ~24s, lasts ~5s). Combo system (eat within ~1s for escalating multipliers up to x6). Eat sparks, floating score text, food blink when expiring. New SFX for bonus/golden/combo.
+
+**Build:** 119 pages (unchanged — no new routes)
+
+#### Session XXX (upcoming): Pipeline Infrastructure + Contact
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
