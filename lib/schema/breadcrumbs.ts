@@ -100,3 +100,6 @@ export const toolBreadcrumb = (title?: string) =>
     { name: 'Tools', url: '/insights/tools' },
     ...(title ? [{ name: title, url: '#' }] : []),
   ]);
+
+export const aboutBreadcrumb = () =>
+  breadcrumb([{ name: 'Home', url: '/' }, { name: 'About', url: '/about' }]);
