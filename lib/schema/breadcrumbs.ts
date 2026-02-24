@@ -103,3 +103,13 @@ export const toolBreadcrumb = (title?: string) =>
 
 export const aboutBreadcrumb = () =>
   breadcrumb([{ name: 'Home', url: '/' }, { name: 'About', url: '/about' }]);
+
+export const industriesBreadcrumb = () =>
+  breadcrumb([{ name: 'Home', url: '/' }, { name: 'Industries', url: '/industries' }]);
+
+export const industryBreadcrumb = (name?: string) =>
+  breadcrumb([
+    { name: 'Home', url: '/' },
+    { name: 'Industries', url: '/industries' },
+    ...(name ? [{ name, url: '#' }] : []),
+  ]);
