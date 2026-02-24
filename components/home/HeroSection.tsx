@@ -39,15 +39,15 @@ export function HeroSection() {
         >
           {/* The classic Asteroids ship — exact game shape, pointing down */}
           <motion.svg
-            width="36"
-            height="50"
-            viewBox="0 0 36 50"
+            width="44"
+            height="80"
+            viewBox="-4 -24 44 74"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="transition-all duration-300 drop-shadow-[0_0_6px_rgba(255,89,16,0.3)] group-hover:drop-shadow-[0_0_14px_rgba(255,89,16,0.8)]"
+            className="transition-all duration-300 drop-shadow-[0_0_8px_rgba(255,89,16,0.4)] group-hover:drop-shadow-[0_0_18px_rgba(255,89,16,0.8)]"
             animate={{
-              y: [0, 0, -1, -2, -1, 0, 0, -1, -2, 0],
-              rotate: [0, 0, -4, -4, 0, 0, 0, 3.5, 3.5, 0],
+              y: [0, 0, -3, -5, -2, 0, 0, -3, -5, 0],
+              rotate: [0, 0, -15, -15, 0, 0, 0, 12, 12, 0],
             }}
             transition={{
               duration: 8,
@@ -57,12 +57,12 @@ export function HeroSection() {
             }}
           >
             <defs>
-              <linearGradient id="flameOuter" x1="18" y1="10" x2="18" y2="0" gradientUnits="userSpaceOnUse">
+              <linearGradient id="flameOuter" x1="18" y1="14" x2="18" y2="-16" gradientUnits="userSpaceOnUse">
                 <stop offset="0%" stopColor="#FF5910" />
                 <stop offset="60%" stopColor="#FF8C00" stopOpacity="0.7" />
                 <stop offset="100%" stopColor="#FFD700" stopOpacity="0" />
               </linearGradient>
-              <linearGradient id="flameInner" x1="18" y1="10" x2="18" y2="3" gradientUnits="userSpaceOnUse">
+              <linearGradient id="flameInner" x1="18" y1="14" x2="18" y2="-6" gradientUnits="userSpaceOnUse">
                 <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.9" />
                 <stop offset="50%" stopColor="#FFD700" stopOpacity="0.7" />
                 <stop offset="100%" stopColor="#FF5910" stopOpacity="0" />
@@ -81,35 +81,35 @@ export function HeroSection() {
                 times: [0, 0.12, 0.18, 0.3, 0.38, 0.5, 0.62, 0.68, 0.8, 1],
               }}
             >
-              {/* Outer flame */}
+              {/* Outer flame — large exhaust plume from rear notch */}
               <motion.polygon
-                points="13,8 18,1 23,8"
+                points="10,14 18,-16 26,14"
                 fill="url(#flameOuter)"
                 animate={{ scaleY: [0.7, 1, 0.6, 1.1, 0.8, 1, 0.7] }}
-                style={{ transformOrigin: '18px 8px' }}
+                style={{ transformOrigin: '18px 14px' }}
                 transition={{ duration: 0.35, repeat: Infinity }}
               />
               {/* Inner flame — hotter core */}
               <motion.polygon
-                points="15.5,9 18,4 20.5,9"
+                points="13,14 18,-6 23,14"
                 fill="url(#flameInner)"
                 animate={{ scaleY: [0.5, 1.1, 0.7, 0.9, 0.5] }}
-                style={{ transformOrigin: '18px 9px' }}
+                style={{ transformOrigin: '18px 14px' }}
                 transition={{ duration: 0.2, repeat: Infinity }}
               />
             </motion.g>
 
-            {/* Exhaust sparks — tiny particles that drift during burns */}
-            <motion.circle r="1" fill="#FFD700"
-              animate={{ cy: [7, -2], cx: [16, 13], opacity: [0.8, 0] }}
+            {/* Exhaust sparks — particles that drift upward during burns */}
+            <motion.circle r="1.8" fill="#FFD700"
+              animate={{ cy: [10, -18], cx: [16, 11], opacity: [0.9, 0] }}
               transition={{ duration: 1, repeat: Infinity, repeatDelay: 5.5, delay: 1.5 }}
             />
-            <motion.circle r="0.8" fill="#FF8C00"
-              animate={{ cy: [7, -1], cx: [20, 24], opacity: [0.7, 0] }}
+            <motion.circle r="1.4" fill="#FF8C00"
+              animate={{ cy: [10, -15], cx: [20, 26], opacity: [0.8, 0] }}
               transition={{ duration: 0.9, repeat: Infinity, repeatDelay: 4.8, delay: 5 }}
             />
-            <motion.circle r="1.1" fill="#FF5910"
-              animate={{ cy: [6, -3], cx: [18, 17], opacity: [0.9, 0] }}
+            <motion.circle r="2" fill="#FF5910"
+              animate={{ cy: [8, -20], cx: [18, 17], opacity: [0.9, 0] }}
               transition={{ duration: 1.2, repeat: Infinity, repeatDelay: 5, delay: 3 }}
             />
 
