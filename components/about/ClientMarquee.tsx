@@ -25,17 +25,95 @@ const clientsRow2 = [
   'Cornerstone OnDemand', 'Bitwarden',
 ];
 
+// Lane colors matching Frogger lanes
+const LANE_COLORS: Record<string, { border: string; fill: string; hood: string }> = {
+  tangerine: { border: 'rgba(255,89,16,0.45)', fill: 'rgba(255,89,16,0.10)', hood: 'rgba(255,89,16,0.25)' },
+  tidal:     { border: 'rgba(115,245,255,0.45)', fill: 'rgba(115,245,255,0.10)', hood: 'rgba(115,245,255,0.25)' },
+};
+
+function CarBadge({ name, color, facingRight }: { name: string; color: 'tangerine' | 'tidal'; facingRight: boolean }) {
+  const c = LANE_COLORS[color];
+  return (
+    <span
+      className="relative inline-flex items-center justify-center whitespace-nowrap text-sm font-bold text-shroomy hover:text-white transition-colors duration-300 group"
+      style={{
+        padding: '10px 28px',
+        borderRadius: 6,
+        border: `1.5px solid ${c.border}`,
+        background: c.fill,
+      }}
+    >
+      {/* Hood / bumper */}
+      <span
+        className="absolute top-0 bottom-0"
+        style={{
+          width: 10,
+          background: c.hood,
+          borderRadius: facingRight ? '0 5px 5px 0' : '5px 0 0 5px',
+          ...(facingRight ? { right: 0 } : { left: 0 }),
+        }}
+      />
+      {/* Windshield */}
+      <span
+        className="absolute"
+        style={{
+          width: 12,
+          height: '42%',
+          top: '29%',
+          background: 'rgba(115,245,255,0.06)',
+          border: '0.5px solid rgba(255,255,255,0.05)',
+          ...(facingRight ? { right: 16 } : { left: 16 }),
+        }}
+      />
+      {/* Headlights (front) */}
+      <span
+        className="absolute flex flex-col gap-1.5"
+        style={{ ...(facingRight ? { right: -1 } : { left: -1 }), top: '50%', transform: 'translateY(-50%)' }}
+      >
+        <span className="block w-[3px] h-[3px] rounded-full bg-[#FFE066]" />
+        <span className="block w-[3px] h-[3px] rounded-full bg-[#FFE066]" />
+      </span>
+      {/* Taillights (rear) */}
+      <span
+        className="absolute flex flex-col gap-1.5"
+        style={{ ...(facingRight ? { left: 2 } : { right: 2 }), top: '50%', transform: 'translateY(-50%)' }}
+      >
+        <span className="block w-[2.5px] h-[2.5px] rounded-full bg-[#FF4444]" />
+        <span className="block w-[2.5px] h-[2.5px] rounded-full bg-[#FF4444]" />
+      </span>
+      {/* Wheels */}
+      <span
+        className="absolute bottom-0 translate-y-1/2"
+        style={{ left: '22%' }}
+      >
+        <span className="block w-[8px] h-[4px] rounded-t-full bg-[#1a1a1a]" />
+      </span>
+      <span
+        className="absolute bottom-0 translate-y-1/2"
+        style={{ right: '22%' }}
+      >
+        <span className="block w-[8px] h-[4px] rounded-t-full bg-[#1a1a1a]" />
+      </span>
+      {/* Client name */}
+      <span className="relative z-10">{name}</span>
+    </span>
+  );
+}
+
 function MarqueeRow({
   clients,
   direction = 'left',
   duration = 60,
+  color = 'tangerine',
 }: {
   clients: string[];
   direction?: 'left' | 'right';
   duration?: number;
+  color?: 'tangerine' | 'tidal';
 }) {
   // Double the array for seamless loop
   const doubled = [...clients, ...clients];
+  const facingRight = direction === 'right';
 
   return (
     <div className="relative overflow-hidden">
@@ -60,12 +138,12 @@ function MarqueeRow({
         }}
       >
         {doubled.map((client, i) => (
-          <span
+          <CarBadge
             key={`${client}-${i}`}
-            className="inline-flex items-center px-5 py-2.5 rounded-full border border-white/10 text-sm text-shroomy whitespace-nowrap hover:border-atomic-tangerine/30 hover:text-white transition-colors duration-300"
-          >
-            {client}
-          </span>
+            name={client}
+            color={color}
+            facingRight={facingRight}
+          />
         ))}
       </motion.div>
     </div>
@@ -93,8 +171,8 @@ export function ClientMarquee() {
         {/* Normal marquee rows */}
         {!playing && (
           <div className="space-y-4">
-            <MarqueeRow clients={clientsRow1} direction="left" duration={55} />
-            <MarqueeRow clients={clientsRow2} direction="right" duration={65} />
+            <MarqueeRow clients={clientsRow1} direction="left" duration={55} color="tangerine" />
+            <MarqueeRow clients={clientsRow2} direction="right" duration={65} color="tidal" />
           </div>
         )}
 
