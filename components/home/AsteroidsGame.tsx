@@ -44,6 +44,207 @@ const HS_KEY = 'tsc-asteroids-scores';
 const HS_MAX = 10;
 const ABC = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
+/* ══════════════════════════════════════════════════════
+   Sound Engine — Web Audio API retro synth sounds
+   ══════════════════════════════════════════════════════ */
+class SFX {
+  private ctx: AudioContext | null = null;
+  private _muted = false;
+  private ufoNodes: { osc1: OscillatorNode; osc2: OscillatorNode; gain: GainNode } | null = null;
+  private thrustNodes: { src: AudioBufferSourceNode; gain: GainNode } | null = null;
+
+  private ensure(): AudioContext | null {
+    if (!this.ctx) {
+      try { this.ctx = new (window.AudioContext || (window as any).webkitAudioContext)(); }
+      catch { return null; }
+    }
+    if (this.ctx.state === 'suspended') this.ctx.resume();
+    return this.ctx;
+  }
+
+  get muted() { return this._muted; }
+
+  toggle(): boolean {
+    this._muted = !this._muted;
+    if (this._muted) { this.stopUfoHum(); this.stopThrust(); }
+    return this._muted;
+  }
+
+  /* ── Discrete sounds ── */
+
+  shoot() {
+    const c = this.ensure();
+    if (!c || this._muted) return;
+    const o = c.createOscillator();
+    const g = c.createGain();
+    o.type = 'square';
+    o.frequency.setValueAtTime(880, c.currentTime);
+    o.frequency.exponentialRampToValueAtTime(220, c.currentTime + 0.1);
+    g.gain.setValueAtTime(0.12, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.1);
+    o.connect(g).connect(c.destination);
+    o.start(); o.stop(c.currentTime + 0.1);
+  }
+
+  explodeRock(size: ASize) {
+    const c = this.ensure();
+    if (!c || this._muted) return;
+    const dur = size === 'large' ? 0.4 : size === 'medium' ? 0.25 : 0.15;
+    const vol = size === 'large' ? 0.22 : size === 'medium' ? 0.16 : 0.1;
+    const freq = size === 'large' ? 600 : size === 'medium' ? 900 : 1400;
+    const len = Math.floor(c.sampleRate * dur);
+    const buf = c.createBuffer(1, len, c.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / len);
+    const src = c.createBufferSource(); src.buffer = buf;
+    const g = c.createGain();
+    g.gain.setValueAtTime(vol, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur);
+    const f = c.createBiquadFilter(); f.type = 'lowpass';
+    f.frequency.setValueAtTime(freq, c.currentTime);
+    src.connect(f).connect(g).connect(c.destination);
+    src.start(); src.stop(c.currentTime + dur);
+  }
+
+  explodeShip() {
+    const c = this.ensure();
+    if (!c || this._muted) return;
+    const dur = 0.6;
+    const len = Math.floor(c.sampleRate * dur);
+    const buf = c.createBuffer(1, len, c.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / len);
+    const src = c.createBufferSource(); src.buffer = buf;
+    const g = c.createGain();
+    g.gain.setValueAtTime(0.3, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur);
+    const f = c.createBiquadFilter(); f.type = 'lowpass';
+    f.frequency.setValueAtTime(400, c.currentTime);
+    f.frequency.exponentialRampToValueAtTime(80, c.currentTime + dur);
+    src.connect(f).connect(g).connect(c.destination);
+    src.start(); src.stop(c.currentTime + dur);
+  }
+
+  ufoShoot() {
+    const c = this.ensure();
+    if (!c || this._muted) return;
+    const o = c.createOscillator();
+    const g = c.createGain();
+    o.type = 'sawtooth';
+    o.frequency.setValueAtTime(600, c.currentTime);
+    o.frequency.exponentialRampToValueAtTime(200, c.currentTime + 0.08);
+    g.gain.setValueAtTime(0.08, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.08);
+    o.connect(g).connect(c.destination);
+    o.start(); o.stop(c.currentTime + 0.08);
+  }
+
+  ufoExplode() {
+    const c = this.ensure();
+    if (!c || this._muted) return;
+    const dur = 0.5;
+    const len = Math.floor(c.sampleRate * dur);
+    const buf = c.createBuffer(1, len, c.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / len);
+    const src = c.createBufferSource(); src.buffer = buf;
+    const g = c.createGain();
+    g.gain.setValueAtTime(0.25, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur);
+    const f = c.createBiquadFilter(); f.type = 'lowpass';
+    f.frequency.setValueAtTime(800, c.currentTime);
+    f.frequency.exponentialRampToValueAtTime(100, c.currentTime + dur);
+    src.connect(f).connect(g).connect(c.destination);
+    src.start(); src.stop(c.currentTime + dur);
+  }
+
+  levelUp() {
+    const c = this.ensure();
+    if (!c || this._muted) return;
+    [440, 554, 659, 880].forEach((freq, i) => {
+      const o = c.createOscillator();
+      const g = c.createGain();
+      o.type = 'square';
+      o.frequency.setValueAtTime(freq, c.currentTime + i * 0.1);
+      g.gain.setValueAtTime(0.1, c.currentTime + i * 0.1);
+      g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + i * 0.1 + 0.15);
+      o.connect(g).connect(c.destination);
+      o.start(c.currentTime + i * 0.1);
+      o.stop(c.currentTime + i * 0.1 + 0.15);
+    });
+  }
+
+  gameOver() {
+    const c = this.ensure();
+    if (!c || this._muted) return;
+    [440, 370, 311, 220].forEach((freq, i) => {
+      const o = c.createOscillator();
+      const g = c.createGain();
+      o.type = 'square';
+      o.frequency.setValueAtTime(freq, c.currentTime + i * 0.2);
+      g.gain.setValueAtTime(0.12, c.currentTime + i * 0.2);
+      g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + i * 0.2 + 0.25);
+      o.connect(g).connect(c.destination);
+      o.start(c.currentTime + i * 0.2);
+      o.stop(c.currentTime + i * 0.2 + 0.25);
+    });
+  }
+
+  /* ── Continuous sounds ── */
+
+  startThrust() {
+    const c = this.ensure();
+    if (!c || this._muted || this.thrustNodes) return;
+    const len = c.sampleRate; // 1 second looping buffer
+    const buf = c.createBuffer(1, len, c.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+    const src = c.createBufferSource(); src.buffer = buf; src.loop = true;
+    const g = c.createGain();
+    g.gain.setValueAtTime(0.07, c.currentTime);
+    const f = c.createBiquadFilter(); f.type = 'lowpass';
+    f.frequency.setValueAtTime(200, c.currentTime);
+    src.connect(f).connect(g).connect(c.destination);
+    src.start();
+    this.thrustNodes = { src, gain: g };
+  }
+
+  stopThrust() {
+    if (this.thrustNodes) {
+      try { this.thrustNodes.src.stop(); } catch { /* already stopped */ }
+      this.thrustNodes = null;
+    }
+  }
+
+  startUfoHum() {
+    const c = this.ensure();
+    if (!c || this._muted || this.ufoNodes) return;
+    const gain = c.createGain();
+    gain.gain.setValueAtTime(0.06, c.currentTime);
+    const osc1 = c.createOscillator();
+    osc1.type = 'square'; osc1.frequency.setValueAtTime(120, c.currentTime);
+    const osc2 = c.createOscillator();
+    osc2.type = 'square'; osc2.frequency.setValueAtTime(126, c.currentTime);
+    osc1.connect(gain); osc2.connect(gain); gain.connect(c.destination);
+    osc1.start(); osc2.start();
+    this.ufoNodes = { osc1, osc2, gain };
+  }
+
+  stopUfoHum() {
+    if (this.ufoNodes) {
+      try { this.ufoNodes.osc1.stop(); this.ufoNodes.osc2.stop(); } catch { /* */ }
+      this.ufoNodes = null;
+    }
+  }
+
+  dispose() {
+    this.stopThrust();
+    this.stopUfoHum();
+    try { this.ctx?.close(); } catch { /* */ }
+    this.ctx = null;
+  }
+}
+
 /* ── Types ── */
 type ASize = 'large' | 'medium' | 'small';
 
@@ -110,6 +311,14 @@ interface Game {
   highScores: HighScore[];
   scoreSubmitted: boolean;
   scoreIndex: number;
+}
+
+interface TBtn {
+  id: string;
+  x: number;
+  y: number;
+  r: number;
+  label: string;
 }
 
 /* ── Helpers ── */
@@ -203,13 +412,83 @@ function qualifiesForHighScore(score: number, scores: HighScore[]): boolean {
   return score > scores[scores.length - 1].score;
 }
 
-/* ── Component ── */
+/* ── Touch button layouts ── */
+function calcButtons(w: number, h: number, g: Game): TBtn[] {
+  const r = Math.max(28, Math.min(38, Math.min(w, h) * 0.065));
+  const btns: TBtn[] = [];
+
+  /* always: close & mute */
+  btns.push({ id: 'close', x: 28, y: 28, r: 18, label: '\u2715' });
+  btns.push({ id: 'mute', x: w - 28, y: 28, r: 18, label: '\u266B' });
+
+  if (g.over && g.overTimer >= 40) {
+    if (g.enteringInitials) {
+      const cy = h * 0.68;
+      const sp = r * 2.5;
+      btns.push({ id: 'left',    x: w / 2 - sp * 2, y: cy, r, label: '\u25C0' });
+      btns.push({ id: 'up',      x: w / 2 - sp,     y: cy, r, label: '\u25B2' });
+      btns.push({ id: 'confirm', x: w / 2,           y: cy, r: r * 1.15, label: '\u2713' });
+      btns.push({ id: 'down',    x: w / 2 + sp,      y: cy, r, label: '\u25BC' });
+      btns.push({ id: 'right',   x: w / 2 + sp * 2,  y: cy, r, label: '\u25B6' });
+    } else {
+      btns.push({ id: 'restart', x: w / 2, y: h * 0.82, r: r * 1.4, label: '\u25B6' });
+    }
+  } else if (!g.over) {
+    const by = h - 25 - r;
+    btns.push({ id: 'left',   x: 25 + r,             y: by, r, label: '\u25C0' });
+    btns.push({ id: 'right',  x: 25 + r * 3 + 15,    y: by, r, label: '\u25B6' });
+    btns.push({ id: 'thrust', x: w - 25 - r * 3 - 15, y: by, r, label: '\u25B2' });
+    btns.push({ id: 'fire',   x: w - 25 - r,          y: by, r, label: '\u25CF' });
+  }
+  return btns;
+}
+
+function drawBtn(
+  ctx: CanvasRenderingContext2D,
+  b: TBtn,
+  active: boolean,
+  sfxMuted: boolean,
+) {
+  ctx.save();
+  ctx.globalAlpha = 0.85;
+  ctx.beginPath();
+  ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+  ctx.fillStyle = active ? 'rgba(255,89,16,0.25)' : 'rgba(20,18,19,0.55)';
+  ctx.fill();
+  ctx.strokeStyle = active ? 'rgba(255,89,16,0.9)' : 'rgba(255,255,255,0.25)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  ctx.fillStyle = active ? '#FF5910' : 'rgba(255,255,255,0.65)';
+  ctx.font = `bold ${Math.round(b.r * 0.65)}px monospace`;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(b.label, b.x, b.y + 1);
+
+  /* mute button strikethrough */
+  if (b.id === 'mute' && sfxMuted) {
+    ctx.strokeStyle = '#FF5910'; ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(b.x - b.r * 0.55, b.y - b.r * 0.55);
+    ctx.lineTo(b.x + b.r * 0.55, b.y + b.r * 0.55);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+/* ══════════════════════════════════════════════════════
+   Component
+   ══════════════════════════════════════════════════════ */
 export function AsteroidsGame({ onClose }: { onClose: () => void }) {
   const cvs = useRef<HTMLCanvasElement>(null);
   const game = useRef<Game | null>(null);
   const keys = useRef<Set<string>>(new Set());
   const raf = useRef(0);
   const ochoImg = useRef<HTMLImageElement | null>(null);
+  const sfxRef = useRef<SFX | null>(null);
+  const touchActive = useRef<Record<string, boolean>>({});
+  const prevTouch = useRef<Record<string, boolean>>({});
+  const showTouch = useRef(false);
+  const btnsRef = useRef<TBtn[]>([]);
 
   const init = useCallback((w: number, h: number): Game => ({
     ship: {
@@ -246,6 +525,10 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
+    /* Sound engine */
+    const sfx = new SFX();
+    sfxRef.current = sfx;
+
     /* Load ocho mascot image */
     const img = new Image();
     img.src = '/images/ocho-color.png';
@@ -253,8 +536,32 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
 
     game.current = init(el.width, el.height);
 
+    /* ── Touch handlers ── */
+    const updateTouch = (e: TouchEvent) => {
+      e.preventDefault();
+      showTouch.current = true;
+      const state: Record<string, boolean> = {};
+      const btns = btnsRef.current;
+      for (let t = 0; t < e.touches.length; t++) {
+        const tx = e.touches[t].clientX;
+        const ty = e.touches[t].clientY;
+        for (const btn of btns) {
+          if (Math.hypot(tx - btn.x, ty - btn.y) < btn.r * 1.5) {
+            state[btn.id] = true;
+          }
+        }
+      }
+      touchActive.current = state;
+    };
+
+    el.addEventListener('touchstart', updateTouch, { passive: false });
+    el.addEventListener('touchmove', updateTouch, { passive: false });
+    el.addEventListener('touchend', updateTouch, { passive: false });
+    el.addEventListener('touchcancel', updateTouch, { passive: false });
+
+    /* ── Keyboard handlers ── */
     const onDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') { onClose(); return; }
+      if (e.key === 'Escape') { sfx.dispose(); onClose(); return; }
       if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
         e.preventDefault();
       }
@@ -264,7 +571,7 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
 
       /* ── Game over input ── */
       if (g.over) {
-        if (g.overTimer < 40) return; // brief delay before accepting input
+        if (g.overTimer < 40) return;
 
         if (g.enteringInitials) {
           const key = e.key;
@@ -292,13 +599,18 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
           return;
         }
 
+        /* Not entering initials — viewing scores */
+        if (e.key === 'm' || e.key === 'M') { sfx.toggle(); return; }
         if (e.key === 'Enter') {
+          sfx.stopThrust(); sfx.stopUfoHum();
           keys.current.clear();
           game.current = init(el.width, el.height);
         }
         return;
       }
 
+      /* Gameplay */
+      if (e.key === 'm' || e.key === 'M') { sfx.toggle(); return; }
       keys.current.add(e.key.toLowerCase());
     };
     const onUp = (e: KeyboardEvent) => { keys.current.delete(e.key.toLowerCase()); };
@@ -306,15 +618,75 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
     window.addEventListener('keydown', onDown);
     window.addEventListener('keyup', onUp);
 
-    /* ── GAME LOOP ── */
+    /* ── Continuous sound trackers ── */
+    let wasThrusting = false;
+    let hadUfo = false;
+    let wasOver = false;
+
+    /* ═══════════════════════════════════
+       GAME LOOP
+       ═══════════════════════════════════ */
     const loop = () => {
       const g = game.current;
       if (!g) return;
       const w = el.width;
       const h = el.height;
       const k = keys.current;
+      const ta = touchActive.current;
       g.frame++;
 
+      /* ── Input helpers (keyboard + touch) ── */
+      const pressed = (id: string): boolean => {
+        switch (id) {
+          case 'left':   return k.has('arrowleft')  || k.has('a') || !!ta.left;
+          case 'right':  return k.has('arrowright') || k.has('d') || !!ta.right;
+          case 'thrust': return k.has('arrowup')    || k.has('w') || !!ta.thrust;
+          case 'fire':   return k.has(' ')           || !!ta.fire;
+          default: return false;
+        }
+      };
+      const justTouched = (id: string): boolean => !!ta[id] && !prevTouch.current[id];
+
+      /* Calculate touch button layout for this frame */
+      if (showTouch.current) {
+        btnsRef.current = calcButtons(w, h, g);
+      }
+
+      /* ── Handle game-over touch input ── */
+      if (g.over && g.overTimer >= 40 && showTouch.current) {
+        if (g.enteringInitials) {
+          if (justTouched('up'))    g.initialsChars[g.initialsPos] = (g.initialsChars[g.initialsPos] + 1) % 26;
+          if (justTouched('down'))  g.initialsChars[g.initialsPos] = (g.initialsChars[g.initialsPos] + 25) % 26;
+          if (justTouched('left'))  g.initialsPos = Math.max(0, g.initialsPos - 1);
+          if (justTouched('right')) g.initialsPos = Math.min(2, g.initialsPos + 1);
+          if (justTouched('confirm')) {
+            const initials = g.initialsChars.map(i => ABC[i]).join('');
+            const entry: HighScore = { initials, score: g.score };
+            const scores = [...g.highScores, entry].sort((a, b) => b.score - a.score).slice(0, HS_MAX);
+            saveHighScores(scores);
+            g.highScores = scores;
+            g.scoreIndex = scores.indexOf(entry);
+            g.enteringInitials = false;
+            g.scoreSubmitted = true;
+          }
+        } else if (justTouched('restart')) {
+          sfx.stopThrust(); sfx.stopUfoHum();
+          wasThrusting = false; hadUfo = false; wasOver = false;
+          game.current = init(el.width, el.height);
+          prevTouch.current = { ...ta };
+          raf.current = requestAnimationFrame(loop);
+          return;
+        }
+      }
+
+      /* close & mute via touch */
+      if (justTouched('close')) {
+        sfx.dispose(); onClose();
+        return;
+      }
+      if (justTouched('mute')) sfx.toggle();
+
+      /* ═══ GAME LOGIC ═══ */
       if (!g.over) {
         const s = g.ship;
 
@@ -322,6 +694,7 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
         const die = () => {
           s.alive = false; s.respawn = 90; g.lives--; g.shake = 15;
           g.sparks.push(...boom(s.x, s.y, 20));
+          sfx.explodeShip();
           if (g.lives <= 0) {
             g.over = true;
             const hs = loadHighScores();
@@ -332,9 +705,9 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
 
         /* update ship */
         if (s.alive) {
-          if (k.has('arrowleft') || k.has('a')) s.rot -= ROT_SPEED;
-          if (k.has('arrowright') || k.has('d')) s.rot += ROT_SPEED;
-          if (k.has('arrowup') || k.has('w')) {
+          if (pressed('left'))  s.rot -= ROT_SPEED;
+          if (pressed('right')) s.rot += ROT_SPEED;
+          if (pressed('thrust')) {
             s.vx += Math.cos(s.rot) * THRUST;
             s.vy += Math.sin(s.rot) * THRUST;
             const spd = Math.hypot(s.vx, s.vy);
@@ -345,7 +718,7 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
           if (s.invuln > 0) s.invuln--;
 
           if (g.cooldown > 0) g.cooldown--;
-          if (k.has(' ') && g.cooldown === 0) {
+          if (pressed('fire') && g.cooldown === 0) {
             g.bullets.push({
               x: s.x + Math.cos(s.rot) * SHIP_R,
               y: s.y + Math.sin(s.rot) * SHIP_R,
@@ -354,6 +727,7 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
               life: g.bulletLife,
             });
             g.cooldown = FIRE_RATE;
+            sfx.shoot();
           }
         } else {
           s.respawn--;
@@ -363,10 +737,10 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
           }
         }
 
-        /* update bullets */
+        /* update bullets — NO WRAP, die at screen edge */
         g.bullets = g.bullets.filter(b => {
-          b.x = wrap(b.x + b.vx, w); b.y = wrap(b.y + b.vy, h);
-          return --b.life > 0;
+          b.x += b.vx; b.y += b.vy;
+          return --b.life > 0 && b.x >= -4 && b.x <= w + 4 && b.y >= -4 && b.y <= h + 4;
         });
 
         /* update rocks */
@@ -400,6 +774,7 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
               life: g.bulletLife,
             });
             u.cooldown = UFO_FIRE_INTERVAL;
+            sfx.ufoShoot();
           }
 
           /* UFO left the screen */
@@ -414,10 +789,10 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
           }
         }
 
-        /* update UFO bullets */
+        /* update UFO bullets — NO WRAP, die at screen edge */
         g.ufoBullets = g.ufoBullets.filter(b => {
-          b.x = wrap(b.x + b.vx, w); b.y = wrap(b.y + b.vy, h);
-          return --b.life > 0;
+          b.x += b.vx; b.y += b.vy;
+          return --b.life > 0 && b.x >= -4 && b.x <= w + 4 && b.y >= -4 && b.y <= h + 4;
         });
 
         /* ── Collisions ── */
@@ -436,6 +811,7 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
               g.score += A_SCORE[r.size];
               addRocks.push(...splitRock(r));
               g.sparks.push(...boom(r.x, r.y, r.size === 'large' ? 15 : r.size === 'medium' ? 10 : 6));
+              sfx.explodeRock(r.size);
               break;
             }
           }
@@ -450,6 +826,7 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
               deadB.add(bi);
               g.score += UFO_SCORE;
               g.sparks.push(...boom(g.ufo.x, g.ufo.y, 25));
+              sfx.ufoExplode();
               g.ufo = null;
               g.ufoTimer = UFO_SPAWN_MIN + Math.floor(Math.random() * (UFO_SPAWN_MAX - UFO_SPAWN_MIN));
               break;
@@ -474,6 +851,7 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
         if (s.alive && s.invuln <= 0 && g.ufo) {
           if (hit(s.x, s.y, SHIP_R * 0.6, g.ufo.x, g.ufo.y, UFO_R)) {
             g.sparks.push(...boom(g.ufo.x, g.ufo.y, 15));
+            sfx.ufoExplode();
             g.ufo = null;
             g.ufoTimer = UFO_SPAWN_MIN + Math.floor(Math.random() * (UFO_SPAWN_MAX - UFO_SPAWN_MIN));
             die();
@@ -494,7 +872,28 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
         /* next wave */
         if (g.rocks.length === 0) {
           g.level++;
+          sfx.levelUp();
           g.rocks = spawnWave(START_ROCKS + g.level - 1, w, h, s.x, s.y);
+        }
+      }
+
+      /* ── Continuous sound management ── */
+      if (g.over && !wasOver) {
+        sfx.stopThrust(); sfx.stopUfoHum();
+        sfx.gameOver();
+        wasThrusting = false; hadUfo = false; wasOver = true;
+      }
+      if (!g.over) {
+        wasOver = false;
+        const isThrusting = g.ship.alive && pressed('thrust');
+        if (isThrusting !== wasThrusting) {
+          isThrusting ? sfx.startThrust() : sfx.stopThrust();
+          wasThrusting = isThrusting;
+        }
+        const hasUfo = !!g.ufo;
+        if (hasUfo !== hadUfo) {
+          hasUfo ? sfx.startUfoHum() : sfx.stopUfoHum();
+          hadUfo = hasUfo;
         }
       }
 
@@ -507,7 +906,9 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
       /* game over timer */
       if (g.over) g.overTimer++;
 
-      /* ── RENDER ── */
+      /* ═══════════════════════════════════
+         RENDER
+         ═══════════════════════════════════ */
       ctx.save();
       if (g.shake > 0) ctx.translate((Math.random() - 0.5) * g.shake, (Math.random() - 0.5) * g.shake);
 
@@ -584,7 +985,7 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
           ctx.closePath(); ctx.stroke();
 
           /* thrust flame */
-          if (k.has('arrowup') || k.has('w')) {
+          if (pressed('thrust')) {
             const fl = 0.5 + Math.random() * 0.8;
             ctx.strokeStyle = C.score; ctx.lineWidth = 1.5;
             ctx.beginPath();
@@ -613,10 +1014,12 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
         ctx.closePath(); ctx.stroke(); ctx.restore();
       }
 
-      /* controls hint */
-      ctx.fillStyle = C.ui; ctx.globalAlpha = 0.4; ctx.font = '12px monospace'; ctx.textAlign = 'center';
-      ctx.fillText('ARROWS / WASD \u00B7 SPACE TO FIRE \u00B7 ESC TO EXIT', w / 2, h - 20);
-      ctx.globalAlpha = 1;
+      /* controls hint (desktop only) */
+      if (!showTouch.current) {
+        ctx.fillStyle = C.ui; ctx.globalAlpha = 0.4; ctx.font = '12px monospace'; ctx.textAlign = 'center';
+        ctx.fillText('ARROWS / WASD \u00B7 SPACE TO FIRE \u00B7 M MUTE \u00B7 ESC TO EXIT', w / 2, h - 20);
+        ctx.globalAlpha = 1;
+      }
 
       /* ── GAME OVER OVERLAY ── */
       if (g.over) {
@@ -637,7 +1040,11 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
             ctx.fillText('\u2605 NEW HIGH SCORE! \u2605', w / 2, h / 2 - 40);
 
             ctx.fillStyle = C.ui; ctx.font = '13px monospace';
-            ctx.fillText('TYPE INITIALS  \u00B7  \u2190\u2192 MOVE  \u00B7  ENTER TO CONFIRM', w / 2, h / 2 - 10);
+            if (showTouch.current) {
+              ctx.fillText('USE BUTTONS BELOW TO ENTER INITIALS', w / 2, h / 2 - 10);
+            } else {
+              ctx.fillText('TYPE INITIALS  \u00B7  \u2190\u2192 MOVE  \u00B7  ENTER TO CONFIRM', w / 2, h / 2 - 10);
+            }
 
             ctx.font = 'bold 40px monospace';
             const blink = Math.floor(g.frame / 18) % 2 === 0;
@@ -687,10 +1094,12 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
                 ctx.fillText(String(hs.score).padStart(6, '0'), w / 2 + 110, y);
               }
 
-              const bottomY = startY + Math.min(scores.length, HS_MAX) * 26 + 25;
-              ctx.fillStyle = C.ui; ctx.font = '16px monospace'; ctx.textAlign = 'center';
-              ctx.fillText('ENTER TO RESTART \u00B7 ESC TO EXIT', w / 2, bottomY);
-            } else {
+              if (!showTouch.current) {
+                const bottomY = startY + Math.min(scores.length, HS_MAX) * 26 + 25;
+                ctx.fillStyle = C.ui; ctx.font = '16px monospace'; ctx.textAlign = 'center';
+                ctx.fillText('ENTER TO RESTART \u00B7 ESC TO EXIT', w / 2, bottomY);
+              }
+            } else if (!showTouch.current) {
               ctx.fillStyle = C.ui; ctx.font = '16px monospace';
               ctx.fillText('ENTER TO RESTART \u00B7 ESC TO EXIT', w / 2, h / 2 + 20);
             }
@@ -698,7 +1107,19 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
         }
       }
 
+      /* ── Touch buttons (drawn last, on top of everything) ── */
+      if (showTouch.current) {
+        const btns = btnsRef.current;
+        for (const b of btns) {
+          drawBtn(ctx, b, !!ta[b.id], sfx.muted);
+        }
+      }
+
       ctx.restore();
+
+      /* update prev touch state for rising-edge detection */
+      prevTouch.current = { ...ta };
+
       raf.current = requestAnimationFrame(loop);
     };
 
@@ -706,16 +1127,21 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
 
     return () => {
       cancelAnimationFrame(raf.current);
+      sfx.dispose();
       window.removeEventListener('resize', resize);
       window.removeEventListener('keydown', onDown);
       window.removeEventListener('keyup', onUp);
+      el.removeEventListener('touchstart', updateTouch);
+      el.removeEventListener('touchmove', updateTouch);
+      el.removeEventListener('touchend', updateTouch);
+      el.removeEventListener('touchcancel', updateTouch);
       document.body.style.overflow = prevOverflow;
     };
   }, [init, onClose]);
 
   return createPortal(
-    <div style={{ position: 'fixed', inset: 0, zIndex: 99999, background: C.bg }}>
-      <canvas ref={cvs} style={{ display: 'block', width: '100%', height: '100%' }} />
+    <div style={{ position: 'fixed', inset: 0, zIndex: 99999, background: C.bg, touchAction: 'none' }}>
+      <canvas ref={cvs} style={{ display: 'block', width: '100%', height: '100%', touchAction: 'none' }} />
     </div>,
     document.body,
   );
