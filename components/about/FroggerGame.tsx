@@ -142,11 +142,13 @@ export function FroggerGame({ onClose }: { onClose: () => void }) {
     };
   }, []);
 
-  // Get player Y from lane
+  // Get player Y from lane — center of the lane strip
+  // Layout: bottom safe (lane 0) → 5 traffic lanes (1-5) → top safe (lane 6)
+  // Each strip is laneH tall, so center of strip p = h - laneH * (p + 0.5)
   const getPlayerY = useCallback((g: GameState, h: number): number => {
     if (g.playerLane === 0) return h - g.laneH * 0.5;
     if (g.playerLane >= 6) return g.laneH * 0.5;
-    return h - g.laneH * (g.playerLane + 1) - g.laneH + g.laneH * 0.5;
+    return h - g.laneH * (g.playerLane + 0.5);
   }, []);
 
   useEffect(() => {
@@ -503,7 +505,8 @@ export function FroggerGame({ onClose }: { onClose: () => void }) {
 
       const canvas = canvasRef.current;
       if (!canvas) return;
-      const w = canvas.width;
+      const dprK = window.devicePixelRatio || 1;
+      const w = canvas.width / dprK;
       const step = g.laneH * 0.7;
 
       keysRef.current.add(e.key);
@@ -558,19 +561,19 @@ export function FroggerGame({ onClose }: { onClose: () => void }) {
       }
 
       const rect = canvas.getBoundingClientRect();
-      const w = canvas.width;
-      const h = canvas.height;
-      const scaleX = w / rect.width;
-      const scaleY = h / rect.height;
+      const dprT = window.devicePixelRatio || 1;
+      const logW = canvas.width / dprT;
+      const logH = canvas.height / dprT;
 
       for (let i = 0; i < e.touches.length; i++) {
-        const tx = (e.touches[i].clientX - rect.left) * scaleX;
-        const ty = (e.touches[i].clientY - rect.top) * scaleY;
+        // Map touch to logical (CSS) coordinates to match drawTouchControls
+        const tx = (e.touches[i].clientX - rect.left) * (logW / rect.width);
+        const ty = (e.touches[i].clientY - rect.top) * (logH / rect.height);
 
         const btnSize = 52;
         const pad = 20;
-        const cx = w - pad - btnSize * 1.5;
-        const cy = h - pad - btnSize * 1.5;
+        const cx = logW - pad - btnSize * 1.5;
+        const cy = logH - pad - btnSize * 1.5;
         const step = g.laneH * 0.7;
 
         const buttons = [
@@ -586,7 +589,7 @@ export function FroggerGame({ onClose }: { onClose: () => void }) {
             if (btn.action === 'up' && g.playerLane < 6) g.playerLane++;
             else if (btn.action === 'down' && g.playerLane > 0) g.playerLane--;
             else if (btn.action === 'left') g.playerX = Math.max(step, g.playerX - step);
-            else if (btn.action === 'right') g.playerX = Math.min(w - step, g.playerX + step);
+            else if (btn.action === 'right') g.playerX = Math.min(logW - step, g.playerX + step);
           }
         }
       }
