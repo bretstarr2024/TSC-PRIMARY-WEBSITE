@@ -1,0 +1,86 @@
+session_id: "XXV"
+date: "2026-02-24"
+branch: main
+version: "0.18.0"  # MINOR: Tron light cycle game on pricing page (4th arcade easter egg)
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "pending"
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "TronGame uses localStorage only (tsc-tron-scores). Reuses existing /api/arcade-boss route — no new collections or schema changes."
+
+commits:
+  - hash: "1f79842"
+    message: "feat: Add Tron light cycle game to pricing page easter egg"
+  - hash: "59177df"
+    message: "docs: Session XXV roadmap update — Tron light cycle game on pricing page"
+
+artifacts_updated:
+  - "components/pricing/TronGame.tsx — New Tron light cycle game (player vs AI, neon grid, trail collision, SFX, high scores, boss overlay, touch D-pad)"
+  - "components/pricing/WhyDifferent.tsx — Added game state, dynamic import TronGame, OchoTrigger below The Combination card"
+  - "docs/roadmap.md — Session XXV entry, next session renumbered to XXVI"
+
+decisions_made:
+  - decision: "Tron game placed in WhyDifferent section on pricing page (below The Combination card)"
+    rationale: "Follows the same pattern as Breakout in BridgeStatement — OchoTrigger after a statement section. Natural narrative beat between philosophy and pricing."
+    reversible: true
+  - decision: "Game over text is 'DERESOLVED' (not 'GAME OVER')"
+    rationale: "Tron film vocabulary — adds flavor and distinguishes this game from the others."
+    reversible: true
+  - decision: "Scoring: +1 per tick survived, +100 × level per enemy killed"
+    rationale: "Survival score rewards longevity, enemy kills reward aggression. Level multiplier incentivizes progressing."
+    reversible: true
+  - decision: "3-2-1 countdown before each round"
+    rationale: "Tron races start with a countdown. Gives player orientation time before movement begins."
+    reversible: true
+  - decision: "AI enemies pathfind toward player with random turn chance, die when fully trapped"
+    rationale: "Simple but effective AI. Trapped enemies dying rewards strategic play (boxing them in)."
+    reversible: true
+  - decision: "Continuous engine hum SFX (low sawtooth) during gameplay"
+    rationale: "Tron light cycles are defined by their engine sound. Adds immersion."
+    reversible: true
+  - decision: "Levels add enemies: 1→2→3→4 max"
+    rationale: "Progressive difficulty without overwhelming. 4 enemies on screen is plenty intense."
+    reversible: true
+
+known_risks:
+  - risk: "isOccupied() checks all trail points every tick — O(n) per cycle where n = trail length"
+    mitigation: "Grid is finite (screen pixels / 4), games rarely exceed a few hundred ticks. Performance is fine on modern hardware. Could optimize with Set-based lookup if needed."
+    severity: low
+  - risk: "Enemy AI can occasionally trap itself quickly on small screens"
+    mitigation: "This is intentional gameplay — trapping enemies earns points. Small screens have proportionally smaller grids."
+    severity: low
+
+explicitly_deferred:
+  - "Contact page with form (Resend integration) — next session priority"
+  - "Pipeline infrastructure from AEO — next session"
+  - "Chatbot (chaDbot) — next session"
+  - "Source monitors — next session"
+
+next_actions:
+  - "Build Contact page with form (Resend integration)"
+  - "Copy pipeline infrastructure from AEO donor"
+  - "Build chatbot (chaDbot) — copy RAG from AEO"
+  - "Create source monitors for B2B/AI marketing news"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All CTAs -> /book (internal Cal.com iframe)"
+  - "All game triggers use shared OchoTrigger component — no per-game trigger implementations"
+  - "Easter egg games are undocumented — no navigation or user-facing docs"
+  - "High score localStorage keys: tsc-asteroids-scores, tsc-frogger-scores, tsc-breakout-scores, tsc-tron-scores"
+  - "Boss overlay z-index 100000 > game portals 99999"
+  - "arcade_bosses collection in tsc database for #1 high score email capture"
+  - "4 arcade games: Asteroids (homepage), Frogger (about), Breakout (services), Tron (pricing)"

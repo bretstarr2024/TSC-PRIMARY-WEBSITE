@@ -1,16 +1,53 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 24, 2026 (Session XXIV)
+**Last Updated:** February 24, 2026 (Session XXV)
 
 ---
 
-## Current Phase: Phase 1 COMPLETE + 3 Arcade Easter Eggs + Boss Celebration System
+## Current Phase: Phase 1 COMPLETE + 4 Arcade Easter Eggs + Boss Celebration System
 
-The site is live with **119 pages** (118 static + 1 API route) across 10 content types, 9 verticals, a full Pricing page, 89 answer capsules, and **3 hidden arcade games** (Asteroids, Frogger, Breakout) with a shared boss celebration system. Session XXIV added Breakout to the Services page, unified all game triggers with a shared OchoTrigger component, added sound effects and high scores to Frogger, and built a confetti-showering email capture overlay that fires when any player achieves the #1 high score position.
+The site is live with **119 pages** (118 static + 1 API route) across 10 content types, 9 verticals, a full Pricing page, 89 answer capsules, and **4 hidden arcade games** (Asteroids, Frogger, Breakout, Tron) with a shared boss celebration system. Every major page now has its own easter egg game, all triggered by the shared OchoTrigger component.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections)
 - **Next actions:** Build Contact page with form, pipeline infrastructure from AEO, chatbot (chaDbot)
-- **Roadmap:** See `docs/roadmap.md` Session XXIV
+- **Roadmap:** See `docs/roadmap.md` Session XXV
+
+### Session XXV Summary (February 24, 2026)
+
+**Focus:** Add Tron light cycle racing game to pricing page as 4th arcade easter egg.
+
+**What was done:**
+
+1. **Tron Light Cycle Game** (`components/pricing/TronGame.tsx`):
+   - Full canvas Tron racer on a dark grid with neon glow trails
+   - Player (Atomic Tangerine #FF5910) vs AI light cycles (Cyan, Magenta, Lime, Teal)
+   - Tick-based movement — cycles leave trails, hit any trail or wall and you're "deresolved"
+   - Levels 1–4: each level adds another AI enemy (max 4), speed increases per level
+   - Scoring: +1 per tick survived, +100 × level per enemy killed (enemies die when fully trapped)
+   - 3-2-1 countdown before each round starts
+   - Web Audio SFX: continuous engine hum (low sawtooth), turn clicks, crash explosion, enemy crash, countdown beeps, level-up arpeggio, game-over descending notes
+   - High scores via localStorage (`tsc-tron-scores`), top 10, 3-letter initials entry
+   - Boss celebration overlay on #1 high score (reuses existing ArcadeBossOverlay + `/api/arcade-boss`)
+   - Touch controls: D-pad during gameplay, initials buttons on game over, close/mute always visible
+   - Portal at z-index 99999, lazy-loaded via `next/dynamic`, zero bundle cost until played
+
+2. **Pricing page integration** (`components/pricing/WhyDifferent.tsx`):
+   - OchoTrigger (bobbing Ocho with Sprinkles glow) placed below "The Combination" card
+   - Same pattern as Breakout on Services, Asteroids on Homepage, Frogger on About
+
+**Commits this session:**
+- `1f79842` — feat: Add Tron light cycle game to pricing page easter egg
+- `59177df` — docs: Session XXV roadmap update — Tron light cycle game on pricing page
+
+**Results:**
+- 4 arcade games across 4 major pages (homepage, about, services, pricing)
+- All games share: OchoTrigger, ArcadeBossOverlay, SFX patterns, high score system, touch controls
+- Build: 119 pages, PASS
+
+**Donor files referenced:**
+- None — built from existing project patterns (BreakoutGame.tsx as primary template)
+
+---
 
 ### Session XXIV Summary (February 24, 2026)
 
