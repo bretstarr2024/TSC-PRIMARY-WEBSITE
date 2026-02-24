@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION VI** | Last Updated: February 23, 2026
+**Status: SESSION VII** | Last Updated: February 24, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -263,12 +263,45 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 108 static pages (up from 103 — 5 new routes)
 
-#### Session VII (upcoming): Pipeline Infrastructure + Structured Data
+#### Session VII: About Page + Headline Animations + AEO Structured Data ✅ COMPLETE (Feb 24, 2026)
+
+**Focus:** Build complete About page with full content, AEO optimization, and fix animation consistency across stub pages.
+
+**Layer 0 — Headline Animation Fix (done):**
+- [x] Added `AnimatedSection` + `GradientText` wrappers to `/about`, `/work`, `/industries` pages
+- [x] All section headlines now animate consistently with Services and Insights pages
+
+**Layer 1 — About Page Content (done):**
+- [x] `components/about/AboutHero.tsx` — Word-by-word 3D animated headline, AEO answer capsule
+- [x] `components/about/OriginStory.tsx` — Founding story (1999), stats grid, book callout
+- [x] `components/about/ApproachSection.tsx` — Three kernel values as animated cards
+- [x] `components/about/LeadershipSection.tsx` — 10 leaders, expand-on-click bios, LinkedIn links
+- [x] `components/about/ClientMarquee.tsx` — 52 client names, dual-row infinite scroll
+- [x] `components/about/AboutFaq.tsx` — 6 FAQ items with animated accordion
+- [x] Reused `ServiceCTA` for CTA section
+
+**Layer 2 — AEO Structured Data (done):**
+- [x] Organization JSON-LD schema on About page
+- [x] FAQPage JSON-LD schema (6 questions) — `lib/schema/about-faq.ts`
+- [x] BreadcrumbList JSON-LD schema — added `aboutBreadcrumb()` to `lib/schema/breadcrumbs.ts`
+- [x] AEO answer capsule in hero (20-word summary for AI extraction)
+- [x] Keywords in metadata (8 targeted terms)
+
+**Key content gathered from user:**
+- 10 leadership bios (Bret Starr, Dan McCarron, Racheal Bates, JJ La Pata, Nancy Crabb, Noah Johnson, Joanna Castle, Evan Addison Payne, Melissa Casey, Skylin Solaris)
+- 52 highlighted clients from 500+ client CRM list
+- Founding story: 1999, Bret's brand-side frustration principle
+- Stats: 3,000+ B2B tech clients, 100+ brands repositioned, 25+ years
+- Bret's book: A Humble Guide to Fixing Everything in Brand, Marketing, and Sales
+- All leadership LinkedIn URLs
+
+**Build:** 108 static pages (same count — About page replaced stub)
+
+#### Session VIII (upcoming): Pipeline Infrastructure
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
 - [ ] Create source monitors for B2B/AI marketing news
-- [ ] Add BreadcrumbList, Organization, Person schemas to all pages
 - [ ] Add answer capsules to service pillar pages
 
 ---
@@ -323,7 +356,7 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 #### Session XII: About, Contact, Work, Careers
 - [x] `/about`, `/contact`, `/work`, `/careers` stub pages created (Session VI)
-- [ ] About: Team profiles, company story, 25+ years
+- [x] About: 10 leadership bios, founding story, 52-client marquee, FAQ, AEO schemas (Session VII)
 - [ ] Contact: Form (Resend integration), booking link
 - [ ] Work: Case study showcase
 - [ ] Careers: Job listings, culture
