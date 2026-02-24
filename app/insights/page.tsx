@@ -4,7 +4,10 @@ import { AnimatedSection, StaggerContainer, StaggerItem } from '@/components/Ani
 import { GradientText } from '@/components/AnimatedText';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { AnswerCapsulesSection } from '@/components/AnswerCapsulesSection';
 import { getClientConfig } from '@/lib/kernel/client';
+import { insightsCapsules } from '@/lib/schema/hub-faqs';
+import { getFaqSchema } from '@/lib/schema/service-faq';
 
 export const revalidate = 3600;
 
@@ -176,8 +179,22 @@ export default function InsightsPage() {
             ))}
           </StaggerContainer>
         </section>
+
+        <AnswerCapsulesSection
+          capsules={insightsCapsules}
+          accentColor="#73F5FF"
+          heading={<>About our <span className="text-tidal-wave">content engine.</span></>}
+          subheading="How TSC builds AI-powered content that earns authority with buyers and search engines alike."
+        />
       </main>
       <Footer />
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(getFaqSchema(insightsCapsules)),
+        }}
+      />
     </>
   );
 }

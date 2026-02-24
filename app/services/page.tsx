@@ -7,7 +7,10 @@ import { ServiceCategoryStrip } from '@/components/services/ServiceCategoryStrip
 import { AiCascade } from '@/components/services/AiCascade';
 import { BridgeStatement } from '@/components/services/BridgeStatement';
 import { ServiceCTA } from '@/components/services/ServiceCTA';
+import { AnswerCapsulesSection } from '@/components/AnswerCapsulesSection';
 import { getStrategicCategories } from '@/lib/services-data';
+import { servicesCapsules } from '@/lib/schema/hub-faqs';
+import { getFaqSchema } from '@/lib/schema/service-faq';
 
 export const metadata: Metadata = {
   title: 'Services | The Starr Conspiracy',
@@ -38,9 +41,24 @@ export default function ServicesPage() {
         ))}
         <AiCascade />
         <BridgeStatement />
+
+        <AnswerCapsulesSection
+          capsules={servicesCapsules}
+          accentColor="#FF5910"
+          heading={<>Common questions about <span className="text-atomic-tangerine">our services.</span></>}
+          subheading="What B2B marketing leaders want to know before engaging an agency."
+        />
+
         <ServiceCTA />
       </main>
       <Footer />
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(getFaqSchema(servicesCapsules)),
+        }}
+      />
     </>
   );
 }
