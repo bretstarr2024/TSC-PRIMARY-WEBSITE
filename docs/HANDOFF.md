@@ -1,16 +1,49 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 24, 2026 (Session XV)
+**Last Updated:** February 24, 2026 (Session XVI)
 
 ---
 
-## Current Phase: Phase 1 COMPLETE + Frogger Polished
+## Current Phase: Phase 1 COMPLETE + Marquee Car Teaser
 
-The site is live with **108 static pages** across 10 content types. Session XV upgraded the Frogger easter egg UX: obstacles are now recognizable cars with client names, the game trigger is more discoverable below the client marquee, and overlapping obstacles are fixed.
+The site is live with **108 static pages** across 10 content types. Session XVI replaced the client marquee pill badges with CSS car shapes matching the Frogger game aesthetic, creating a visual teaser for the hidden easter egg.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10 collections, ~80 documents)
-- **Next actions:** Verify Frogger cars on live site, build Industries page, pipeline infrastructure from AEO
-- **Roadmap:** See `docs/roadmap.md` Session XV
+- **Next actions:** Verify car marquee on live site, build Industries page, pipeline infrastructure from AEO
+- **Roadmap:** See `docs/roadmap.md` Session XVI
+
+### Session XVI Summary (February 24, 2026)
+
+**Focus:** Replace client marquee pill badges with CSS car shapes as a Frogger game teaser.
+
+**What was done:**
+
+1. **CarBadge component** (1 modified file):
+   - `components/about/ClientMarquee.tsx` — New `CarBadge` component replaces the plain `<span>` pill badges. Each client name now sits inside a miniature CSS car that matches the Frogger `drawCar` canvas rendering: boxy body (border-radius 6px, not rounded-full), colored hood/bumper at the front end, tinted windshield behind the hood, yellow headlights (front), red taillights (rear), dark semicircle wheels at bottom edges. Direction-aware — headlights face the direction of travel. Row 1 (left-moving) uses tangerine, row 2 (right-moving) uses tidal, matching the first two Frogger lane colors. Added `LANE_COLORS` config object with border/fill/hood opacity variants per color.
+
+**Commits this session:**
+- `61ffb71` — feat: Client marquee car badges — Frogger teaser
+- `d83a229` — docs: Update roadmap for Session XVI — marquee car teaser
+
+**Results:**
+- 108 static pages (unchanged — no new routes)
+- Client marquee now visually teases the Frogger game with car-shaped badges
+- Two opposing rows create a "two lanes of traffic" feel
+- All changes contained in 1 component file + docs
+
+**Donor files referenced:**
+- None — CSS adaptation of the existing canvas `drawCar` function in `FroggerGame.tsx`
+
+**Key decisions:**
+- CSS implementation over canvas — the marquee is DOM-based with Framer Motion, so CSS cars are the natural fit (no canvas needed for static display)
+- Tangerine/tidal lane colors — matches Frogger lanes 1 and 2, creates visual continuity
+- Direction-aware headlights — left-moving row faces left, right-moving faces right
+
+**What NOT to re-debate:**
+- Cars over pills in the marquee — user explicitly requested this as a Frogger teaser
+- Lane color assignment (tangerine row 1, tidal row 2) — matches Frogger lane order
+
+---
 
 ### Session XV Summary (February 24, 2026)
 

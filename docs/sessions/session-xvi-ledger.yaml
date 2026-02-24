@@ -1,0 +1,69 @@
+session_id: "XVI"
+date: "2026-02-24"
+branch: main
+version: "0.12.0"  # MINOR: Client marquee car badges — Frogger teaser
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "TBD"
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "Purely frontend — no MongoDB schema modifications"
+
+commits:
+  - hash: "61ffb71"
+    message: "feat: Client marquee car badges — Frogger teaser"
+  - hash: "d83a229"
+    message: "docs: Update roadmap for Session XVI — marquee car teaser"
+
+artifacts_updated:
+  - "components/about/ClientMarquee.tsx — Replaced pill badges with CarBadge component (CSS car shapes), added lane color system, direction-aware rendering"
+  - "docs/roadmap.md — Session XVI entry added"
+
+decisions_made:
+  - decision: "CSS car shapes in marquee matching Frogger drawCar aesthetic"
+    rationale: "User loved the Frogger car obstacles and wanted them as a visual teaser in the client marquee. CSS implementation keeps it lightweight (no canvas needed for static display). Matches the game's boxy body, hood, windshield, wheels, headlights, taillights."
+    reversible: true
+  - decision: "Row 1 tangerine, row 2 tidal lane colors"
+    rationale: "Matches the first two Frogger lane colors. Direction-aware (left-moving = facing left, right-moving = facing right) creates a two-lane traffic feel that hints at the game."
+    reversible: true
+
+known_risks:
+  - risk: "CarBadge has multiple absolute-positioned child elements per badge — 52 clients × 2 rows × 2 copies (doubled for loop) = 208 car instances in DOM"
+    mitigation: "All elements are simple spans with inline styles — no JS animation, no layout thrashing. Framer Motion handles the single container translation. Performance should be fine."
+    severity: low
+
+explicitly_deferred:
+  - "Pipeline infrastructure — moved to Session XVII"
+  - "Industries page content"
+  - "Contact page with form"
+  - "Leadership headshot photos — still using generative avatars"
+
+next_actions:
+  - "Verify car marquee on live site"
+  - "Build Industries page content (8 industry sub-pages from kernel ICP)"
+  - "Build Contact page with form (Resend integration)"
+  - "Copy pipeline infrastructure from AEO donor"
+  - "Add answer capsules to service pillar pages"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All CTAs -> /book (internal Cal.com iframe)"
+  - "Asteroids game is an easter egg — no navigation or docs pointing to it"
+  - "Frogger game is an easter egg — Ocho trigger only, no navigation pointing to it"
+  - "Canvas games must use devicePixelRatio scaling for Retina displays"
+  - "All canvas input handlers must use logical (DPR-divided) coordinates"
+  - "Frogger obstacles are cars (not pills) — drawCar function in FroggerGame.tsx"
+  - "Client marquee uses CarBadge CSS cars matching Frogger aesthetic"
+  - "Marquee lane colors: row 1 = tangerine, row 2 = tidal"
