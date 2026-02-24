@@ -61,6 +61,7 @@ export function ArcadeBossOverlay({ game, score, initials, onClose }: ArcadeBoss
 
   return createPortal(
     <div
+      data-arcade-boss
       style={{
         position: 'fixed',
         inset: 0,
@@ -79,6 +80,9 @@ export function ArcadeBossOverlay({ game, score, initials, onClose }: ArcadeBoss
           0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
           100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
         }
+        [data-arcade-boss], [data-arcade-boss] * { cursor: default !important; }
+        [data-arcade-boss] button { cursor: pointer !important; }
+        [data-arcade-boss] input { cursor: text !important; }
       `}</style>
       {confetti.map((c, i) => (
         <div

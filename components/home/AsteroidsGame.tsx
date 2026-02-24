@@ -493,6 +493,7 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
   const bossActive = useRef(false);
 
   const [bossData, setBossData] = useState<{ game: string; score: number; initials: string } | null>(null);
+  const [isOver, setIsOver] = useState(false);
 
   const init = useCallback((w: number, h: number): Game => ({
     ship: {
@@ -614,6 +615,7 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
           sfx.stopThrust(); sfx.stopUfoHum();
           keys.current.clear();
           game.current = init(el.width, el.height);
+          setIsOver(false);
         }
         return;
       }
@@ -686,6 +688,7 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
           sfx.stopThrust(); sfx.stopUfoHum();
           wasThrusting = false; hadUfo = false; wasOver = false;
           game.current = init(el.width, el.height);
+          setIsOver(false);
           prevTouch.current = { ...ta };
           raf.current = requestAnimationFrame(loop);
           return;
@@ -710,6 +713,7 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
           sfx.explodeShip();
           if (g.lives <= 0) {
             g.over = true;
+            setIsOver(true);
             const hs = loadHighScores();
             g.highScores = hs;
             g.enteringInitials = qualifiesForHighScore(g.score, hs);
@@ -1155,7 +1159,8 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
   return (
     <>
       {createPortal(
-        <div style={{ position: 'fixed', inset: 0, zIndex: 99999, background: C.bg, touchAction: 'none' }}>
+        <div data-asteroids-game style={{ position: 'fixed', inset: 0, zIndex: 99999, background: C.bg, touchAction: 'none', cursor: isOver ? 'default' : 'none' }}>
+          {isOver && <style>{`[data-asteroids-game], [data-asteroids-game] * { cursor: default !important; }`}</style>}
           <canvas ref={cvs} style={{ display: 'block', width: '100%', height: '100%', touchAction: 'none' }} />
         </div>,
         document.body,

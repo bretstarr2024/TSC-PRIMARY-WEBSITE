@@ -10,15 +10,16 @@ const C = {
   enemy: '#73F5FF',
   score: '#E1FF00',
   ui: '#d1d1c6',
-  bg: '#0a0a0a',
-  grid: 'rgba(115, 245, 255, 0.06)',
-  gridBright: 'rgba(115, 245, 255, 0.12)',
+  bg: '#05080f',
+  grid: 'rgba(115, 245, 255, 0.10)',
+  gridMajor: 'rgba(115, 245, 255, 0.22)',
+  gridBright: 'rgba(115, 245, 255, 0.45)',
   fx: ['#FF5910', '#73F5FF', '#E1FF00', '#ED0AD2'],
   enemies: ['#73F5FF', '#ED0AD2', '#E1FF00', '#088BA0'],
 };
 
 /* ── Tuning knobs ── */
-const CELL = 4;
+const CELL = 8;
 const BASE_SPEED = 4;
 const SPEED_INC = 0.5;
 const TICK_MS = 50;
@@ -365,6 +366,7 @@ export function TronGame({ onClose }: { onClose: () => void }) {
   const lastTick = useRef(0);
 
   const [bossData, setBossData] = useState<{ game: string; score: number; initials: string } | null>(null);
+  const [isOver, setIsOver] = useState(false);
 
   const init = useCallback((w: number, h: number, level: number = 1, score: number = 0): Game => {
     const gridW = Math.floor(w / CELL);
@@ -513,6 +515,7 @@ export function TronGame({ onClose }: { onClose: () => void }) {
           keys.current.clear();
           game.current = init(el.width, el.height);
           lastTick.current = performance.now();
+          setIsOver(false);
         }
         return;
       }
@@ -582,6 +585,7 @@ export function TronGame({ onClose }: { onClose: () => void }) {
         } else if (justTouched('restart')) {
           game.current = init(el.width, el.height);
           lastTick.current = performance.now();
+          setIsOver(false);
           prevTouch.current = { ...ta };
           raf.current = requestAnimationFrame(loop);
           return;
@@ -645,6 +649,7 @@ export function TronGame({ onClose }: { onClose: () => void }) {
               isOccupied(nx, ny, [g.player, ...g.enemies], g.gridW, g.gridH)) {
             g.player.alive = false;
             g.over = true;
+            setIsOver(true);
             sfx.stopEngine();
             wasEngine = false;
             g.shake = 15;
@@ -783,36 +788,67 @@ export function TronGame({ onClose }: { onClose: () => void }) {
       ctx.fillRect(-10, -10, w + 20, h + 20);
 
       /* ── Grid ── */
-      const gridSpacing = CELL * 8;
-      ctx.strokeStyle = C.grid;
-      ctx.lineWidth = 0.5;
-      for (let x = 0; x < w; x += gridSpacing) {
+      const gridSpacing = CELL * 6;
+      const majorEvery = 4;
+      for (let i = 0, x = 0; x <= w; i++, x += gridSpacing) {
+        ctx.strokeStyle = i % majorEvery === 0 ? C.gridMajor : C.grid;
+        ctx.lineWidth = i % majorEvery === 0 ? 1 : 0.5;
         ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
       }
-      for (let y = 0; y < h; y += gridSpacing) {
+      for (let i = 0, y = 0; y <= h; i++, y += gridSpacing) {
+        ctx.strokeStyle = i % majorEvery === 0 ? C.gridMajor : C.grid;
+        ctx.lineWidth = i % majorEvery === 0 ? 1 : 0.5;
         ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
       }
 
-      /* ── Brighter grid border ── */
+      /* ── Neon border ── */
+      ctx.save();
       ctx.strokeStyle = C.gridBright;
-      ctx.lineWidth = 1.5;
-      ctx.strokeRect(0, 0, g.gridW * CELL, g.gridH * CELL);
+      ctx.lineWidth = 2;
+      ctx.shadowColor = '#73F5FF';
+      ctx.shadowBlur = 15;
+      ctx.strokeRect(1, 1, g.gridW * CELL - 2, g.gridH * CELL - 2);
+      ctx.restore();
 
       /* ── Draw trails ── */
       const drawTrail = (cycle: Cycle) => {
         if (cycle.trail.length < 2) return;
+        const px = (p: Pt) => p.x * CELL + CELL / 2;
+        const py = (p: Pt) => p.y * CELL + CELL / 2;
+        /* Outer glow layer */
+        ctx.save();
+        ctx.strokeStyle = cycle.color;
+        ctx.lineWidth = CELL + 6;
+        ctx.globalAlpha = 0.15;
+        ctx.shadowColor = cycle.glowColor;
+        ctx.shadowBlur = 24;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.beginPath();
+        ctx.moveTo(px(cycle.trail[0]), py(cycle.trail[0]));
+        for (let i = 1; i < cycle.trail.length; i++) ctx.lineTo(px(cycle.trail[i]), py(cycle.trail[i]));
+        ctx.stroke();
+        ctx.restore();
+        /* Core trail */
         ctx.save();
         ctx.strokeStyle = cycle.color;
         ctx.lineWidth = CELL - 1;
         ctx.shadowColor = cycle.glowColor;
-        ctx.shadowBlur = 8;
+        ctx.shadowBlur = 14;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
         ctx.beginPath();
-        ctx.moveTo(cycle.trail[0].x * CELL + CELL / 2, cycle.trail[0].y * CELL + CELL / 2);
-        for (let i = 1; i < cycle.trail.length; i++) {
-          ctx.lineTo(cycle.trail[i].x * CELL + CELL / 2, cycle.trail[i].y * CELL + CELL / 2);
-        }
+        ctx.moveTo(px(cycle.trail[0]), py(cycle.trail[0]));
+        for (let i = 1; i < cycle.trail.length; i++) ctx.lineTo(px(cycle.trail[i]), py(cycle.trail[i]));
+        ctx.stroke();
+        /* Bright center line */
+        ctx.strokeStyle = '#FFFFFF';
+        ctx.lineWidth = 1.5;
+        ctx.globalAlpha = 0.25;
+        ctx.shadowBlur = 0;
+        ctx.beginPath();
+        ctx.moveTo(px(cycle.trail[0]), py(cycle.trail[0]));
+        for (let i = 1; i < cycle.trail.length; i++) ctx.lineTo(px(cycle.trail[i]), py(cycle.trail[i]));
         ctx.stroke();
         ctx.restore();
       };
@@ -823,24 +859,38 @@ export function TronGame({ onClose }: { onClose: () => void }) {
       }
       drawTrail(g.player);
 
-      /* ── Draw cycle heads ── */
+      /* ── Draw light cycle sprites ── */
       const drawHead = (cycle: Cycle) => {
         if (!cycle.alive) return;
         const hx = cycle.x * CELL + CELL / 2;
         const hy = cycle.y * CELL + CELL / 2;
+        const sz = CELL * 1.6;
+        const angle = cycle.dir === 'right' ? 0 : cycle.dir === 'down' ? Math.PI / 2 : cycle.dir === 'left' ? Math.PI : -Math.PI / 2;
         ctx.save();
-        ctx.fillStyle = '#FFFFFF';
+        ctx.translate(hx, hy);
+        ctx.rotate(angle);
+        /* Cycle body — arrow/chevron shape */
         ctx.shadowColor = cycle.color;
-        ctx.shadowBlur = 16;
-        ctx.beginPath();
-        ctx.arc(hx, hy, CELL, 0, Math.PI * 2);
-        ctx.fill();
-        /* Inner glow */
+        ctx.shadowBlur = 24;
         ctx.fillStyle = cycle.color;
-        ctx.shadowBlur = 0;
         ctx.beginPath();
-        ctx.arc(hx, hy, CELL * 0.5, 0, Math.PI * 2);
+        ctx.moveTo(sz, 0);
+        ctx.lineTo(-sz * 0.6, -sz * 0.55);
+        ctx.lineTo(-sz * 0.15, 0);
+        ctx.lineTo(-sz * 0.6, sz * 0.55);
+        ctx.closePath();
         ctx.fill();
+        /* White core */
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = '#FFFFFF';
+        ctx.globalAlpha = 0.9;
+        ctx.beginPath();
+        ctx.moveTo(sz * 0.55, 0);
+        ctx.lineTo(-sz * 0.05, -sz * 0.2);
+        ctx.lineTo(-sz * 0.05, sz * 0.2);
+        ctx.closePath();
+        ctx.fill();
+        ctx.globalAlpha = 1;
         ctx.restore();
       };
 
@@ -853,9 +903,16 @@ export function TronGame({ onClose }: { onClose: () => void }) {
       for (const p of g.sparks) {
         ctx.globalAlpha = p.life / p.max;
         ctx.fillStyle = p.color;
-        ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(p.x, p.y, 3, 0, Math.PI * 2); ctx.fill();
       }
       ctx.globalAlpha = 1;
+
+      /* ── Vignette ── */
+      const vgr = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.35, w / 2, h / 2, Math.max(w, h) * 0.7);
+      vgr.addColorStop(0, 'rgba(0,0,0,0)');
+      vgr.addColorStop(1, 'rgba(0,0,0,0.4)');
+      ctx.fillStyle = vgr;
+      ctx.fillRect(0, 0, w, h);
 
       /* ── HUD ── */
       ctx.fillStyle = C.score; ctx.font = 'bold 24px monospace'; ctx.textAlign = 'left';
@@ -1006,7 +1063,8 @@ export function TronGame({ onClose }: { onClose: () => void }) {
   return (
     <>
       {createPortal(
-        <div style={{ position: 'fixed', inset: 0, zIndex: 99999, background: C.bg, touchAction: 'none', cursor: 'none' }}>
+        <div data-tron-game style={{ position: 'fixed', inset: 0, zIndex: 99999, background: C.bg, touchAction: 'none', cursor: isOver ? 'default' : 'none' }}>
+          {isOver && <style>{`[data-tron-game], [data-tron-game] * { cursor: default !important; }`}</style>}
           <canvas ref={cvs} style={{ display: 'block', width: '100%', height: '100%', touchAction: 'none' }} />
         </div>,
         document.body,
