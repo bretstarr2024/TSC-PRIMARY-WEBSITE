@@ -11,6 +11,7 @@ const navLinks = [
   { href: '/industries', label: 'Industries' },
   { href: '/insights', label: 'Insights' },
   { href: '/about', label: 'About' },
+  { href: '/pricing', label: 'Pricing' },
 ];
 
 export function Header() {

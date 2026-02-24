@@ -104,6 +104,9 @@ export const toolBreadcrumb = (title?: string) =>
 export const aboutBreadcrumb = () =>
   breadcrumb([{ name: 'Home', url: '/' }, { name: 'About', url: '/about' }]);
 
+export const pricingBreadcrumb = () =>
+  breadcrumb([{ name: 'Home', url: '/' }, { name: 'Pricing', url: '/pricing' }]);
+
 export const industriesBreadcrumb = () =>
   breadcrumb([{ name: 'Home', url: '/' }, { name: 'Industries', url: '/industries' }]);
 
