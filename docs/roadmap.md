@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XXV** | Last Updated: February 24, 2026
+**Status: SESSION XXVI** | Last Updated: February 24, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -536,7 +536,19 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 119 pages (unchanged — no new routes)
 
-#### Session XXVI (upcoming): Pipeline Infrastructure + Contact
+#### Session XXVI: Tron Visual Overhaul + Arcade Cursor Fix ✅ COMPLETE (Feb 24, 2026)
+
+**Focus:** Upgrade Tron game visuals to match the classic Tron arcade aesthetic (brighter grid, directional light cycle sprites, neon glow trails, vignette). Fix invisible cursor on all game high score/boss overlay screens.
+
+**Modified files:**
+- [x] `components/pricing/TronGame.tsx` — Visual overhaul: CELL 4→8, blue-black background, major/minor grid lines, neon border with glow, 3-layer trail rendering (outer glow + core + center line), directional arrow/chevron light cycle sprites, vignette effect, bigger sparks. Cursor fix: `isOver` state toggles cursor visibility on game-over.
+- [x] `components/ArcadeBossOverlay.tsx` — Cursor fix: `data-arcade-boss` attribute + CSS rules restoring native cursor (default, pointer on buttons, text on inputs) with `!important` to override global `cursor: none`.
+- [x] `components/home/AsteroidsGame.tsx` — Cursor fix: `isOver` state + `data-asteroids-game` attribute + `<style>` tag to show cursor on game-over screen.
+- [x] `components/services/BreakoutGame.tsx` — Cursor fix: `isOver` state + `data-breakout-game` attribute + `<style>` tag to show cursor on game-over screen.
+
+**Build:** 119 pages (unchanged — no new routes)
+
+#### Session XXVII (upcoming): Pipeline Infrastructure + Contact
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
