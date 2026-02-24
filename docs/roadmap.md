@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION V** | Last Updated: February 11, 2026
+**Status: SESSION VI** | Last Updated: February 23, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -237,7 +237,33 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 103 static pages (new `/book` route)
 
-#### Session VI (upcoming): Pipeline Infrastructure + Structured Data
+#### Out-of-Band: Phase 1 Website Edits (Racheal, Feb 19, 2026)
+
+**Commit `8d8894e`** — Major site-wide edit pass done outside of session workflow:
+- [x] Services restructured: Advisory/fractional CMO removed, GTM Strategy & Architecture added, AI services updated (7 new), Visual Brand Development added, Digital Performance → Paid/Earned/Owned Media
+- [x] Homepage rework: "Who We Are" section added, archetypes renamed (Holdouts/Bandwagoners/Overcorrectors), Approach section updated with convergence + GTM Kernel callout, carousel fixed with horizontal scroll + arrows
+- [x] Content: FAQ rebuilt as flip cards, 2 fabricated case studies replaced with 10 real ones, GTM Strategy Gap Assessment tool added
+- [x] Book page: solo Melissa → 6-person team carousel with all headshots
+- [x] JTBD cleanup: "Fill Leadership Gap" removed, JTBD acronym eliminated from user-facing text
+- [x] Videos page hidden from navigation (route preserved)
+- [x] Kernel data updated in `tsc.json`
+
+#### Session VI: Stub Pages + Nav (Feb 23, 2026) ✅ COMPLETE
+
+**Focus:** Add all missing website sections as stub pages, wire into navigation.
+
+- [x] Pull Racheal's out-of-band Phase 1 edits (`8d8894e`)
+- [x] Create `/about` stub page with metadata
+- [x] Create `/contact` stub page with metadata
+- [x] Create `/work` stub page with metadata
+- [x] Create `/industries` stub page with metadata
+- [x] Create `/careers` stub page with metadata
+- [x] Update Header nav: Services, Work, Industries, Insights, About + Let's Talk!
+- [x] Update Footer Company column: About, Work, Industries, Insights, Careers, Contact
+
+**Build:** 108 static pages (up from 103 — 5 new routes)
+
+#### Session VII (upcoming): Pipeline Infrastructure + Structured Data
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
@@ -291,13 +317,16 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 (See Phase 1 Session I above)
 
 #### Session XI: Industry Pages
-- [ ] 8 industry pages from kernel's ICP industries
+- [x] `/industries` stub page created (Session VI)
+- [ ] 8 industry sub-pages from kernel's ICP industries
 - [ ] Each: industry-specific pain points, how TSC helps, related content
 
-#### Session XII: About, Contact, Work
+#### Session XII: About, Contact, Work, Careers
+- [x] `/about`, `/contact`, `/work`, `/careers` stub pages created (Session VI)
 - [ ] About: Team profiles, company story, 25+ years
 - [ ] Contact: Form (Resend integration), booking link
 - [ ] Work: Case study showcase
+- [ ] Careers: Job listings, culture
 
 #### Session XIII: Chatbot (chaDbot)
 - [ ] Copy RAG infrastructure from AEO

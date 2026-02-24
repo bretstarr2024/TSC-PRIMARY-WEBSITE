@@ -1,16 +1,61 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 11, 2026 (Session V)
+**Last Updated:** February 23, 2026 (Session VI)
 
 ---
 
-## Current Phase: Phase 1 COMPLETE — Content Live, /book Page Live, Ready for Pipeline Infrastructure
+## Current Phase: Phase 1 COMPLETE — All Sections Stubbed, Ready for Content + Pipeline Infrastructure
 
-The site is live with **103 static pages** across 10 content types, populated by 56 AI-generated kernel-driven content pieces plus 24 seed documents. All CTAs route to `/book` — a dedicated booking page with Three.js star particles, concentric glow rings, Melissa's sparkle-enhanced photo, and an embedded Cal.com calendar. Next priority is pipeline infrastructure (crons, circuit breakers) for autonomous content generation.
+The site is live with **108 static pages** across 10 content types plus 5 new section stubs. All primary website sections now have routes and navigation: Services, Work, Industries, Insights, About, Contact, Careers. Stub pages show "Coming soon" — content will be added in future sessions. Work page is last priority per user directive. Next priorities are page content and pipeline infrastructure.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10 collections, ~80 documents)
-- **Next actions:** Copy pipeline infrastructure from AEO, add structured data schemas
-- **Roadmap:** See `docs/roadmap.md` Session V
+- **Next actions:** Add content to stub pages (About, Industries, Contact, Careers), pipeline infrastructure from AEO
+- **Roadmap:** See `docs/roadmap.md` Session VI
+
+### Session VI Summary (February 23, 2026)
+
+**Focus:** Pull Racheal's out-of-band edits, add all missing website section stubs + nav updates
+
+**What was done:**
+
+1. **Pulled out-of-band commit** (`8d8894e` by Racheal, Feb 19):
+   - Services restructured: Advisory/fractional CMO removed, GTM Strategy added, AI services updated
+   - Homepage rework: "Who We Are" section, renamed archetypes, carousel fix
+   - Content: FAQ flip cards, 10 real case studies, GTM Strategy Gap Assessment
+   - Book page: 6-person team carousel replacing solo Melissa
+   - JTBD cleanup, Videos hidden from nav
+
+2. **5 new stub pages** (5 new files):
+   - `app/about/page.tsx` — About stub with metadata
+   - `app/contact/page.tsx` — Contact stub with metadata
+   - `app/work/page.tsx` — Work stub with metadata
+   - `app/industries/page.tsx` — Industries stub with metadata
+   - `app/careers/page.tsx` — Careers stub with metadata
+
+3. **Navigation updates** (2 modified files):
+   - `components/Header.tsx` — Nav: Services, Work, Industries, Insights, About + Let's Talk! CTA
+   - `components/Footer.tsx` — Company column: About, Work, Industries, Insights, Careers, Contact
+
+**Commits this session:**
+- `1d0ebbe` — feat: Add stub pages for About, Contact, Work, Industries, Careers + nav updates
+
+**Results:**
+- 108 static pages (up from 103 — 5 new routes)
+- All website sections have routes and are wired into navigation
+- Header has 5 nav items + CTA button
+- Footer Company column has 6 links
+
+**Key decisions:**
+- Careers and Contact are footer-only (not in header nav) — secondary pages
+- Work page content is last priority (user directive)
+- All stubs use consistent "Coming soon" placeholder — content added later
+
+**What NOT to re-debate:**
+- Header nav order: Services, Work, Industries, Insights, About — established
+- Careers/Contact footer-only — don't add to header unless user requests
+- Work page last — user explicitly said "we'll do that last"
+
+---
 
 ### Session V Summary (February 11, 2026)
 
