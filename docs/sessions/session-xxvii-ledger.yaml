@@ -7,7 +7,7 @@ deployment:
   platform: vercel
   url: "tsc-primary-website.vercel.app"
   environment: production
-  job_id: "HBcnJJWej3luOF9rpZws"
+  job_id: "p6N4sisBn7Oxu5cRENeh"
   status: triggered
 
 build_verification:
@@ -23,6 +23,8 @@ commits:
     message: "fix: Polish pricing cards — remove pills, update copy, add booking context"
   - hash: "1e5bb01"
     message: "docs: Session XXVII roadmap update — pricing cards polish"
+  - hash: "536deed"
+    message: "docs: Session XXVII closeout — ledger, handoff, roadmap update"
 
 artifacts_updated:
   - "components/pricing/PricingCards.tsx — Removed 'Most Popular' and 'Defined Scope' badge pills. Changed 'Starting at' to 'minimum'. Updated subscription checklist (Strategic planning, Opportunity prioritization, Traditional agency services, AI workflows and custom builds). CTA buttons now 'Let's talk about a subscription/project' with ?service= param passthrough to /book. Flex-col layout for equal card heights."
