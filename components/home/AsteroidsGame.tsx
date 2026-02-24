@@ -11,6 +11,7 @@ const C = {
   score: '#E1FF00',
   ui: '#d1d1c6',
   fx: ['#FF5910', '#73F5FF', '#E1FF00', '#ED0AD2'],
+  ufo: '#ED0AD2',
   bg: '#0a0a0a',
 };
 
@@ -21,13 +22,27 @@ const THRUST = 0.12;
 const FRICTION = 0.992;
 const MAX_V = 6;
 const BULLET_V = 8;
-const BULLET_LIFE = 50;
 const FIRE_RATE = 8;
 const INVULN = 120;
 const A_RADIUS: Record<ASize, number> = { large: 40, medium: 20, small: 10 };
 const A_SPEED: Record<ASize, number> = { large: 1.5, medium: 2.5, small: 3.5 };
 const A_SCORE: Record<ASize, number> = { large: 20, medium: 50, small: 100 };
 const START_ROCKS = 4;
+
+/* UFO (Ocho) tuning */
+const UFO_SPEED = 2.5;
+const UFO_R = 22;
+const UFO_SCORE = 300;
+const UFO_FIRE_INTERVAL = 150;
+const UFO_BULLET_V = 4;
+const UFO_SPAWN_MIN = 600;
+const UFO_SPAWN_MAX = 1200;
+const UFO_IMG_SIZE = 50;
+
+/* High scores */
+const HS_KEY = 'tsc-asteroids-scores';
+const HS_MAX = 10;
+const ABC = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 /* ── Types ── */
 type ASize = 'large' | 'medium' | 'small';
@@ -58,17 +73,43 @@ interface Spark {
   color: string;
 }
 
+interface Ufo {
+  x: number; y: number;
+  vx: number;
+  baseY: number;
+  sinPhase: number;
+  cooldown: number;
+}
+
+interface HighScore {
+  initials: string;
+  score: number;
+}
+
 interface Game {
   ship: Ship;
   rocks: Rock[];
   bullets: Bullet[];
   sparks: Spark[];
+  ufo: Ufo | null;
+  ufoBullets: Bullet[];
+  ufoTimer: number;
   score: number;
   lives: number;
   level: number;
   over: boolean;
+  overTimer: number;
   cooldown: number;
   shake: number;
+  frame: number;
+  bulletLife: number;
+  /* high-score entry */
+  enteringInitials: boolean;
+  initialsChars: number[];
+  initialsPos: number;
+  highScores: HighScore[];
+  scoreSubmitted: boolean;
+  scoreIndex: number;
 }
 
 /* ── Helpers ── */
@@ -131,12 +172,44 @@ function hit(ax: number, ay: number, ar: number, bx: number, by: number, br: num
   return Math.hypot(ax - bx, ay - by) < ar + br;
 }
 
+function spawnUfo(w: number, h: number): Ufo {
+  const fromLeft = Math.random() > 0.5;
+  return {
+    x: fromLeft ? -UFO_R * 2 : w + UFO_R * 2,
+    y: h * 0.15 + Math.random() * h * 0.7,
+    vx: (fromLeft ? 1 : -1) * UFO_SPEED,
+    baseY: h * 0.15 + Math.random() * h * 0.7,
+    sinPhase: Math.random() * Math.PI * 2,
+    cooldown: Math.floor(UFO_FIRE_INTERVAL * 0.4),
+  };
+}
+
+function loadHighScores(): HighScore[] {
+  try {
+    const raw = localStorage.getItem(HS_KEY);
+    if (!raw) return [];
+    return JSON.parse(raw) as HighScore[];
+  } catch { return []; }
+}
+
+function saveHighScores(scores: HighScore[]): void {
+  try { localStorage.setItem(HS_KEY, JSON.stringify(scores.slice(0, HS_MAX))); }
+  catch { /* ignore */ }
+}
+
+function qualifiesForHighScore(score: number, scores: HighScore[]): boolean {
+  if (score <= 0) return false;
+  if (scores.length < HS_MAX) return true;
+  return score > scores[scores.length - 1].score;
+}
+
 /* ── Component ── */
 export function AsteroidsGame({ onClose }: { onClose: () => void }) {
   const cvs = useRef<HTMLCanvasElement>(null);
   const game = useRef<Game | null>(null);
   const keys = useRef<Set<string>>(new Set());
   const raf = useRef(0);
+  const ochoImg = useRef<HTMLImageElement | null>(null);
 
   const init = useCallback((w: number, h: number): Game => ({
     ship: {
@@ -147,8 +220,17 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
     },
     rocks: spawnWave(START_ROCKS, w, h, w / 2, h / 2),
     bullets: [], sparks: [],
+    ufo: null, ufoBullets: [],
+    ufoTimer: UFO_SPAWN_MIN + Math.floor(Math.random() * (UFO_SPAWN_MAX - UFO_SPAWN_MIN)),
     score: 0, lives: 3, level: 1,
-    over: false, cooldown: 0, shake: 0,
+    over: false, overTimer: 0, cooldown: 0, shake: 0, frame: 0,
+    bulletLife: Math.ceil(Math.hypot(w, h) * 0.8 / BULLET_V),
+    enteringInitials: false,
+    initialsChars: [0, 0, 0],
+    initialsPos: 0,
+    highScores: [],
+    scoreSubmitted: false,
+    scoreIndex: -1,
   }), []);
 
   useEffect(() => {
@@ -161,22 +243,63 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
     resize();
     window.addEventListener('resize', resize);
 
-    // prevent body scroll
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+
+    /* Load ocho mascot image */
+    const img = new Image();
+    img.src = '/images/ocho-color.png';
+    ochoImg.current = img;
 
     game.current = init(el.width, el.height);
 
     const onDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') { onClose(); return; }
-      // prevent scroll for game keys
       if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
         e.preventDefault();
       }
-      keys.current.add(e.key.toLowerCase());
-      if (e.key === 'Enter' && game.current?.over) {
-        game.current = init(el.width, el.height);
+
+      const g = game.current;
+      if (!g) return;
+
+      /* ── Game over input ── */
+      if (g.over) {
+        if (g.overTimer < 40) return; // brief delay before accepting input
+
+        if (g.enteringInitials) {
+          const key = e.key;
+          if (key === 'ArrowUp' || key === 'w' || key === 'W') {
+            g.initialsChars[g.initialsPos] = (g.initialsChars[g.initialsPos] + 1) % 26;
+          } else if (key === 'ArrowDown' || key === 's' || key === 'S') {
+            g.initialsChars[g.initialsPos] = (g.initialsChars[g.initialsPos] + 25) % 26;
+          } else if (key === 'ArrowLeft' || key === 'a' || key === 'A') {
+            g.initialsPos = Math.max(0, g.initialsPos - 1);
+          } else if (key === 'ArrowRight' || key === 'd' || key === 'D') {
+            g.initialsPos = Math.min(2, g.initialsPos + 1);
+          } else if (key === 'Enter') {
+            const initials = g.initialsChars.map(i => ABC[i]).join('');
+            const entry: HighScore = { initials, score: g.score };
+            const scores = [...g.highScores, entry].sort((a, b) => b.score - a.score).slice(0, HS_MAX);
+            saveHighScores(scores);
+            g.highScores = scores;
+            g.scoreIndex = scores.indexOf(entry);
+            g.enteringInitials = false;
+            g.scoreSubmitted = true;
+          } else if (/^[a-zA-Z]$/.test(key)) {
+            g.initialsChars[g.initialsPos] = key.toUpperCase().charCodeAt(0) - 65;
+            if (g.initialsPos < 2) g.initialsPos++;
+          }
+          return;
+        }
+
+        if (e.key === 'Enter') {
+          keys.current.clear();
+          game.current = init(el.width, el.height);
+        }
+        return;
       }
+
+      keys.current.add(e.key.toLowerCase());
     };
     const onUp = (e: KeyboardEvent) => { keys.current.delete(e.key.toLowerCase()); };
 
@@ -190,9 +313,22 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
       const w = el.width;
       const h = el.height;
       const k = keys.current;
+      g.frame++;
 
       if (!g.over) {
         const s = g.ship;
+
+        /* helper: kill the ship */
+        const die = () => {
+          s.alive = false; s.respawn = 90; g.lives--; g.shake = 15;
+          g.sparks.push(...boom(s.x, s.y, 20));
+          if (g.lives <= 0) {
+            g.over = true;
+            const hs = loadHighScores();
+            g.highScores = hs;
+            g.enteringInitials = qualifiesForHighScore(g.score, hs);
+          }
+        };
 
         /* update ship */
         if (s.alive) {
@@ -215,7 +351,7 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
               y: s.y + Math.sin(s.rot) * SHIP_R,
               vx: Math.cos(s.rot) * BULLET_V + s.vx * 0.3,
               vy: Math.sin(s.rot) * BULLET_V + s.vy * 0.3,
-              life: BULLET_LIFE,
+              life: g.bulletLife,
             });
             g.cooldown = FIRE_RATE;
           }
@@ -245,12 +381,51 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
           return --p.life > 0;
         });
 
-        if (g.shake > 0) { g.shake *= 0.9; if (g.shake < 0.5) g.shake = 0; }
+        /* ── UFO (Ocho) ── */
+        if (g.ufo) {
+          const u = g.ufo;
+          u.x += u.vx;
+          u.sinPhase += 0.02;
+          u.y = u.baseY + Math.sin(u.sinPhase) * 50;
 
-        /* bullet ↔ rock collisions */
+          /* UFO fires at player */
+          u.cooldown--;
+          if (u.cooldown <= 0 && s.alive) {
+            const accuracy = Math.max(0.15, 0.6 - g.level * 0.05);
+            const angle = Math.atan2(s.y - u.y, s.x - u.x) + (Math.random() - 0.5) * accuracy * 2;
+            g.ufoBullets.push({
+              x: u.x, y: u.y,
+              vx: Math.cos(angle) * UFO_BULLET_V,
+              vy: Math.sin(angle) * UFO_BULLET_V,
+              life: g.bulletLife,
+            });
+            u.cooldown = UFO_FIRE_INTERVAL;
+          }
+
+          /* UFO left the screen */
+          if (u.x < -UFO_R * 3 || u.x > w + UFO_R * 3) {
+            g.ufo = null;
+            g.ufoTimer = UFO_SPAWN_MIN + Math.floor(Math.random() * (UFO_SPAWN_MAX - UFO_SPAWN_MIN));
+          }
+        } else {
+          g.ufoTimer--;
+          if (g.ufoTimer <= 0) {
+            g.ufo = spawnUfo(w, h);
+          }
+        }
+
+        /* update UFO bullets */
+        g.ufoBullets = g.ufoBullets.filter(b => {
+          b.x = wrap(b.x + b.vx, w); b.y = wrap(b.y + b.vy, h);
+          return --b.life > 0;
+        });
+
+        /* ── Collisions ── */
         const addRocks: Rock[] = [];
         const deadB = new Set<number>();
         const deadR = new Set<number>();
+
+        /* bullet ↔ rock */
         for (let bi = 0; bi < g.bullets.length; bi++) {
           const b = g.bullets[bi];
           for (let ri = 0; ri < g.rocks.length; ri++) {
@@ -265,18 +440,53 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
             }
           }
         }
+
+        /* bullet ↔ UFO */
+        if (g.ufo) {
+          for (let bi = 0; bi < g.bullets.length; bi++) {
+            if (deadB.has(bi)) continue;
+            const b = g.bullets[bi];
+            if (hit(b.x, b.y, 2, g.ufo.x, g.ufo.y, UFO_R)) {
+              deadB.add(bi);
+              g.score += UFO_SCORE;
+              g.sparks.push(...boom(g.ufo.x, g.ufo.y, 25));
+              g.ufo = null;
+              g.ufoTimer = UFO_SPAWN_MIN + Math.floor(Math.random() * (UFO_SPAWN_MAX - UFO_SPAWN_MIN));
+              break;
+            }
+          }
+        }
+
         g.bullets = g.bullets.filter((_, i) => !deadB.has(i));
         g.rocks = g.rocks.filter((_, i) => !deadR.has(i));
         g.rocks.push(...addRocks);
 
-        /* ship ↔ rock collisions */
+        /* ship ↔ rock */
         if (s.alive && s.invuln <= 0) {
           for (const r of g.rocks) {
             if (hit(s.x, s.y, SHIP_R * 0.6, r.x, r.y, r.r * 0.8)) {
-              s.alive = false; s.respawn = 90; g.lives--; g.shake = 15;
-              g.sparks.push(...boom(s.x, s.y, 20));
-              if (g.lives <= 0) g.over = true;
-              break;
+              die(); break;
+            }
+          }
+        }
+
+        /* ship ↔ UFO (touching the ocho kills you) */
+        if (s.alive && s.invuln <= 0 && g.ufo) {
+          if (hit(s.x, s.y, SHIP_R * 0.6, g.ufo.x, g.ufo.y, UFO_R)) {
+            g.sparks.push(...boom(g.ufo.x, g.ufo.y, 15));
+            g.ufo = null;
+            g.ufoTimer = UFO_SPAWN_MIN + Math.floor(Math.random() * (UFO_SPAWN_MAX - UFO_SPAWN_MIN));
+            die();
+          }
+        }
+
+        /* UFO bullet ↔ ship */
+        if (s.alive && s.invuln <= 0) {
+          for (let i = g.ufoBullets.length - 1; i >= 0; i--) {
+            const b = g.ufoBullets[i];
+            if (hit(b.x, b.y, 3, s.x, s.y, SHIP_R * 0.6)) {
+              g.ufoBullets.splice(i, 1);
+              die(); break;
             }
           }
         }
@@ -287,6 +497,15 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
           g.rocks = spawnWave(START_ROCKS + g.level - 1, w, h, s.x, s.y);
         }
       }
+
+      /* shake decay — OUTSIDE the game-active block so it always runs */
+      if (g.shake > 0) {
+        g.shake *= g.over ? 0.8 : 0.9;
+        if (g.shake < 0.5) g.shake = 0;
+      }
+
+      /* game over timer */
+      if (g.over) g.overTimer++;
 
       /* ── RENDER ── */
       ctx.save();
@@ -320,7 +539,34 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
         ctx.closePath(); ctx.stroke(); ctx.restore();
       }
 
-      /* bullets */
+      /* ── Ocho UFO ── */
+      if (g.ufo) {
+        const u = g.ufo;
+        ctx.save();
+        const imgOk = ochoImg.current?.complete && ochoImg.current.naturalWidth > 0;
+        if (imgOk) {
+          ctx.shadowColor = C.ufo;
+          ctx.shadowBlur = 20;
+          const sz = UFO_IMG_SIZE;
+          ctx.drawImage(ochoImg.current!, u.x - sz / 2, u.y - sz / 2, sz, sz);
+          ctx.shadowBlur = 0;
+        } else {
+          /* fallback saucer */
+          ctx.strokeStyle = C.ufo; ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.ellipse(u.x, u.y, UFO_R, UFO_R * 0.5, 0, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      /* UFO bullets (pink) */
+      ctx.fillStyle = C.ufo;
+      for (const b of g.ufoBullets) {
+        ctx.beginPath(); ctx.arc(b.x, b.y, 3, 0, Math.PI * 2); ctx.fill();
+      }
+
+      /* player bullets */
       ctx.fillStyle = C.bullet;
       for (const b of g.bullets) { ctx.beginPath(); ctx.arc(b.x, b.y, 2, 0, Math.PI * 2); ctx.fill(); }
 
@@ -372,15 +618,84 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
       ctx.fillText('ARROWS / WASD \u00B7 SPACE TO FIRE \u00B7 ESC TO EXIT', w / 2, h - 20);
       ctx.globalAlpha = 1;
 
-      /* game over overlay */
+      /* ── GAME OVER OVERLAY ── */
       if (g.over) {
-        ctx.fillStyle = 'rgba(0,0,0,0.6)'; ctx.fillRect(0, 0, w, h);
-        ctx.fillStyle = C.ship; ctx.font = 'bold 48px monospace'; ctx.textAlign = 'center';
-        ctx.fillText('GAME OVER', w / 2, h / 2 - 30);
+        ctx.fillStyle = 'rgba(0,0,0,0.65)'; ctx.fillRect(0, 0, w, h);
+
+        ctx.textAlign = 'center';
+        ctx.fillStyle = C.ship; ctx.font = 'bold 48px monospace';
+        ctx.fillText('GAME OVER', w / 2, h / 2 - 120);
+
         ctx.fillStyle = C.score; ctx.font = '24px monospace';
-        ctx.fillText(`SCORE: ${g.score}`, w / 2, h / 2 + 20);
-        ctx.fillStyle = C.ui; ctx.font = '16px monospace';
-        ctx.fillText('ENTER TO RESTART \u00B7 ESC TO EXIT', w / 2, h / 2 + 60);
+        ctx.fillText(`SCORE: ${String(g.score).padStart(6, '0')}`, w / 2, h / 2 - 80);
+
+        /* Wait for the brief delay before showing interactive UI */
+        if (g.overTimer >= 40) {
+          if (g.enteringInitials) {
+            /* ── Initials entry ── */
+            ctx.fillStyle = C.score; ctx.font = 'bold 22px monospace';
+            ctx.fillText('\u2605 NEW HIGH SCORE! \u2605', w / 2, h / 2 - 40);
+
+            ctx.fillStyle = C.ui; ctx.font = '13px monospace';
+            ctx.fillText('TYPE INITIALS  \u00B7  \u2190\u2192 MOVE  \u00B7  ENTER TO CONFIRM', w / 2, h / 2 - 10);
+
+            ctx.font = 'bold 40px monospace';
+            const blink = Math.floor(g.frame / 18) % 2 === 0;
+            for (let i = 0; i < 3; i++) {
+              const cx = w / 2 + (i - 1) * 55;
+              const cy = h / 2 + 40;
+              const char = ABC[g.initialsChars[i]];
+
+              if (i === g.initialsPos) {
+                ctx.fillStyle = C.score;
+                /* blinking underline cursor */
+                if (blink) {
+                  ctx.fillRect(cx - 16, cy + 8, 32, 4);
+                }
+              } else {
+                ctx.fillStyle = C.ui;
+              }
+              ctx.fillText(char, cx, cy);
+            }
+          } else {
+            /* ── High score table ── */
+            const scores = g.highScores;
+            const hasScores = scores.length > 0;
+
+            if (hasScores) {
+              ctx.fillStyle = C.score; ctx.font = 'bold 20px monospace';
+              ctx.fillText('\u2550\u2550\u2550 HIGH SCORES \u2550\u2550\u2550', w / 2, h / 2 - 40);
+
+              ctx.font = '17px monospace';
+              const startY = h / 2 - 10;
+              for (let i = 0; i < Math.min(scores.length, HS_MAX); i++) {
+                const hs = scores[i];
+                const y = startY + i * 26;
+                const isPlayer = g.scoreSubmitted && i === g.scoreIndex;
+
+                /* rank */
+                ctx.fillStyle = isPlayer ? C.score : C.ui;
+                ctx.textAlign = 'right';
+                ctx.fillText(`${i + 1}.`, w / 2 - 85, y);
+
+                /* initials */
+                ctx.textAlign = 'left';
+                ctx.fillText(hs.initials, w / 2 - 65, y);
+
+                /* score */
+                ctx.textAlign = 'right';
+                ctx.fillText(String(hs.score).padStart(6, '0'), w / 2 + 110, y);
+              }
+
+              const bottomY = startY + Math.min(scores.length, HS_MAX) * 26 + 25;
+              ctx.fillStyle = C.ui; ctx.font = '16px monospace'; ctx.textAlign = 'center';
+              ctx.fillText('ENTER TO RESTART \u00B7 ESC TO EXIT', w / 2, bottomY);
+            } else {
+              ctx.fillStyle = C.ui; ctx.font = '16px monospace';
+              ctx.fillText('ENTER TO RESTART \u00B7 ESC TO EXIT', w / 2, h / 2 + 20);
+            }
+          }
+        }
       }
 
       ctx.restore();
