@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AnimatedSection } from '@/components/AnimatedSection';
 
@@ -37,7 +37,8 @@ const avatarPalette: [string, string][] = [
   ['#E1FF00', '#ED0AD2'],
 ];
 
-function GenerativeAvatar({ name, index }: { name: string; index: number }) {
+function GenerativeAvatar({ name, index, size }: { name: string; index: number; size?: number }) {
+  const px = size ?? 56;
   const hash = nameHash(name);
   const rand = prng(hash);
   const [c1, c2] = avatarPalette[index % avatarPalette.length];
@@ -59,7 +60,7 @@ function GenerativeAvatar({ name, index }: { name: string; index: number }) {
   const sparkPhase = +(rand() * 4).toFixed(1);
 
   return (
-    <svg viewBox="0 0 56 56" className="w-14 h-14 shrink-0 mb-4" aria-hidden="true">
+    <svg viewBox="0 0 56 56" style={{ width: px, height: px }} className="shrink-0" aria-hidden="true">
       <defs>
         <radialGradient id={`av${index}g`}>
           <stop offset="0%" stopColor={c1} stopOpacity="0.2" />
@@ -198,7 +199,28 @@ const leaders: Leader[] = [
 ];
 
 export function LeadershipSection() {
-  const [expanded, setExpanded] = useState<string | null>(null);
+  const [selected, setSelected] = useState<number | null>(null);
+
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (selected !== null) {
+      document.body.style.overflow = 'hidden';
+      return () => { document.body.style.overflow = ''; };
+    }
+  }, [selected]);
+
+  // Keyboard navigation
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (selected === null) return;
+    if (e.key === 'Escape') setSelected(null);
+    if (e.key === 'ArrowLeft') setSelected(selected === 0 ? leaders.length - 1 : selected - 1);
+    if (e.key === 'ArrowRight') setSelected(selected === leaders.length - 1 ? 0 : selected + 1);
+  }, [selected]);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
 
   return (
     <section className="relative py-24 md:py-32">
@@ -217,15 +239,16 @@ export function LeadershipSection() {
           {leaders.map((leader, i) => (
             <AnimatedSection key={leader.name} delay={i * 0.05}>
               <motion.div
-                className="glass rounded-xl p-6 cursor-pointer h-full flex flex-col"
+                className="glass rounded-xl p-6 cursor-pointer h-full flex flex-col group"
                 whileHover={{ y: -4 }}
                 transition={{ duration: 0.3 }}
-                onClick={() =>
-                  setExpanded(expanded === leader.name ? null : leader.name)
-                }
+                onClick={() => setSelected(i)}
+                layoutId={`leader-card-${i}`}
               >
                 {/* Generative avatar */}
-                <GenerativeAvatar name={leader.name} index={i} />
+                <div className="mb-4">
+                  <GenerativeAvatar name={leader.name} index={i} />
+                </div>
 
                 {/* Info */}
                 <h3 className="text-white font-semibold text-base mb-1">
@@ -243,28 +266,123 @@ export function LeadershipSection() {
                 >
                   LinkedIn &rarr;
                 </a>
-
-                {/* Expanded bio */}
-                <AnimatePresence>
-                  {expanded === leader.name && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="overflow-hidden"
-                    >
-                      <p className="text-shroomy text-xs leading-relaxed mt-4 pt-4 border-t border-white/10">
-                        {leader.bio}
-                      </p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
               </motion.div>
             </AnimatedSection>
           ))}
         </div>
       </div>
+
+      {/* Bio modal overlay */}
+      <AnimatePresence>
+        {selected !== null && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+          >
+            {/* Backdrop */}
+            <motion.div
+              className="absolute inset-0 bg-black/70 backdrop-blur-md"
+              onClick={() => setSelected(null)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            />
+
+            {/* Modal content */}
+            <motion.div
+              className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl border border-white/10 bg-[#1a1a1a]/95 backdrop-blur-xl shadow-2xl"
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close button */}
+              <button
+                onClick={() => setSelected(null)}
+                className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/15 text-greige hover:text-white transition-colors"
+                aria-label="Close"
+              >
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                </svg>
+              </button>
+
+              {/* Top accent bar */}
+              <div
+                className="h-1 rounded-t-2xl"
+                style={{
+                  background: `linear-gradient(90deg, ${avatarPalette[selected % avatarPalette.length][0]}, ${avatarPalette[selected % avatarPalette.length][1]})`,
+                }}
+              />
+
+              <div className="p-8 sm:p-10">
+                {/* Avatar + header */}
+                <div className="flex items-start gap-6 mb-8">
+                  <div className="shrink-0">
+                    <div className="w-20 h-20">
+                      <GenerativeAvatar name={leaders[selected].name} index={selected} size={80} />
+                    </div>
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-white font-bold text-2xl mb-1">
+                      {leaders[selected].name}
+                    </h3>
+                    <p className="text-greige text-sm mb-3">{leaders[selected].title}</p>
+                    <a
+                      href={leaders[selected].linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-sm font-medium hover:text-atomic-tangerine transition-colors"
+                      style={{ color: avatarPalette[selected % avatarPalette.length][0] }}
+                    >
+                      LinkedIn &rarr;
+                    </a>
+                  </div>
+                </div>
+
+                {/* Divider */}
+                <div
+                  className="h-px mb-8 opacity-20"
+                  style={{
+                    background: `linear-gradient(90deg, ${avatarPalette[selected % avatarPalette.length][0]}, transparent)`,
+                  }}
+                />
+
+                {/* Bio */}
+                <p className="text-shroomy text-base leading-relaxed">
+                  {leaders[selected].bio}
+                </p>
+
+                {/* Nav arrows */}
+                <div className="flex items-center justify-between mt-10 pt-6 border-t border-white/5">
+                  <button
+                    onClick={() => setSelected(selected === 0 ? leaders.length - 1 : selected - 1)}
+                    className="flex items-center gap-2 text-sm text-greige hover:text-white transition-colors"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M10 3L5 8l5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    {leaders[selected === 0 ? leaders.length - 1 : selected - 1].name}
+                  </button>
+                  <button
+                    onClick={() => setSelected(selected === leaders.length - 1 ? 0 : selected + 1)}
+                    className="flex items-center gap-2 text-sm text-greige hover:text-white transition-colors"
+                  >
+                    {leaders[selected === leaders.length - 1 ? 0 : selected + 1].name}
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M6 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

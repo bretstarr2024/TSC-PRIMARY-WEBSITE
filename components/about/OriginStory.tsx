@@ -52,7 +52,7 @@ export function OriginStory() {
                 {[
                   { stat: '1999', label: 'Founded' },
                   { stat: '3,000+', label: 'B2B tech clients' },
-                  { stat: '1,000+', label: 'Shots of tequila' },
+                  { stat: '100,000', label: 'Shots of tequila' },
                 ].map((item) => (
                   <div key={item.label} className="glass rounded-xl p-6">
                     <p className="text-2xl md:text-3xl font-bold text-atomic-tangerine mb-2">

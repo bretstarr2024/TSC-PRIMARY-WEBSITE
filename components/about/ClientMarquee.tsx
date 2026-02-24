@@ -1,7 +1,11 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import dynamic from 'next/dynamic';
+import { motion, AnimatePresence } from 'framer-motion';
 import { AnimatedSection } from '@/components/AnimatedSection';
+
+const FroggerGame = dynamic(() => import('./FroggerGame').then(m => ({ default: m.FroggerGame })), { ssr: false });
 
 const clientsRow1 = [
   'ADP', 'Oracle', 'SAP', 'ServiceNow', 'Thomson Reuters',
@@ -69,6 +73,8 @@ function MarqueeRow({
 }
 
 export function ClientMarquee() {
+  const [playing, setPlaying] = useState(false);
+
   return (
     <section className="relative py-24 md:py-32 overflow-hidden">
       <div className="section-wide mb-12">
@@ -83,9 +89,51 @@ export function ClientMarquee() {
         </AnimatedSection>
       </div>
 
-      <div className="space-y-4">
-        <MarqueeRow clients={clientsRow1} direction="left" duration={55} />
-        <MarqueeRow clients={clientsRow2} direction="right" duration={65} />
+      <div className="relative" style={{ minHeight: playing ? 420 : undefined }}>
+        {/* Normal marquee rows */}
+        {!playing && (
+          <div className="space-y-4">
+            <MarqueeRow clients={clientsRow1} direction="left" duration={55} />
+            <MarqueeRow clients={clientsRow2} direction="right" duration={65} />
+          </div>
+        )}
+
+        {/* Frogger game overlay */}
+        <AnimatePresence>
+          {playing && (
+            <motion.div
+              className="relative w-full rounded-xl overflow-hidden border border-white/10"
+              style={{ height: 420 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.3 }}
+            >
+              <FroggerGame onClose={() => setPlaying(false)} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Ocho play trigger */}
+        {!playing && (
+          <motion.button
+            className="absolute -bottom-2 right-8 z-20 group"
+            onClick={() => setPlaying(true)}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.5, duration: 0.5 }}
+            title="Play Frogger"
+          >
+            <motion.img
+              src="/images/ocho-color.png"
+              alt=""
+              className="w-10 h-10 opacity-40 group-hover:opacity-100 transition-opacity duration-300"
+              animate={{ y: [0, -4, 0] }}
+              transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+              style={{ filter: 'drop-shadow(0 0 8px #ED0AD2)' }}
+            />
+          </motion.button>
+        )}
       </div>
     </section>
   );
