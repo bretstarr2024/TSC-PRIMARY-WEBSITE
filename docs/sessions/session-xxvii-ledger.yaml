@@ -1,0 +1,73 @@
+session_id: "XXVII"
+date: "2026-02-24"
+branch: main
+version: "0.19.1"  # PATCH: Pricing cards polish — remove pills, update copy, booking context passthrough
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "HBcnJJWej3luOF9rpZws"
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "All changes are client-side component edits. No MongoDB schema or API route changes."
+
+commits:
+  - hash: "7b57661"
+    message: "fix: Polish pricing cards — remove pills, update copy, add booking context"
+  - hash: "1e5bb01"
+    message: "docs: Session XXVII roadmap update — pricing cards polish"
+
+artifacts_updated:
+  - "components/pricing/PricingCards.tsx — Removed 'Most Popular' and 'Defined Scope' badge pills. Changed 'Starting at' to 'minimum'. Updated subscription checklist (Strategic planning, Opportunity prioritization, Traditional agency services, AI workflows and custom builds). CTA buttons now 'Let's talk about a subscription/project' with ?service= param passthrough to /book. Flex-col layout for equal card heights."
+  - "docs/roadmap.md — Session XXVII entry, next session renumbered to XXVIII"
+
+decisions_made:
+  - decision: "Remove badge pills from pricing cards entirely"
+    rationale: "User directive: 'We don't need to justify it.' No badge on either card — clean, confident presentation."
+    reversible: true
+  - decision: "CTA buttons say 'Let's talk about a subscription/project' instead of generic 'Let's Talk!'"
+    rationale: "User directive: specific CTA copy that passes context to the booking page. ?service= param flows into Cal.com embed notes field."
+    reversible: true
+  - decision: "Subscription checklist updated to: Dedicated senior team, Strategic planning, Opportunity prioritization, Traditional agency services, AI workflows and custom builds"
+    rationale: "User directive: more specific service description replacing generic items like 'Continuous context accumulation' and 'Iterative improvement over time'."
+    reversible: true
+  - decision: "Pricing page declared 'done' by user"
+    rationale: "User stated 'We can call the pricing page done after those fixes.'"
+    reversible: true
+
+known_risks:
+  - risk: "Cal.com ?notes= parameter may truncate long service context strings"
+    mitigation: "Current values are single words ('Subscription', 'Project') — no risk. Monitor if service-page CTAs pass longer strings."
+    severity: low
+
+explicitly_deferred:
+  - "Contact page with form (Resend integration) — next session priority"
+  - "Pipeline infrastructure from AEO — next session"
+  - "Chatbot (chaDbot) — next session"
+  - "Source monitors — next session"
+
+next_actions:
+  - "Build Contact page with form (Resend integration)"
+  - "Copy pipeline infrastructure from AEO donor"
+  - "Build chatbot (chaDbot) — copy RAG from AEO"
+  - "Create source monitors for B2B/AI marketing news"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All CTAs -> /book (internal Cal.com iframe)"
+  - "Pricing page is DONE per user directive — no further changes unless requested"
+  - "Pricing CTA links pass ?service= param to /book for Cal.com context"
+  - "All game triggers use shared OchoTrigger component"
+  - "Easter egg games are undocumented — no navigation or user-facing docs"
+  - "Boss overlay z-index 100000 > game portals 99999 > custom cursor 9999"
+  - "4 arcade games: Asteroids (homepage), Frogger (about), Breakout (services), Tron (pricing)"

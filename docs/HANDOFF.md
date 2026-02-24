@@ -1,16 +1,44 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 24, 2026 (Session XXVI)
+**Last Updated:** February 24, 2026 (Session XXVII)
 
 ---
 
-## Current Phase: Phase 1 COMPLETE + 4 Arcade Easter Eggs + Boss Celebration System
+## Current Phase: Phase 1 COMPLETE + Pricing DONE + 4 Arcade Easter Eggs + Boss Celebration System
 
-The site is live with **119 pages** (118 static + 1 API route) across 10 content types, 9 verticals, a full Pricing page, 89 answer capsules, and **4 hidden arcade games** (Asteroids, Frogger, Breakout, Tron) with a shared boss celebration system. Every major page now has its own easter egg game, all triggered by the shared OchoTrigger component.
+The site is live with **119 pages** (118 static + 1 API route) across 10 content types, 9 verticals, a full Pricing page (declared done), 89 answer capsules, and **4 hidden arcade games** (Asteroids, Frogger, Breakout, Tron) with a shared boss celebration system. Every major page now has its own easter egg game, all triggered by the shared OchoTrigger component.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections)
 - **Next actions:** Build Contact page with form, pipeline infrastructure from AEO, chatbot (chaDbot)
-- **Roadmap:** See `docs/roadmap.md` Session XXVI
+- **Roadmap:** See `docs/roadmap.md` Session XXVII
+
+### Session XXVII Summary (February 24, 2026)
+
+**Focus:** Polish pricing cards per user directive. User declared pricing page "done" after these fixes.
+
+**What was done:**
+
+1. **Pricing Cards Polish** (`components/pricing/PricingCards.tsx`):
+   - Removed "Most Popular" and "Defined Scope" badge pills — clean, confident presentation
+   - Changed "Starting at" to "minimum" on both cards
+   - Updated subscription checklist: Dedicated senior team, Strategic planning, Opportunity prioritization, Traditional agency services, AI workflows and custom builds
+   - CTA buttons now read "Let's talk about a subscription" / "Let's talk about a project"
+   - Links pass `?service=Subscription` / `?service=Project` to `/book` page, which flows into Cal.com embed notes
+   - Flex-col layout with `mt-auto` on CTAs ensures equal card heights
+
+**Commits this session:**
+- `7b57661` — fix: Polish pricing cards — remove pills, update copy, add booking context
+- `1e5bb01` — docs: Session XXVII roadmap update — pricing cards polish
+
+**Results:**
+- Pricing page declared done by user
+- Booking context now flows from pricing cards → Cal.com embed notes
+- Build: 119 pages, PASS
+
+**Donor files referenced:**
+- None — modified existing project component
+
+---
 
 ### Session XXVI Summary (February 24, 2026)
 
