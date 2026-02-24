@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XXVII** | Last Updated: February 24, 2026
+**Status: SESSION XXVIII** | Last Updated: February 24, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -557,7 +557,35 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 119 pages (unchanged — no new routes)
 
-#### Session XXVIII (upcoming): Pipeline Infrastructure + Contact
+#### Session XXVIII: 5 New Arcade Games — Complete Arcade on Every Page ✅ COMPLETE (Feb 24, 2026)
+
+**Focus:** Add arcade easter egg games to all 5 remaining pages (Insights, Verticals, Work, Careers, Contact). Every page now has a hidden game triggered by the shared OchoTrigger component. All games follow the same infrastructure: canvas-based, Web Audio SFX, high scores with initials, boss celebration overlay, touch controls, lazy-loaded via `next/dynamic`.
+
+**New files:**
+- [x] `components/contact/PongGame.tsx` — Classic Pong vs AI. Player paddle (mouse/touch/keyboard) vs AI paddle. Set-based scoring (first to 11), level progression, CRT scanline aesthetic, ball trail effect.
+- [x] `components/contact/PongGameTrigger.tsx` — Client wrapper for dynamic import + OchoTrigger.
+- [x] `components/insights/SnakeGame.tsx` — Classic Snake/Nibbles. Tick-based grid movement, food eating, snake growth. Neon Cactus snake with glow, Sprinkles food with pulsing glow.
+- [x] `components/insights/SnakeGameTrigger.tsx` — Client wrapper.
+- [x] `components/industries/SpaceInvadersGame.tsx` — Classic Space Invaders. 5x11 enemy formation, destructible shields, UFO bonus, march rhythm SFX, 2-frame enemy animation.
+- [x] `components/industries/SpaceInvadersGameTrigger.tsx` — Client wrapper.
+- [x] `components/work/GalagaGame.tsx` — Classic Galaga. Curved formation, bezier dive attacks, boss capture/tractor beam mechanic, dual fighter mode, parallax starfield.
+- [x] `components/work/GalagaGameTrigger.tsx` — Client wrapper.
+- [x] `components/careers/PacManGame.tsx` — Classic Pac-Man. 28x31 maze, 4 ghost AIs (Blinky/Pinky/Inky/Clyde), power pellets, frightened mode, ghost eating streak, tunnel wrap, fruit bonus.
+- [x] `components/careers/PacManGameTrigger.tsx` — Client wrapper.
+
+**Modified files:**
+- [x] `app/contact/page.tsx` — Added PongGameTrigger import and placement.
+- [x] `app/insights/page.tsx` — Added SnakeGameTrigger between Content Type Grid and AnswerCapsulesSection.
+- [x] `app/verticals/page.tsx` — Added SpaceInvadersGameTrigger between Industry Cards and AnswerCapsulesSection.
+- [x] `app/work/page.tsx` — Added GalagaGameTrigger below hero section.
+- [x] `app/careers/page.tsx` — Added PacManGameTrigger below hero section.
+
+**New directories:**
+- `components/work/`, `components/careers/`, `components/contact/`
+
+**Build:** 119 pages (unchanged — all games are lazy-loaded, zero bundle cost until played)
+
+#### Session XXIX (upcoming): Pipeline Infrastructure + Contact
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections

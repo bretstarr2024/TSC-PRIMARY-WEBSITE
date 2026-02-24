@@ -1,0 +1,86 @@
+session_id: "XXVIII"
+date: "2026-02-24"
+branch: main
+version: "0.20.0"  # MINOR: 5 new arcade games — complete arcade on every page
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "pending"
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "All changes are client-side game components and page imports. No MongoDB schema or API route changes."
+
+commits:
+  - hash: "4e5e35e"
+    message: "feat: Add 5 arcade games — Pong, Snake, Space Invaders, Galaga, Pac-Man"
+
+artifacts_updated:
+  - "components/contact/PongGame.tsx — Classic Pong vs AI. Mouse/touch/keyboard paddle control, set-based scoring (first to 11), level progression, CRT scanline effect, ball trail, rally bonus."
+  - "components/contact/PongGameTrigger.tsx — Client wrapper for dynamic import + OchoTrigger."
+  - "components/insights/SnakeGame.tsx — Classic Snake. Tick-based grid movement (Tron pattern), Neon Cactus snake with glow trail, Sprinkles pulsing food, level progression via speed increase."
+  - "components/insights/SnakeGameTrigger.tsx — Client wrapper."
+  - "components/industries/SpaceInvadersGame.tsx — Classic Space Invaders. 5x11 enemy formation, 3 enemy types with 2-frame animation, destructible pixel shields, UFO bonus, march rhythm SFX."
+  - "components/industries/SpaceInvadersGameTrigger.tsx — Client wrapper."
+  - "components/work/GalagaGame.tsx — Classic Galaga. Curved formation with sinusoidal sway, bezier dive attacks, boss capture/tractor beam, dual fighter mode, parallax 3-layer starfield."
+  - "components/work/GalagaGameTrigger.tsx — Client wrapper."
+  - "components/careers/PacManGame.tsx — Classic Pac-Man. 28x31 maze, 4 ghost AIs (Blinky/Pinky/Inky/Clyde), scatter/chase mode cycling, power pellets, frightened mode, ghost eating streak, tunnel wrap, fruit bonus, death animation."
+  - "components/careers/PacManGameTrigger.tsx — Client wrapper."
+  - "app/contact/page.tsx — Added PongGameTrigger."
+  - "app/insights/page.tsx — Added SnakeGameTrigger between Content Type Grid and AnswerCapsulesSection."
+  - "app/verticals/page.tsx — Added SpaceInvadersGameTrigger between Industry Cards and AnswerCapsulesSection."
+  - "app/work/page.tsx — Added GalagaGameTrigger below hero."
+  - "app/careers/page.tsx — Added PacManGameTrigger below hero."
+  - "docs/roadmap.md — Session XXVIII entry, next session renumbered to XXIX."
+
+decisions_made:
+  - decision: "Game-to-page assignments: Pong/Contact, Snake/Insights, Space Invaders/Verticals, Galaga/Work, Pac-Man/Careers"
+    rationale: "Thematic fit — Pong (back-and-forth conversation), Snake (consuming content/knowledge), Space Invaders (defending verticals), Galaga (capturing/delivering work), Pac-Man (navigating career path). All classic 70s-80s arcade games matching existing Asteroids/Frogger/Breakout/Tron vibe."
+    reversible: true
+  - decision: "Client wrapper pattern for server component pages"
+    rationale: "All 5 target pages export metadata (server components). Games need useState + dynamic. Wrapper isolates client logic so pages remain server components with metadata exports."
+    reversible: true
+  - decision: "All 5 games use full-screen portal pattern (not inline canvas)"
+    rationale: "Consistent with 3 of 4 existing games (Asteroids, Breakout, Tron). Full viewport provides best gameplay experience."
+    reversible: true
+
+known_risks:
+  - risk: "Pac-Man maze hardcoded as string template — row length must be exactly 28 chars"
+    mitigation: "Runtime padding/trimming in init function handles minor discrepancies. Verified at build time."
+    severity: low
+  - risk: "5 large game files (~6,300 lines total) are AI-generated and need gameplay testing"
+    mitigation: "All follow verified patterns from existing games. Build passes. Manual browser testing recommended."
+    severity: medium
+
+explicitly_deferred:
+  - "Contact page form with Resend integration — next session"
+  - "Pipeline infrastructure from AEO — next session"
+  - "Chatbot (chaDbot) — next session"
+  - "Source monitors — next session"
+
+next_actions:
+  - "Test all 5 new games in browser — verify gameplay, SFX, high scores, boss overlay"
+  - "Build Contact page form (Resend integration)"
+  - "Copy pipeline infrastructure from AEO donor"
+  - "Build chatbot (chaDbot) — copy RAG from AEO"
+  - "Create source monitors for B2B/AI marketing news"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All CTAs -> /book (internal Cal.com iframe)"
+  - "Pricing page is DONE per user directive — no further changes unless requested"
+  - "All game triggers use shared OchoTrigger component"
+  - "Easter egg games are undocumented — no navigation or user-facing docs"
+  - "Boss overlay z-index 100000 > game portals 99999 > custom cursor 9999"
+  - "9 arcade games: Asteroids (homepage), Frogger (about), Breakout (services), Tron (pricing), Pong (contact), Snake (insights), Space Invaders (verticals), Galaga (work), Pac-Man (careers)"
+  - "High score localStorage keys: tsc-{game}-scores (asteroids, frogger, breakout, tron, pong, snake, invaders, galaga, pacman)"

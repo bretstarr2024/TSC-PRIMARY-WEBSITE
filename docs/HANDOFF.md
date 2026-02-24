@@ -1,12 +1,66 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 24, 2026 (Session XXVII)
+**Last Updated:** February 24, 2026 (Session XXVIII)
 
 ---
 
-## Current Phase: Phase 1 COMPLETE + Pricing DONE + 4 Arcade Easter Eggs + Boss Celebration System
+## Current Phase: Phase 1 COMPLETE + Pricing DONE + 9 Arcade Easter Eggs (Every Page) + Boss Celebration System
 
-The site is live with **119 pages** (118 static + 1 API route) across 10 content types, 9 verticals, a full Pricing page (declared done), 89 answer capsules, and **4 hidden arcade games** (Asteroids, Frogger, Breakout, Tron) with a shared boss celebration system. Every major page now has its own easter egg game, all triggered by the shared OchoTrigger component.
+The site is live with **119 pages** (118 static + 1 API route) across 10 content types, 9 verticals, a full Pricing page (declared done), 89 answer capsules, and **9 hidden arcade games** — one on every page — with a shared boss celebration system. All games triggered by the shared OchoTrigger component.
+
+- **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections)
+- **Next actions:** Test new games in browser, then Contact page form, pipeline infrastructure, chatbot
+- **Roadmap:** See `docs/roadmap.md` Session XXVIII
+
+### Session XXVIII Summary (February 24, 2026)
+
+**Focus:** Add 5 new classic arcade games so every page has a hidden easter egg. Complete the full 9-game arcade system.
+
+**What was done:**
+
+1. **Pong** (`components/contact/PongGame.tsx` + trigger):
+   - Classic Pong vs AI on Contact page. Player paddle tracks mouse/touch/keyboard.
+   - Set-based scoring (first to 11 wins), level progression (faster ball, smarter AI, smaller paddles).
+   - CRT scanline aesthetic, ball trail effect, rally bonus scoring.
+
+2. **Snake** (`components/insights/SnakeGame.tsx` + trigger):
+   - Classic Snake on Insights page. Tick-based grid movement (reuses Tron pattern).
+   - Neon Cactus snake with glow trail, Sprinkles pulsing food, D-pad touch controls.
+   - Level progression: every 5 food items, speed increases.
+
+3. **Space Invaders** (`components/industries/SpaceInvadersGame.tsx` + trigger):
+   - Classic Space Invaders on Verticals page. 5x11 enemy formation (55 enemies).
+   - 3 enemy types with 2-frame animation, 4 destructible pixel shields, UFO bonus.
+   - March rhythm SFX that speeds up as enemies die.
+
+4. **Galaga** (`components/work/GalagaGame.tsx` + trigger):
+   - Classic Galaga on Work page. Curved formation with sinusoidal sway.
+   - Bezier dive attacks, boss capture/tractor beam mechanic, dual fighter mode.
+   - 3-layer parallax starfield background.
+
+5. **Pac-Man** (`components/careers/PacManGame.tsx` + trigger):
+   - Classic Pac-Man on Careers page. 28x31 maze, 4 ghost AIs (Blinky/Pinky/Inky/Clyde).
+   - Scatter/chase mode cycling, power pellets, frightened mode, ghost eating streak (200-1600 pts).
+   - Tunnel wrap, fruit bonus, death animation, continuous siren SFX.
+
+6. **Page integrations** (5 modified pages):
+   - Client wrapper pattern for all 5 (pages stay server components with metadata exports).
+   - OchoTrigger placed contextually: between sections on content pages, below hero on placeholder pages.
+
+**All 5 games share:** Canvas full-screen portal (z-99999), Web Audio SFX, high scores with 3-letter initials (localStorage), boss celebration overlay on #1 (email capture), touch controls, cursor fix, lazy-loaded via `next/dynamic` (zero bundle cost).
+
+**Commits this session:**
+- `4e5e35e` — feat: Add 5 arcade games — Pong, Snake, Space Invaders, Galaga, Pac-Man
+
+**Results:**
+- 9 arcade games across 9 pages (complete coverage)
+- Build: 119 pages, PASS
+- 6,330 lines of new game code added
+
+**Donor files referenced:**
+- None — built from existing project game patterns (BreakoutGame.tsx + TronGame.tsx as templates)
+
+---
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections)
 - **Next actions:** Build Contact page with form, pipeline infrastructure from AEO, chatbot (chaDbot)
