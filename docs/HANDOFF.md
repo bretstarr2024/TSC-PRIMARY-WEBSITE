@@ -1,16 +1,62 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 24, 2026 (Session XIX)
+**Last Updated:** February 24, 2026 (Session XX)
 
 ---
 
-## Current Phase: Phase 1 COMPLETE + Industries Section
+## Current Phase: Phase 1 COMPLETE + Industries + Pricing
 
-The site is live with **117 static pages** across 10 content types plus 9 industry verticals. Session XIX added game-authentic thruster animations to the homepage hero ship SVG — intermittent flame bursts, exhaust sparks, and coordinated micro-turns.
+The site is live with **118 static pages** across 10 content types, 9 industry verticals, and a full Pricing page. Session XX built the Pricing page (6-section narrative arc telling the agency model story) and fixed the homepage hero ship animation (rotation was imperceptible, thruster flame was too small).
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10 collections, ~80 documents)
 - **Next actions:** Build Contact page with form, pipeline infrastructure from AEO, answer capsules for service pages
-- **Roadmap:** See `docs/roadmap.md` Session XIX
+- **Roadmap:** See `docs/roadmap.md` Session XX
+
+### Session XX Summary (February 24, 2026)
+
+**Focus:** Build complete Pricing page with 6-section agency model narrative. Fix hero ship animation visibility.
+
+**What was done:**
+
+1. **Hero ship animation fix** (1 modified file):
+   - `components/home/HeroSection.tsx` — Rotation increased from ±4°/±3.5° (imperceptible) to ±15°/±12° (clearly visible snap turns). Drift increased from -1/-2px to -3/-5px during burns. Thruster flame enlarged ~4x: outer flame from 7px to 30px tall, inner flame from 5px to 20px. Flames relocated from dead space to ship rear engine notch (y=14). ViewBox expanded from `0 0 36 50` to `-4 -24 44 74`, SVG dimensions from 36x50 to 44x80. Gradient coordinates, transform-origins, and exhaust spark radii/distances all scaled to match.
+
+2. **Pricing page — 5 new components + page** (9 new/modified files):
+   - `components/pricing/PricingHero.tsx` — "We don't sell hours. We sell growth." Word-by-word 3D animated headline with gradient text, dual background glows (tangerine + sprinkles), scroll indicator.
+   - `components/pricing/ModelOverview.tsx` — "We change the unit economics of your business." Side-by-side contrast panels (conventional agency in greige vs TSC in tangerine). Below: 4 outcome metric cards (Pipeline, CAC, Time-to-Revenue, Efficiency) each in a brand color.
+   - `components/pricing/FourPillars.tsx` — 2x2 glass card grid: 01 Senior Talent Only (tangerine), 02 Proprietary AI Infrastructure (neon cactus), 03 AI Solutions Built Into Your World (tidal wave), 04 Continuity Compounds Results (sprinkles). Each with large watermark number, colored left border, hook line + description.
+   - `components/pricing/WhyDifferent.tsx` — Visual pyramid: two limitation cards (Senior Talent Alone / AI Alone with ✕ markers, muted) feeding into full-width "Combination" card with tangerine border glow and ✓ marker.
+   - `components/pricing/PricingCards.tsx` — Two glass pricing cards: Subscription ($15K/mo, "Most Popular" badge, tangerine CTA) and Project ($30K minimum, "Defined Scope" badge, tidal checkmarks). Both link to /book.
+   - `app/pricing/page.tsx` — Page with metadata, keywords, OpenGraph, BreadcrumbList JSON-LD. Reuses ServiceCTA for final CTA.
+
+3. **Navigation updates** (2 modified files):
+   - `components/Header.tsx` — Added `{ href: '/pricing', label: 'Pricing' }` to navLinks (after About).
+   - `components/Footer.tsx` — Added Pricing to companyLinks (between Insights and Careers).
+
+4. **Schema** (1 modified file):
+   - `lib/schema/breadcrumbs.ts` — Added `pricingBreadcrumb()` function.
+
+**Commits this session:**
+- `d32b32d` — fix: Increase hero ship rotation to ±15° and thruster flame 4x larger
+- `a0213e2` — feat: Add Pricing page with 6-section agency model narrative
+- `4459558` — docs: Session XX roadmap update — Pricing page + hero ship fix
+
+**Results:**
+- 118 static pages (up from 117 — new `/pricing` route)
+- Homepage hero ship now has clearly visible rotation and prominent thruster flame
+- Complete Pricing page tells the agency model story as a narrative arc
+
+**Donor files referenced:**
+- None — all components built from existing TSC site patterns (AboutHero, ApproachSection, OriginStory patterns)
+
+**What NOT to re-debate:**
+- Pricing page is a narrative (6 sections), not just a pricing table — the model needs explaining before showing prices
+- Subscription card is visually emphasized (tangerine accent, "Most Popular" badge) — it's the preferred model
+- Pricing copy is original (distilled from the agency model brief, not copied verbatim)
+- Subscription: from $15K/month. Project: from $30K. These are the numbers from the brief.
+- Hero ship rotation at ±15° — user confirmed the previous ±4° was imperceptible
+
+---
 
 ### Session XIX Summary (February 24, 2026)
 

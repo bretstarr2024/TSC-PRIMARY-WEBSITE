@@ -1,0 +1,74 @@
+session_id: "XX"
+date: "2026-02-24"
+branch: main
+version: "0.14.0"  # MINOR: Pricing page + hero ship animation fix
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "T2yuf64qAcwVRqA5qzUe"
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "Pure frontend session — no MongoDB schema modifications"
+
+commits:
+  - hash: "d32b32d"
+    message: "fix: Increase hero ship rotation to ±15° and thruster flame 4x larger"
+  - hash: "a0213e2"
+    message: "feat: Add Pricing page with 6-section agency model narrative"
+  - hash: "4459558"
+    message: "docs: Session XX roadmap update — Pricing page + hero ship fix"
+
+artifacts_updated:
+  - "components/home/HeroSection.tsx — Ship rotation increased ±4° to ±15°/±12°, thruster flame 4x larger (7px→30px), viewBox expanded, gradients and sparks rescaled"
+  - "components/pricing/PricingHero.tsx — Word-by-word 3D animated headline, dual background glows, scroll indicator"
+  - "components/pricing/ModelOverview.tsx — Conventional vs TSC contrast panels, 4 outcome metric cards"
+  - "components/pricing/FourPillars.tsx — 2x2 glass card grid with watermark numbers, colored borders, hooks + descriptions"
+  - "components/pricing/WhyDifferent.tsx — Limitation pyramid (Senior Talent Alone / AI Alone) → Combination card with glow"
+  - "components/pricing/PricingCards.tsx — Subscription ($15K/mo) and Project ($30K) glass cards with CTAs to /book"
+  - "app/pricing/page.tsx — Page with metadata, OpenGraph, BreadcrumbList JSON-LD"
+  - "lib/schema/breadcrumbs.ts — Added pricingBreadcrumb()"
+  - "components/Header.tsx — Added Pricing to navLinks"
+  - "components/Footer.tsx — Added Pricing to companyLinks"
+  - "docs/roadmap.md — Session XX entry added"
+
+decisions_made:
+  - decision: "Pricing page structured as 6-section narrative arc, not just a pricing table"
+    rationale: "The agency model brief tells a story (premise → inversion → pillars → synthesis → pricing). A narrative page sells the value before showing the price. Matches the creative mandate."
+    reversible: true
+  - decision: "Subscription card marked 'Most Popular' with tangerine accent, project card has neutral styling"
+    rationale: "Subscription is described as how the deepest client relationships work. Visual hierarchy guides visitors toward the preferred engagement model."
+    reversible: true
+  - decision: "Hero ship rotation increased from ±4° to ±15°"
+    rationale: "User feedback that rotation was imperceptible. 15° is clearly visible without being excessive."
+    reversible: true
+  - decision: "Pricing added as last item in header nav (after About)"
+    rationale: "High-intent page should be near the CTA button. Conventional placement for pricing links."
+    reversible: true
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All CTAs -> /book (internal Cal.com iframe)"
+  - "Asteroids game is an easter egg — no navigation or docs pointing to it"
+  - "Frogger game is an easter egg — Ocho trigger only, no navigation pointing to it"
+  - "Industries data is static (lib/industries-data.ts), not MongoDB"
+  - "Homepage hero ship SVG matches AsteroidsGame.tsx canvas ship shape exactly"
+  - "SVG gradient IDs flameOuter/flameInner used in HeroSection — avoid collisions"
+  - "Pricing page copy is original (not copied from the agency model brief verbatim)"
+  - "Subscription pricing: from $15K/month. Project pricing: from $30K."
+
+next_actions:
+  - "Build Contact page with form (Resend integration)"
+  - "Copy pipeline infrastructure from AEO donor"
+  - "Add answer capsules to service pillar pages"
+  - "Build chatbot (chaDbot) — copy RAG from AEO"
