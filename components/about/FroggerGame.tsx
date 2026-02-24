@@ -28,6 +28,13 @@ const BG = '#141213';
 
 const LANE_COLORS = [TANGERINE, TIDAL, SPRINKLES, CACTUS, TANGERINE];
 
+function hexToRgba(hex: string, alpha: number): string {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
 interface Pill {
   x: number;
   w: number;
@@ -59,10 +66,10 @@ interface GameState {
   touchActive: boolean;
 }
 
-// Measure pill widths
+// Measure car widths (text + padding for hood/windshield/bumper)
 function measurePill(ctx: CanvasRenderingContext2D, label: string, pillH: number): number {
-  ctx.font = `${pillH * 0.38}px Inter, system-ui, sans-serif`;
-  return ctx.measureText(label).width + pillH * 1.2;
+  ctx.font = `bold ${pillH * 0.34}px Inter, system-ui, sans-serif`;
+  return ctx.measureText(label).width + pillH * 2;
 }
 
 // Build lane pills
@@ -90,6 +97,102 @@ function buildLane(
   }
 
   return { y: laneY, speed, dir, pills, color };
+}
+
+// Draw a side-view car with client name
+function drawCar(
+  ctx: CanvasRenderingContext2D,
+  x: number, y: number, w: number, h: number,
+  color: string, label: string, dir: 1 | -1,
+) {
+  const r = Math.min(6, h * 0.15);
+
+  // Car body fill
+  ctx.beginPath();
+  ctx.roundRect(x, y, w, h, r);
+  ctx.fillStyle = hexToRgba(color, 0.12);
+  ctx.fill();
+
+  // Hood + windshield (clipped to body shape)
+  ctx.save();
+  ctx.beginPath();
+  ctx.roundRect(x, y, w, h, r);
+  ctx.clip();
+
+  // Hood / bumper section
+  const hoodW = Math.max(8, w * 0.1);
+  ctx.fillStyle = hexToRgba(color, 0.28);
+  if (dir === 1) {
+    ctx.fillRect(x + w - hoodW, y, hoodW, h);
+  } else {
+    ctx.fillRect(x, y, hoodW, h);
+  }
+
+  // Windshield
+  const winH = h * 0.42;
+  const winW = Math.min(w * 0.18, 30);
+  const winY = y + (h - winH) / 2;
+  const winX = dir === 1 ? x + w - hoodW - winW - 4 : x + hoodW + 4;
+  ctx.fillStyle = 'rgba(115, 245, 255, 0.07)';
+  ctx.fillRect(winX, winY, winW, winH);
+  ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+  ctx.lineWidth = 0.5;
+  ctx.strokeRect(winX, winY, winW, winH);
+
+  ctx.restore();
+
+  // Body outline
+  ctx.beginPath();
+  ctx.roundRect(x, y, w, h, r);
+  ctx.strokeStyle = hexToRgba(color, 0.45);
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // Wheels (semicircles at bottom edge)
+  const wheelR = Math.max(3, h * 0.15);
+  const wheelY2 = y + h;
+  const fwX = dir === 1 ? x + w * 0.78 : x + w * 0.22;
+  const rwX = dir === 1 ? x + w * 0.22 : x + w * 0.78;
+
+  for (const wx of [fwX, rwX]) {
+    ctx.beginPath();
+    ctx.arc(wx, wheelY2, wheelR, Math.PI, 0);
+    ctx.fillStyle = '#1a1a1a';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(wx, wheelY2, wheelR * 0.5, Math.PI, 0);
+    ctx.fillStyle = '#555';
+    ctx.fill();
+  }
+
+  // Headlights (front)
+  const hlR = Math.max(1.5, h * 0.06);
+  const hlX = dir === 1 ? x + w - 2 : x + 2;
+  ctx.fillStyle = '#FFE066';
+  ctx.beginPath();
+  ctx.arc(hlX, y + h * 0.28, hlR, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(hlX, y + h * 0.72, hlR, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Taillights (rear)
+  const tlR = hlR * 0.8;
+  const tlX = dir === 1 ? x + 3 : x + w - 3;
+  ctx.fillStyle = '#FF4444';
+  ctx.beginPath();
+  ctx.arc(tlX, y + h * 0.28, tlR, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(tlX, y + h * 0.72, tlR, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Client name
+  ctx.fillStyle = SHROOMY;
+  ctx.font = `bold ${h * 0.34}px Inter, system-ui, sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(label, x + w / 2, y + h / 2);
 }
 
 export function FroggerGame({ onClose }: { onClose: () => void }) {
@@ -190,11 +293,23 @@ export function FroggerGame({ onClose }: { onClose: () => void }) {
         for (const pill of lane.pills) {
           pill.x += lane.speed * lane.dir * speedMult;
         }
+        // Wrap with spacing awareness to prevent overlap
         for (const pill of lane.pills) {
           if (lane.dir === 1 && pill.x > w + 100) {
-            pill.x = -pill.w - 80 - Math.random() * 200;
+            let minX = 0;
+            for (const p of lane.pills) {
+              if (p !== pill && p.x < minX) minX = p.x;
+            }
+            pill.x = minX - pill.w - g.pillH * 3 - Math.random() * g.pillH * 2;
           } else if (lane.dir === -1 && pill.x + pill.w < -100) {
-            pill.x = w + 80 + Math.random() * 200;
+            let maxR = w;
+            for (const p of lane.pills) {
+              if (p !== pill) {
+                const right = p.x + p.w;
+                if (right > maxR) maxR = right;
+              }
+            }
+            pill.x = maxR + g.pillH * 3 + Math.random() * g.pillH * 2;
           }
         }
       }
@@ -298,30 +413,12 @@ export function FroggerGame({ onClose }: { onClose: () => void }) {
         ctx.stroke();
       }
 
-      // Draw pills
+      // Draw cars
       for (const lane of g.lanes) {
         for (const pill of lane.pills) {
           const px = pill.x;
           const py = lane.y + (g.laneH - g.pillH) / 2;
-          const pw = pill.w;
-          const ph = g.pillH;
-          const radius = ph / 2;
-
-          // Pill shape
-          ctx.beginPath();
-          ctx.roundRect(px, py, pw, ph, radius);
-          ctx.fillStyle = 'rgba(255,255,255,0.03)';
-          ctx.fill();
-          ctx.strokeStyle = `${lane.color}33`;
-          ctx.lineWidth = 1;
-          ctx.stroke();
-
-          // Label
-          ctx.fillStyle = SHROOMY;
-          ctx.font = `${g.pillH * 0.38}px Inter, system-ui, sans-serif`;
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText(pill.label, px + pw / 2, py + ph / 2);
+          drawCar(ctx, px, py, pill.w, g.pillH, lane.color, pill.label, lane.dir);
         }
       }
 

@@ -114,27 +114,31 @@ export function ClientMarquee() {
           )}
         </AnimatePresence>
 
-        {/* Ocho play trigger */}
-        {!playing && (
-          <motion.button
-            className="absolute -bottom-2 right-8 z-20 group"
-            onClick={() => setPlaying(true)}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.5, duration: 0.5 }}
-            title="Play Frogger"
-          >
-            <motion.img
-              src="/images/ocho-color.png"
-              alt=""
-              className="w-10 h-10 opacity-40 group-hover:opacity-100 transition-opacity duration-300"
-              animate={{ y: [0, -4, 0] }}
-              transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-              style={{ filter: 'drop-shadow(0 0 8px #ED0AD2)' }}
-            />
-          </motion.button>
-        )}
       </div>
+
+      {/* Ocho play trigger — below client list, centered */}
+      {!playing && (
+        <motion.button
+          className="flex flex-col items-center mx-auto mt-8 group cursor-pointer"
+          onClick={() => setPlaying(true)}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.5, duration: 0.5 }}
+          title="Play Frogger"
+        >
+          <motion.img
+            src="/images/ocho-color.png"
+            alt=""
+            className="w-12 h-12 opacity-50 group-hover:opacity-100 transition-opacity duration-300"
+            animate={{ y: [0, -5, 0] }}
+            transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+            style={{ filter: 'drop-shadow(0 0 10px #ED0AD2)' }}
+          />
+          <span className="mt-2 text-[10px] font-bold tracking-[0.25em] text-greige/40 group-hover:text-sprinkles/70 transition-colors duration-300 uppercase">
+            Start
+          </span>
+        </motion.button>
+      )}
     </section>
   );
 }
