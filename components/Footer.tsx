@@ -13,7 +13,12 @@ const serviceLinks = [
 ];
 
 const companyLinks = [
+  { href: '/about', label: 'About' },
+  { href: '/work', label: 'Work' },
+  { href: '/industries', label: 'Industries' },
   { href: '/insights', label: 'Insights' },
+  { href: '/careers', label: 'Careers' },
+  { href: '/contact', label: 'Contact' },
 ];
 
 export function Footer() {
