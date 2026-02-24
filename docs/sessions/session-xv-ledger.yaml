@@ -1,0 +1,75 @@
+session_id: "XV"
+date: "2026-02-24"
+branch: main
+version: "0.11.0"  # MINOR: Frogger UX — car obstacles, discoverable trigger, overlap fix
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "cZdCrKxmDSM2aPQdNeNF"
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "Purely frontend — no MongoDB schema modifications"
+
+commits:
+  - hash: "478ce1c"
+    message: "feat: Frogger UX — car obstacles, discoverable trigger, overlap fix"
+  - hash: "fb1a20c"
+    message: "docs: Update roadmap for Session XV — Frogger UX improvements"
+
+artifacts_updated:
+  - "components/about/FroggerGame.tsx — Car rendering (drawCar function), overlap-aware wrapping, hexToRgba helper, wider car measurement"
+  - "components/about/ClientMarquee.tsx — Ocho trigger moved below marquee rows, centered with Start label"
+  - "docs/roadmap.md — Session XV entry added"
+
+decisions_made:
+  - decision: "Side-view car shape for Frogger obstacles"
+    rationale: "User wanted obstacles to look like actual Frogger cars with client names on them. Side-view is more recognizable than top-down at the small canvas scale (~33px tall). Features: boxy body, colored hood/bumper, tinted windshield, semicircle wheels, headlights, taillights."
+    reversible: true
+  - decision: "Ocho trigger centered below client marquee with Start label"
+    rationale: "User said the previous bottom-right absolute position wasn't discoverable enough. Centering below the client rows makes it visible as a call-to-action while still being subtle (small, low opacity until hover)."
+    reversible: true
+  - decision: "Spacing-aware wrapping to prevent overlap"
+    rationale: "Multiple pills wrapping in the same frame were getting random positions that overlapped. New logic finds the leftmost (or rightmost) pill in the lane and places the wrapping pill behind it with guaranteed minimum gap."
+    reversible: true
+
+known_risks:
+  - risk: "drawCar uses ctx.save/clip/restore per car — 65+ clip operations per frame"
+    mitigation: "Canvas clip is well-optimized in modern browsers. No performance issues observed. If needed, hood can be drawn without clipping using inset rects."
+    severity: low
+  - risk: "Frogger AABB collision detection uses simple box overlap — edge cases at very high levels"
+    mitigation: "Player has invulnerability frames on respawn. Speed scaling is gradual. Playable well past level 10."
+    severity: low
+
+explicitly_deferred:
+  - "Pipeline infrastructure — moved to Session XVI"
+  - "Industries page content"
+  - "Contact page with form"
+  - "Leadership headshot photos — still using generative avatars"
+
+next_actions:
+  - "Verify Frogger cars and trigger on live site"
+  - "Build Industries page content (8 industry sub-pages from kernel ICP)"
+  - "Build Contact page with form (Resend integration)"
+  - "Copy pipeline infrastructure from AEO donor"
+  - "Add answer capsules to service pillar pages"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All CTAs -> /book (internal Cal.com iframe)"
+  - "Asteroids game is an easter egg — no navigation or docs pointing to it"
+  - "Frogger game is an easter egg — Ocho trigger only, no navigation pointing to it"
+  - "Canvas games must use devicePixelRatio scaling for Retina displays"
+  - "All canvas input handlers must use logical (DPR-divided) coordinates, not raw canvas dimensions"
+  - "Frogger obstacles are cars (not pills) — drawCar function in FroggerGame.tsx"
+  - "measurePill uses bold font matching drawCar for accurate width calculation"

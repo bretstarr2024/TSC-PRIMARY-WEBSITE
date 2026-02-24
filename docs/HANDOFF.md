@@ -1,16 +1,58 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 24, 2026 (Session XIV)
+**Last Updated:** February 24, 2026 (Session XV)
 
 ---
 
-## Current Phase: Phase 1 COMPLETE + Frogger Functional
+## Current Phase: Phase 1 COMPLETE + Frogger Polished
 
-The site is live with **108 static pages** across 10 content types. Session XIV fixed three critical bugs that made the Frogger easter egg completely non-functional: collisions never fired, scoring was broken, and input bounds were wrong on Retina displays.
+The site is live with **108 static pages** across 10 content types. Session XV upgraded the Frogger easter egg UX: obstacles are now recognizable cars with client names, the game trigger is more discoverable below the client marquee, and overlapping obstacles are fixed.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10 collections, ~80 documents)
-- **Next actions:** Verify Frogger on live site, build Industries page, pipeline infrastructure from AEO
-- **Roadmap:** See `docs/roadmap.md` Session XIV
+- **Next actions:** Verify Frogger cars on live site, build Industries page, pipeline infrastructure from AEO
+- **Roadmap:** See `docs/roadmap.md` Session XV
+
+### Session XV Summary (February 24, 2026)
+
+**Focus:** Three Frogger easter egg UX improvements: discoverable trigger, fix overlapping obstacles, turn pills into cars.
+
+**What was done:**
+
+1. **Ocho trigger moved below client list** (1 modified file):
+   - `components/about/ClientMarquee.tsx` — Moved the Ocho play trigger from absolute-positioned bottom-right corner (barely visible) to a centered flex column below the marquee rows. Slightly larger (w-12), more visible (opacity-50 base), with "Start" text in small caps beneath the bobbing mascot. Lights up in Sprinkles pink on hover.
+
+2. **Overlap fix** (1 modified file):
+   - `components/about/FroggerGame.tsx` — Wrapping logic previously placed pills at random positions off-screen, causing multiple pills wrapping in the same frame to overlap. New logic finds the leftmost (dir=1) or rightmost (dir=-1) pill in the lane and places the wrapping pill behind it with guaranteed `pillH * 3` minimum gap plus random variance. Client names are always readable.
+
+3. **Cars instead of pills** (same file):
+   - `components/about/FroggerGame.tsx` — New `drawCar` function renders side-view cars: rounded body with boxy corners (r=6 vs full pill radius), colored hood/bumper section at the front (direction-aware), tinted windshield behind hood, body outline in lane color, semicircle wheels at bottom with darker rubber and lighter rims, yellow headlights (2 dots at front), red taillights (2 dots at rear). Client names displayed in bold centered on the car body. Cars are wider (`pillH * 2` padding) to accommodate hood/windshield sections. `measurePill` uses matching bold font for accurate width calculation. Added `hexToRgba` utility for color alpha blending.
+
+**Commits this session:**
+- `478ce1c` — feat: Frogger UX — car obstacles, discoverable trigger, overlap fix
+- `fb1a20c` — docs: Update roadmap for Session XV — Frogger UX improvements
+
+**Results:**
+- 108 static pages (unchanged — no new routes)
+- Frogger obstacles look like actual cars — headlights, taillights, wheels, windshield
+- Game trigger is visibly centered below client list with "Start" label
+- No more overlapping/blurred client names
+- All changes contained in 2 component files + docs
+
+**Donor files referenced:**
+- None — all modifications to existing code
+
+**Key decisions:**
+- Side-view cars over top-down — more recognizable at small canvas scale (~33px tall)
+- Hood/bumper drawn via clip path to body shape — clean edges without complex geometry
+- Spacing-aware wrapping — each wrapping car is placed behind the farthest-back car in the lane
+- Bold font for car names — matches original Frogger's punchy label feel
+
+**What NOT to re-debate:**
+- Cars over pills — user explicitly said pills "kinda suck" because names blur together
+- Ocho below marquee — user explicitly said "move the ocho logo to below the client list with the word 'start'"
+- drawCar uses ctx.save/clip/restore — standard pattern for masked fills, well-optimized
+
+---
 
 ### Session XIV Summary (February 24, 2026)
 
