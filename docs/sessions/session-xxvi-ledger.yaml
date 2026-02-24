@@ -1,0 +1,83 @@
+session_id: "XXVI"
+date: "2026-02-24"
+branch: main
+version: "0.19.0"  # MINOR: Tron visual overhaul (classic arcade aesthetic) + cursor fix across all games
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "t8paXtbTQZyYzAj4RNtB"
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "All changes are client-side canvas rendering and CSS cursor overrides. No MongoDB schema or API route changes."
+
+commits:
+  - hash: "ea11a0f"
+    message: "feat: Tron visual overhaul + fix cursor on all game-over/boss screens"
+  - hash: "c72170f"
+    message: "docs: Session XXVI roadmap update — Tron visual overhaul + cursor fix"
+
+artifacts_updated:
+  - "components/pricing/TronGame.tsx — Visual overhaul: CELL 4→8, blue-black bg (#05080f), major/minor grid lines, neon border with shadowBlur 15, 3-layer trail rendering (outer glow + core + white center line), directional arrow/chevron light cycle sprites with rotation, radial vignette, bigger sparks. Cursor fix via isOver state + data-attribute CSS."
+  - "components/ArcadeBossOverlay.tsx — data-arcade-boss attribute + CSS rules restoring cursor: default, pointer on buttons, text on inputs (all !important to override global cursor: none)"
+  - "components/home/AsteroidsGame.tsx — isOver state + data-asteroids-game attribute + conditional style tag for cursor on game-over"
+  - "components/services/BreakoutGame.tsx — isOver state + data-breakout-game attribute + conditional style tag for cursor on game-over"
+  - "docs/roadmap.md — Session XXVI entry, next session renumbered to XXVII"
+
+decisions_made:
+  - decision: "CELL increased from 4 to 8 for Tron game"
+    rationale: "4px cells made trails and cycles nearly invisible. 8px provides visible game elements while keeping 240×135 grid cells on 1920×1080 — plenty of gameplay space. Game feels faster visually, matching the original arcade pace."
+    reversible: true
+  - decision: "Light cycles rendered as directional arrow/chevron shapes instead of circles"
+    rationale: "Classic Tron arcade shows actual vehicle shapes with directional orientation. Arrows convey movement direction and look more like light cycles than plain dots."
+    reversible: true
+  - decision: "3-layer trail rendering (outer glow + core + white center line)"
+    rationale: "Matches the neon light-pipe aesthetic of the Tron franchise. Single-layer trails lacked the bloom/glow effect that defines the visual identity."
+    reversible: true
+  - decision: "Cursor fix uses data-attribute CSS selectors with !important to override global cursor: none"
+    rationale: "CustomCursor.tsx sets `* { cursor: none !important; }` globally. Game portals at z-99999 are above the custom cursor at z-9999. Using [data-X-game] selectors with !important provides higher specificity than the global * rule. Alternative of bumping CustomCursor z-index was rejected to avoid showing the custom cursor dot during active gameplay."
+    reversible: true
+  - decision: "Frogger game not modified for cursor fix"
+    rationale: "Frogger uses an inline canvas (z-30) not a portal (z-99999), so the custom cursor at z-9999 is already visible above it. No fix needed."
+    reversible: false
+
+known_risks:
+  - risk: "CELL=8 makes game visually faster (each tick covers 8px instead of 4px)"
+    mitigation: "This is intentional — matches the fast-paced feel of the original arcade. TICK_MS kept at 50ms. If too fast, increase TICK_MS."
+    severity: low
+  - risk: "Inline <style> tags injected on game-over could theoretically conflict with other global CSS"
+    mitigation: "Using scoped data-attribute selectors ([data-tron-game], etc.) ensures they only target the specific game portal div and its descendants."
+    severity: low
+
+explicitly_deferred:
+  - "Contact page with form (Resend integration) — next session priority"
+  - "Pipeline infrastructure from AEO — next session"
+  - "Chatbot (chaDbot) — next session"
+  - "Source monitors — next session"
+
+next_actions:
+  - "Build Contact page with form (Resend integration)"
+  - "Copy pipeline infrastructure from AEO donor"
+  - "Build chatbot (chaDbot) — copy RAG from AEO"
+  - "Create source monitors for B2B/AI marketing news"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All CTAs -> /book (internal Cal.com iframe)"
+  - "All game triggers use shared OchoTrigger component"
+  - "Easter egg games are undocumented — no navigation or user-facing docs"
+  - "High score localStorage keys: tsc-asteroids-scores, tsc-frogger-scores, tsc-breakout-scores, tsc-tron-scores"
+  - "Boss overlay z-index 100000 > game portals 99999 > custom cursor 9999"
+  - "arcade_bosses collection in tsc database for #1 high score email capture"
+  - "4 arcade games: Asteroids (homepage), Frogger (about), Breakout (services), Tron (pricing)"
+  - "Cursor fix pattern: isOver state + data-attribute + conditional <style> tag with !important — applies to all portal-based games"

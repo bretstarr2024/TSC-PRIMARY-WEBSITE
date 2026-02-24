@@ -1,6 +1,6 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 24, 2026 (Session XXV)
+**Last Updated:** February 24, 2026 (Session XXVI)
 
 ---
 
@@ -10,7 +10,43 @@ The site is live with **119 pages** (118 static + 1 API route) across 10 content
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections)
 - **Next actions:** Build Contact page with form, pipeline infrastructure from AEO, chatbot (chaDbot)
-- **Roadmap:** See `docs/roadmap.md` Session XXV
+- **Roadmap:** See `docs/roadmap.md` Session XXVI
+
+### Session XXVI Summary (February 24, 2026)
+
+**Focus:** Upgrade Tron game visuals to match classic Tron arcade aesthetic. Fix invisible cursor on all game high score and boss overlay screens.
+
+**What was done:**
+
+1. **Tron Visual Overhaul** (`components/pricing/TronGame.tsx`):
+   - Cell size doubled (4→8px) — trails and cycles now clearly visible
+   - Background changed to deep blue-black (#05080f) for authentic Tron feel
+   - Grid upgraded with major/minor line distinction (every 4th line brighter)
+   - Neon border with cyan shadowBlur glow around play area
+   - Light cycle sprites: directional arrow/chevron shapes that rotate with movement direction, colored body with white core (replaces plain circles)
+   - 3-layer trail rendering: outer glow (wide, faint bloom), core trail (solid with shadowBlur), bright white center line
+   - Radial vignette effect darkening screen edges for arcade monitor feel
+   - Spark particles enlarged for bigger cell scale
+
+2. **Cursor Fix — All Games** (5 files):
+   - **Root cause:** Global `CustomCursor.tsx` hides native cursor with `* { cursor: none !important; }` and renders at z-9999, but game portals sit at z-99999 and boss overlay at z-100000 — both native and custom cursors invisible during games
+   - **ArcadeBossOverlay.tsx:** Added `data-arcade-boss` attribute + CSS rules restoring `cursor: default`, `pointer` on buttons, `text` on inputs — all with `!important` to override global rule
+   - **TronGame.tsx, AsteroidsGame.tsx, BreakoutGame.tsx:** Each game now tracks `isOver` state. On game-over, portal div gets a `<style>` tag with `[data-X-game]` selector that overrides `cursor: none`. On restart, cursor hides again.
+   - **Frogger not modified** — uses inline canvas (z-30) not a portal, so custom cursor at z-9999 is already visible above it
+
+**Commits this session:**
+- `ea11a0f` — feat: Tron visual overhaul + fix cursor on all game-over/boss screens
+- `c72170f` — docs: Session XXVI roadmap update — Tron visual overhaul + cursor fix
+
+**Results:**
+- Tron game now has a classic arcade look: visible grid, directional cycles, neon glow trails
+- All 3 portal-based games + boss overlay now show cursor on game-over/boss screens
+- Build: 119 pages, PASS
+
+**Donor files referenced:**
+- None — built from existing project patterns
+
+---
 
 ### Session XXV Summary (February 24, 2026)
 
