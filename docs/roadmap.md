@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XVII** | Last Updated: February 24, 2026
+**Status: SESSION XVIII** | Last Updated: February 24, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -409,7 +409,16 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 117 static pages (up from 108 — 9 new industry sub-pages)
 
-#### Session XVIII (upcoming): Pipeline Infrastructure
+#### Session XVIII: Homepage Ship SVG Fix ✅ COMPLETE (Feb 24, 2026)
+
+**Focus:** Match the homepage hero ship SVG to the exact Asteroids game ship shape and add subtle ambient animation.
+
+- [x] **Ship SVG replaced** — Old 6-point diamond/arrow path (`M20 40 L8 12 L16 18 L20 4 L24 18 L32 12 Z`) replaced with the exact 4-point Asteroids game ship geometry rotated to point downward (`M18 46 L32 6 L18 14 L4 6 Z`). Nose, two wings, rear notch — matches `AsteroidsGame.tsx` canvas `drawShip` proportions.
+- [x] **Subtle ambient animation** — Float increased from ±4px to ±6px, added ±2° gentle rotation oscillation, slowed from 3s to 4s cycle. Added always-on soft orange glow (`drop-shadow 0.3 opacity`) that brightens on hover.
+
+**Build:** 117 static pages (unchanged count)
+
+#### Session XIX (upcoming): Pipeline Infrastructure
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
