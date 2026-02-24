@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { Suspense, useEffect, useRef, useState, useCallback } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
@@ -45,9 +46,17 @@ const photoSparkles = [
   { x: 100, y: 75, size: 1.5, color: '#E1FF00', delay: 0.9 },
 ];
 
-export default function BookPage() {
+function BookPageContent() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const searchParams = useSearchParams();
+  const service = searchParams.get('service');
+
+  // Build Cal.com URL with optional service context in notes
+  const calBaseUrl = 'https://cal.com/team/tsc/25-50?embed=true&theme=dark&layout=month_view';
+  const calUrl = service
+    ? `${calBaseUrl}&notes=${encodeURIComponent(`Interested in: ${service}`)}`
+    : calBaseUrl;
 
   // Auto-rotate team members every 4 seconds
   const advance = useCallback(() => {
@@ -314,6 +323,19 @@ export default function BookPage() {
               </div>
             </motion.div>
 
+            {/* Service context — shown when arriving from a service CTA */}
+            {service && (
+              <motion.div
+                className="text-center mb-6"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
+                <p className="text-sm text-greige uppercase tracking-wider mb-1">You&apos;re interested in</p>
+                <p className="text-lg font-semibold text-atomic-tangerine">{service}</p>
+              </motion.div>
+            )}
+
             {/* Calendar embed */}
             <div className="relative rounded-2xl glass border border-white/10" style={{ overflow: 'visible' }}>
               {/* Glow behind the iframe */}
@@ -326,7 +348,7 @@ export default function BookPage() {
               <div className="rounded-2xl overflow-hidden">
                 <iframe
                   ref={iframeRef}
-                  src="https://cal.com/team/tsc/25-50?embed=true&theme=dark&layout=month_view"
+                  src={calUrl}
                   className="w-full border-0"
                   style={{ height: 1000 }}
                   title="Book a meeting with The Starr Conspiracy"
@@ -339,5 +361,13 @@ export default function BookPage() {
       </main>
       <Footer />
     </>
+  );
+}
+
+export default function BookPage() {
+  return (
+    <Suspense>
+      <BookPageContent />
+    </Suspense>
   );
 }
