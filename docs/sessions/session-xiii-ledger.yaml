@@ -1,0 +1,70 @@
+session_id: "XIII"
+date: "2026-02-24"
+branch: main
+version: "0.10.1"  # PATCH: Frogger game UX polish (DPI, speed, spacing, start screen)
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "pending"
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "Purely frontend — no MongoDB schema modifications"
+
+commits:
+  - hash: "9ee2cd4"
+    message: "fix: Frogger game — DPI scaling, speed reduction, pill spacing, start screen"
+
+artifacts_updated:
+  - "components/about/FroggerGame.tsx — Canvas DPI scaling (devicePixelRatio), speed reduction (~70%), pill gap tripled, start screen with title/instructions/pulsing CTA"
+  - "docs/roadmap.md — Session XIII entry added"
+
+decisions_made:
+  - decision: "devicePixelRatio canvas scaling for Retina clarity"
+    rationale: "Canvas was rendering at 1x CSS pixels and being upscaled by browser on Retina displays, causing severe blur. Standard fix: render at native DPR, set CSS dimensions separately."
+    reversible: true
+  - decision: "Base speed 0.35 (down from 1.2)"
+    rationale: "Original speed was unplayable — pills moved too fast to navigate between. New speed provides a relaxed start with progressive challenge via level scaling."
+    reversible: true
+  - decision: "Pill gaps tripled (pillH×4.5 + random×3)"
+    rationale: "Original gaps (pillH×1.8 + random×1.2) left no navigable space between pills. Tripled gaps create clear lanes for player movement."
+    reversible: true
+  - decision: "Start screen before gameplay"
+    rationale: "Game launched directly into action with no context. Start screen shows title, Ocho icon, control instructions, and pulsing CTA. Pills drift slowly as visual backdrop. Any key or tap starts."
+    reversible: true
+
+known_risks:
+  - risk: "Frogger AABB collision detection uses simple box overlap — edge cases at very high levels"
+    mitigation: "Player has invulnerability frames on respawn. Speed scaling is gradual. Playable well past level 10."
+    severity: low
+
+explicitly_deferred:
+  - "Pipeline infrastructure — moved to Session XIV"
+  - "Industries page content"
+  - "Contact page with form"
+  - "Leadership headshot photos — still using generative avatars"
+
+next_actions:
+  - "Review Frogger on live site — verify DPI fix, speed, spacing, start screen"
+  - "Build Industries page content (8 industry sub-pages from kernel ICP)"
+  - "Build Contact page with form (Resend integration)"
+  - "Copy pipeline infrastructure from AEO donor"
+  - "Add answer capsules to service pillar pages"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All CTAs -> /book (internal Cal.com iframe)"
+  - "Asteroids game is an easter egg — no navigation or docs pointing to it"
+  - "Frogger game is an easter egg — Ocho trigger only, no navigation pointing to it"
+  - "Canvas games must use devicePixelRatio scaling for Retina displays"
+  - "Stats on About page: Founded 1999, 3,000+ B2B tech clients, 100,000 Shots of tequila"

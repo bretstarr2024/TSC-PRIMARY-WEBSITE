@@ -1,16 +1,58 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 24, 2026 (Session XII)
+**Last Updated:** February 24, 2026 (Session XIII)
 
 ---
 
-## Current Phase: Phase 1 COMPLETE + About Page UX Overhauled
+## Current Phase: Phase 1 COMPLETE + Frogger Polished
 
-The site is live with **108 static pages** across 10 content types. Session XII overhauled About page UX: leadership bios now open in a cinematic modal overlay instead of broken in-card expansion, the client marquee has a hidden Frogger easter egg (Ocho-triggered), and the tequila stat was updated to 100,000.
+The site is live with **108 static pages** across 10 content types. Session XIII fixed four critical UX issues with the client Frogger easter egg: blurry canvas on Retina, excessive speed, cramped pill spacing, and no start screen.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10 collections, ~80 documents)
-- **Next actions:** Review modal + Frogger on live site, build Industries page, pipeline infrastructure from AEO
-- **Roadmap:** See `docs/roadmap.md` Session XII
+- **Next actions:** Review Frogger on live site, build Industries page, pipeline infrastructure from AEO
+- **Roadmap:** See `docs/roadmap.md` Session XIII
+
+### Session XIII Summary (February 24, 2026)
+
+**Focus:** Fix four critical UX issues with the client Frogger easter egg per user feedback.
+
+**What was done:**
+
+1. **Canvas DPI scaling** (1 modified file):
+   - `components/about/FroggerGame.tsx` — Added `devicePixelRatio` scaling. Canvas now renders at native Retina resolution (2x/3x) with CSS sizing set separately. All game logic uses logical (CSS) pixels via `canvas.width / dpr`. Fixes severe blur on high-DPI displays.
+
+2. **Speed reduction** (same file):
+   - Base speed: 1.2 → 0.35. Random variance: 0.8 → 0.25. Per-lane increment: 0.15 → 0.08. Level-up multiplier: 0.15 → 0.08. Lane speed bump per crossing: 0.2 → 0.06. ~70% slower at start, gradual progression.
+
+3. **Pill spacing** (same file):
+   - Gap between client name pills tripled: `pillH × 1.8 + random × 1.2` → `pillH × 4.5 + random × 3`. Clear navigable lanes between obstacles.
+
+4. **Start screen** (same file):
+   - Game opens with "CLIENT FROGGER" title screen: Ocho icon with pink glow, game title in Atomic Tangerine, two lines of instructions ("Navigate Ocho through the client traffic" / "Arrow keys or WASD to move"), pulsing "Press any key or tap to start" CTA in Neon Cactus, "ESC to exit" hint. Pills drift slowly in background at half speed for visual interest. Any key or tap starts gameplay. Player/HUD hidden until started.
+
+**Commits this session:**
+- `9ee2cd4` — fix: Frogger game — DPI scaling, speed reduction, pill spacing, start screen
+
+**Results:**
+- 108 static pages (unchanged — no new routes)
+- Frogger game now crisp on Retina, playable speed, proper spacing, clear onboarding
+- All changes contained in 1 component file + docs
+
+**Donor files referenced:**
+- None — all modifications to existing code
+
+**Key decisions:**
+- devicePixelRatio scaling is the standard canvas fix for Retina blur
+- Speed tuned to be relaxed at start, challenging by level 5+
+- Start screen follows same pattern as Asteroids (title + instructions before gameplay)
+
+**What NOT to re-debate:**
+- Speed values (0.35 base) — tuned per user feedback that original was "way too fast"
+- Pill gap tripling — original had "not enough room between client names"
+- Start screen is mandatory — game was "not clear how to start"
+- DPI scaling is non-negotiable — canvas was "blurry as fuck"
+
+---
 
 ### Session XII Summary (February 24, 2026)
 
