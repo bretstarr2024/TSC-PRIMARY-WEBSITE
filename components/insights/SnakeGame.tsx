@@ -8,8 +8,11 @@ import { ArcadeBossOverlay } from '@/components/ArcadeBossOverlay';
 const C = {
   snake: '#E1FF00',
   snakeHead: '#FF5910',
-  food: '#ED0AD2',
+  food: '#ED0AD2',       // Sprinkles — regular food
+  bonus: '#73F5FF',      // Tidal Wave — bonus food
+  golden: '#FF5910',     // Atomic Tangerine — golden Ocho
   score: '#E1FF00',
+  combo: '#FF5910',
   ui: '#d1d1c6',
   bg: '#0a0a0a',
   grid: 'rgba(225, 255, 0, 0.04)',
@@ -21,6 +24,12 @@ const BASE_TICK_MS = 120;
 const TICK_DEC = 8;
 const MIN_TICK_MS = 50;
 const FOOD_PER_LEVEL = 5;
+const REGULAR_FOOD_COUNT = 3;
+const BONUS_SPAWN_TICKS = 100;    // ticks between bonus spawns (~12s at start)
+const BONUS_LIFETIME = 60;        // ticks before bonus disappears (~7s)
+const GOLDEN_SPAWN_TICKS = 200;   // ticks between golden spawns (~24s at start)
+const GOLDEN_LIFETIME = 40;       // ticks before golden disappears (~5s)
+const COMBO_WINDOW_TICKS = 8;     // ticks to chain a combo (~1s)
 
 /* High scores */
 const HS_KEY = 'tsc-snake-scores';
@@ -58,6 +67,53 @@ class SFX {
     g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.08);
     o.connect(g).connect(c.destination);
     o.start(); o.stop(c.currentTime + 0.08);
+  }
+
+  eatBonus() {
+    const c = this.ensure();
+    if (!c || this._muted) return;
+    [800, 1000, 1200].forEach((freq, i) => {
+      const o = c.createOscillator();
+      const g = c.createGain();
+      o.type = 'square';
+      o.frequency.setValueAtTime(freq, c.currentTime + i * 0.05);
+      g.gain.setValueAtTime(0.12, c.currentTime + i * 0.05);
+      g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + i * 0.05 + 0.08);
+      o.connect(g).connect(c.destination);
+      o.start(c.currentTime + i * 0.05);
+      o.stop(c.currentTime + i * 0.05 + 0.08);
+    });
+  }
+
+  eatGolden() {
+    const c = this.ensure();
+    if (!c || this._muted) return;
+    [600, 800, 1000, 1200, 1600].forEach((freq, i) => {
+      const o = c.createOscillator();
+      const g = c.createGain();
+      o.type = 'square';
+      o.frequency.setValueAtTime(freq, c.currentTime + i * 0.04);
+      g.gain.setValueAtTime(0.14, c.currentTime + i * 0.04);
+      g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + i * 0.04 + 0.1);
+      o.connect(g).connect(c.destination);
+      o.start(c.currentTime + i * 0.04);
+      o.stop(c.currentTime + i * 0.04 + 0.1);
+    });
+  }
+
+  combo(streak: number) {
+    const c = this.ensure();
+    if (!c || this._muted) return;
+    const freq = 400 + streak * 100;
+    const o = c.createOscillator();
+    const g = c.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(freq, c.currentTime);
+    o.frequency.exponentialRampToValueAtTime(freq * 1.5, c.currentTime + 0.06);
+    g.gain.setValueAtTime(0.08, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.06);
+    o.connect(g).connect(c.destination);
+    o.start(); o.stop(c.currentTime + 0.06);
   }
 
   turn() {
@@ -133,7 +189,11 @@ class SFX {
 
 /* ── Types ── */
 type Dir = 'up' | 'down' | 'left' | 'right';
+type FoodKind = 'regular' | 'bonus' | 'golden';
 interface Pt { x: number; y: number }
+interface Food { x: number; y: number; kind: FoodKind; ttl: number }
+
+interface FloatingText { x: number; y: number; text: string; color: string; life: number; max: number }
 
 interface Spark {
   x: number; y: number;
@@ -148,18 +208,24 @@ interface Game {
   snake: Pt[];
   dir: Dir;
   pendingDir: Dir | null;
-  food: Pt;
+  foods: Food[];
+  bonusTimer: number;
+  goldenTimer: number;
   gridW: number;
   gridH: number;
   score: number;
   level: number;
   foodEaten: number;
   tickInterval: number;
+  combo: number;
+  comboTimer: number;
   over: boolean;
   overTimer: number;
   shake: number;
   frame: number;
+  tick: number;
   sparks: Spark[];
+  floats: FloatingText[];
   enteringInitials: boolean;
   initialsChars: number[];
   initialsPos: number;
@@ -181,14 +247,30 @@ function boom(x: number, y: number, n: number, color: string): Spark[] {
   });
 }
 
-function placeFood(snake: Pt[], gridW: number, gridH: number): Pt {
-  const occupied = new Set(snake.map(p => `${p.x},${p.y}`));
+function occupiedSet(snake: Pt[], foods: Food[]): Set<string> {
+  const s = new Set(snake.map(p => `${p.x},${p.y}`));
+  for (const f of foods) s.add(`${f.x},${f.y}`);
+  return s;
+}
+
+function placeOneFood(snake: Pt[], foods: Food[], gridW: number, gridH: number, kind: FoodKind, ttl: number): Food {
+  const occ = occupiedSet(snake, foods);
   let x: number, y: number;
+  let attempts = 0;
   do {
     x = Math.floor(Math.random() * gridW);
     y = Math.floor(Math.random() * gridH);
-  } while (occupied.has(`${x},${y}`));
-  return { x, y };
+    attempts++;
+  } while (occ.has(`${x},${y}`) && attempts < 500);
+  return { x, y, kind, ttl };
+}
+
+function placeInitialFoods(snake: Pt[], gridW: number, gridH: number): Food[] {
+  const foods: Food[] = [];
+  for (let i = 0; i < REGULAR_FOOD_COUNT; i++) {
+    foods.push(placeOneFood(snake, foods, gridW, gridH, 'regular', -1));
+  }
+  return foods;
 }
 
 function loadHighScores(): HighScore[] {
@@ -298,18 +380,24 @@ export function SnakeGame({ onClose }: { onClose: () => void }) {
       snake,
       dir: 'right',
       pendingDir: null,
-      food: placeFood(snake, gridW, gridH),
+      foods: placeInitialFoods(snake, gridW, gridH),
+      bonusTimer: BONUS_SPAWN_TICKS,
+      goldenTimer: GOLDEN_SPAWN_TICKS,
       gridW,
       gridH,
       score: 0,
       level: 1,
       foodEaten: 0,
       tickInterval: BASE_TICK_MS,
+      combo: 0,
+      comboTimer: 0,
       over: false,
       overTimer: 0,
       shake: 0,
       frame: 0,
+      tick: 0,
       sparks: [],
+      floats: [],
       enteringInitials: false,
       initialsChars: [0, 0, 0],
       initialsPos: 0,
@@ -518,6 +606,7 @@ export function SnakeGame({ onClose }: { onClose: () => void }) {
 
         if (dt >= g.tickInterval) {
           lastTick.current = now;
+          g.tick++;
 
           /* Apply pending direction */
           if (g.pendingDir) {
@@ -526,11 +615,48 @@ export function SnakeGame({ onClose }: { onClose: () => void }) {
             g.pendingDir = null;
           }
 
+          /* Combo timer decay */
+          if (g.comboTimer > 0) {
+            g.comboTimer--;
+            if (g.comboTimer <= 0) g.combo = 0;
+          }
+
+          /* Tick down bonus/golden food TTLs and remove expired */
+          g.foods = g.foods.filter(f => {
+            if (f.ttl < 0) return true; // regular food never expires
+            f.ttl--;
+            return f.ttl > 0;
+          });
+
+          /* Ensure regular food count is maintained */
+          const regularCount = g.foods.filter(f => f.kind === 'regular').length;
+          for (let i = regularCount; i < REGULAR_FOOD_COUNT; i++) {
+            g.foods.push(placeOneFood(g.snake, g.foods, g.gridW, g.gridH, 'regular', -1));
+          }
+
+          /* Spawn bonus food */
+          g.bonusTimer--;
+          if (g.bonusTimer <= 0 && !g.foods.some(f => f.kind === 'bonus')) {
+            g.foods.push(placeOneFood(g.snake, g.foods, g.gridW, g.gridH, 'bonus', BONUS_LIFETIME));
+            g.bonusTimer = BONUS_SPAWN_TICKS;
+          }
+
+          /* Spawn golden Ocho food */
+          g.goldenTimer--;
+          if (g.goldenTimer <= 0 && !g.foods.some(f => f.kind === 'golden')) {
+            g.foods.push(placeOneFood(g.snake, g.foods, g.gridW, g.gridH, 'golden', GOLDEN_LIFETIME));
+            g.goldenTimer = GOLDEN_SPAWN_TICKS;
+          }
+
           /* Move snake */
           const head = g.snake[0];
           const v = dirVec[g.dir];
           const nx = head.x + v.x;
           const ny = head.y + v.y;
+
+          /* Pixel offset for sparks */
+          const ofsX = Math.floor((w - g.gridW * CELL) / 2);
+          const ofsY = Math.floor((h - g.gridH * CELL) / 2);
 
           /* Check wall collision */
           if (nx < 0 || nx >= g.gridW || ny < 0 || ny >= g.gridH) {
@@ -538,9 +664,7 @@ export function SnakeGame({ onClose }: { onClose: () => void }) {
             setIsOver(true);
             g.shake = 15;
             sfx.crash();
-            const ox = (g.gridW * CELL - w) / -2;
-            const oy = (g.gridH * CELL - h) / -2;
-            g.sparks.push(...boom(head.x * CELL + CELL / 2 + ox, head.y * CELL + CELL / 2 + oy, 20, C.snake));
+            g.sparks.push(...boom(head.x * CELL + CELL / 2 + ofsX, head.y * CELL + CELL / 2 + ofsY, 20, C.snake));
             const hs = loadHighScores();
             g.highScores = hs;
             g.enteringInitials = qualifiesForHighScore(g.score, hs);
@@ -559,9 +683,7 @@ export function SnakeGame({ onClose }: { onClose: () => void }) {
               setIsOver(true);
               g.shake = 15;
               sfx.crash();
-              const ox = (w - g.gridW * CELL) / 2;
-              const oy = (h - g.gridH * CELL) / 2;
-              g.sparks.push(...boom(head.x * CELL + CELL / 2 + ox, head.y * CELL + CELL / 2 + oy, 20, C.snake));
+              g.sparks.push(...boom(head.x * CELL + CELL / 2 + ofsX, head.y * CELL + CELL / 2 + ofsY, 20, C.snake));
               const hs = loadHighScores();
               g.highScores = hs;
               g.enteringInitials = qualifiesForHighScore(g.score, hs);
@@ -569,21 +691,71 @@ export function SnakeGame({ onClose }: { onClose: () => void }) {
               /* Move head */
               g.snake.unshift({ x: nx, y: ny });
 
-              /* Check food */
-              if (nx === g.food.x && ny === g.food.y) {
-                /* Ate food — don't remove tail (snake grows) */
-                g.score += 10 * g.level;
-                g.foodEaten++;
-                sfx.eat();
+              /* Check food collision */
+              const eatenIdx = g.foods.findIndex(f => f.x === nx && f.y === ny);
+              if (eatenIdx >= 0) {
+                const eaten = g.foods[eatenIdx];
+                g.foods.splice(eatenIdx, 1);
 
+                /* Score based on food kind */
+                let pts: number;
+                let sparkColor: string;
+                if (eaten.kind === 'golden') {
+                  pts = 50 * g.level;
+                  sparkColor = C.golden;
+                  sfx.eatGolden();
+                } else if (eaten.kind === 'bonus') {
+                  pts = 25 * g.level;
+                  sparkColor = C.bonus;
+                  sfx.eatBonus();
+                } else {
+                  pts = 10 * g.level;
+                  sparkColor = C.food;
+                  sfx.eat();
+                }
+
+                /* Combo: eating within COMBO_WINDOW_TICKS of last eat */
+                if (g.comboTimer > 0) {
+                  g.combo++;
+                  const comboMultiplier = Math.min(g.combo, 5);
+                  pts += pts * comboMultiplier;
+                  sfx.combo(g.combo);
+                  g.floats.push({
+                    x: nx * CELL + CELL / 2 + ofsX,
+                    y: ny * CELL + ofsY - 4,
+                    text: `x${comboMultiplier + 1}`,
+                    color: C.combo,
+                    life: 40,
+                    max: 40,
+                  });
+                } else {
+                  g.combo = 0;
+                }
+                g.comboTimer = COMBO_WINDOW_TICKS;
+
+                g.score += pts;
+                g.foodEaten++;
+
+                /* Eat sparks */
+                g.sparks.push(...boom(nx * CELL + CELL / 2 + ofsX, ny * CELL + CELL / 2 + ofsY, 8, sparkColor));
+
+                /* Floating score text */
+                g.floats.push({
+                  x: nx * CELL + CELL / 2 + ofsX,
+                  y: ny * CELL + ofsY - 10,
+                  text: `+${pts}`,
+                  color: sparkColor,
+                  life: 35,
+                  max: 35,
+                });
+
+                /* Level up check */
                 if (g.foodEaten >= FOOD_PER_LEVEL) {
                   g.level++;
                   g.foodEaten = 0;
                   g.tickInterval = Math.max(MIN_TICK_MS, BASE_TICK_MS - TICK_DEC * (g.level - 1));
                   sfx.levelUp();
                 }
-
-                g.food = placeFood(g.snake, g.gridW, g.gridH);
               } else {
                 /* Normal move — remove tail */
                 g.snake.pop();
@@ -598,6 +770,9 @@ export function SnakeGame({ onClose }: { onClose: () => void }) {
         p.x += p.vx; p.y += p.vy; p.vx *= 0.97; p.vy *= 0.97;
         return --p.life > 0;
       });
+
+      /* Floating text */
+      g.floats = g.floats.filter(f => --f.life > 0);
 
       /* Sound management */
       if (g.over && !wasOver) { sfx.gameOver(); wasOver = true; }
@@ -714,17 +889,50 @@ export function SnakeGame({ onClose }: { onClose: () => void }) {
       }
 
       /* ── Food ── */
-      {
-        const fcx = ox + g.food.x * CELL + CELL / 2;
-        const fcy = oy + g.food.y * CELL + CELL / 2;
-        const fr = CELL * 0.35;
+      for (const f of g.foods) {
+        const fcx = ox + f.x * CELL + CELL / 2;
+        const fcy = oy + f.y * CELL + CELL / 2;
         const pulse = 6 + 4 * Math.sin(g.frame * 0.1);
 
         ctx.save();
-        ctx.fillStyle = C.food;
-        ctx.shadowColor = C.food;
-        ctx.shadowBlur = pulse;
-        ctx.beginPath(); ctx.arc(fcx, fcy, fr, 0, Math.PI * 2); ctx.fill();
+        if (f.kind === 'golden') {
+          /* Golden Ocho — larger, pulsing orange with halo */
+          const blink = f.ttl < 15 && Math.floor(g.frame / 4) % 2 === 0;
+          if (!blink) {
+            ctx.fillStyle = C.golden;
+            ctx.shadowColor = C.golden;
+            ctx.shadowBlur = pulse + 6;
+            const sz = CELL * 0.8;
+            ctx.beginPath(); ctx.arc(fcx, fcy, sz / 2, 0, Math.PI * 2); ctx.fill();
+            /* Inner star */
+            ctx.fillStyle = '#FFFFFF';
+            ctx.shadowBlur = 0;
+            ctx.beginPath(); ctx.arc(fcx, fcy, 2, 0, Math.PI * 2); ctx.fill();
+          }
+        } else if (f.kind === 'bonus') {
+          /* Bonus — diamond shape, cyan */
+          const blink = f.ttl < 15 && Math.floor(g.frame / 4) % 2 === 0;
+          if (!blink) {
+            const sz = CELL * 0.4;
+            ctx.fillStyle = C.bonus;
+            ctx.shadowColor = C.bonus;
+            ctx.shadowBlur = pulse + 2;
+            ctx.beginPath();
+            ctx.moveTo(fcx, fcy - sz);
+            ctx.lineTo(fcx + sz, fcy);
+            ctx.lineTo(fcx, fcy + sz);
+            ctx.lineTo(fcx - sz, fcy);
+            ctx.closePath();
+            ctx.fill();
+          }
+        } else {
+          /* Regular — circle, pink */
+          const fr = CELL * 0.35;
+          ctx.fillStyle = C.food;
+          ctx.shadowColor = C.food;
+          ctx.shadowBlur = pulse;
+          ctx.beginPath(); ctx.arc(fcx, fcy, fr, 0, Math.PI * 2); ctx.fill();
+        }
         ctx.restore();
       }
 
@@ -736,6 +944,18 @@ export function SnakeGame({ onClose }: { onClose: () => void }) {
       }
       ctx.globalAlpha = 1;
 
+      /* ── Floating text ── */
+      for (const ft of g.floats) {
+        ctx.save();
+        ctx.globalAlpha = ft.life / ft.max;
+        ctx.fillStyle = ft.color;
+        ctx.font = 'bold 14px monospace';
+        ctx.textAlign = 'center';
+        const rise = (ft.max - ft.life) * 0.6;
+        ctx.fillText(ft.text, ft.x, ft.y - rise);
+        ctx.restore();
+      }
+
       /* ── HUD ── */
       ctx.fillStyle = C.score; ctx.font = 'bold 24px monospace'; ctx.textAlign = 'left';
       ctx.fillText(String(g.score).padStart(6, '0'), 20, 40);
@@ -745,6 +965,17 @@ export function SnakeGame({ onClose }: { onClose: () => void }) {
 
       ctx.fillStyle = C.ui; ctx.font = '12px monospace'; ctx.textAlign = 'center';
       ctx.fillText(`${g.foodEaten}/${FOOD_PER_LEVEL}`, w / 2, 48);
+
+      /* Combo display */
+      if (g.combo > 0 && g.comboTimer > 0) {
+        ctx.save();
+        ctx.fillStyle = C.combo;
+        ctx.font = 'bold 18px monospace';
+        ctx.textAlign = 'right';
+        ctx.globalAlpha = 0.6 + 0.4 * Math.sin(g.frame * 0.2);
+        ctx.fillText(`COMBO x${Math.min(g.combo, 5) + 1}`, w - 20, 40);
+        ctx.restore();
+      }
 
       /* Controls hint */
       if (!showTouch.current && !g.over) {

@@ -4,18 +4,19 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ArcadeBossOverlay } from '@/components/ArcadeBossOverlay';
 
-/* ── Brand colors ── */
+/* ── Brand colors (classic arcade palette mapped to TSC brand) ── */
 const C = {
   player: '#FF5910',
   bullet: '#FFFFFF',
-  enemyTop: '#ED0AD2',
-  enemyMid: '#73F5FF',
-  enemyBot: '#E1FF00',
-  ufo: '#FF5910',
-  shield: 'rgba(255, 89, 16, 0.7)',
+  enemyTop: '#ED0AD2',    // Sprinkles — commander row
+  enemyMid: '#73F5FF',    // Tidal Wave — middle rows
+  enemyBot: '#E1FF00',    // Neon Cactus — grunt rows
+  ufo: '#FF5910',         // Atomic Tangerine
+  shield: '#E1FF00',      // Neon Cactus (classic green-ish)
+  ground: '#FF5910',      // Atomic Tangerine ground line
   score: '#E1FF00',
   ui: '#d1d1c6',
-  bg: '#0a0a0a',
+  bg: '#0a0a1e',          // Deep navy — classic arcade CRT blue-black
 };
 
 /* ── Tuning knobs ── */
@@ -380,7 +381,7 @@ function drawBtn(ctx: CanvasRenderingContext2D, b: TBtn, active: boolean, sfxMut
 }
 
 /* ── Sprite drawing ── */
-function drawEnemy(ctx: CanvasRenderingContext2D, e: Enemy) {
+function drawEnemy(ctx: CanvasRenderingContext2D, e: Enemy, ochoImage?: HTMLImageElement | null) {
   const cx = e.x + ENEMY_W / 2;
   const cy = e.y + ENEMY_H / 2;
   const hw = ENEMY_W / 2;
@@ -388,27 +389,26 @@ function drawEnemy(ctx: CanvasRenderingContext2D, e: Enemy) {
   ctx.save();
 
   if (e.type === 0) {
-    // Commander — diamond shape
-    ctx.fillStyle = C.enemyTop;
-    ctx.shadowColor = C.enemyTop;
-    ctx.shadowBlur = 6;
-    ctx.beginPath();
-    ctx.moveTo(cx, e.y);
-    ctx.lineTo(e.x + ENEMY_W, cy);
-    ctx.lineTo(cx, e.y + ENEMY_H);
-    ctx.lineTo(e.x, cy);
-    ctx.closePath();
-    ctx.fill();
-    if (e.animFrame === 1) {
-      // Antennae
-      ctx.strokeStyle = C.enemyTop;
-      ctx.lineWidth = 1.5;
+    // Commander row — Ocho mascots!
+    const imgOk = ochoImage?.complete && ochoImage.naturalWidth > 0;
+    if (imgOk) {
+      ctx.shadowColor = C.enemyTop;
+      ctx.shadowBlur = 8;
+      const sz = Math.max(ENEMY_W, ENEMY_H) + 4;
+      const bob = e.animFrame === 1 ? -2 : 0;
+      ctx.drawImage(ochoImage, cx - sz / 2, cy - sz / 2 + bob, sz, sz);
+    } else {
+      // Fallback diamond
+      ctx.fillStyle = C.enemyTop;
+      ctx.shadowColor = C.enemyTop;
+      ctx.shadowBlur = 6;
       ctx.beginPath();
-      ctx.moveTo(cx - 4, e.y);
-      ctx.lineTo(cx - 7, e.y - 5);
-      ctx.moveTo(cx + 4, e.y);
-      ctx.lineTo(cx + 7, e.y - 5);
-      ctx.stroke();
+      ctx.moveTo(cx, e.y);
+      ctx.lineTo(e.x + ENEMY_W, cy);
+      ctx.lineTo(cx, e.y + ENEMY_H);
+      ctx.lineTo(e.x, cy);
+      ctx.closePath();
+      ctx.fill();
     }
   } else if (e.type === 1) {
     // Middle — inverted trapezoid with legs
@@ -524,6 +524,7 @@ export function SpaceInvadersGame({ onClose }: { onClose: () => void }) {
   const keys = useRef<Set<string>>(new Set());
   const raf = useRef(0);
   const sfxRef = useRef<SFX | null>(null);
+  const ochoImg = useRef<HTMLImageElement | null>(null);
   const touchActive = useRef<Record<string, boolean>>({});
   const prevTouch = useRef<Record<string, boolean>>({});
   const showTouch = useRef(false);
@@ -547,7 +548,7 @@ export function SpaceInvadersGame({ onClose }: { onClose: () => void }) {
     enemyBullets: [],
     shields: makeShields(w, h),
     ufo: null,
-    ufoTimer: 500 + Math.floor(Math.random() * 500),
+    ufoTimer: 1200 + Math.floor(Math.random() * 1200),
     sparks: [],
     score: 0,
     lives: 3,
@@ -581,6 +582,11 @@ export function SpaceInvadersGame({ onClose }: { onClose: () => void }) {
 
     const sfx = new SFX();
     sfxRef.current = sfx;
+
+    /* Load ocho mascot for commander row */
+    const img = new Image();
+    img.src = '/images/ocho-color.png';
+    ochoImg.current = img;
 
     game.current = init(el.width, el.height);
 
@@ -1020,7 +1026,7 @@ export function SpaceInvadersGame({ onClose }: { onClose: () => void }) {
             g.ufo = null;
             sfx.stopUfo();
             wasUfo = false;
-            g.ufoTimer = 500 + Math.floor(Math.random() * 500);
+            g.ufoTimer = 1200 + Math.floor(Math.random() * 1200);
           }
         }
 
@@ -1047,7 +1053,7 @@ export function SpaceInvadersGame({ onClose }: { onClose: () => void }) {
           g.enemyBullets = [];
           g.shields = makeShields(w, h);
           g.ufo = null;
-          g.ufoTimer = 500 + Math.floor(Math.random() * 500);
+          g.ufoTimer = 1200 + Math.floor(Math.random() * 1200);
           g.playerAlive = true;
           g.playerX = w / 2;
           g.fireCooldown = 0;
@@ -1108,6 +1114,8 @@ export function SpaceInvadersGame({ onClose }: { onClose: () => void }) {
       /* ── Shields ── */
       for (const sh of g.shields) {
         ctx.save();
+        ctx.shadowColor = C.shield;
+        ctx.shadowBlur = 4;
         ctx.fillStyle = C.shield;
         for (let r = 0; r < sh.pixels.length; r++) {
           for (let c = 0; c < sh.pixels[r].length; c++) {
@@ -1122,7 +1130,7 @@ export function SpaceInvadersGame({ onClose }: { onClose: () => void }) {
       /* ── Enemies ── */
       for (const e of g.enemies) {
         if (!e.alive) continue;
-        drawEnemy(ctx, e);
+        drawEnemy(ctx, e, ochoImg.current);
       }
 
       /* ── UFO ── */
@@ -1178,6 +1186,16 @@ export function SpaceInvadersGame({ onClose }: { onClose: () => void }) {
         ctx.fillText(String(fp.pts), fp.x, fp.y - (40 - fp.timer));
         ctx.restore();
       }
+
+      /* ── Ground line (classic arcade) ── */
+      ctx.save();
+      ctx.strokeStyle = C.ground;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, playerY + 8);
+      ctx.lineTo(w, playerY + 8);
+      ctx.stroke();
+      ctx.restore();
 
       /* ── HUD ── */
       ctx.fillStyle = C.score; ctx.font = 'bold 24px monospace'; ctx.textAlign = 'left';

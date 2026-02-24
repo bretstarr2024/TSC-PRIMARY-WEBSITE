@@ -38,8 +38,6 @@ const UFO_FIRE_INTERVAL = 150;
 const UFO_BULLET_V = 4;
 const UFO_SPAWN_MIN = 600;
 const UFO_SPAWN_MAX = 1200;
-const UFO_IMG_SIZE = 50;
-
 /* High scores */
 const HS_KEY = 'tsc-asteroids-scores';
 const HS_MAX = 10;
@@ -223,9 +221,9 @@ class SFX {
     const gain = c.createGain();
     gain.gain.setValueAtTime(0.06, c.currentTime);
     const osc1 = c.createOscillator();
-    osc1.type = 'square'; osc1.frequency.setValueAtTime(120, c.currentTime);
+    osc1.type = 'sawtooth'; osc1.frequency.setValueAtTime(120, c.currentTime);
     const osc2 = c.createOscillator();
-    osc2.type = 'square'; osc2.frequency.setValueAtTime(126, c.currentTime);
+    osc2.type = 'sawtooth'; osc2.frequency.setValueAtTime(126, c.currentTime);
     osc1.connect(gain); osc2.connect(gain); gain.connect(c.destination);
     osc1.start(); osc2.start();
     this.ufoNodes = { osc1, osc2, gain };
@@ -484,7 +482,6 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
   const game = useRef<Game | null>(null);
   const keys = useRef<Set<string>>(new Set());
   const raf = useRef(0);
-  const ochoImg = useRef<HTMLImageElement | null>(null);
   const sfxRef = useRef<SFX | null>(null);
   const touchActive = useRef<Record<string, boolean>>({});
   const prevTouch = useRef<Record<string, boolean>>({});
@@ -533,11 +530,6 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
     /* Sound engine */
     const sfx = new SFX();
     sfxRef.current = sfx;
-
-    /* Load ocho mascot image */
-    const img = new Image();
-    img.src = '/images/ocho-color.png';
-    ochoImg.current = img;
 
     game.current = init(el.width, el.height);
 
@@ -957,24 +949,21 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
         ctx.closePath(); ctx.stroke(); ctx.restore();
       }
 
-      /* ── Ocho UFO ── */
+      /* ── UFO (classic saucer) ── */
       if (g.ufo) {
         const u = g.ufo;
         ctx.save();
-        const imgOk = ochoImg.current?.complete && ochoImg.current.naturalWidth > 0;
-        if (imgOk) {
-          ctx.shadowColor = C.ufo;
-          ctx.shadowBlur = 20;
-          const sz = UFO_IMG_SIZE;
-          ctx.drawImage(ochoImg.current!, u.x - sz / 2, u.y - sz / 2, sz, sz);
-          ctx.shadowBlur = 0;
-        } else {
-          /* fallback saucer */
-          ctx.strokeStyle = C.ufo; ctx.lineWidth = 2;
-          ctx.beginPath();
-          ctx.ellipse(u.x, u.y, UFO_R, UFO_R * 0.5, 0, 0, Math.PI * 2);
-          ctx.stroke();
-        }
+        ctx.fillStyle = C.ufo;
+        ctx.shadowColor = C.ufo;
+        ctx.shadowBlur = 10;
+        /* Saucer body */
+        ctx.beginPath();
+        ctx.ellipse(u.x, u.y, UFO_R, UFO_R * 0.4, 0, 0, Math.PI * 2);
+        ctx.fill();
+        /* Dome */
+        ctx.beginPath();
+        ctx.arc(u.x, u.y - UFO_R * 0.25, UFO_R * 0.4, Math.PI, 0);
+        ctx.fill();
         ctx.restore();
       }
 
