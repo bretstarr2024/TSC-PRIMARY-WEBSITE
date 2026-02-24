@@ -37,20 +37,27 @@ export function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          {/* The classic Asteroids ship, pointing down toward the headline */}
+          {/* The classic Asteroids ship — exact game shape, pointing down */}
           <motion.svg
-            width="40"
-            height="44"
-            viewBox="0 0 40 44"
+            width="36"
+            height="50"
+            viewBox="0 0 36 50"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="transition-all duration-300 drop-shadow-none group-hover:drop-shadow-[0_0_12px_rgba(255,89,16,0.8)]"
-            animate={{ y: [0, -4, 0] }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+            className="transition-all duration-300 drop-shadow-[0_0_6px_rgba(255,89,16,0.3)] group-hover:drop-shadow-[0_0_14px_rgba(255,89,16,0.8)]"
+            animate={{
+              y: [0, -6, 0],
+              rotate: [-2, 2, -2],
+            }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
           >
-            {/* Ship body — classic triangle pointing down */}
+            {/* Ship body — matches AsteroidsGame canvas ship exactly, rotated to point down */}
             <path
-              d="M20 40 L8 12 L16 18 L20 4 L24 18 L32 12 Z"
+              d="M18 46 L32 6 L18 14 L4 6 Z"
               stroke="#FF5910"
               strokeWidth="2"
               strokeLinejoin="round"
