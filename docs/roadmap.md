@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XII** | Last Updated: February 24, 2026
+**Status: SESSION XIII** | Last Updated: February 24, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -352,7 +352,18 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 108 static pages (unchanged count)
 
-#### Session XIII (upcoming): Pipeline Infrastructure
+#### Session XIII: Frogger Game Polish ✅ COMPLETE (Feb 24, 2026)
+
+**Focus:** Fix four critical UX issues with the client Frogger easter egg per user feedback.
+
+- [x] **Canvas DPI scaling** — Added `devicePixelRatio` scaling to fix blurry rendering on Retina displays. Canvas renders at native resolution with CSS sizing.
+- [x] **Speed reduction** — Base speed reduced ~70% (1.2→0.35), random variance reduced (0.8→0.25), per-lane increment halved (0.15→0.08). Level-up ramp also reduced (multiplier 0.15→0.08, lane bump 0.2→0.06). Game is now playable and progressively challenging.
+- [x] **Pill spacing** — Gaps between client name pills tripled (pillH×1.8→pillH×4.5 base, random×1.2→random×3). Clear navigable lanes between obstacles.
+- [x] **Start screen** — Added "CLIENT FROGGER" title screen with Ocho icon, instructions, pulsing "Press any key or tap to start" CTA, and ESC hint. Pills drift slowly in background. Game no longer dumps player into action immediately.
+
+**Build:** 108 static pages (unchanged count)
+
+#### Session XIV (upcoming): Pipeline Infrastructure
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
