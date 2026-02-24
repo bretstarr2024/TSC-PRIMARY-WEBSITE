@@ -6,8 +6,11 @@ import { ModelOverview } from '@/components/pricing/ModelOverview';
 import { FourPillars } from '@/components/pricing/FourPillars';
 import { WhyDifferent } from '@/components/pricing/WhyDifferent';
 import { PricingCards } from '@/components/pricing/PricingCards';
+import { AnswerCapsulesSection } from '@/components/AnswerCapsulesSection';
 import { ServiceCTA } from '@/components/services/ServiceCTA';
 import { pricingBreadcrumb } from '@/lib/schema/breadcrumbs';
+import { pricingCapsules } from '@/lib/schema/pricing-faq';
+import { getFaqSchema } from '@/lib/schema/service-faq';
 
 export const metadata: Metadata = {
   title: 'Pricing | The Starr Conspiracy',
@@ -31,6 +34,8 @@ export const metadata: Metadata = {
 export default function PricingPage() {
   const breadcrumbSchema = pricingBreadcrumb();
 
+  const faqSchema = getFaqSchema(pricingCapsules);
+
   return (
     <>
       <Header />
@@ -38,7 +43,7 @@ export default function PricingPage() {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify([breadcrumbSchema]),
+            __html: JSON.stringify([breadcrumbSchema, faqSchema]),
           }}
         />
 
@@ -47,6 +52,14 @@ export default function PricingPage() {
         <FourPillars />
         <WhyDifferent />
         <PricingCards />
+
+        <AnswerCapsulesSection
+          capsules={pricingCapsules}
+          accentColor="#FF5910"
+          heading={<>Common questions about{' '}<span className="text-atomic-tangerine">working with us.</span></>}
+          subheading="Straight answers about pricing, engagement models, and what you actually get."
+        />
+
         <ServiceCTA />
       </main>
       <Footer />

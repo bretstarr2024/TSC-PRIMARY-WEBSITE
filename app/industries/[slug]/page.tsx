@@ -4,6 +4,7 @@ import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { IndustryHero } from '@/components/industries/IndustryHero';
 import { IndustryContent } from '@/components/industries/IndustryContent';
+import { AnswerCapsulesSection } from '@/components/AnswerCapsulesSection';
 import { RelatedIndustries } from '@/components/industries/RelatedIndustries';
 import {
   INDUSTRIES,
@@ -11,6 +12,7 @@ import {
   getRelatedIndustries,
 } from '@/lib/industries-data';
 import { industryBreadcrumb } from '@/lib/schema/breadcrumbs';
+import { getFaqSchema } from '@/lib/schema/service-faq';
 
 interface PageProps {
   params: { slug: string };
@@ -55,9 +57,24 @@ export default function IndustryPage({ params }: PageProps) {
 
         <IndustryHero industry={industry} />
         <IndustryContent industry={industry} />
+
+        <AnswerCapsulesSection
+          capsules={industry.answerCapsules}
+          accentColor={industry.color}
+          heading={<>What you need to know about{' '}<span style={{ color: industry.color }}>{industry.name} marketing.</span></>}
+          subheading={`Straight answers for ${industry.buyerTitle}s evaluating agency partners.`}
+        />
+
         <RelatedIndustries industries={related} />
       </main>
       <Footer />
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(getFaqSchema(industry.answerCapsules)),
+        }}
+      />
     </>
   );
 }

@@ -9,6 +9,11 @@ export interface Service {
   whoItsFor: string;
 }
 
+export interface AnswerCapsule {
+  question: string;
+  answer: string;
+}
+
 export interface ServiceCategory {
   name: string;
   slug: string;
@@ -19,6 +24,7 @@ export interface ServiceCategory {
   colorName: string;
   borderClass: string;
   services: Service[];
+  answerCapsules: AnswerCapsule[];
 }
 
 export const SERVICE_CATEGORIES: ServiceCategory[] = [
@@ -89,6 +95,28 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
           'Executives and founders who need to build personal authority in their category — especially in competitive markets where expertise is the differentiator.',
       },
     ],
+    answerCapsules: [
+      {
+        question: 'What does a B2B brand strategy engagement actually include?',
+        answer:
+          'A B2B brand strategy engagement includes market positioning, brand architecture, messaging frameworks, and competitive differentiation — all built to change how your market perceives you. The typical scope is 8–12 weeks, starting with research and competitive analysis, moving through positioning development, and ending with an internal activation playbook your team can execute immediately.',
+      },
+      {
+        question: 'When should a B2B tech company reposition its brand?',
+        answer:
+          "B2B tech companies should reposition when growth stalls, the market narrative no longer fits, or they're preparing for a major expansion or acquisition. The most common triggers we see: entering a new market segment, post-acquisition integration, or realizing your sales team can't explain what makes you different anymore.",
+      },
+      {
+        question: 'How do you build a messaging framework for B2B tech?',
+        answer:
+          'A B2B messaging framework starts with competitive positioning analysis, buyer research, and a clear articulation of the value you deliver that competitors cannot. We build frameworks that include value propositions, proof points, persona-specific messaging, and objection handling — structured so every team member tells the same story.',
+      },
+      {
+        question: "What's the difference between a rebrand and repositioning?",
+        answer:
+          "Repositioning changes how the market perceives your company's strategic value, while a rebrand changes the visual and verbal identity that communicates that position. Most companies that think they need a rebrand actually need repositioning first — because a new logo on a confused strategy is still a confused strategy.",
+      },
+    ],
   },
   {
     name: 'Go-to-Market Strategy & Architecture',
@@ -118,6 +146,28 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
         ],
         whoItsFor:
           'B2B tech companies launching new products, entering new segments, or restructuring their marketing function to actually drive revenue.',
+      },
+    ],
+    answerCapsules: [
+      {
+        question: "What's included in a B2B go-to-market strategy?",
+        answer:
+          "A B2B go-to-market strategy includes ICP development, competitive positioning, channel architecture, and a marketing-to-revenue model with measurable KPIs. It's the strategic blueprint that aligns product, marketing, and sales around a shared growth thesis — typically scoped at 6–10 weeks for companies entering new markets or restructuring their marketing function.",
+      },
+      {
+        question: 'How do you develop an ICP for B2B tech companies?',
+        answer:
+          "ICP development combines firmographic profiling, psychographic analysis, and buying committee mapping to identify the companies and people most likely to buy and succeed. We go beyond demographics to understand your buyers' worldview, their internal politics, and the triggers that move them from awareness to purchase.",
+      },
+      {
+        question: "What's the difference between a GTM strategy and a marketing plan?",
+        answer:
+          'A GTM strategy defines who you sell to, why they buy, and how you reach them, while a marketing plan details the tactical campaigns and channels you\'ll use. The strategy comes first — without it, your marketing plan is just a list of activities disconnected from revenue outcomes.',
+      },
+      {
+        question: 'How do you measure go-to-market success?',
+        answer:
+          'Go-to-market success is measured by pipeline generated, marketing-sourced revenue, customer acquisition cost, and time-to-revenue from launch. Vanity metrics like impressions and clicks tell you nothing about whether your GTM is working — we build measurement frameworks tied directly to revenue outcomes.',
       },
     ],
   },
@@ -187,6 +237,28 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
           'Companies that invested in HubSpot, Marketo, or Pardot but aren\'t getting the ROI — because the tool is only as good as the strategy behind it.',
       },
     ],
+    answerCapsules: [
+      {
+        question: "What's the difference between demand generation and lead generation?",
+        answer:
+          'Demand generation creates market awareness and buying intent, while lead generation captures contact information from people already interested — demand gen builds the audience, lead gen harvests it. The most common mistake is investing in lead gen without demand gen, which gives you a database of people who aren\'t ready to buy.',
+      },
+      {
+        question: 'How long does it take for B2B demand generation to produce results?',
+        answer:
+          'B2B demand generation typically takes 3–6 months to show meaningful pipeline impact, because B2B buying cycles are long and trust compounds over time. Quick wins come from optimizing existing channels and conversion points; sustainable pipeline growth comes from building a system that compounds — content, distribution, and nurture working together.',
+      },
+      {
+        question: 'How do you measure demand generation ROI?',
+        answer:
+          'Demand generation ROI is measured by pipeline contribution, marketing-sourced revenue, and customer acquisition cost efficiency — not clicks, impressions, or MQL volume. We build attribution models that track the full buyer journey from first touch to closed deal, so you can see which investments actually drive revenue.',
+      },
+      {
+        question: 'What is account-based marketing and when should you use it?',
+        answer:
+          'Account-based marketing focuses resources on specific named accounts instead of broad audiences, ideal for companies with high-ACV products selling into enterprise buyers. ABM works best when your average deal size justifies the per-account investment and your sales team can name the companies they need to close.',
+      },
+    ],
   },
   {
     name: 'Digital Performance',
@@ -254,6 +326,28 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
           'B2B companies ready to build durable distribution channels they actually own — instead of renting attention from platforms indefinitely.',
       },
     ],
+    answerCapsules: [
+      {
+        question: 'How should B2B companies approach paid media differently than B2C?',
+        answer:
+          'B2B paid media must account for long buying cycles, multi-person buying committees, and the reality that a click rarely equals a customer — optimization targets pipeline influence, not conversions. We manage B2B paid programs against downstream revenue metrics, not the cost-per-click vanity numbers that consumer marketers optimize for.',
+      },
+      {
+        question: 'What role does SEO play for B2B technology companies?',
+        answer:
+          "SEO builds the organic foundation that captures buyer research intent at every stage of the journey, from problem awareness through vendor evaluation and purchase decision. For B2B tech companies, SEO isn't just about rankings — it's about being present in the research process your buyers go through months before they ever talk to sales.",
+      },
+      {
+        question: 'How do you approach earned media for B2B tech?',
+        answer:
+          'Earned media for B2B tech requires a strategic program targeting trade publications, industry analysts, and the journalists your actual buyers and investors read. We build earned media programs around executive visibility, category leadership, and newsworthy milestones — not spray-and-pray press releases that nobody covers.',
+      },
+      {
+        question: "What's the difference between B2B SEO and answer engine optimization?",
+        answer:
+          'Traditional SEO optimizes for search engine rankings and click-through, while answer engine optimization ensures your content is cited by AI-powered discovery channels like ChatGPT, Perplexity, and Google AI Overviews. Both matter — SEO captures intentional searches, AEO captures the growing share of buyer research that happens through AI assistants.',
+      },
+    ],
   },
   {
     name: 'Content & Creative',
@@ -301,6 +395,28 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
         ],
         whoItsFor:
           'B2B companies that are tired of looking like every other tech company — and understand that design is a strategic advantage, not a cost center.',
+      },
+    ],
+    answerCapsules: [
+      {
+        question: 'What makes B2B content marketing different from B2C?',
+        answer:
+          'B2B content marketing must address longer buying cycles, multiple stakeholders, and complex technical decisions, making strategic depth and expertise more important than viral reach. Unlike B2C, where a single piece can drive immediate purchase, B2B content builds trust over months and must speak to different roles in the buying committee.',
+      },
+      {
+        question: 'How do you build a content strategy that actually drives pipeline?',
+        answer:
+          'A pipeline-driving content strategy maps every piece to a buyer journey stage, a specific persona, and a measurable conversion path — not just a publishing calendar. We tie content directly to revenue by building content-to-pipeline attribution, so you know which topics, formats, and channels actually influence deals.',
+      },
+      {
+        question: 'What is answer engine optimization for content?',
+        answer:
+          'Answer engine optimization structures your content so AI-powered search engines can extract, cite, and recommend your expertise as the authoritative answer to buyer questions. Every piece of content we create includes standalone answer capsules — quotable sentences that AI engines can cite directly, giving your brand visibility in ChatGPT, Perplexity, and Google AI Overviews.',
+      },
+      {
+        question: 'Why does B2B creative matter if the product sells itself?',
+        answer:
+          "B2B creative differentiates your brand in crowded markets where every competitor claims the same features, making design a strategic advantage that influences perception before buyers ever talk to sales. The companies that invest in creative — memorable visuals, sharp copy, distinctive brand identity — consistently outperform competitors in brand recall and consideration.",
       },
     ],
   },
@@ -441,6 +557,28 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
         ],
         whoItsFor:
           'Companies with AI marketing systems in production that need dedicated expertise to keep them performing — without hiring a full AI ops team.',
+      },
+    ],
+    answerCapsules: [
+      {
+        question: 'How can AI actually transform B2B marketing operations?',
+        answer:
+          'AI transforms B2B marketing by automating content production, personalizing at scale, optimizing channel mix in real-time, and compressing go-to-market timelines from quarters to weeks. The key is applying AI to the right use cases — not everything benefits from automation, and the highest-value applications combine AI efficiency with human strategic judgment.',
+      },
+      {
+        question: 'What is an AI content engine and how does it work?',
+        answer:
+          'An AI content engine is a custom system trained on your brand voice, messaging framework, and domain expertise that produces publication-ready content across formats at scale. It\'s not a chatbot generating generic blog posts — it\'s a production system with editorial governance, quality assurance, and brand voice enforcement built into every workflow.',
+      },
+      {
+        question: 'What is answer engine optimization?',
+        answer:
+          'Answer engine optimization is the practice of structuring content so AI-powered search engines cite your brand as the authoritative answer to buyer questions across platforms like ChatGPT, Perplexity, and Google AI Overviews. Unlike traditional SEO that optimizes for rankings and clicks, AEO optimizes for citation and recommendation — because an increasing share of buyer research never reaches a search results page.',
+      },
+      {
+        question: 'When should a company invest in AI marketing versus traditional approaches?',
+        answer:
+          "Companies should invest in AI marketing when they need to scale output without scaling headcount, when they're competing on speed-to-market, or when data-driven personalization would materially improve conversion rates. AI isn't a replacement for marketing strategy — it's an accelerant. Companies that try to shortcut strategy with AI tools end up producing bad content faster.",
       },
     ],
   },

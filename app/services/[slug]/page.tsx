@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { ServiceDetailSection } from '@/components/services/ServiceDetailSection';
+import { AnswerCapsulesSection } from '@/components/AnswerCapsulesSection';
 import { ServiceCTA } from '@/components/services/ServiceCTA';
 import { ServiceSubpageHero } from '@/components/services/ServiceSubpageHero';
 import { RelatedServices } from '@/components/services/RelatedServices';
@@ -11,6 +12,7 @@ import {
   getCategoryBySlug,
   getRelatedCategories,
 } from '@/lib/services-data';
+import { getServiceFaqSchema } from '@/lib/schema/service-faq';
 
 interface PageProps {
   params: { slug: string };
@@ -61,10 +63,23 @@ export default function ServiceCategoryPage({ params }: PageProps) {
           </div>
         </div>
 
+        <AnswerCapsulesSection
+          capsules={category.answerCapsules}
+          accentColor={category.color}
+          heading={<>What you need to know about{' '}<span style={{ color: category.color }}>{category.name}.</span></>}
+        />
+
         <RelatedServices categories={related} currentSlug={params.slug} />
         <ServiceCTA />
       </main>
       <Footer />
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(getServiceFaqSchema(category.answerCapsules)),
+        }}
+      />
     </>
   );
 }

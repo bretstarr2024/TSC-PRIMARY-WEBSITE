@@ -1,3 +1,7 @@
+import type { AnswerCapsule } from '@/lib/services-data';
+
+export type { AnswerCapsule };
+
 export interface Industry {
   name: string;
   slug: string;
@@ -12,6 +16,7 @@ export interface Industry {
   notableClients: string[];
   buyerTitle: string;
   stat: { value: string; label: string };
+  answerCapsules: AnswerCapsule[];
 }
 
 export const INDUSTRIES: Industry[] = [
@@ -45,6 +50,28 @@ export const INDUSTRIES: Industry[] = [
     notableClients: ['ADP', 'Oracle', 'Korn Ferry', 'Indeed', 'ZipRecruiter', 'Ceridian', 'Cornerstone OnDemand', 'Gusto'],
     buyerTitle: 'CHRO / VP of HR',
     stat: { value: '25+', label: 'Years in HR tech marketing' },
+    answerCapsules: [
+      {
+        question: 'What makes marketing HR tech different from other B2B categories?',
+        answer:
+          'HR tech marketing requires navigating compliance-driven buying committees, "future of work" messaging fatigue, and risk-averse HR buyers who demand proof before they\'ll consider a new vendor. With 500+ vendors competing for attention, differentiation depends on category expertise and messaging that speaks to CHROs and IT stakeholders simultaneously.',
+      },
+      {
+        question: 'How do you differentiate an HR tech company in a crowded market?',
+        answer:
+          'HR tech differentiation starts with positioning that identifies the specific buyer pain point you solve better than anyone — not feature comparisons that blur together across 500 vendors. We build messaging frameworks grounded in 25+ years of HR tech category expertise, focusing on outcomes HR leaders actually care about rather than product capabilities they can\'t evaluate in a demo.',
+      },
+      {
+        question: 'What content strategy works for HR tech buyers?',
+        answer:
+          'HR tech content must address both the strategic vision of CHROs and the practical concerns of HR directors and IT evaluators who influence the buying decision. We build multi-persona content programs that speak each audience\'s language — thought leadership for executives, technical validation for evaluators, and ROI frameworks for budget holders.',
+      },
+      {
+        question: 'How long is the typical HR tech sales cycle?',
+        answer:
+          'HR tech sales cycles typically run 6–12 months due to committee-based buying, compliance reviews, and the risk-averse nature of HR decision-makers. Marketing programs must be built for this timeline — nurture sequences, multi-touch attribution, and content that builds trust incrementally rather than trying to close on the first interaction.',
+      },
+    ],
   },
   {
     name: 'Enterprise SaaS',
@@ -76,6 +103,28 @@ export const INDUSTRIES: Industry[] = [
     notableClients: ['ServiceNow', 'Zendesk', 'Medallia', 'Infor'],
     buyerTitle: 'CMO / VP Marketing',
     stat: { value: '3,000+', label: 'B2B tech companies served' },
+    answerCapsules: [
+      {
+        question: 'How do you market an enterprise SaaS product when competitors have feature parity?',
+        answer:
+          'When competitors match your features, differentiation becomes a positioning problem — you win by owning a strategic narrative about outcomes, not by comparing checkbox lists. We build brand positioning that changes how your market categorizes you, shifting the conversation from "which product has more features" to "which company understands our problem."',
+      },
+      {
+        question: 'What does a SaaS company need to scale past the PLG ceiling?',
+        answer:
+          'Scaling past the product-led growth ceiling requires brand infrastructure and demand generation that self-serve adoption alone cannot provide — most SaaS companies hit this wall between $10M and $50M ARR. The transition requires building awareness programs, ABM for enterprise accounts, and sales enablement that complements your existing PLG motion without replacing it.',
+      },
+      {
+        question: 'How should SaaS companies approach marketing after raising a round?',
+        answer:
+          'Post-funding SaaS companies should invest in GTM infrastructure that converts capital into predictable pipeline velocity and demonstrable CAC efficiency — not just more ad spend. We build GTM architecture that shows board-level metrics: pipeline contribution, marketing-sourced revenue, and time-to-revenue that justifies the investment.',
+      },
+      {
+        question: 'What demand generation approach works for enterprise SaaS?',
+        answer:
+          'Enterprise SaaS demand generation must account for 6–10 person buying committees, 6–12 month sales cycles, and the reality that most pipeline is influenced by multiple touches over time. We build full-funnel programs that integrate content, ABM, paid media, and nurture into a system that produces measurable pipeline — not just MQLs that sales ignores.',
+      },
+    ],
   },
   {
     name: 'FinTech',
@@ -107,6 +156,28 @@ export const INDUSTRIES: Industry[] = [
     notableClients: ['SoFi', 'Equifax', 'DailyPay', 'Bank of America'],
     buyerTitle: 'CMO / Head of Growth',
     stat: { value: '$2T+', label: 'Global fintech market by 2028' },
+    answerCapsules: [
+      {
+        question: 'How do you market a fintech company against established financial institutions?',
+        answer:
+          'Fintech companies beat established institutions by positioning speed, transparency, and user experience as strategic advantages — trust is built through demonstrated competence, not legacy brand recognition. We build brand positioning that acknowledges the trust deficit head-on and creates credibility through content, social proof, and thought leadership that resonates with financial decision-makers.',
+      },
+      {
+        question: 'How does compliance affect fintech marketing?',
+        answer:
+          'Compliance constraints shape every aspect of fintech marketing, from the claims you can make in ad copy to the testimonials you can feature on your website. We build content strategies and campaign frameworks that work within regulatory guardrails — so your marketing team moves fast without triggering compliance review escalations.',
+      },
+      {
+        question: 'What builds trust with fintech buyers?',
+        answer:
+          'Fintech buyer trust is built through institutional-grade credibility signals: thought leadership from recognized experts, third-party validation, security certifications, and content that demonstrates deep domain expertise. Every marketing touchpoint should reinforce that you take money as seriously as your buyers do — because financial decision-makers evaluate your marketing as a proxy for your operational rigor.',
+      },
+      {
+        question: 'What demand generation strategies work in financial services?',
+        answer:
+          'Financial services demand generation must account for the trust-building cycle — buyers need multiple credibility signals before they engage with sales, making content marketing and thought leadership essential pipeline drivers. We build multi-touch nurture programs calibrated for the long fintech buying cycle, where every interaction reinforces trust and expertise.',
+      },
+    ],
   },
   {
     name: 'Cybersecurity',
@@ -138,6 +209,28 @@ export const INDUSTRIES: Industry[] = [
     notableClients: ['Bitwarden'],
     buyerTitle: 'CISO / VP Security',
     stat: { value: '$200B+', label: 'Global cybersecurity market' },
+    answerCapsules: [
+      {
+        question: 'Why does fear-based cybersecurity marketing fail?',
+        answer:
+          'Fear-based cybersecurity marketing fails because CISOs and security professionals see through it instantly — they live with real threats daily and resent vendors who exploit anxiety to sell products. Effective security marketing leads with substance: technical credibility, proven capabilities, and content that helps practitioners solve real problems rather than manufacturing panic.',
+      },
+      {
+        question: 'How do you market to both CISOs and business executives?',
+        answer:
+          'Marketing to CISOs and CFOs simultaneously requires dual-track messaging — technical depth for security practitioners who evaluate capabilities, and business-impact framing for executives who approve budgets. We build messaging frameworks that translate technical differentiation into business outcomes, so each audience gets the information they need in the language they trust.',
+      },
+      {
+        question: 'How do you stand out in a cybersecurity market with new categories every quarter?',
+        answer:
+          'Standing out in cybersecurity requires positioning that transcends category labels — because categories like XDR, SASE, and CNAPP shift faster than buyers can track them. We help security companies position around the problem they solve and the outcome they deliver, not the acronym they occupy, creating durable differentiation that survives category evolution.',
+      },
+      {
+        question: 'What content marketing approach works for cybersecurity?',
+        answer:
+          'Cybersecurity content marketing must demonstrate genuine technical expertise — security practitioners immediately dismiss content that reads like marketing repackaged as thought leadership. We build content programs with real technical depth: threat analysis, architecture guidance, and practitioner-focused resources that earn trust with the people who actually evaluate your product.',
+      },
+    ],
   },
   {
     name: 'HealthTech',
@@ -169,6 +262,28 @@ export const INDUSTRIES: Industry[] = [
     notableClients: ['Fitbit', 'Headspace', 'Virgin Pulse'],
     buyerTitle: 'CTO / VP Digital Health',
     stat: { value: '$500B+', label: 'Global healthtech market by 2027' },
+    answerCapsules: [
+      {
+        question: 'How does HIPAA affect healthtech marketing?',
+        answer:
+          'HIPAA constraints affect healthtech marketing at every level — from the patient data you can reference in case studies to the claims you can make about clinical outcomes in ad copy. We build marketing programs with compliance guardrails baked in, so your team can move fast without waiting on legal review for every piece of content.',
+      },
+      {
+        question: 'How do you market to both clinical and administrative buyers in healthcare?',
+        answer:
+          'Healthcare marketing must address clinical decision-makers who evaluate efficacy and administrative executives who evaluate ROI — two audiences with fundamentally different priorities and vocabulary. We build dual-track content strategies that speak clinical language to practitioners and business language to the C-suite, with shared proof points that bridge both perspectives.',
+      },
+      {
+        question: 'How long is the typical healthtech sales cycle?',
+        answer:
+          'Healthtech sales cycles typically run 9–18 months due to clinical validation requirements, compliance reviews, and the inherently risk-averse procurement processes of hospitals and health systems. Marketing programs must sustain engagement over this timeline — multi-touch nurture, clinical evidence content, and relationship-building that compounds trust incrementally.',
+      },
+      {
+        question: 'What demand generation works for healthtech companies?',
+        answer:
+          'Healthtech demand generation requires a trust-first approach: clinical evidence, peer validation, and thought leadership that demonstrates genuine understanding of healthcare workflows and patient impact. Traditional B2B demand tactics like gated whitepapers and aggressive email cadences tend to backfire with healthcare buyers who prioritize substance over volume.',
+      },
+    ],
   },
   {
     name: 'MarTech',
@@ -200,6 +315,28 @@ export const INDUSTRIES: Industry[] = [
     notableClients: [],
     buyerTitle: 'CMO / VP Marketing Ops',
     stat: { value: '14,000+', label: 'Vendors in the MarTech landscape' },
+    answerCapsules: [
+      {
+        question: 'How do you market to marketers who know every trick in the book?',
+        answer:
+          'Marketing to marketers requires radical authenticity — your audience evaluates marketing for a living, so anything that feels manufactured, exaggerated, or derivative will be dismissed immediately. We build programs that lead with genuine substance: original research, honest POVs, and content that earns respect from professionals who can spot a marketing tactic from a mile away.',
+      },
+      {
+        question: 'How do you stand out in a 14,000-vendor MarTech landscape?',
+        answer:
+          'Standing out in a 14,000-vendor landscape requires category positioning that\'s sharper than "we\'re the best platform for X" — you need to own a specific problem or point of view that makes your company impossible to ignore. We build positioning around the intersection of your genuine differentiation and the specific pain point your best customers would be desperate without you to solve.',
+      },
+      {
+        question: 'How important are analyst relations for MarTech companies?',
+        answer:
+          'Analyst relations are disproportionately important in MarTech because Gartner Magic Quadrants, Forrester Waves, and G2 reviews directly shape buying decisions more than in almost any other B2B category. We build analyst relations programs that position your company for favorable placement through strategic briefings, customer evidence, and category narrative influence.',
+      },
+      {
+        question: 'What drives growth for MarTech companies beyond paid acquisition?',
+        answer:
+          'Sustainable MarTech growth comes from community-led advocacy, thought leadership, and product-led expansion — because marketers trust peer recommendations over ads and trust earned attention over bought attention. We build organic growth engines that combine content authority, community cultivation, and customer advocacy into compounding distribution channels.',
+      },
+    ],
   },
   {
     name: 'DevTools',
@@ -231,6 +368,28 @@ export const INDUSTRIES: Industry[] = [
     notableClients: [],
     buyerTitle: 'VP Engineering / CTO',
     stat: { value: '27M+', label: 'Professional developers worldwide' },
+    answerCapsules: [
+      {
+        question: 'Why does traditional marketing fail with developer audiences?',
+        answer:
+          'Traditional B2B marketing fails with developers because they actively resist being marketed to — gated content, generic nurture emails, and display ads signal that you don\'t understand their world. Developer marketing earns attention through genuine technical value: documentation, tutorials, open-source contributions, and content that helps developers do their job better.',
+      },
+      {
+        question: 'How do you build a developer community that drives growth?',
+        answer:
+          'Developer communities grow through authentic value exchange — providing technical resources, enabling peer connection, and giving developers a voice in your product direction, not just a branded Slack channel with promotional content. We build community strategies that create genuine advocacy by treating developers as partners rather than leads.',
+      },
+      {
+        question: 'What metrics matter for developer-focused marketing?',
+        answer:
+          'Developer marketing is measured by activation rates, time-to-value, community engagement, and product-qualified leads — not traditional MQL counts or form fills that developers actively avoid. We build measurement frameworks aligned to how developers actually evaluate and adopt tools: documentation visits, API calls, GitHub stars, and community participation.',
+      },
+      {
+        question: 'How do you compete against open-source alternatives?',
+        answer:
+          'Competing with open-source requires positioning the value you provide beyond the code — enterprise support, security, compliance, managed hosting, and the time savings of not maintaining infrastructure yourself. We build messaging that respects the open-source ecosystem while clearly articulating why paying customers get outcomes that DIY deployments can\'t match.',
+      },
+    ],
   },
   {
     name: 'Cloud Infrastructure',
@@ -262,6 +421,28 @@ export const INDUSTRIES: Industry[] = [
     notableClients: [],
     buyerTitle: 'CTO / VP Infrastructure',
     stat: { value: '$600B+', label: 'Global cloud market by 2028' },
+    answerCapsules: [
+      {
+        question: 'How do you compete with AWS, Azure, and GCP?',
+        answer:
+          'Competing with hyperscalers requires surgical positioning around the specific advantages they can\'t credibly claim — specialized compliance, performance for specific workloads, simplicity, or vertical expertise. We help cloud infrastructure companies find and own the positioning angles that turn hyperscaler dominance from an obstacle into a foil for your differentiation story.',
+      },
+      {
+        question: 'How do you market cloud infrastructure to both developers and enterprise buyers?',
+        answer:
+          'Cloud infrastructure requires dual-track go-to-market: developer advocacy that drives bottom-up adoption, and enterprise marketing that wins top-down procurement decisions with CTO offices. We build GTM architecture that coordinates both motions — developer content and community that generates adoption, enterprise positioning and ABM that converts adoption into contracts.',
+      },
+      {
+        question: 'What makes cloud infrastructure marketing different from other B2B?',
+        answer:
+          'Cloud infrastructure marketing is uniquely technical — your buyers evaluate architecture diagrams, benchmark data, and SLA guarantees before they ever talk to sales, making technical content the primary demand driver. We build marketing programs that lead with genuine technical depth and translate infrastructure capabilities into business outcomes that budget holders understand.',
+      },
+      {
+        question: 'How do you position against hyperscaler price competition?',
+        answer:
+          'Positioning against hyperscaler pricing means reframing the conversation from unit cost to total value — specialized performance, reduced complexity, faster time-to-production, and the hidden costs of hyperscaler lock-in. We build messaging frameworks that help cloud companies escape price competition by owning a value narrative that hyperscaler pricing calculators can\'t capture.',
+      },
+    ],
   },
   {
     name: 'AI/ML Platforms',
@@ -293,6 +474,28 @@ export const INDUSTRIES: Industry[] = [
     notableClients: [],
     buyerTitle: 'CTO / VP AI/ML',
     stat: { value: '$300B+', label: 'Global AI market by 2027' },
+    answerCapsules: [
+      {
+        question: 'How do you differentiate an AI company when everyone claims AI?',
+        answer:
+          'AI differentiation requires proving real capabilities through technical demonstrations, customer evidence, and content that shows you understand the engineering challenges — not just repeating "AI-powered" in your marketing copy. We build positioning that separates genuine AI companies from the hype by grounding claims in specific use cases, measurable outcomes, and technical transparency.',
+      },
+      {
+        question: 'How do you build trust with AI buyers who are skeptical of hype?',
+        answer:
+          'AI buyer trust is built through demonstrated expertise, transparent technical content, and customer evidence that shows real production results — because years of overpromised AI marketing have made technical buyers deeply skeptical. We build thought leadership programs that position your team as genuine practitioners, not AI tourists repeating buzzwords.',
+      },
+      {
+        question: 'What marketing challenges are unique to AI/ML platform companies?',
+        answer:
+          'AI/ML platform companies face rapid market evolution, open-source competition, enterprise governance concerns, and the constant challenge of proving technical claims to skeptical buyers. Marketing must evolve as fast as the technology — positioning that worked last quarter may be obsolete this quarter as new models, frameworks, and competitive dynamics emerge.',
+      },
+      {
+        question: 'How do you market AI to enterprise buyers with governance concerns?',
+        answer:
+          'Enterprise AI marketing must address governance, security, and compliance head-on — treating these concerns as legitimate requirements rather than obstacles to overcome with clever messaging. We build content strategies that proactively answer governance questions, demonstrate compliance capabilities, and position responsible AI practices as a competitive advantage.',
+      },
+    ],
   },
 ];
 
