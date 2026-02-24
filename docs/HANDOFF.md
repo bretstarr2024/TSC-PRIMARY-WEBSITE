@@ -1,12 +1,58 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 24, 2026 (Session XXI)
+**Last Updated:** February 24, 2026 (Session XXII)
 
 ---
 
-## Current Phase: Phase 1 COMPLETE + Industries + Pricing + Services CTA
+## Current Phase: Phase 1 COMPLETE + Industries + Pricing + Answer Capsules
 
-The site is live with **118 static pages** across 10 content types, 9 industry verticals, and a full Pricing page. Session XXI replaced the services hub "Explore" buttons with direct-to-book CTAs that pass service context through to Cal.com, cutting out the sub-page middleman. Homepage and services pages are now considered done.
+The site is live with **118 static pages** across 10 content types, 9 industry verticals, a full Pricing page, and **71 answer capsules** across 16 pages optimized for AI search citation. Session XXII added AEO-optimized FAQ accordions (with FAQPage JSON-LD schema) to every service sub-page, every industry sub-page, and the pricing page. Services section is now fully complete including answer capsules.
+
+- **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10 collections, ~80 documents)
+- **Next actions:** Build Contact page with form, pipeline infrastructure from AEO, chatbot (chaDbot)
+- **Roadmap:** See `docs/roadmap.md` Session XXII
+
+### Session XXII Summary (February 24, 2026)
+
+**Focus:** Add AI-citation-optimized answer capsules to every major section of the site.
+
+**What was done:**
+
+1. **Generic AnswerCapsulesSection component** (1 new file):
+   - `components/AnswerCapsulesSection.tsx` — Reusable accordion component accepting configurable heading (ReactNode), subheading, accent color, and label. Glass cards with Framer Motion expand/collapse, category-colored chevrons, staggered entrance animations. Follows the same pattern as the existing `AboutFaq` component.
+
+2. **Service answer capsules** (2 modified files):
+   - `lib/services-data.ts` — Added `AnswerCapsule` interface and `answerCapsules` array to `ServiceCategory`. 24 Q&As across 6 categories (4 each). Content derived from kernel ICP pain points, JTBD clusters, and service offerings.
+   - `app/services/[slug]/page.tsx` — Wired in `AnswerCapsulesSection` between service details and RelatedServices. Added FAQPage JSON-LD schema via `getServiceFaqSchema()`.
+
+3. **Industry answer capsules** (2 modified files):
+   - `lib/industries-data.ts` — Added `answerCapsules` to `Industry` interface (imports `AnswerCapsule` from services-data). 36 Q&As across 9 verticals (4 each). Content tailored to each industry's specific buyer psychology, compliance constraints, and competitive dynamics.
+   - `app/industries/[slug]/page.tsx` — Wired in `AnswerCapsulesSection` with industry-specific heading and buyer-title-personalized subheading. Added FAQPage JSON-LD schema.
+
+4. **Pricing answer capsules** (2 new/modified files):
+   - `lib/schema/pricing-faq.ts` — 5 Q&As addressing engagement models, pricing rationale, ROI measurement, and how AI reduces agency costs.
+   - `app/pricing/page.tsx` — Wired in `AnswerCapsulesSection` between PricingCards and ServiceCTA. Added FAQPage JSON-LD schema bundled with existing breadcrumb schema.
+
+5. **Schema infrastructure** (1 modified file):
+   - `lib/schema/service-faq.ts` — Added `getFaqSchema` alias for non-service pages. Same function, cleaner import semantics.
+
+**Commits this session:**
+- `ed4e201` — feat: Add 71 answer capsules across services, industries, and pricing pages
+- `0fd6502` — docs: Session XXII roadmap update — answer capsules sitewide
+
+**Results:**
+- 71 answer capsules across 16 pages (6 service + 9 industry + 1 pricing)
+- FAQPage JSON-LD schema on all 16 pages for search engine and AI visibility
+- Every answer's first sentence is a standalone quotable capsule optimized for AI citation
+- Build passes: 118 static pages, no new routes
+
+**Key decisions (do not re-debate):**
+- Generic AnswerCapsulesSection component instead of per-section copies — same pattern everywhere
+- First sentence of every answer is a standalone quotable capsule (20-25 words) — AEO pattern for AI citation
+- AnswerCapsule interface defined once in services-data.ts, re-exported from industries-data.ts
+- About page retains its own AboutFaq component (different layout, pre-existing)
+- Industry subheadings personalized per buyerTitle ("Straight answers for CISO / VP Securitys...")
+
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10 collections, ~80 documents)
 - **Next actions:** Build Contact page with form, pipeline infrastructure from AEO, answer capsules for service pages

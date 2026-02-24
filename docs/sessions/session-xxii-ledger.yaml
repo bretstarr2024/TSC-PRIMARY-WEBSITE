@@ -1,0 +1,74 @@
+session_id: "XXII"
+date: "2026-02-24"
+branch: main
+version: "0.15.0"  # MINOR: Answer capsules sitewide (71 Q&As across 16 pages with FAQPage JSON-LD)
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "pending"
+  status: pending
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "Pure frontend session — no MongoDB schema modifications"
+
+commits:
+  - hash: "ed4e201"
+    message: "feat: Add 71 answer capsules across services, industries, and pricing pages"
+  - hash: "0fd6502"
+    message: "docs: Session XXII roadmap update — answer capsules sitewide"
+
+artifacts_updated:
+  - "components/AnswerCapsulesSection.tsx — New generic reusable accordion component (replaced ServiceAnswerCapsules.tsx)"
+  - "lib/services-data.ts — AnswerCapsule interface + 24 capsules across 6 service categories"
+  - "lib/industries-data.ts — 36 capsules across 9 industry verticals"
+  - "lib/schema/pricing-faq.ts — 5 pricing engagement capsules"
+  - "lib/schema/service-faq.ts — FAQPage JSON-LD schema generator with getFaqSchema alias"
+  - "app/services/[slug]/page.tsx — Wired AnswerCapsulesSection + FAQPage schema"
+  - "app/industries/[slug]/page.tsx — Wired AnswerCapsulesSection + FAQPage schema"
+  - "app/pricing/page.tsx — Wired AnswerCapsulesSection + FAQPage schema"
+  - "docs/roadmap.md — Session XXII entry added, upcoming session renumbered to XXIII"
+
+decisions_made:
+  - decision: "Generic AnswerCapsulesSection component instead of per-section components"
+    rationale: "Same accordion pattern reused on services, industries, and pricing — one component with configurable heading/subheading/accent is cleaner than three copies."
+    reversible: true
+  - decision: "4 capsules per service category, 4 per industry, 5 for pricing"
+    rationale: "Enough to cover key buyer questions without overwhelming the page. Can add more later."
+    reversible: true
+  - decision: "First sentence of every answer designed as standalone quotable capsule"
+    rationale: "Follows AEO pattern — AI engines like ChatGPT and Perplexity can cite just the first sentence as a complete answer. Critical for AI search visibility."
+    reversible: false
+  - decision: "AnswerCapsule interface defined in services-data.ts, re-exported from industries-data.ts"
+    rationale: "Single source of truth for the type. Industries imports it to avoid duplication."
+    reversible: true
+  - decision: "Industry page subheading personalized per buyerTitle"
+    rationale: "Shows visitors we know their role — 'Straight answers for CISO / VP Securitys evaluating agency partners' is more targeted than generic copy."
+    reversible: true
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All CTAs -> /book (internal Cal.com iframe)"
+  - "Service sub-pages (/services/[slug]) still exist for SEO — not removed"
+  - "Book page ?service= query param is optional — page works with or without it"
+  - "Asteroids game is an easter egg — no navigation or docs pointing to it"
+  - "Frogger game is an easter egg — Ocho trigger only, no navigation pointing to it"
+  - "Industries data is static (lib/industries-data.ts), not MongoDB"
+  - "AnswerCapsule interface lives in lib/services-data.ts — single source of truth"
+  - "Every answer capsule's first sentence must be a standalone quotable 20-25 word capsule"
+  - "About page already has its own FAQ (AboutFaq component) — not replaced by AnswerCapsulesSection"
+
+next_actions:
+  - "Build Contact page with form (Resend integration)"
+  - "Copy pipeline infrastructure from AEO donor"
+  - "Build chatbot (chaDbot) — copy RAG from AEO"
+  - "Create source monitors for B2B/AI marketing news"
