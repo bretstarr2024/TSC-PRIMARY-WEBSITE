@@ -1,0 +1,66 @@
+session_id: "XXI"
+date: "2026-02-24"
+branch: main
+version: "0.14.1"  # PATCH: Services CTA direct-to-book with service context passthrough
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "TBD"
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "Pure frontend session — no MongoDB schema modifications"
+
+commits:
+  - hash: "0dffec2"
+    message: "feat: Replace Explore buttons with direct-to-book CTAs passing service context"
+  - hash: "6e654b1"
+    message: "docs: Session XXI roadmap update — services CTA direct-to-book"
+
+artifacts_updated:
+  - "components/services/ServiceCategoryStrip.tsx — 'Explore {name} →' ghost buttons replaced with 'Let's Talk about {name}' tangerine primary CTAs linking to /book?service={name}"
+  - "app/book/page.tsx — Added useSearchParams() to read ?service= param, shows 'You're interested in / {service}' context above calendar, prefills Cal.com notes with service interest, Suspense boundary added"
+  - "docs/roadmap.md — Session XXI entry added, upcoming session renumbered to XXII"
+
+decisions_made:
+  - decision: "Service hub CTAs go directly to /book instead of service sub-pages"
+    rationale: "User feedback: the sub-pages are a middleman. Prospects clicking a service CTA have high intent — send them straight to booking. Sub-pages still exist for SEO and direct navigation."
+    reversible: true
+  - decision: "Service name passed as query param (?service=) rather than slug"
+    rationale: "Human-readable display on the book page ('You're interested in Brand & Positioning') without needing a lookup. Cal.com notes also get the readable name."
+    reversible: true
+  - decision: "Cal.com notes prefilled with 'Interested in: {service}'"
+    rationale: "Gives the sales team context about what the prospect clicked before they even join the call. Zero friction for the prospect."
+    reversible: true
+  - decision: "Buttons changed from variant='secondary' (ghost) to variant='primary' (tangerine)"
+    rationale: "These are now the primary conversion action on the services hub — they deserve primary button treatment."
+    reversible: true
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All CTAs -> /book (internal Cal.com iframe)"
+  - "Service sub-pages (/services/[slug]) still exist for SEO — not removed"
+  - "Book page ?service= query param is optional — page works with or without it"
+  - "Asteroids game is an easter egg — no navigation or docs pointing to it"
+  - "Frogger game is an easter egg — Ocho trigger only, no navigation pointing to it"
+  - "Industries data is static (lib/industries-data.ts), not MongoDB"
+  - "Homepage hero ship SVG matches AsteroidsGame.tsx canvas ship shape exactly"
+  - "SVG gradient IDs flameOuter/flameInner used in HeroSection — avoid collisions"
+  - "Pricing page copy is original (not copied from the agency model brief verbatim)"
+  - "Subscription pricing: from $15K/month. Project pricing: from $30K."
+
+next_actions:
+  - "Build Contact page with form (Resend integration)"
+  - "Copy pipeline infrastructure from AEO donor"
+  - "Add answer capsules to service pillar pages"
+  - "Build chatbot (chaDbot) — copy RAG from AEO"

@@ -1,12 +1,42 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 24, 2026 (Session XX)
+**Last Updated:** February 24, 2026 (Session XXI)
 
 ---
 
-## Current Phase: Phase 1 COMPLETE + Industries + Pricing
+## Current Phase: Phase 1 COMPLETE + Industries + Pricing + Services CTA
 
-The site is live with **118 static pages** across 10 content types, 9 industry verticals, and a full Pricing page. Session XX built the Pricing page (6-section narrative arc telling the agency model story) and fixed the homepage hero ship animation (rotation was imperceptible, thruster flame was too small).
+The site is live with **118 static pages** across 10 content types, 9 industry verticals, and a full Pricing page. Session XXI replaced the services hub "Explore" buttons with direct-to-book CTAs that pass service context through to Cal.com, cutting out the sub-page middleman. Homepage and services pages are now considered done.
+
+- **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10 collections, ~80 documents)
+- **Next actions:** Build Contact page with form, pipeline infrastructure from AEO, answer capsules for service pages
+- **Roadmap:** See `docs/roadmap.md` Session XXI
+
+### Session XXI Summary (February 24, 2026)
+
+**Focus:** Replace services hub "Explore" buttons with direct-to-book CTAs passing service context to Cal.com.
+
+**What was done:**
+
+1. **ServiceCategoryStrip CTA overhaul** (1 modified file):
+   - `components/services/ServiceCategoryStrip.tsx` — All 6 "Explore {name} →" ghost buttons replaced with "Let's Talk about {name}" tangerine primary CTAs. Links changed from `/services/{slug}` to `/book?service={name}`. Service sub-pages (`/services/[slug]`) still exist for SEO and direct navigation.
+
+2. **Book page service context** (1 modified file):
+   - `app/book/page.tsx` — Added `useSearchParams()` to read optional `?service=` query param. When present: displays "You're interested in / {service}" context line above the calendar with animated fade-in, and prefills Cal.com notes field with `Interested in: {service}` so the sales team sees the prospect's interest before the call. Component split into `BookPageContent` + `BookPage` wrapper with `<Suspense>` boundary for Next.js 14 static build compatibility. Page works identically without the param (existing /book links unaffected).
+
+**Commits this session:**
+- `0dffec2` — feat: Replace Explore buttons with direct-to-book CTAs passing service context
+- `6e654b1` — docs: Session XXI roadmap update — services CTA direct-to-book
+
+**Results:**
+- Services hub conversion path shortened: /services → /book (was /services → /services/[slug] → scroll → /book)
+- Cal.com now receives service interest context automatically
+- Build passes: 118 static pages, no new routes
+
+**Key decisions (do not re-debate):**
+- Service hub CTAs bypass sub-pages and go straight to /book — the sub-pages are a middleman for high-intent prospects
+- Service name (not slug) passed as query param — human-readable on the book page and in Cal.com notes
+- Buttons upgraded from ghost (secondary) to tangerine (primary) — these are now the primary conversion action on the hub
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10 collections, ~80 documents)
 - **Next actions:** Build Contact page with form, pipeline infrastructure from AEO, answer capsules for service pages
