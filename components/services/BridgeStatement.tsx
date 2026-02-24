@@ -1,11 +1,23 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
+import dynamic from 'next/dynamic';
 import { AnimatedSection } from '@/components/AnimatedSection';
+import { OchoTrigger } from '@/components/OchoTrigger';
+
+const BreakoutGame = dynamic(
+  () => import('./BreakoutGame').then((mod) => ({ default: mod.BreakoutGame })),
+  { ssr: false }
+);
 
 export function BridgeStatement() {
+  const [playing, setPlaying] = useState(false);
+
   return (
     <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
+      {playing && <BreakoutGame onClose={() => setPlaying(false)} />}
+
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-b from-[#0c1118] via-[#1a0e08] to-heart-of-darkness" />
         <motion.div
@@ -26,6 +38,9 @@ export function BridgeStatement() {
         <p className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight text-atomic-tangerine leading-[1.1] mt-2">
           You get both.
         </p>
+        {!playing && (
+          <OchoTrigger onClick={() => setPlaying(true)} delay={0.5} className="mt-8 mx-auto" />
+        )}
       </AnimatedSection>
     </section>
   );

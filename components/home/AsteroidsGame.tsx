@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { ArcadeBossOverlay } from '@/components/ArcadeBossOverlay';
 
 /* ── Brand colors ── */
 const C = {
@@ -489,6 +490,9 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
   const prevTouch = useRef<Record<string, boolean>>({});
   const showTouch = useRef(false);
   const btnsRef = useRef<TBtn[]>([]);
+  const bossActive = useRef(false);
+
+  const [bossData, setBossData] = useState<{ game: string; score: number; initials: string } | null>(null);
 
   const init = useCallback((w: number, h: number): Game => ({
     ship: {
@@ -561,6 +565,7 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
 
     /* ── Keyboard handlers ── */
     const onDown = (e: KeyboardEvent) => {
+      if (bossActive.current) return;
       if (e.key === 'Escape') { sfx.dispose(); onClose(); return; }
       if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
         e.preventDefault();
@@ -592,6 +597,10 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
             g.scoreIndex = scores.indexOf(entry);
             g.enteringInitials = false;
             g.scoreSubmitted = true;
+            if (g.scoreIndex === 0) {
+              bossActive.current = true;
+              setBossData({ game: 'asteroids', score: g.score, initials });
+            }
           } else if (/^[a-zA-Z]$/.test(key)) {
             g.initialsChars[g.initialsPos] = key.toUpperCase().charCodeAt(0) - 65;
             if (g.initialsPos < 2) g.initialsPos++;
@@ -668,6 +677,10 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
             g.scoreIndex = scores.indexOf(entry);
             g.enteringInitials = false;
             g.scoreSubmitted = true;
+            if (g.scoreIndex === 0) {
+              bossActive.current = true;
+              setBossData({ game: 'asteroids', score: g.score, initials });
+            }
           }
         } else if (justTouched('restart')) {
           sfx.stopThrust(); sfx.stopUfoHum();
@@ -1139,10 +1152,22 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
     };
   }, [init, onClose]);
 
-  return createPortal(
-    <div style={{ position: 'fixed', inset: 0, zIndex: 99999, background: C.bg, touchAction: 'none' }}>
-      <canvas ref={cvs} style={{ display: 'block', width: '100%', height: '100%', touchAction: 'none' }} />
-    </div>,
-    document.body,
+  return (
+    <>
+      {createPortal(
+        <div style={{ position: 'fixed', inset: 0, zIndex: 99999, background: C.bg, touchAction: 'none' }}>
+          <canvas ref={cvs} style={{ display: 'block', width: '100%', height: '100%', touchAction: 'none' }} />
+        </div>,
+        document.body,
+      )}
+      {bossData && (
+        <ArcadeBossOverlay
+          game={bossData.game}
+          score={bossData.score}
+          initials={bossData.initials}
+          onClose={() => { bossActive.current = false; setBossData(null); }}
+        />
+      )}
+    </>
   );
 }

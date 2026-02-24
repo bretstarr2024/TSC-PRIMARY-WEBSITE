@@ -4,6 +4,7 @@ import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AnimatedSection } from '@/components/AnimatedSection';
+import { OchoTrigger } from '@/components/OchoTrigger';
 
 const FroggerGame = dynamic(() => import('./FroggerGame').then(m => ({ default: m.FroggerGame })), { ssr: false });
 
@@ -196,26 +197,7 @@ export function ClientMarquee() {
 
       {/* Ocho play trigger — below client list, centered */}
       {!playing && (
-        <motion.button
-          className="flex flex-col items-center mx-auto mt-8 group cursor-pointer"
-          onClick={() => setPlaying(true)}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.5, duration: 0.5 }}
-          title="Play Frogger"
-        >
-          <motion.img
-            src="/images/ocho-color.png"
-            alt=""
-            className="w-12 h-12 opacity-50 group-hover:opacity-100 transition-opacity duration-300"
-            animate={{ y: [0, -5, 0] }}
-            transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-            style={{ filter: 'drop-shadow(0 0 10px #ED0AD2)' }}
-          />
-          <span className="mt-2 text-[10px] font-bold tracking-[0.25em] text-greige/40 group-hover:text-sprinkles/70 transition-colors duration-300 uppercase">
-            Start
-          </span>
-        </motion.button>
+        <OchoTrigger onClick={() => setPlaying(true)} delay={1.5} className="mt-8 mx-auto" />
       )}
     </section>
   );
