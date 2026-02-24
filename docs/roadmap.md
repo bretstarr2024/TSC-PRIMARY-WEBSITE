@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XIX** | Last Updated: February 24, 2026
+**Status: SESSION XX** | Last Updated: February 24, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -429,7 +429,29 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 117 static pages (unchanged count)
 
-#### Session XX (upcoming): Pipeline Infrastructure
+#### Session XX: Pricing Page + Hero Ship Fix ✅ COMPLETE (Feb 24, 2026)
+
+**Focus:** Build complete Pricing page with 6 sections telling the agency model story, and fix hero ship animation (rotation visibility + thruster size).
+
+**Hero Ship Fix (done):**
+- [x] **Rotation increased** — From ±4°/±3.5° (imperceptible) to ±15°/±12° (clearly visible snappy turns). Drift increased from -1/-2px to -3/-5px during burns.
+- [x] **Thruster flame 4x larger** — Flame polygons relocated from dead space above ship to engine rear notch (y=14). Outer flame from 7px to 30px tall, inner flame from 5px to 20px tall. ViewBox expanded from `0 0 36 50` to `-4 -24 44 74` with SVG dimensions 44x80 to accommodate. Gradient coordinates and transform-origins updated.
+- [x] **Exhaust sparks scaled** — Particle radii increased ~60%, travel distance extended to match larger flame.
+
+**Pricing Page — 6 sections (done):**
+- [x] `components/pricing/PricingHero.tsx` — "We don't sell hours. We sell growth." Word-by-word 3D animated headline with gradient text, dual background glows (tangerine + sprinkles), scroll indicator.
+- [x] `components/pricing/ModelOverview.tsx` — Core premise + model inversion. Side-by-side contrast panels (conventional agency vs TSC) + 4 outcome metric cards (Pipeline, CAC, Time-to-Revenue, Efficiency) in brand colors.
+- [x] `components/pricing/FourPillars.tsx` — 2x2 glass card grid: 01 Senior Talent Only (tangerine), 02 Proprietary AI Infrastructure (neon cactus), 03 AI Solutions Built Into Your World (tidal wave), 04 Continuity Compounds Results (sprinkles). Each with watermark number, colored left border, hook + description.
+- [x] `components/pricing/WhyDifferent.tsx` — Visual pyramid: two limitation cards (Senior Talent Alone / AI Alone with ✕ markers) feeding into full-width "Combination" card with tangerine border glow and ✓ marker.
+- [x] `components/pricing/PricingCards.tsx` — Two glass pricing cards: Subscription ($15K/mo, "Most Popular" badge, tangerine CTA) and Project ($30K minimum, "Defined Scope" badge, tidal checkmarks). Both link to /book.
+- [x] Reused `ServiceCTA` for final call-to-action section.
+- [x] `app/pricing/page.tsx` — Page with full metadata, keywords, OpenGraph, BreadcrumbList JSON-LD.
+- [x] `lib/schema/breadcrumbs.ts` — Added `pricingBreadcrumb()`.
+- [x] Navigation updated: Header navLinks + Footer companyLinks.
+
+**Build:** 118 static pages (up from 117 — new `/pricing` route)
+
+#### Session XXI (upcoming): Pipeline Infrastructure + Contact
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
