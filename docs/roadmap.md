@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XX** | Last Updated: February 24, 2026
+**Status: SESSION XXI** | Last Updated: February 24, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -451,7 +451,17 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 118 static pages (up from 117 — new `/pricing` route)
 
-#### Session XXI (upcoming): Pipeline Infrastructure + Contact
+#### Session XXI: Services CTA Direct-to-Book ✅ COMPLETE (Feb 24, 2026)
+
+**Focus:** Replace "Explore" buttons on /services hub with direct-to-book CTAs that pass service context through to Cal.com.
+
+- [x] **ServiceCategoryStrip CTAs** — "Explore {name} →" ghost buttons replaced with "Let's Talk about {name}" tangerine primary CTAs linking to `/book?service={name}`
+- [x] **Book page service context** — `useSearchParams()` reads `?service=` param, displays "You're interested in / {service}" above calendar, prefills Cal.com notes with `Interested in: {service}`
+- [x] **Suspense boundary** — Wrapped BookPageContent in `<Suspense>` for Next.js 14 static build compatibility
+
+**Build:** 118 static pages (unchanged — no new routes)
+
+#### Session XXII (upcoming): Pipeline Infrastructure + Contact
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
