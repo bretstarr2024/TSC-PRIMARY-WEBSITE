@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XIII** | Last Updated: February 24, 2026
+**Status: SESSION XIV** | Last Updated: February 24, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -363,7 +363,17 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 108 static pages (unchanged count)
 
-#### Session XIV (upcoming): Pipeline Infrastructure
+#### Session XIV: Frogger Game Critical Bug Fixes ✅ COMPLETE (Feb 24, 2026)
+
+**Focus:** Fix three critical bugs that made the Frogger game non-functional: broken collisions, broken scoring, broken input bounds.
+
+- [x] **Player Y position fix (root cause)** — `getPlayerY` formula had an extra `- laneH` term, placing the player one full lane above their actual lane. The collision hitbox and pill hitbox never overlapped, so collisions never fired and the player walked through all traffic unharmed. Fixed formula to `h - laneH * (playerLane + 0.5)`.
+- [x] **Keyboard DPR fix** — `handleKeyDown` used raw `canvas.width` (includes devicePixelRatio scaling) for horizontal movement bounds. On Retina displays, the player could move 2x off-screen to the right. Now divides by DPR.
+- [x] **Touch DPR fix** — Touch handler computed button hit-test positions in DPR-scaled coordinates, but `drawTouchControls` rendered buttons in logical coordinates. Touch targets didn't align with visual buttons on Retina. Now uses logical coordinates throughout.
+
+**Build:** 108 static pages (unchanged count)
+
+#### Session XV (upcoming): Pipeline Infrastructure
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
