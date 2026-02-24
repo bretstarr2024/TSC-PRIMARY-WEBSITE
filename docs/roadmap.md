@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XXI** | Last Updated: February 24, 2026
+**Status: SESSION XXII** | Last Updated: February 24, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -461,13 +461,29 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 118 static pages (unchanged — no new routes)
 
-#### Session XXII (upcoming): Pipeline Infrastructure + Contact
+#### Session XXII: Answer Capsules Sitewide ✅ COMPLETE (Feb 24, 2026)
+
+**Focus:** Add AI-citation-optimized answer capsules (FAQ accordions with FAQPage JSON-LD) to every major section of the site.
+
+- [x] **Generic AnswerCapsulesSection component** — `components/AnswerCapsulesSection.tsx` — Reusable accordion component with configurable heading, subheading, accent color. Glass cards, Framer Motion expand/collapse, staggered entrance animations. Replaced initial service-specific component.
+- [x] **Service answer capsules** — 24 Q&As (4 per service category) added to `lib/services-data.ts`. `AnswerCapsule` interface defined. Wired into `/services/[slug]` pages with FAQPage JSON-LD schema.
+- [x] **Industry answer capsules** — 36 Q&As (4 per industry vertical) added to `lib/industries-data.ts`. Wired into `/industries/[slug]` pages with FAQPage JSON-LD schema. Subheading personalized per buyer title.
+- [x] **Pricing answer capsules** — 5 Q&As about engagement models, ROI, and pricing rationale. `lib/schema/pricing-faq.ts` created. Wired into `/pricing` page with FAQPage JSON-LD schema.
+- [x] **Schema infrastructure** — `lib/schema/service-faq.ts` updated with `getFaqSchema` alias for cross-section reuse.
+
+**Content approach:** Every answer's first sentence is a standalone quotable capsule (20-25 words) optimized for AI citation — following the AEO pattern where AI engines can cite just the first sentence as a complete answer.
+
+**Coverage:** 71 total answer capsules across 17 pages (6 service + 9 industry + 1 pricing + 1 about [pre-existing]).
+
+**Build:** 118 static pages (unchanged — no new routes)
+
+#### Session XXIII (upcoming): Pipeline Infrastructure + Contact
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
 - [ ] Create source monitors for B2B/AI marketing news
-- [ ] Add answer capsules to service pillar pages
 - [ ] Build Contact page with form (Resend integration)
+- [ ] Build chatbot (chaDbot) — copy RAG from AEO
 
 ---
 
