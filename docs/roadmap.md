@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XXVI** | Last Updated: February 24, 2026
+**Status: SESSION XXVII** | Last Updated: February 24, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -548,7 +548,16 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 119 pages (unchanged — no new routes)
 
-#### Session XXVII (upcoming): Pipeline Infrastructure + Contact
+#### Session XXVII: Pricing Cards Polish ✅ COMPLETE (Feb 24, 2026)
+
+**Focus:** Clean up pricing cards — remove badge pills, update copy, add booking context passthrough. User declared pricing page "done" after these fixes.
+
+**Modified files:**
+- [x] `components/pricing/PricingCards.tsx` — Removed "Most Popular" and "Defined Scope" badge pills. Changed "Starting at" to "minimum" on both cards. Updated subscription checklist (Strategic planning, Opportunity prioritization, Traditional agency services, AI workflows and custom builds). CTA buttons now read "Let's talk about a subscription" / "Let's talk about a project". Links pass `?service=Subscription` / `?service=Project` to `/book` page, which flows into Cal.com embed notes. Added flex-col layout with mt-auto on CTAs for equal-height cards.
+
+**Build:** 119 pages (unchanged — no new routes)
+
+#### Session XXVIII (upcoming): Pipeline Infrastructure + Contact
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
