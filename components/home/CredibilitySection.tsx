@@ -36,8 +36,8 @@ function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string
 
 const stats = [
   { value: 25, suffix: '+', label: 'Years of B2B expertise' },
-  { value: 150, suffix: 'M+', label: 'In client revenue generated' },
-  { value: 1000, suffix: '+', label: 'B2B tech companies served' },
+  { value: 500, suffix: 'M+', label: 'Defining moments' },
+  { value: 3000, suffix: '+', label: 'B2B tech companies served' },
 ];
 
 export function CredibilitySection() {
