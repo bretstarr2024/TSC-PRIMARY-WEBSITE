@@ -1,0 +1,56 @@
+session_id: "XIX"
+date: "2026-02-24"
+branch: main
+version: "0.13.2"  # PATCH: Hero ship thruster flame + game-like micro-turns
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "TBD"
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "Pure frontend SVG/animation change — no MongoDB schema modifications"
+
+commits:
+  - hash: "79a57fa"
+    message: "feat: Add thruster flame, exhaust sparks, and game-like micro-turns to hero ship"
+
+artifacts_updated:
+  - "components/home/HeroSection.tsx — Two-layer thruster flame (outer orange gradient + inner white-hot core), 3 exhaust spark particles, game-like -4°/+3.5° micro-turns synced to thruster bursts via coordinated keyframe times arrays on 8s cycle"
+  - "docs/roadmap.md — Session XIX entry added"
+
+decisions_made:
+  - decision: "Thruster bursts synced to rotation via coordinated keyframe times arrays"
+    rationale: "Coordinating thruster firing with ship turns sells the illusion of active maneuvering. Looks intentional rather than random."
+    reversible: true
+  - decision: "8-second animation cycle with two burn/turn sequences"
+    rationale: "Long enough to feel organic, short enough to see the full behavior quickly. Two turns per cycle (left then right) prevents visual monotony."
+    reversible: true
+  - decision: "Exhaust sparks on staggered independent timings (not perfectly synced to burns)"
+    rationale: "Perfect sync would look mechanical. Slight timing drift creates organic randomness while sparks still roughly coincide with burns."
+    reversible: true
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All CTAs -> /book (internal Cal.com iframe)"
+  - "Asteroids game is an easter egg — no navigation or docs pointing to it"
+  - "Frogger game is an easter egg — Ocho trigger only, no navigation pointing to it"
+  - "Industries data is static (lib/industries-data.ts), not MongoDB"
+  - "Homepage hero ship SVG matches AsteroidsGame.tsx canvas ship shape exactly"
+  - "SVG gradient IDs flameOuter/flameInner used in HeroSection — avoid collisions if adding gradients elsewhere"
+
+next_actions:
+  - "Build Contact page with form (Resend integration)"
+  - "Copy pipeline infrastructure from AEO donor"
+  - "Add answer capsules to service pillar pages"
+  - "Build chatbot (chaDbot) — copy RAG from AEO"

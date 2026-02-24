@@ -1,16 +1,53 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 24, 2026 (Session XVIII)
+**Last Updated:** February 24, 2026 (Session XIX)
 
 ---
 
 ## Current Phase: Phase 1 COMPLETE + Industries Section
 
-The site is live with **117 static pages** across 10 content types plus 9 industry verticals. Session XVIII was a cosmetic fix to match the homepage hero ship SVG to the exact Asteroids game ship shape.
+The site is live with **117 static pages** across 10 content types plus 9 industry verticals. Session XIX added game-authentic thruster animations to the homepage hero ship SVG — intermittent flame bursts, exhaust sparks, and coordinated micro-turns.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10 collections, ~80 documents)
 - **Next actions:** Build Contact page with form, pipeline infrastructure from AEO, answer capsules for service pages
-- **Roadmap:** See `docs/roadmap.md` Session XVIII
+- **Roadmap:** See `docs/roadmap.md` Session XIX
+
+### Session XIX Summary (February 24, 2026)
+
+**Focus:** Add game-authentic thruster flame, exhaust sparks, and game-like micro-turn animations to the homepage hero ship SVG.
+
+**What was done:**
+
+1. **Thruster flame** (1 modified file):
+   - `components/home/HeroSection.tsx` — Two-layer SVG flame added inside the ship SVG. Outer flame (`polygon points="13,8 18,1 23,8"`) uses `linearGradient` from tangerine → orange → gold. Inner flame (`polygon points="15.5,9 18,4 20.5,9"`) uses white → gold → tangerine for a hotter core. Both flicker via rapid `scaleY` oscillations (0.35s and 0.2s cycles). Flame group opacity animated with `times` keyframes to fire in two intermittent bursts per 8s cycle.
+
+2. **Game-like micro-turns** (same file):
+   - Replaced old smooth sinusoidal rocking (±2°, 4s) with coordinated keyframe sequences: ship snaps -4° left, holds, drifts back to center, then snaps +3.5° right, holds, drifts back. Uses 10-keyframe `times` array for precise timing. Thruster bursts synced to fire during each turn.
+
+3. **Exhaust sparks** (same file):
+   - 3 tiny `motion.circle` particles (gold #FFD700, orange #FF8C00, tangerine #FF5910) drift upward from the flame area with staggered independent timings. Each fades from ~0.8 opacity to 0 while drifting in cy/cx.
+
+4. **Ship drift** (same file):
+   - Subtle -1 to -2px upward nudge during each thruster burn, returning to 0 between burns.
+
+**Commits this session:**
+- `79a57fa` — feat: Add thruster flame, exhaust sparks, and game-like micro-turns to hero ship
+
+**Results:**
+- 117 static pages (unchanged — animation-only change)
+- Homepage hero ship now has active, game-authentic thruster behavior
+- Thruster and rotation are coordinated to tell a "ship is maneuvering" story
+
+**Donor files referenced:**
+- None — built from scratch using Framer Motion keyframe animation on SVG elements
+
+**What NOT to re-debate:**
+- Thruster bursts are synced to rotation (not independent) — looks intentional, not random
+- 8s cycle with two burn/turn sequences — long enough to feel organic
+- Exhaust spark timings are intentionally imperfect — organic randomness by design
+- SVG gradient IDs `flameOuter`/`flameInner` — avoid collisions if adding gradients elsewhere
+
+---
 
 ### Session XVIII Summary (February 24, 2026)
 

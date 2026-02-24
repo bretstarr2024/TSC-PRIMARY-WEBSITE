@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XVIII** | Last Updated: February 24, 2026
+**Status: SESSION XIX** | Last Updated: February 24, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -418,7 +418,18 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 117 static pages (unchanged count)
 
-#### Session XIX (upcoming): Pipeline Infrastructure
+#### Session XIX: Hero Ship Thruster Animation ✅ COMPLETE (Feb 24, 2026)
+
+**Focus:** Add game-authentic thruster flame, exhaust sparks, and game-like micro-turn animations to the homepage hero ship SVG.
+
+- [x] **Thruster flame** — Two-layer SVG flame (outer orange gradient + inner white-hot core) fires from the rear notch between wings. Rapid `scaleY` flicker on each layer for choppy retro exhaust. Intermittent bursts synced to ship rotation on 8s cycle.
+- [x] **Game-like micro-turns** — Ship snaps -4° left, holds, drifts back, then snaps +3.5° right, holds, drifts back. Coordinated with thruster bursts via `times` keyframe arrays. Replaces old smooth sinusoidal rocking.
+- [x] **Exhaust sparks** — 3 tiny particles (gold, orange, tangerine) drift upward from flame area on staggered timings, fade out.
+- [x] **Ship drift** — Subtle -1 to -2px upward nudge during each thruster burn.
+
+**Build:** 117 static pages (unchanged count)
+
+#### Session XX (upcoming): Pipeline Infrastructure
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
