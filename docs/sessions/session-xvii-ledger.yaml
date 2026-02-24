@@ -1,0 +1,82 @@
+session_id: "XVII"
+date: "2026-02-24"
+branch: main
+version: "0.13.0"  # MINOR: Industries section — 9 vertical landing pages
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "pending"
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "Purely frontend — no MongoDB schema modifications"
+
+commits:
+  - hash: "2ab9637"
+    message: "feat: Build Industries section — 9 vertical landing pages"
+  - hash: "eb36857"
+    message: "docs: Update roadmap for Session XVII — Industries section"
+
+artifacts_updated:
+  - "lib/industries-data.ts — NEW: Industry interface, 9 industries (HR Tech, SaaS, FinTech, Cybersecurity, HealthTech, MarTech, DevTools, Cloud Infra, AI/ML), helper functions"
+  - "components/industries/IndustriesHero.tsx — NEW: Pillar page hero with dual-glow, gradient text"
+  - "components/industries/IndustryCard.tsx — NEW: Glass card with stat, tagline, client badges, stagger animation"
+  - "components/industries/IndustryHero.tsx — NEW: Sub-page hero with color glow, breadcrumb, stat + buyer title"
+  - "components/industries/IndustryContent.tsx — NEW: Market context, pain points, solutions, clients, services, CTA"
+  - "components/industries/RelatedIndustries.tsx — NEW: 3-column cross-linking grid"
+  - "app/industries/page.tsx — UPDATED: Replaced stub with IndustriesHero + 3x3 card grid + ServiceCTA"
+  - "app/industries/[slug]/page.tsx — NEW: SSG sub-pages with generateStaticParams, BreadcrumbList JSON-LD"
+  - "lib/schema/breadcrumbs.ts — UPDATED: Added industriesBreadcrumb() and industryBreadcrumb(name)"
+  - "docs/roadmap.md — UPDATED: Session XVII entry, Phase 3 industry item marked complete"
+
+decisions_made:
+  - decision: "9 industries including MarTech (FAQ listed it, kernel only has 8 primary verticals)"
+    rationale: "TSC has genuine expertise marketing to marketers. The FAQ answer is the user-approved source of truth for this page."
+    reversible: true
+  - decision: "Static data in lib/industries-data.ts, not MongoDB"
+    rationale: "Industry pages are curated positioning pages — not pipeline-generated content. Static data is simpler, faster, and appropriate for hand-crafted vertical messaging."
+    reversible: true
+  - decision: "Reused ServiceCTA on pillar page instead of creating IndustryCTA"
+    rationale: "Same CTA message applies — no need for a duplicate component. Industries and services both lead to /book."
+    reversible: true
+  - decision: "6 brand colors across 9 industries (some colors repeat)"
+    rationale: "9 verticals exceed the 6-color brand palette. Assigned to avoid adjacent repeats in the 3x3 grid. Visual impact is fine."
+    reversible: true
+
+known_risks:
+  - risk: "Some verticals (MarTech, DevTools, Cloud Infra) have empty notableClients arrays"
+    mitigation: "The client badge section is conditionally rendered — empty arrays show nothing. As TSC adds clients in these verticals, update the data."
+    severity: low
+  - risk: "Industry descriptions are hand-written, not kernel-sourced — could diverge from kernel ICP data over time"
+    mitigation: "Kernel ICP was used as primary source for pain points. Descriptions add TSC-specific positioning. Revisit if kernel ICP changes significantly."
+    severity: low
+
+explicitly_deferred:
+  - "Pipeline infrastructure — moved to Session XVIII"
+  - "Contact page with form (Resend integration)"
+  - "Answer capsules for service pillar pages"
+  - "Leadership headshot photos — still using generative avatars"
+
+next_actions:
+  - "Build Contact page with form (Resend integration)"
+  - "Copy pipeline infrastructure from AEO donor"
+  - "Add answer capsules to service pillar pages"
+  - "Build chatbot (chaDbot) — copy RAG from AEO"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All CTAs -> /book (internal Cal.com iframe)"
+  - "Asteroids game is an easter egg — no navigation or docs pointing to it"
+  - "Frogger game is an easter egg — Ocho trigger only, no navigation pointing to it"
+  - "Industries data is static (lib/industries-data.ts), not MongoDB"
+  - "9 verticals: HR Tech, Enterprise SaaS, FinTech, Cybersecurity, HealthTech, MarTech, DevTools, Cloud Infrastructure, AI/ML Platforms"
