@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XXXI** | Last Updated: February 25, 2026
+**Status: SESSION XXXII** | Last Updated: February 25, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -634,7 +634,25 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 119 pages (unchanged — no new routes)
 
-#### Session XXXII (upcoming): Pipeline Infrastructure + Contact
+#### Session XXXII: ArcadeButton Photo Upgrade ✅ COMPLETE (Feb 25, 2026)
+
+**Focus:** Replace CSS-gradient ArcadeButton with real arcade button photo for all 9 easter egg triggers.
+
+**What was done:**
+- [x] Replaced ArcadeButton's CSS-gradient circle + inline SVG stick figure with real 3D arcade button photo (`public/images/1_player.png`, 25KB transparent PNG exported from Canva at 128×128)
+- [x] Switched from inline styling to `next/image` for optimized loading
+- [x] Hover glow now uses CSS `drop-shadow` filter instead of `boxShadow` (works on transparent PNG)
+- [x] Removed `PlayerIcon` component and all CSS-gradient bezel/button-face styling
+- [x] Cleaned up unused files: `1_player.svg` (158KB) and `1_player_backup.svg`
+
+**Modified files:**
+- `components/ArcadeButton.tsx` — Complete rewrite: photo-based button via `next/image`
+- `public/images/1_player.png` — NEW: 25KB transparent PNG of real arcade 1-Player button
+- `public/images/1_player.svg` — DELETED (158KB, raster data wrapped in SVG)
+
+**Build:** 119 pages (unchanged — no new routes)
+
+#### Session XXXIII (upcoming): Pipeline Infrastructure + Contact
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
