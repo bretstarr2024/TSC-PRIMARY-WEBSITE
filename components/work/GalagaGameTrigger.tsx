@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
-import { OchoTrigger } from '@/components/OchoTrigger';
+import { ArcadeButton } from '@/components/ArcadeButton';
 
 const GalagaGame = dynamic(
   () => import('./GalagaGame').then((mod) => ({ default: mod.GalagaGame })),
@@ -15,7 +15,7 @@ export function GalagaGameTrigger() {
     <>
       {playing && <GalagaGame onClose={() => setPlaying(false)} />}
       <div className="flex justify-center my-8">
-        {!playing && <OchoTrigger onClick={() => setPlaying(true)} delay={0.5} />}
+        {!playing && <ArcadeButton onClick={() => setPlaying(true)} delay={0.5} />}
       </div>
     </>
   );

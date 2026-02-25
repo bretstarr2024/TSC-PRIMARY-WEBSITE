@@ -4,7 +4,7 @@ import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AnimatedSection } from '@/components/AnimatedSection';
-import { OchoTrigger } from '@/components/OchoTrigger';
+import { ArcadeButton } from '@/components/ArcadeButton';
 
 const FroggerGame = dynamic(() => import('./FroggerGame').then(m => ({ default: m.FroggerGame })), { ssr: false });
 
@@ -195,9 +195,9 @@ export function ClientMarquee() {
 
       </div>
 
-      {/* Ocho play trigger — below client list, centered */}
+      {/* Arcade play trigger — below client list, centered */}
       {!playing && (
-        <OchoTrigger onClick={() => setPlaying(true)} delay={1.5} className="mt-8 mx-auto" />
+        <ArcadeButton onClick={() => setPlaying(true)} delay={1.5} className="mt-8 mx-auto" />
       )}
     </section>
   );

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Press_Start_2P } from "next/font/google";
 import "./globals.css";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { NoiseOverlay } from "@/components/GradientBackground";
@@ -14,6 +14,13 @@ const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+const pressStart = Press_Start_2P({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-arcade",
   display: "swap",
 });
 
@@ -63,7 +70,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`dark ${inter.variable}`}>
+    <html lang="en" className={`dark ${inter.variable} ${pressStart.variable}`}>
       <body className="bg-heart-of-darkness text-white antialiased font-sans">
         <SmoothScroll>
           <CustomCursor />

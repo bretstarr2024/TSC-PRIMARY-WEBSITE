@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import { AnimatedSection } from '@/components/AnimatedSection';
-import { OchoTrigger } from '@/components/OchoTrigger';
+import { ArcadeButton } from '@/components/ArcadeButton';
 
 const TronGame = dynamic(
   () => import('./TronGame').then((mod) => ({ default: mod.TronGame })),
@@ -108,7 +108,7 @@ export function WhyDifferent() {
         </AnimatedSection>
 
         {!playing && (
-          <OchoTrigger onClick={() => setPlaying(true)} delay={0.5} className="mt-10 mx-auto" />
+          <ArcadeButton onClick={() => setPlaying(true)} delay={0.5} className="mt-10 mx-auto" />
         )}
       </div>
     </section>

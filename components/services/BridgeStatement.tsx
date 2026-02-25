@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import { AnimatedSection } from '@/components/AnimatedSection';
-import { OchoTrigger } from '@/components/OchoTrigger';
+import { ArcadeButton } from '@/components/ArcadeButton';
 
 const BreakoutGame = dynamic(
   () => import('./BreakoutGame').then((mod) => ({ default: mod.BreakoutGame })),
@@ -39,7 +39,7 @@ export function BridgeStatement() {
           You get both.
         </p>
         {!playing && (
-          <OchoTrigger onClick={() => setPlaying(true)} delay={0.5} className="mt-8 mx-auto" />
+          <ArcadeButton onClick={() => setPlaying(true)} delay={0.5} className="mt-8 mx-auto" />
         )}
       </AnimatedSection>
     </section>

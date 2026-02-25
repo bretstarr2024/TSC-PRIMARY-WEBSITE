@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { GradientText } from '@/components/AnimatedText';
-import { OchoTrigger } from '@/components/OchoTrigger';
+import { ArcadeButton } from '@/components/ArcadeButton';
 
 const HeroParticles = dynamic(
   () => import('./HeroParticles').then((mod) => ({ default: mod.HeroParticles })),
@@ -29,8 +29,8 @@ export function HeroSection() {
       {playing && <AsteroidsGame onClose={() => setPlaying(false)} />}
 
       <div className="relative z-10 section-wide text-center px-4">
-        {/* Ocho easter egg trigger */}
-        <OchoTrigger onClick={() => setPlaying(true)} delay={0.2} className="mb-6 mx-auto" />
+        {/* Arcade easter egg trigger */}
+        <ArcadeButton onClick={() => setPlaying(true)} delay={0.2} className="mb-6 mx-auto" />
 
         {/* Main headline */}
         <h1 className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-tight leading-[0.95]">

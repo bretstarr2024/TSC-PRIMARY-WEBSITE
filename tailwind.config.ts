@@ -18,6 +18,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
+        arcade: ['var(--font-arcade)', '"Press Start 2P"', 'monospace'],
       },
       fontSize: {
         '8xl': ['6rem', { lineHeight: '1' }],
