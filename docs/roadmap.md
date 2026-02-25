@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XXX** | Last Updated: February 24, 2026
+**Status: SESSION XXXI** | Last Updated: February 25, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -605,13 +605,44 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 119 pages (unchanged — no new routes)
 
-#### Session XXXI (upcoming): Pipeline Infrastructure + Contact
+#### Session XXXI: "Game Over" Concept — Arcade Components + Trigger Overhaul ✅ COMPLETE (Feb 25, 2026)
+
+**Focus:** Begin "Game Over" concept-driven site evolution. Created two new arcade-themed components and replaced all 9 game triggers with a new 1-Player arcade button.
+
+**What was done:**
+- [x] Added Press Start 2P font (Google Fonts via `next/font/google`, `--font-arcade` CSS variable, `font-arcade` Tailwind class)
+- [x] Created `components/CoinSlotCTA.tsx` — arcade coin slot CTA button (metallic frame, corner screws, recessed LED display, "25¢" / "PUSH" in Press Start 2P with LED glow, idle pulse/flicker, press-in animation, links to `/book`)
+- [x] Created `components/ArcadeButton.tsx` — classic 1-Player arcade cabinet button (dark bezel housing, concave Atomic Tangerine button face, white stick figure SVG icon, bob animation, hover glow, press-in depression)
+- [x] Replaced OchoTrigger with ArcadeButton in all 9 game trigger locations (5 dedicated trigger files + 4 inline in HeroSection, WhyDifferent, BridgeStatement, ClientMarquee)
+- [x] Deleted `components/OchoTrigger.tsx` (zero remaining references)
+
+**Modified files:**
+- `app/layout.tsx` — Added Press Start 2P font import + CSS variable
+- `tailwind.config.ts` — Added `arcade` font family
+- `components/CoinSlotCTA.tsx` — NEW
+- `components/ArcadeButton.tsx` — NEW
+- `components/OchoTrigger.tsx` — DELETED
+- `components/home/HeroSection.tsx` — OchoTrigger → ArcadeButton
+- `components/about/ClientMarquee.tsx` — OchoTrigger → ArcadeButton
+- `components/services/BridgeStatement.tsx` — OchoTrigger → ArcadeButton
+- `components/pricing/WhyDifferent.tsx` — OchoTrigger → ArcadeButton
+- `components/contact/PongGameTrigger.tsx` — OchoTrigger → ArcadeButton
+- `components/careers/PacManGameTrigger.tsx` — OchoTrigger → ArcadeButton
+- `components/insights/SnakeGameTrigger.tsx` — OchoTrigger → ArcadeButton
+- `components/industries/SpaceInvadersGameTrigger.tsx` — OchoTrigger → ArcadeButton
+- `components/work/GalagaGameTrigger.tsx` — OchoTrigger → ArcadeButton
+
+**Build:** 119 pages (unchanged — no new routes)
+
+#### Session XXXII (upcoming): Pipeline Infrastructure + Contact
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
 - [ ] Create source monitors for B2B/AI marketing news
 - [ ] Build Contact page with form (Resend integration)
 - [ ] Build chatbot (chaDbot) — copy RAG from AEO
+- [ ] Place CoinSlotCTA on pages (homepage CTA, potentially others)
+- [ ] Continue "Game Over" concept — homepage copy reframe, selective retro visual touches
 
 ---
 
