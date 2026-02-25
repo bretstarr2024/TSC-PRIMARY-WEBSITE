@@ -23,6 +23,8 @@ commits:
     message: "feat: Add CoinSlotCTA + ArcadeButton components, replace OchoTrigger with 1-Player arcade button"
   - hash: "aa98f7b"
     message: "docs: Session XXXI roadmap update — Game Over concept, arcade components"
+  - hash: "697db02"
+    message: "docs: Session XXXI closeout — ledger, handoff update"
 
 artifacts_updated:
   - "components/CoinSlotCTA.tsx — NEW: Arcade coin slot CTA button with metallic frame, corner screws, recessed LED display, '25¢' / 'PUSH' in Press Start 2P with multi-layer LED glow, idle pulse/flicker animation, spring press-in on click, links to /book by default."
