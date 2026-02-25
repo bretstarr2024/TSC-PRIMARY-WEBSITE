@@ -1,0 +1,60 @@
+session_id: "XXXVI"
+date: "2026-02-25"
+branch: main
+version: "0.25.2"  # PATCH: Fix homepage ArcadeButton focus box via conditional rendering
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "zgq3w6kpQhwSQeZJdFGZ"
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "JSX conditional rendering change only. No MongoDB schema or API route changes."
+
+commits:
+  - hash: "45d5638"
+    message: "fix: Conditionally render ArcadeButton on homepage to prevent focus box"
+  - hash: "9bd2248"
+    message: "docs: Session XXXVI roadmap update — homepage ArcadeButton conditional render fix"
+
+artifacts_updated:
+  - "components/home/HeroSection.tsx — Wrapped ArcadeButton in {!playing && (...)} conditional"
+  - "docs/roadmap.md — Session XXXVI entry, next session renumbered to XXXVII"
+
+decisions_made:
+  - decision: "Fix homepage ArcadeButton by conditional rendering, not more CSS"
+    rationale: "The bug was never a CSS specificity issue. The homepage was the only page that kept ArcadeButton in the DOM during gameplay. All 8 other pages already used conditional rendering. When the game closed on the homepage, browser focus returned to the still-mounted element, showing the focus indicator. Three sessions of CSS fixes (XXXIII-XXXV) targeted the shared component, which was identical across all pages — the wrong layer. Matching the conditional rendering pattern used everywhere else eliminates the focus-return entirely."
+    reversible: true
+
+explicitly_deferred:
+  - "CoinSlotCTA page placement — next session"
+  - "Expand Game Over concept to other pages — future sessions"
+  - "Contact page form with Resend integration — next session"
+  - "Pipeline infrastructure from AEO — next session"
+  - "Chatbot (chaDbot) — future session"
+
+next_actions:
+  - "Verify homepage ArcadeButton no longer shows square box in production after playing Asteroids"
+  - "Place CoinSlotCTA on homepage CTA section and/or other pages"
+  - "Expand Game Over concept to other page headlines/sections"
+  - "Build Contact page form (Resend integration)"
+  - "Copy pipeline infrastructure from AEO donor"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All CTAs -> /book (internal Cal.com iframe)"
+  - "Pricing page is DONE per user directive — no further changes unless requested"
+  - "9 arcade games: all triggered by ArcadeButton (motion.div with role=button, real photo PNG)"
+  - "Easter egg games are undocumented — no navigation or user-facing docs"
+  - "ArcadeButton MUST be conditionally rendered with {!playing && ...} on EVERY page — never leave it mounted during gameplay"
+  - "'Game Over' is the site's creative concept — first visible execution live on homepage hero"

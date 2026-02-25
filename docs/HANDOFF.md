@@ -1,6 +1,6 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 25, 2026 (Session XXXV)
+**Last Updated:** February 25, 2026 (Session XXXVI)
 
 ---
 
@@ -10,7 +10,37 @@ The site is live with **119 pages** (118 static + 1 API route) across 10 content
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections)
 - **Next actions:** Place CoinSlotCTA on pages, expand Game Over concept to other pages, Contact page form
-- **Roadmap:** See `docs/roadmap.md` Session XXXV
+- **Roadmap:** See `docs/roadmap.md` Session XXXVI
+
+### Session XXXVI Summary (February 25, 2026)
+
+**Focus:** Fix the ArcadeButton square focus box that appeared ONLY on the homepage — the bug that three prior sessions failed to fix.
+
+**What was done:**
+
+1. **Homepage ArcadeButton conditional rendering fix** (`components/home/HeroSection.tsx`):
+   - Root cause: The homepage was the ONLY page (out of 9) that rendered ArcadeButton unconditionally — it stayed in the DOM during gameplay
+   - All 8 other pages already used `{!playing && <ArcadeButton />}` to unmount the button while a game was active
+   - When Asteroids closed on the homepage, browser focus returned to the still-mounted `motion.div[tabIndex=0]`, triggering the browser's focus indicator
+   - Sessions XXXIII–XXXV all modified `ArcadeButton.tsx` (CSS focus suppression) — wrong layer. The shared component was identical on all pages; the problem was in how the homepage used it.
+   - Fix: Wrapped the homepage's ArcadeButton in `{!playing && (...)}`, matching every other page
+
+**Commits this session:**
+- `45d5638` — fix: Conditionally render ArcadeButton on homepage to prevent focus box
+- `9bd2248` — docs: Session XXXVI roadmap update — homepage ArcadeButton conditional render fix
+
+**Results:**
+- ArcadeButton on homepage now unmounts during gameplay, preventing focus return on game close
+- All 9 pages now use identical conditional rendering pattern
+- Build: 119 pages, PASS
+
+**Lesson learned:**
+- When a bug appears on only one page but the "broken" component is shared across all pages, the problem is in how that page uses the component — not in the component itself. Always compare usage patterns across pages before modifying the shared code.
+
+**Critical invariant added:**
+- ArcadeButton MUST be conditionally rendered with `{!playing && ...}` on EVERY page — never leave it mounted during gameplay
+
+---
 
 ### Session XXXV Summary (February 25, 2026)
 
