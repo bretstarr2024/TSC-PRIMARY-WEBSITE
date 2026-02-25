@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "The Starr Conspiracy",
-    title: "The Starr Conspiracy | See Marketing in a Whole New Light",
+    title: "The Starr Conspiracy | Game Over for Traditional B2B Marketing",
     description:
       "The B2B marketing agency where fundamentals meet AI transformation. We deliver the best of both worlds.",
   },

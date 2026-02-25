@@ -81,6 +81,18 @@ body {
     border-color: rgba(255, 255, 255, 0.1);
   }
 
+  /* CRT scanline overlay — reusable for Game Over concept */
+  .crt-scanlines {
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.12) 2px,
+      rgba(0, 0, 0, 0.12) 3px
+    );
+    pointer-events: none;
+  }
+
   /* Section container */
   .section-wide {
     max-width: 80rem;
