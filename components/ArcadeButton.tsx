@@ -17,9 +17,17 @@ export function ArcadeButton({
   const reducedMotion = useReducedMotion();
 
   return (
-    <motion.button
-      className={`flex flex-col items-center group cursor-pointer bg-transparent border-none outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 ${className}`}
+    <motion.div
+      className={`flex flex-col items-center cursor-pointer select-none ${className}`}
       onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick();
+        }
+      }}
+      role="button"
+      tabIndex={0}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay, duration: 0.5 }}
@@ -54,11 +62,12 @@ export function ArcadeButton({
             alt=""
             width={64}
             height={64}
+            unoptimized
             aria-hidden="true"
             draggable={false}
           />
         </motion.div>
       </motion.div>
-    </motion.button>
+    </motion.div>
   );
 }
