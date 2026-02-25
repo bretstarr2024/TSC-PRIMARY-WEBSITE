@@ -18,7 +18,7 @@ export function ArcadeButton({
 
   return (
     <motion.button
-      className={`flex flex-col items-center group cursor-pointer bg-transparent border-none outline-none ${className}`}
+      className={`flex flex-col items-center group cursor-pointer bg-transparent border-none outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 ${className}`}
       onClick={onClick}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
