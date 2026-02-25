@@ -1,16 +1,65 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 25, 2026 (Session XXXIII)
+**Last Updated:** February 25, 2026 (Session XXXIV)
 
 ---
 
-## Current Phase: Phase 1 COMPLETE + "Game Over" Concept Emerging + 9 Arcade Games + CoinSlotCTA + ArcadeButton (Photo)
+## Current Phase: Phase 1 COMPLETE + "Game Over" Concept LIVE on Homepage + 9 Arcade Games + CoinSlotCTA Ready
 
-The site is live with **119 pages** (118 static + 1 API route) across 10 content types, 9 verticals, a full Pricing page (declared done), 89 answer capsules, and **9 hidden arcade games** — one on every page — with a shared boss celebration system. The "Game Over" concept is emerging as the site's creative theme: traditional B2B marketing is dead, time to level up. All game triggers use ArcadeButton with a real 3D arcade button photo (25KB transparent PNG via `next/image`). A CoinSlotCTA component is ready for placement.
+The site is live with **119 pages** (118 static + 1 API route) across 10 content types, 9 verticals, a full Pricing page (declared done), 89 answer capsules, and **9 hidden arcade games** — one on every page — with a shared boss celebration system. The "Game Over" creative concept is now **live on the homepage hero** — the first visible public-facing execution. The headline "GAME OVER" renders in Press Start 2P with LED glow, CRT flicker, and scanline overlay. A CoinSlotCTA component is ready for placement on other pages.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections)
-- **Next actions:** Place CoinSlotCTA on pages, homepage copy reframe for "Game Over" concept, Contact page form
-- **Roadmap:** See `docs/roadmap.md` Session XXXIII
+- **Next actions:** Place CoinSlotCTA on pages, expand Game Over concept to other pages, Contact page form
+- **Roadmap:** See `docs/roadmap.md` Session XXXIV
+
+### Session XXXIV Summary (February 25, 2026)
+
+**Focus:** First visible "Game Over" concept execution — homepage hero rewrite + ArcadeButton rendering fix.
+
+**What was done:**
+
+1. **Homepage hero "GAME OVER" headline** (`components/home/HeroSection.tsx`):
+   - Replaced "See marketing in a whole new light." with "GAME OVER" in Press Start 2P (`font-arcade`)
+   - "GAME" and "OVER" stacked vertically — authentic to 80s arcade screens
+   - LED glow effect: 5-layer textShadow (#FF7A40 text, #FF5910 glow at 4px/8px/20px/40px/60px)
+   - CRT flicker: Framer Motion opacity loop [1, 0.92, 1, 1, 0.8, 1] on 5s cycle
+   - CRT scanline overlay: `.crt-scanlines` utility at ~5% opacity
+   - Crisp pixel rendering: `-webkit-font-smoothing: none`
+   - Responsive sizing: text-4xl → xl:text-8xl with tracking-[0.15em]
+   - Reduced motion: static glow only, no flicker/scale animations
+
+2. **New sub-headline copy**:
+   - "The SaaS marketing era is over. AI-native marketing is a whole new game. TSC is the B2B agency you can trust to help you level up."
+   - "level up" rendered with animated GradientText (tangerine→cactus→tidal-wave)
+
+3. **Animation choreography**: ArcadeButton (0.2s) → GAME (0.6s, scale 1.15→1) → OVER (1.0s) → flicker starts (1.3s) → scanlines (1.5s) → sub-headline (1.8s) → CTA (2.4s) → scroll indicator (3.2s)
+
+4. **ArcadeButton square box fix** (`components/ArcadeButton.tsx`):
+   - Root cause: browser default `<button>` styling that CSS couldn't fully override (Framer Motion style merging)
+   - Fix: switched from `<motion.button>` to `<motion.div>` with `role="button"`, `tabIndex={0}`, keyboard handlers
+   - Added `unoptimized` to Image to prevent PNG→WebP conversion artifacts
+
+5. **Reusable CSS utility** (`app/globals.css`): `.crt-scanlines` for future Game Over concept expansion
+
+6. **OG title updated** (`app/layout.tsx`): "Game Over for Traditional B2B Marketing"
+
+**Commits this session:**
+- `146c4b7` — fix: Eliminate square box around ArcadeButton on all pages
+- `e0cee8c` — feat: GAME OVER homepage hero — first visible execution of site concept
+- `9451dec` — docs: Session XXXIV roadmap update — GAME OVER hero + ArcadeButton fix
+
+**Results:**
+- "Game Over" concept is now publicly visible for the first time — homepage hero
+- LED glow + CRT flicker pattern proven at headline scale (was only on CoinSlotCTA before)
+- `.crt-scanlines` utility ready for reuse across site as concept expands
+
+**Design patterns established for future Game Over expansion:**
+- LED glow style object: `{ color: '#FF7A40', textShadow: '0 0 4px #FF5910, ...' }` (shared with CoinSlotCTA)
+- CRT flicker: opacity loop with uneven timing for analog feel
+- Scanline overlay: repeating-linear-gradient at low opacity
+- Press Start 2P for accent headlines, Inter for body — the contrast IS the message
+
+---
 
 ### Session XXXIII Summary (February 25, 2026)
 
