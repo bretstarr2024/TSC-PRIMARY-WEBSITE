@@ -1,16 +1,73 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 24, 2026 (Session XXX)
+**Last Updated:** February 25, 2026 (Session XXXI)
 
 ---
 
-## Current Phase: Phase 1 COMPLETE + Pricing DONE + 9 Arcade Easter Eggs (Every Page) + Boss Celebration System
+## Current Phase: Phase 1 COMPLETE + "Game Over" Concept Emerging + 9 Arcade Games + CoinSlotCTA + ArcadeButton
 
-The site is live with **119 pages** (118 static + 1 API route) across 10 content types, 9 verticals, a full Pricing page (declared done), 89 answer capsules, and **9 hidden arcade games** — one on every page — with a shared boss celebration system. All games triggered by the shared OchoTrigger component. Snake game completely rewritten this session as "Serpent Arena" — a battle royale with AI opponents, waves, power-ups, and a shrinking arena.
+The site is live with **119 pages** (118 static + 1 API route) across 10 content types, 9 verticals, a full Pricing page (declared done), 89 answer capsules, and **9 hidden arcade games** — one on every page — with a shared boss celebration system. The "Game Over" concept is emerging as the site's creative theme: traditional B2B marketing is dead, time to level up. All game triggers now use the new ArcadeButton (1-Player arcade cabinet button) instead of OchoTrigger. A CoinSlotCTA component is ready for placement.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections)
-- **Next actions:** Test Serpent Arena in browser, then Contact page form, pipeline infrastructure, chatbot
-- **Roadmap:** See `docs/roadmap.md` Session XXX
+- **Next actions:** Test ArcadeButton + CoinSlotCTA in browser, place CoinSlotCTA on pages, homepage copy reframe for "Game Over" concept
+- **Roadmap:** See `docs/roadmap.md` Session XXXI
+
+### Session XXXI Summary (February 25, 2026)
+
+**Focus:** Begin "Game Over" concept — created arcade-themed CTA component and replaced all game triggers with 1-Player arcade button.
+
+**What was done:**
+
+1. **CoinSlotCTA component** (`components/CoinSlotCTA.tsx`):
+   - Arcade coin return slot as a CTA button
+   - Dark metallic frame with CSS gradients, beveled box-shadows, 4 corner screw details
+   - Recessed black inner display with "25¢" in large Press Start 2P font and "PUSH" below
+   - Multi-layer LED glow effect (text-shadow in Atomic Tangerine)
+   - Idle pulse/flicker animation mimicking real LED electronics
+   - Spring press-in animation on click (stiffness: 600, damping: 20)
+   - Links to `/book` by default, mirrors MagneticButton navigation pattern
+   - Respects `prefers-reduced-motion`
+   - NOT placed on any page yet — ready for use
+
+2. **ArcadeButton component** (`components/ArcadeButton.tsx`):
+   - Classic 1-Player arcade cabinet button (replaces OchoTrigger)
+   - Dark metallic bezel housing with concave Atomic Tangerine button face
+   - White stick figure SVG icon (classic arcade "1 player" icon)
+   - Idle bob animation, hover glow, satisfying press-in depression
+   - Same props interface as OchoTrigger (onClick, delay, className)
+
+3. **Press Start 2P font** (`app/layout.tsx`, `tailwind.config.ts`):
+   - Loaded via `next/font/google` (self-hosted, ~6KB)
+   - CSS variable `--font-arcade`, Tailwind class `font-arcade`
+   - Used only in CoinSlotCTA
+
+4. **All 9 game triggers replaced** — OchoTrigger → ArcadeButton:
+   - `components/home/HeroSection.tsx` (Asteroids)
+   - `components/about/ClientMarquee.tsx` (Frogger)
+   - `components/services/BridgeStatement.tsx` (Breakout)
+   - `components/pricing/WhyDifferent.tsx` (Tron)
+   - `components/contact/PongGameTrigger.tsx` (Pong)
+   - `components/careers/PacManGameTrigger.tsx` (Pac-Man)
+   - `components/insights/SnakeGameTrigger.tsx` (Serpent Arena)
+   - `components/industries/SpaceInvadersGameTrigger.tsx` (Space Invaders)
+   - `components/work/GalagaGameTrigger.tsx` (Galaga)
+
+5. **OchoTrigger deleted** — `components/OchoTrigger.tsx` removed, zero remaining references.
+
+**Commits this session:**
+- `ade8717` — feat: Add CoinSlotCTA + ArcadeButton components, replace OchoTrigger with 1-Player arcade button
+- `aa98f7b` — docs: Session XXXI roadmap update — Game Over concept, arcade components
+
+**Results:**
+- Two new arcade-themed components ready for use
+- All 9 game triggers now use brand-colored 1-Player arcade button
+- OchoTrigger fully replaced and deleted
+- Build: 119 pages, PASS
+
+**Donor files referenced:**
+- None — new components built from scratch
+
+---
 
 ### Session XXX Summary (February 24, 2026)
 

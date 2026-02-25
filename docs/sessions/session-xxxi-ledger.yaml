@@ -1,0 +1,92 @@
+session_id: "XXXI"
+date: "2026-02-25"
+branch: main
+version: "0.23.0"  # MINOR: CoinSlotCTA + ArcadeButton components, OchoTrigger → 1-Player arcade button
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "KbJDBEXnxMnZ2qJa4UF8"
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "All changes are client-side components and config. No MongoDB schema or API route changes."
+
+commits:
+  - hash: "ade8717"
+    message: "feat: Add CoinSlotCTA + ArcadeButton components, replace OchoTrigger with 1-Player arcade button"
+  - hash: "aa98f7b"
+    message: "docs: Session XXXI roadmap update — Game Over concept, arcade components"
+
+artifacts_updated:
+  - "components/CoinSlotCTA.tsx — NEW: Arcade coin slot CTA button with metallic frame, corner screws, recessed LED display, '25¢' / 'PUSH' in Press Start 2P with multi-layer LED glow, idle pulse/flicker animation, spring press-in on click, links to /book by default."
+  - "components/ArcadeButton.tsx — NEW: Classic 1-Player arcade cabinet button. Dark metallic bezel housing, concave Atomic Tangerine button face with radial gradient, white stick figure SVG icon, idle bob animation, hover glow, press-in depression."
+  - "app/layout.tsx — Added Press Start 2P font import from next/font/google, --font-arcade CSS variable."
+  - "tailwind.config.ts — Added font-arcade family to theme.extend.fontFamily."
+  - "components/OchoTrigger.tsx — DELETED: replaced by ArcadeButton across all 9 game triggers."
+  - "9 game trigger files — Swapped OchoTrigger → ArcadeButton import and usage (HeroSection, ClientMarquee, BridgeStatement, WhyDifferent, PongGameTrigger, PacManGameTrigger, SnakeGameTrigger, SpaceInvadersGameTrigger, GalagaGameTrigger)."
+  - "docs/roadmap.md — Session XXXI entry, next session renumbered to XXXII."
+
+decisions_made:
+  - decision: "Adopt 'Game Over' concept as site-wide creative theme"
+    rationale: "Traditional B2B marketing model is dead — 'Game Over' frames TSC's positioning (Sage + Rebel archetype). Arcade games already built on every page make this concept organic rather than forced. The metaphor maps to all aspects of the offering (Level Up, Power-Ups, Boss Battles, etc.)."
+    reversible: true
+  - decision: "Replace OchoTrigger with 1-Player arcade cabinet button"
+    rationale: "User wanted easter eggs to be slightly more visible and on-theme with the Game Over concept. Classic arcade 1-Player button is universally recognizable from real cabinets. Atomic Tangerine button with white stick figure matches brand standards."
+    reversible: true
+  - decision: "CoinSlotCTA uses 'PUSH' not 'PUSH TO REJECT'"
+    rationale: "User flagged 'push to reject' is confusing for a CTA — sounds like rejection. 'PUSH' is clean and action-oriented."
+    reversible: true
+  - decision: "Added Press Start 2P as arcade font"
+    rationale: "Inter (the site font) can't sell the LED/pixel display look no matter how much glow you add. Press Start 2P is the canonical arcade pixel font. Loaded via next/font/google (self-hosted, ~6KB). Only used inside CoinSlotCTA — zero impact on other pages."
+    reversible: true
+  - decision: "CoinSlotCTA not placed on any page yet"
+    rationale: "Component created as a reusable file. Placement will happen when the 'Game Over' concept is applied to homepage copy and CTA sections."
+    reversible: true
+
+known_risks:
+  - risk: "ArcadeButton 1-Player stick figure might be confused with a bathroom sign"
+    mitigation: "Component renders the full physical button (bezel housing + concave face + icon) not just the icon. The 3D button context makes it clearly an arcade button. Verify in browser."
+    severity: low
+  - risk: "CoinSlotCTA not yet placed on any page — could be forgotten"
+    mitigation: "Recorded in next_actions and roadmap Session XXXII items."
+    severity: low
+
+explicitly_deferred:
+  - "CoinSlotCTA page placement — next session when homepage copy is reframed for Game Over concept"
+  - "Homepage copy reframe for Game Over concept — next session"
+  - "Selective retro visual touches (CRT scanlines, pixel dividers) — future session"
+  - "Contact page form with Resend integration — next session"
+  - "Pipeline infrastructure from AEO — next session"
+  - "Chatbot (chaDbot) — next session"
+  - "Source monitors — next session"
+
+next_actions:
+  - "Test ArcadeButton in browser on all 9 pages (verify 1-Player button renders correctly)"
+  - "Test CoinSlotCTA by temporarily placing on a page (verify LED glow, press animation, font)"
+  - "Place CoinSlotCTA on homepage and/or CTA sections"
+  - "Reframe homepage copy for Game Over concept"
+  - "Build Contact page form (Resend integration)"
+  - "Copy pipeline infrastructure from AEO donor"
+  - "Build chatbot (chaDbot) — copy RAG from AEO"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All CTAs -> /book (internal Cal.com iframe)"
+  - "Pricing page is DONE per user directive — no further changes unless requested"
+  - "9 arcade games: all triggered by ArcadeButton (1-Player arcade cabinet button, Atomic Tangerine)"
+  - "Easter egg games are undocumented — no navigation or user-facing docs"
+  - "Boss overlay z-index 100000 > game portals 99999 > custom cursor 9999"
+  - "OchoTrigger is DELETED — all triggers now use ArcadeButton"
+  - "Press Start 2P font available as font-arcade Tailwind class (--font-arcade CSS variable)"
+  - "'Game Over' is the emerging site concept — traditional B2B marketing is dead, time to level up"
+  - "CoinSlotCTA text is '25¢' / 'PUSH' — never 'push to reject'"
