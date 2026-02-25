@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XXXIV** | Last Updated: February 25, 2026
+**Status: SESSION XXXV** | Last Updated: February 25, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -688,7 +688,25 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 119 pages (unchanged — no new routes)
 
-#### Session XXXV (upcoming): Pipeline Infrastructure + Contact + CoinSlotCTA
+#### Session XXXV: ArcadeButton Focus Ring Fix (/stuck protocol) ✅ COMPLETE (Feb 25, 2026)
+
+**Focus:** Fix persistent ArcadeButton square box that reappears after game exit. Used /stuck protocol to diagnose root cause after two prior sessions failed to fix it.
+
+**Root cause found:**
+- Session XXXIII added focus-suppressing Tailwind classes (`focus:outline-none`, `focus-visible:outline-none`, `focus:ring-0`, `focus-visible:ring-0`) to `motion.button`
+- Session XXXIV rewrote the component from `motion.button` → `motion.div` but **dropped all focus-suppressing classes** in the rewrite
+- The `motion.div` retained `tabIndex={0}`, so the browser rendered its default focus ring when focus returned to the element after game exit (Escape key)
+
+**What was done:**
+- [x] Restored focus-suppressing Tailwind classes on the `motion.div`: `outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0`
+- [x] Added belt-and-suspenders inline `style={{ outline: 'none' }}` to guarantee no browser or Framer Motion override
+
+**Modified files:**
+- `components/ArcadeButton.tsx` — Restored focus classes + inline outline suppression
+
+**Build:** 119 pages (unchanged — no new routes)
+
+#### Session XXXVI (upcoming): Pipeline Infrastructure + Contact + CoinSlotCTA
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections

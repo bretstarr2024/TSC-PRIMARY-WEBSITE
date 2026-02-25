@@ -1,0 +1,60 @@
+session_id: "XXXV"
+date: "2026-02-25"
+branch: main
+version: "0.25.1"  # PATCH: Fix ArcadeButton focus ring regression from Session XXXIV rewrite
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "xXAECnkHAMQlAmmIOnhY"
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "CSS/Tailwind class changes only. No MongoDB schema or API route changes."
+
+commits:
+  - hash: "9482a85"
+    message: "fix: Restore focus-suppressing CSS on ArcadeButton after Session XXXIV rewrite"
+
+artifacts_updated:
+  - "components/ArcadeButton.tsx — Restored focus-suppressing Tailwind classes + inline style={{ outline: 'none' }}"
+  - "docs/roadmap.md — Session XXXV entry, next session renumbered to XXXVI"
+
+decisions_made:
+  - decision: "Belt-and-suspenders focus suppression: Tailwind classes + inline style"
+    rationale: "Tailwind classes alone failed in Session XXXIII (possibly due to Framer Motion style merging on motion.button). Inline style={{ outline: 'none' }} guarantees suppression regardless of specificity. Both applied for redundancy."
+    reversible: true
+
+explicitly_deferred:
+  - "CoinSlotCTA page placement — next session"
+  - "Expand Game Over concept to other pages — future sessions"
+  - "Contact page form with Resend integration — next session"
+  - "Pipeline infrastructure from AEO — next session"
+  - "Chatbot (chaDbot) — future session"
+
+next_actions:
+  - "Verify ArcadeButton no longer shows square box after game exit in production"
+  - "Place CoinSlotCTA on homepage CTA section and/or other pages"
+  - "Expand Game Over concept to other page headlines/sections"
+  - "Build Contact page form (Resend integration)"
+  - "Copy pipeline infrastructure from AEO donor"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All CTAs -> /book (internal Cal.com iframe)"
+  - "Pricing page is DONE per user directive — no further changes unless requested"
+  - "9 arcade games: all triggered by ArcadeButton (motion.div with role=button, real photo PNG)"
+  - "Easter egg games are undocumented — no navigation or user-facing docs"
+  - "ArcadeButton uses /images/1_player.png (transparent PNG, unoptimized, via next/image)"
+  - "'Game Over' is the site's creative concept — first visible execution live on homepage hero"
+  - "ArcadeButton focus suppression: BOTH Tailwind classes AND inline style={{ outline: 'none' }} — do not remove either"
+  - "When rewriting components, audit ALL classes/styles from original — don't drop classes that seem irrelevant to the new approach"

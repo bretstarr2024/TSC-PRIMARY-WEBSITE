@@ -1,6 +1,6 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 25, 2026 (Session XXXIV)
+**Last Updated:** February 25, 2026 (Session XXXV)
 
 ---
 
@@ -10,7 +10,30 @@ The site is live with **119 pages** (118 static + 1 API route) across 10 content
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections)
 - **Next actions:** Place CoinSlotCTA on pages, expand Game Over concept to other pages, Contact page form
-- **Roadmap:** See `docs/roadmap.md` Session XXXIV
+- **Roadmap:** See `docs/roadmap.md` Session XXXV
+
+### Session XXXV Summary (February 25, 2026)
+
+**Focus:** Fix persistent ArcadeButton square box after game exit — /stuck protocol diagnosis.
+
+**What was done:**
+
+1. **ArcadeButton focus ring fix** (`components/ArcadeButton.tsx`):
+   - Used /stuck protocol to diagnose why the square box persisted across two prior fix attempts (Sessions XXXIII and XXXIV)
+   - Root cause: Session XXXIV's `motion.button` → `motion.div` rewrite accidentally dropped all focus-suppressing CSS classes that Session XXXIII had added, while retaining `tabIndex={0}` — the browser rendered its default focus ring when focus returned to the element after game exit
+   - Fix: Restored Tailwind classes (`outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0`) plus belt-and-suspenders inline `style={{ outline: 'none' }}`
+
+**Commits this session:**
+- `9482a85` — fix: Restore focus-suppressing CSS on ArcadeButton after Session XXXIV rewrite
+
+**Results:**
+- ArcadeButton should no longer show any visible box/outline after game interaction on any page
+- /stuck protocol successfully traced the regression to an accidental deletion during a prior rewrite
+
+**Lesson learned:**
+- When rewriting a component (e.g., changing element type), audit ALL classes and styles from the original — don't just carry forward the ones that seem relevant to the new approach. The focus-suppressing classes were dropped because the rewrite focused on the element type change, not the full class list.
+
+---
 
 ### Session XXXIV Summary (February 25, 2026)
 
