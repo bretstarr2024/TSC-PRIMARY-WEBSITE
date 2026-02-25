@@ -1,16 +1,45 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 25, 2026 (Session XXXI)
+**Last Updated:** February 25, 2026 (Session XXXII)
 
 ---
 
-## Current Phase: Phase 1 COMPLETE + "Game Over" Concept Emerging + 9 Arcade Games + CoinSlotCTA + ArcadeButton
+## Current Phase: Phase 1 COMPLETE + "Game Over" Concept Emerging + 9 Arcade Games + CoinSlotCTA + ArcadeButton (Photo)
 
-The site is live with **119 pages** (118 static + 1 API route) across 10 content types, 9 verticals, a full Pricing page (declared done), 89 answer capsules, and **9 hidden arcade games** — one on every page — with a shared boss celebration system. The "Game Over" concept is emerging as the site's creative theme: traditional B2B marketing is dead, time to level up. All game triggers now use the new ArcadeButton (1-Player arcade cabinet button) instead of OchoTrigger. A CoinSlotCTA component is ready for placement.
+The site is live with **119 pages** (118 static + 1 API route) across 10 content types, 9 verticals, a full Pricing page (declared done), 89 answer capsules, and **9 hidden arcade games** — one on every page — with a shared boss celebration system. The "Game Over" concept is emerging as the site's creative theme: traditional B2B marketing is dead, time to level up. All game triggers use ArcadeButton with a real 3D arcade button photo (25KB transparent PNG via `next/image`). A CoinSlotCTA component is ready for placement.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections)
-- **Next actions:** Test ArcadeButton + CoinSlotCTA in browser, place CoinSlotCTA on pages, homepage copy reframe for "Game Over" concept
-- **Roadmap:** See `docs/roadmap.md` Session XXXI
+- **Next actions:** Test ArcadeButton photo in browser on all 9 pages, place CoinSlotCTA on pages, homepage copy reframe for "Game Over" concept
+- **Roadmap:** See `docs/roadmap.md` Session XXXII
+
+### Session XXXII Summary (February 25, 2026)
+
+**Focus:** Replace ArcadeButton CSS gradient with real arcade button photo.
+
+**What was done:**
+
+1. **ArcadeButton photo upgrade** (`components/ArcadeButton.tsx`):
+   - Replaced CSS-gradient circle + inline SVG `PlayerIcon` with real 3D arcade button photo
+   - Photo: `public/images/1_player.png` — 25KB transparent PNG, 128×128, exported from Canva with background removed
+   - Uses `next/image` for lazy loading and optimization
+   - Hover glow uses CSS `drop-shadow` filter (follows alpha contour of transparent PNG)
+   - Kept all animations: idle bob, press-in spring (stiffness: 600, damping: 20), reduced motion support
+   - Removed `PlayerIcon` component and all CSS-gradient bezel/button-face inline styles
+
+2. **Cleanup:**
+   - Deleted `public/images/1_player.svg` (158KB — was raster data wrapped in SVG, not optimizable)
+   - Deleted `public/images/1_player_backup.svg` (temporary file from optimization attempt)
+
+**Commits this session:**
+- `ecfe094` — feat: Replace ArcadeButton CSS gradient with real arcade button photo
+- `5c18fa2` — docs: Session XXXII roadmap update — ArcadeButton photo upgrade
+
+**Results:**
+- All 9 game triggers automatically updated (shared component)
+- Button image: 25KB (down from 158KB SVG attempt)
+- Build: 119 pages, PASS
+
+---
 
 ### Session XXXI Summary (February 25, 2026)
 

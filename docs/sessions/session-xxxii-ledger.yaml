@@ -1,0 +1,83 @@
+session_id: "XXXII"
+date: "2026-02-25"
+branch: main
+version: "0.24.0"  # MINOR: ArcadeButton replaced with real arcade button photo
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "TBD"
+  status: pending
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "All changes are client-side components and static image assets. No MongoDB schema or API route changes."
+
+commits:
+  - hash: "ecfe094"
+    message: "feat: Replace ArcadeButton CSS gradient with real arcade button photo"
+  - hash: "5c18fa2"
+    message: "docs: Session XXXII roadmap update — ArcadeButton photo upgrade"
+
+artifacts_updated:
+  - "components/ArcadeButton.tsx — Rewritten: replaced CSS-gradient circle + inline SVG stick figure with real 3D arcade button photo via next/image. Removed PlayerIcon component. Hover glow now uses drop-shadow filter."
+  - "public/images/1_player.png — NEW: 25KB transparent PNG of real arcade 1-Player button (128×128, exported from Canva with BG removed)."
+  - "public/images/1_player.svg — DELETED: 158KB raster-data-in-SVG wrapper, replaced by optimized PNG."
+  - "public/images/1_player_backup.svg — DELETED: temporary backup from optimization attempt."
+  - "docs/roadmap.md — Session XXXII entry added, next session renumbered to XXXIII."
+
+decisions_made:
+  - decision: "Use real photo of arcade button instead of CSS-gradient recreation"
+    rationale: "User provided a 3D arcade button image from Canva. Real photo looks more authentic and recognizable than CSS approximation. Transparent PNG at 128×128 (25KB) is small enough for a lazy-loaded easter egg trigger."
+    reversible: true
+  - decision: "Export at 128×128 with transparent background"
+    rationale: "Button displays at 54-64px on screen. 128px is 2× retina. Transparent background lets it sit cleanly on dark page backgrounds. Reduced file from 158KB SVG to 25KB PNG."
+    reversible: true
+  - decision: "Use next/image instead of raw img tag"
+    rationale: "Next.js image optimization provides lazy loading, srcset generation, and format conversion automatically."
+    reversible: true
+  - decision: "Hover glow via CSS drop-shadow filter instead of boxShadow"
+    rationale: "boxShadow renders a rectangular shadow on transparent PNGs. drop-shadow filter follows the image's alpha contour, producing a proper glow around the circular button shape."
+    reversible: true
+
+known_risks:
+  - risk: "Photo-based button may look slightly different across screen DPIs"
+    mitigation: "128×128 source is 2× retina for the 64px display size. next/image handles srcset. Monitor on actual devices."
+    severity: low
+
+explicitly_deferred:
+  - "CoinSlotCTA page placement — next session when homepage copy is reframed for Game Over concept"
+  - "Homepage copy reframe for Game Over concept — next session"
+  - "Selective retro visual touches (CRT scanlines, pixel dividers) — future session"
+  - "Contact page form with Resend integration — next session"
+  - "Pipeline infrastructure from AEO — next session"
+  - "Chatbot (chaDbot) — next session"
+  - "Source monitors — next session"
+
+next_actions:
+  - "Test ArcadeButton photo in browser on all 9 pages (verify PNG renders correctly at 64px with hover glow)"
+  - "Place CoinSlotCTA on homepage and/or CTA sections"
+  - "Reframe homepage copy for Game Over concept"
+  - "Build Contact page form (Resend integration)"
+  - "Copy pipeline infrastructure from AEO donor"
+  - "Build chatbot (chaDbot) — copy RAG from AEO"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All CTAs -> /book (internal Cal.com iframe)"
+  - "Pricing page is DONE per user directive — no further changes unless requested"
+  - "9 arcade games: all triggered by ArcadeButton (real photo PNG, 25KB)"
+  - "Easter egg games are undocumented — no navigation or user-facing docs"
+  - "Boss overlay z-index 100000 > game portals 99999 > custom cursor 9999"
+  - "ArcadeButton uses /images/1_player.png (transparent PNG via next/image)"
+  - "Press Start 2P font available as font-arcade Tailwind class (--font-arcade CSS variable)"
+  - "'Game Over' is the emerging site concept — traditional B2B marketing is dead, time to level up"
+  - "CoinSlotCTA text is '25¢' / 'PUSH' — never 'push to reject'"
