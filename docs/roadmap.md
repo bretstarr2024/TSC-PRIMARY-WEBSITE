@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XXXIII** | Last Updated: February 25, 2026
+**Status: SESSION XXXIV** | Last Updated: February 25, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -665,15 +665,38 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 119 pages (unchanged — no new routes)
 
-#### Session XXXIV (upcoming): Pipeline Infrastructure + Contact
+#### Session XXXIV: "GAME OVER" Homepage Hero + ArcadeButton Fix ✅ COMPLETE (Feb 25, 2026)
+
+**Focus:** First visible execution of the "Game Over" creative concept — replace homepage hero headline with arcade-styled "GAME OVER" in Press Start 2P. Also fix persistent ArcadeButton square/box rendering issue.
+
+**What was done:**
+- [x] Rewrote homepage hero headline: "See marketing in a whole new light." → "GAME OVER" in Press Start 2P with LED glow + CRT flicker + scanline overlay
+- [x] New sub-headline copy: "The SaaS marketing era is over. AI-native marketing is a whole new game. TSC is the B2B agency you can trust to help you level up."
+- [x] "level up" rendered with animated GradientText (tangerine→cactus→tidal-wave)
+- [x] Animation choreography: staggered entrance (scale 1.15→1), CRT flicker loop (5s), scanline fade-in, sub-headline + CTA slide-up
+- [x] Reduced motion support: static glow only, no flicker/scale animations
+- [x] Crisp pixel rendering via `-webkit-font-smoothing: none` on headline
+- [x] Added reusable `.crt-scanlines` CSS utility to globals.css
+- [x] Updated OG title metadata: "Game Over for Traditional B2B Marketing"
+- [x] Fixed ArcadeButton square box: switched from `<motion.button>` to `<motion.div>` with `role="button"` to eliminate browser default button styling; added `unoptimized` to Image to prevent PNG→WebP conversion artifacts
+
+**Modified files:**
+- `components/home/HeroSection.tsx` — Complete hero rewrite (headline, sub-headline, animation choreography)
+- `components/ArcadeButton.tsx` — Changed from motion.button to motion.div, added unoptimized Image
+- `app/globals.css` — Added `.crt-scanlines` utility class
+- `app/layout.tsx` — Updated OG title string
+
+**Build:** 119 pages (unchanged — no new routes)
+
+#### Session XXXV (upcoming): Pipeline Infrastructure + Contact + CoinSlotCTA
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
 - [ ] Create source monitors for B2B/AI marketing news
 - [ ] Build Contact page with form (Resend integration)
 - [ ] Build chatbot (chaDbot) — copy RAG from AEO
-- [ ] Place CoinSlotCTA on pages (homepage CTA, potentially others)
-- [ ] Continue "Game Over" concept — homepage copy reframe, selective retro visual touches
+- [ ] Place CoinSlotCTA on pages (homepage CTA section, potentially others)
+- [ ] Expand "Game Over" concept to other pages (services, pricing, etc.)
 
 ---
 
