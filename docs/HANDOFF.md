@@ -1,16 +1,54 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 24, 2026 (Session XXIX)
+**Last Updated:** February 24, 2026 (Session XXX)
 
 ---
 
 ## Current Phase: Phase 1 COMPLETE + Pricing DONE + 9 Arcade Easter Eggs (Every Page) + Boss Celebration System
 
-The site is live with **119 pages** (118 static + 1 API route) across 10 content types, 9 verticals, a full Pricing page (declared done), 89 answer capsules, and **9 hidden arcade games** — one on every page — with a shared boss celebration system. All games triggered by the shared OchoTrigger component. Three games enhanced this session with classic arcade visuals, standardized UFOs, and a multi-food Snake system.
+The site is live with **119 pages** (118 static + 1 API route) across 10 content types, 9 verticals, a full Pricing page (declared done), 89 answer capsules, and **9 hidden arcade games** — one on every page — with a shared boss celebration system. All games triggered by the shared OchoTrigger component. Snake game completely rewritten this session as "Serpent Arena" — a battle royale with AI opponents, waves, power-ups, and a shrinking arena.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections)
-- **Next actions:** Test enhanced games in browser, then Contact page form, pipeline infrastructure, chatbot
-- **Roadmap:** See `docs/roadmap.md` Session XXIX
+- **Next actions:** Test Serpent Arena in browser, then Contact page form, pipeline infrastructure, chatbot
+- **Roadmap:** See `docs/roadmap.md` Session XXX
+
+### Session XXX Summary (February 24, 2026)
+
+**Focus:** Complete rewrite of Snake easter egg game into "Serpent Arena" — a battle royale Snake with AI opponents.
+
+**What was done:**
+
+1. **Serpent Arena rewrite** (`components/insights/SnakeGame.tsx`):
+   - Replaced boring single-player Snake (user found it pointless on large screens — snake-as-obstacle mechanic never creates tension when grid is enormous)
+   - New game: player vs 3-6 AI snakes in a compact arena (max 40x30 grid)
+   - **3 AI behaviors:** Hunter (red, chases player), Forager (cyan, targets food), Aggressive (magenta, targets nearest snake)
+   - **AI decision algorithm:** per-tick direction scoring based on safety exits, target attraction, border avoidance, and randomized imperfection
+   - **Wave system:** Wave N spawns min(2+N, 6) AI. AI speed increases per wave (120ms → min 70ms). Wave clear bonus 200×wave
+   - **Kill mechanic:** AI that crashes into player body dies, drops food pellets from every other body segment
+   - **3 power-ups** (one on field at a time, despawn after 150 ticks):
+     - Shield (gold ring) — absorbs one lethal hit
+     - Ghost (white diamond) — phase through bodies for 120 ticks
+     - Lightning (yellow bolt) — instantly kills nearest AI
+   - **Boost:** hold Space for 2x speed, costs 1 body segment every 20 ticks, min length 3
+   - **Shrinking arena:** starting wave 2, border shrinks every 500 ticks. Red danger zone with noise dots and pulsing border. Stops at 16×12 minimum
+   - **Spawn invincibility:** 40 ticks of blinking at wave start
+   - **10 SFX:** eat, crash, kill (boom + rising tone), boost (low pulse), shieldHit (metallic clang), lightning (electric zap), powerUp (ascending sparkle), waveClear (fanfare), waveStart (dramatic sweep), gameOver
+   - **Scoring:** food 10×wave, body pellets 5×wave, kills 100×wave, power-ups 25, wave clear 200×wave
+   - All existing infrastructure preserved: high scores (localStorage 'tsc-snake-scores'), boss overlay, touch controls with added boost button
+   - 918 lines (down from 1107)
+
+**Commits this session:**
+- `55c5eca` — feat: Rewrite Snake as Serpent Arena — battle royale with AI opponents, waves, power-ups
+- `96605d1` — docs: Session XXX roadmap update — Snake → Serpent Arena rewrite
+
+**Results:**
+- Snake game completely transformed from boring single-player into engaging battle royale
+- Build: 119 pages, PASS
+
+**Donor files referenced:**
+- None — modified existing project game component
+
+---
 
 ### Session XXIX Summary (February 24, 2026)
 
