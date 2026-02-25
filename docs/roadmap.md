@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XXXV** | Last Updated: February 25, 2026
+**Status: SESSION XXXVI** | Last Updated: February 25, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -706,7 +706,26 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 119 pages (unchanged — no new routes)
 
-#### Session XXXVI (upcoming): Pipeline Infrastructure + Contact + CoinSlotCTA
+#### Session XXXVI: Homepage ArcadeButton Conditional Render Fix ✅ COMPLETE (Feb 25, 2026)
+
+**Focus:** Fix the persistent square focus box around the ArcadeButton that appeared ONLY on the homepage — the bug that Sessions XXXIII–XXXV failed to fix by modifying the shared component.
+
+**Root cause found:**
+- The homepage was the ONLY page that rendered ArcadeButton unconditionally (always in the DOM)
+- All 8 other pages used `{!playing && <ArcadeButton />}` to unmount the button during gameplay
+- On the homepage, when Asteroids closed, browser focus returned to the still-mounted `motion.div[tabIndex=0]`, triggering the browser's focus indicator
+- On other pages, the button was freshly mounted after game close — no focus state, no box
+- Three sessions of CSS focus-suppression on the shared `ArcadeButton.tsx` couldn't fix it because the problem was never in the component — it was in the homepage's rendering pattern
+
+**What was done:**
+- [x] Wrapped homepage ArcadeButton in `{!playing && (...)}` conditional, matching all other pages
+
+**Modified files:**
+- `components/home/HeroSection.tsx` — Added conditional render around ArcadeButton (line 54)
+
+**Build:** 119 pages (unchanged — no new routes)
+
+#### Session XXXVII (upcoming): Pipeline Infrastructure + Contact + CoinSlotCTA
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
