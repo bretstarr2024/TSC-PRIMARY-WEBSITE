@@ -1,0 +1,61 @@
+session_id: "XXXIII"
+date: "2026-02-25"
+branch: main
+version: "0.24.1"  # PATCH: Fix focus outline on ArcadeButton after game exit
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "TBD"
+  status: pending
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "CSS class change only. No MongoDB schema or API route changes."
+
+commits:
+  - hash: "495d404"
+    message: "fix: Remove focus outline on ArcadeButton after game exit"
+  - hash: "098c850"
+    message: "docs: Session XXXIII roadmap update — ArcadeButton focus outline fix"
+
+artifacts_updated:
+  - "components/ArcadeButton.tsx — Added focus:outline-none, focus-visible:outline-none, focus:ring-0, focus-visible:ring-0 to suppress browser focus box after game exit."
+  - "docs/roadmap.md — Session XXXIII entry added, next session renumbered to XXXIV."
+
+decisions_made:
+  - decision: "Suppress all focus indicators on ArcadeButton"
+    rationale: "Easter egg trigger button doesn't need accessibility focus ring — it's a hidden game trigger, not a form element. The focus box was visually jarring after exiting games."
+    reversible: true
+
+explicitly_deferred:
+  - "CoinSlotCTA page placement — next session when homepage copy is reframed for Game Over concept"
+  - "Homepage copy reframe for Game Over concept — next session"
+  - "Contact page form with Resend integration — next session"
+  - "Pipeline infrastructure from AEO — next session"
+  - "Chatbot (chaDbot) — next session"
+
+next_actions:
+  - "Verify ArcadeButton focus outline fix in browser (play game, ESC, check no box)"
+  - "Place CoinSlotCTA on homepage and/or CTA sections"
+  - "Reframe homepage copy for Game Over concept"
+  - "Build Contact page form (Resend integration)"
+  - "Copy pipeline infrastructure from AEO donor"
+  - "Build chatbot (chaDbot) — copy RAG from AEO"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All CTAs -> /book (internal Cal.com iframe)"
+  - "Pricing page is DONE per user directive — no further changes unless requested"
+  - "9 arcade games: all triggered by ArcadeButton (real photo PNG, 25KB, no focus outline)"
+  - "Easter egg games are undocumented — no navigation or user-facing docs"
+  - "ArcadeButton uses /images/1_player.png (transparent PNG via next/image)"
+  - "'Game Over' is the emerging site concept — traditional B2B marketing is dead, time to level up"

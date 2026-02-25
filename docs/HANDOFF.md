@@ -1,6 +1,6 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 25, 2026 (Session XXXII)
+**Last Updated:** February 25, 2026 (Session XXXIII)
 
 ---
 
@@ -9,8 +9,29 @@
 The site is live with **119 pages** (118 static + 1 API route) across 10 content types, 9 verticals, a full Pricing page (declared done), 89 answer capsules, and **9 hidden arcade games** — one on every page — with a shared boss celebration system. The "Game Over" concept is emerging as the site's creative theme: traditional B2B marketing is dead, time to level up. All game triggers use ArcadeButton with a real 3D arcade button photo (25KB transparent PNG via `next/image`). A CoinSlotCTA component is ready for placement.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections)
-- **Next actions:** Test ArcadeButton photo in browser on all 9 pages, place CoinSlotCTA on pages, homepage copy reframe for "Game Over" concept
-- **Roadmap:** See `docs/roadmap.md` Session XXXII
+- **Next actions:** Place CoinSlotCTA on pages, homepage copy reframe for "Game Over" concept, Contact page form
+- **Roadmap:** See `docs/roadmap.md` Session XXXIII
+
+### Session XXXIII Summary (February 25, 2026)
+
+**Focus:** Fix browser focus outline box appearing on ArcadeButton after exiting games.
+
+**What was done:**
+
+1. **ArcadeButton focus outline fix** (`components/ArcadeButton.tsx`):
+   - After playing a game and pressing ESC to return to the page, browser showed a gray/blue focus ring box around the button
+   - Added `focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0` to suppress both native browser outline and Tailwind's focus ring
+   - The existing `outline-none` class wasn't sufficient — Tailwind's base styles add `focus-visible:ring` which overrides it
+
+**Commits this session:**
+- `495d404` — fix: Remove focus outline on ArcadeButton after game exit
+- `098c850` — docs: Session XXXIII roadmap update — ArcadeButton focus outline fix
+
+**Results:**
+- No more focus box after exiting games
+- Build: 119 pages, PASS
+
+---
 
 ### Session XXXII Summary (February 25, 2026)
 
