@@ -51,7 +51,9 @@ export function HeroSection() {
 
       <div className="relative z-10 section-wide text-center px-4">
         {/* Arcade easter egg trigger */}
-        <ArcadeButton onClick={() => setPlaying(true)} delay={0.2} className="mb-6 mx-auto" />
+        {!playing && (
+          <ArcadeButton onClick={() => setPlaying(true)} delay={0.2} className="mb-6 mx-auto" />
+        )}
 
         {/* GAME OVER headline */}
         <div className="relative">
