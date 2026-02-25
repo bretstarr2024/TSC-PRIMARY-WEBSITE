@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XXXII** | Last Updated: February 25, 2026
+**Status: SESSION XXXIII** | Last Updated: February 25, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -652,7 +652,20 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 119 pages (unchanged — no new routes)
 
-#### Session XXXIII (upcoming): Pipeline Infrastructure + Contact
+#### Session XXXIII: ArcadeButton Focus Outline Fix ✅ COMPLETE (Feb 25, 2026)
+
+**Focus:** Fix browser focus outline box appearing on ArcadeButton after exiting games.
+
+**What was done:**
+- [x] Fixed focus outline/ring appearing on ArcadeButton after closing games (ESC back to page)
+- [x] Added `focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0` to suppress both native and Tailwind focus indicators
+
+**Modified files:**
+- `components/ArcadeButton.tsx` — Added focus/ring reset classes to button element
+
+**Build:** 119 pages (unchanged — no new routes)
+
+#### Session XXXIV (upcoming): Pipeline Infrastructure + Contact
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
