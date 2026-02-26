@@ -104,10 +104,10 @@ export function Footer() {
                   className="text-sm text-atomic-tangerine hover:text-hot-sauce transition-colors hover:no-underline"
                   data-track-cta="footer"
                   data-track-component="Footer"
-                  data-track-label="Let's Talk! →"
+                  data-track-label="New Game →"
                   data-track-destination="/book"
                 >
-                  Let&apos;s Talk! →
+                  New Game →
                 </Link>
               </li>
             </ul>

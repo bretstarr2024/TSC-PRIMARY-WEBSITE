@@ -74,10 +74,10 @@ export function Header() {
               className="ml-4 inline-flex items-center px-5 py-2.5 text-sm font-medium text-white bg-atomic-tangerine rounded-lg hover:bg-hot-sauce transition-colors hover:no-underline"
               data-track-cta="header-nav"
               data-track-component="Header"
-              data-track-label="Let's Talk!"
+              data-track-label="New Game"
               data-track-destination="/book"
             >
-              Let&apos;s Talk!
+              New Game
             </Link>
           </nav>
 
