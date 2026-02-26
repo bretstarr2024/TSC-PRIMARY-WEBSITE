@@ -1,0 +1,72 @@
+session_id: "XLVII"
+date: "2026-02-26"
+branch: main
+version: "0.28.5"  # PATCH: Restore hero layout — text centered in sphere, subhead widened, button repositioned
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "TBD"
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "CSS/layout changes only — no data model modifications."
+
+commits:
+  - hash: "893c12c"
+    message: "fix: Restore hero layout — center text in sphere, widen subhead, position button"
+
+artifacts_updated:
+  - "components/home/HeroSection.tsx — Restored flex items-center justify-center centering; subhead max-w back to 600px; ArcadeButton at absolute bottom-[20vh]"
+  - "docs/roadmap.md — Session XLVII added, Session XLVIII upcoming"
+
+decisions_made:
+  - decision: "Restore flex items-center justify-center for hero section centering"
+    rationale: "The flex-col + flex-1 spacer approach (d50ca54, 0b5bead) broke text centering in the sphere. The original CSS centering perfectly aligns the text block with the Three.js sphere because both are centered in the viewport."
+    reversible: true
+  - decision: "ArcadeButton at absolute bottom-[20vh] instead of bottom-8 or flex spacer"
+    rationale: "bottom-8 (32px) was too close to the section edge. The flex spacer approach broke centering. bottom-[20vh] places the button at ~80% from top — approximately halfway between sphere bottom (~60%) and section bottom (100%)."
+    reversible: true
+  - decision: "Subhead max-width restored to 600px from 480px"
+    rationale: "480px made the text wrap excessively and appear cramped. 600px was the original value from Session XXXIX's spatial refinement commit."
+    reversible: true
+
+known_risks:
+  - risk: "ArcadeButton bottom-[20vh] is a viewport-relative estimate — may not look perfectly centered on all screen sizes"
+    mitigation: "User should verify on deploy; easy to tweak the vh value"
+    severity: low
+
+explicitly_deferred:
+  - "Pipeline infrastructure from AEO — Session XLVIII"
+  - "MongoDB index on leads collection (timestamp: -1) — Session XLVIII"
+  - "Chatbot (chaDbot) deployment — future session"
+  - "Expand Game Over concept to other page copy — future session"
+  - "Vercel Analytics initialization — future session"
+
+next_actions:
+  - "Verify hero layout visually on deployed site"
+  - "Copy pipeline infrastructure from AEO (lib/pipeline/*.ts)"
+  - "Create MongoDB index on leads collection (timestamp: -1)"
+  - "Expand Game Over concept to other page copy/headlines"
+  - "Build chatbot (chaDbot) — copy RAG from AEO"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "Homepage hero: flex items-center justify-center (NOT flex-col) — text must stay centered in sphere"
+  - "Subhead max-w-[600px] — do not narrow again"
+  - "ArcadeButton absolute bottom-[20vh] — centered between sphere bottom and Who We Are"
+  - "Hero + contact hero both have h-64 bottom fade gradients"
+  - "CoinSlotCTA is in the bottom CtaSection (not the hero)"
+  - "All general CTAs -> /contact; service-specific CTAs -> /book"
+  - "Pricing page is DONE per user directive — no further changes unless requested"
+  - "9 arcade games: all triggered by ArcadeButton (motion.div with role=button)"
+  - "Game Over is the site's creative concept"

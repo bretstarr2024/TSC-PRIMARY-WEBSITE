@@ -1,16 +1,58 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 25, 2026 (Session XLVI)
+**Last Updated:** February 26, 2026 (Session XLVII)
 
 ---
 
 ## Current Phase: Phase 1 COMPLETE + Contact Live
 
-The site is live with **121 pages** across 10 content types, 9 verticals, a full Pricing page (declared done), 94 answer capsules, **9 hidden arcade games**, site-wide CTA tracking, **full email infrastructure** (Resend verified), a **full Contact page** with "CONTINUE?" arcade headline + dual-path UX (form + calendar) + lead API, and **CTA routing migration** (general CTAs → /contact, service-specific → /book). Homepage hero is clean — GAME OVER headline + subhead centered in the particle sphere, ArcadeButton at the bottom replacing the scroll indicator. Cal.com embeds on both `/contact` and `/book` use smooth CSS height transitions (no jumpiness, no black box, no internal metadata leaked into the notes field).
+The site is live with **121 pages** across 10 content types, 9 verticals, a full Pricing page (declared done), 94 answer capsules, **9 hidden arcade games**, site-wide CTA tracking, **full email infrastructure** (Resend verified), a **full Contact page** with "CONTINUE?" arcade headline + dual-path UX (form + calendar) + lead API, and **CTA routing migration** (general CTAs → /contact, service-specific → /book). Homepage hero is clean — GAME OVER headline + subhead centered in the particle sphere, ArcadeButton positioned between sphere bottom and next section. Cal.com embeds on both `/contact` and `/book` use smooth CSS height transitions (no jumpiness, no black box, no internal metadata leaked into the notes field).
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections + `interactions` + `leads` collections), Vercel CLI linked
-- **Next actions:** Copy pipeline infrastructure from AEO, create `leads` collection index, expand Game Over concept
-- **Roadmap:** See `docs/roadmap.md` Session XLVI
+- **Next actions:** Verify hero layout on deployed site, copy pipeline infrastructure from AEO, create `leads` collection index
+- **Roadmap:** See `docs/roadmap.md` Session XLVII
+
+### Session XLVII Summary (February 26, 2026)
+
+**Focus:** Fix homepage hero layout regression — headline/subhead decentered from sphere, subhead too narrow, ArcadeButton mispositioned.
+
+**What was done:**
+
+1. **Restored hero centering** (`components/home/HeroSection.tsx`):
+   - Post-Session XLVI commits (d50ca54, 0b5bead) switched the section from `flex items-center justify-center` to `flex-col` with `flex-1` spacers, trying to improve ArcadeButton positioning
+   - This broke text centering — the bottom spacer (with button + padding) was heavier than the top, pushing the headline above the sphere center
+   - Reverted to `flex items-center justify-center` which naturally centers the text in the viewport = aligned with the Three.js sphere
+
+2. **Subhead max-width restored** (`components/home/HeroSection.tsx`):
+   - Changed from `max-w-[480px]` back to `max-w-[600px]` (the original value from Session XXXIX)
+   - 480px made the text wrap excessively and look cramped
+
+3. **ArcadeButton repositioned** (`components/home/HeroSection.tsx`):
+   - Changed from `flex-1 flex items-center pt-[10vh]` to `absolute bottom-[20vh] left-1/2 -translate-x-1/2`
+   - Places button at ~80% from viewport top — approximately halfway between sphere bottom (~60%) and section bottom (100%)
+
+**Diagnosis method:** Used `/stuck` protocol — traced the render chain from Three.js camera (centered at origin, fov 45) through CSS layout to confirm the flex-col approach broke the alignment that `flex items-center justify-center` naturally provided.
+
+**Commits this session:**
+- `893c12c` — fix: Restore hero layout — center text in sphere, widen subhead, position button
+
+**Results:**
+- Headline + subhead back in sphere center
+- Subhead readable at proper width
+- ArcadeButton positioned between sphere bottom and next section
+- Build: 121 pages, PASS
+
+**Key decisions (do not re-debate):**
+- Hero section MUST use `flex items-center justify-center` — any flex-col/spacer approach will break sphere centering
+- Subhead `max-w-[600px]` — do not narrow below this
+- ArcadeButton uses absolute positioning at `bottom-[20vh]` — may need fine-tuning per visual check
+
+**What must happen next:**
+- Verify hero layout visually on deployed site (button may need vh tweak)
+- Copy pipeline infrastructure from AEO
+- Create MongoDB index on `leads` collection (timestamp: -1)
+
+---
 
 ### Session XLVI Summary (February 25, 2026)
 

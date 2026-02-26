@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XLVI** | Last Updated: February 25, 2026
+**Status: SESSION XLVII** | Last Updated: February 26, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -869,7 +869,18 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 121 pages, PASS
 
-#### Session XLVII (upcoming): Pipeline Infrastructure + Game Over Expansion
+#### Session XLVII: Hero Layout Fix ✅ COMPLETE (Feb 26, 2026)
+
+**Focus:** Fix homepage hero regression — headline/subhead drifted out of sphere center, subhead too narrow, ArcadeButton mispositioned.
+
+**Root cause:** Sessions XLVI's follow-up commits (d50ca54, 0b5bead) switched section from `flex items-center justify-center` to `flex-col` with `flex-1` spacers, which broke centering. Used /stuck protocol to diagnose.
+
+**Files modified:**
+- [x] `components/home/HeroSection.tsx` — Restored `flex items-center justify-center`; subhead `max-w-[600px]` (was 480px); ArcadeButton `absolute bottom-[20vh]`
+
+**Build:** 121 pages, PASS
+
+#### Session XLVIII (upcoming): Pipeline Infrastructure + Game Over Expansion
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
