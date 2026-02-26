@@ -33,13 +33,10 @@ export function HeroSection() {
   };
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <HeroParticles />
 
       {playing && <AsteroidsGame onClose={() => setPlaying(false)} />}
-
-      {/* Top spacer — pushes content to vertical center */}
-      <div className="flex-1" />
 
       <div className="relative z-10 section-wide text-center px-4">
         {/* GAME OVER headline */}
@@ -116,7 +113,7 @@ export function HeroSection() {
 
         {/* Sub-headline */}
         <motion.p
-          className="mt-10 text-base md:text-lg text-shroomy max-w-[480px] mx-auto leading-relaxed"
+          className="mt-10 text-base md:text-lg text-shroomy max-w-[600px] mx-auto leading-relaxed"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 1.8 }}
@@ -127,13 +124,12 @@ export function HeroSection() {
         </motion.p>
       </div>
 
-      {/* Bottom spacer — button centered between content and section edge */}
+      {/* Arcade button — centered between sphere bottom and section bottom */}
       {!playing && (
-        <div className="flex-1 flex items-center justify-center z-10 pt-[10vh]">
+        <div className="absolute bottom-[20vh] left-1/2 -translate-x-1/2 z-10">
           <ArcadeButton onClick={() => setPlaying(true)} delay={2.8} />
         </div>
       )}
-      {playing && <div className="flex-1" />}
 
       {/* Bottom fade — dissolves starfield into background */}
       <div
