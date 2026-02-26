@@ -1,16 +1,73 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 26, 2026 (Session LI)
+**Last Updated:** February 26, 2026 (Session LII)
 
 ---
 
-## Current Phase: Phase 1 COMPLETE + All 9 Arcade Games DONE + Pipeline Infrastructure Next
+## Current Phase: Phase 1 COMPLETE + Verticals Rebuilt + Pipeline Infrastructure Next
 
-The site is live with **121 pages** across 10 content types, 9 verticals, **37 services** (30 strategic + 7 AI) with AEO-ready content, a full Pricing page (declared done), 94 answer capsules, **9 hidden arcade games** (all declared DONE — Galaga firing tuned in Session LI), site-wide CTA tracking, **full email infrastructure** (Resend verified), a **full Contact page** with "CONTINUE?" arcade headline + dual-path UX (form + calendar) + lead API, and **CTA routing migration** (general CTAs → /contact, service-specific → /book). All major page heroes now use a consistent GradientText single-word headline + descriptive subhead pattern. Homepage, Services, Pricing, and all arcade games are **declared DONE** by the user.
+The site is live with **127 pages** across 10 content types, **15 verticals** (10 HR Tech sub-verticals + 5 adjacent, rebuilt from real client data), **37 services** (30 strategic + 7 AI) with AEO-ready content, a full Pricing page, **60 AEO-optimized vertical answer capsules**, **9 hidden arcade games** (all declared DONE), site-wide CTA tracking, **full email infrastructure** (Resend verified), a **full Contact page** with "CONTINUE?" arcade headline + dual-path UX (form + calendar) + lead API, and **CTA routing migration** (general CTAs → /contact, service-specific → /book). All major page heroes use GradientText single-word headline + descriptive subhead pattern. Homepage, Services, Pricing, Verticals hub, and all arcade games are **declared DONE** by the user.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections + `interactions` + `leads` collections), Vercel CLI linked
-- **Next actions:** Copy pipeline infrastructure from AEO, create `leads` collection index, build chatbot
-- **Roadmap:** See `docs/roadmap.md` Session LI
+- **Next actions:** Polish vertical detail pages, test Space Invaders game, copy pipeline infrastructure from AEO
+- **Roadmap:** See `docs/roadmap.md` Session LII
+
+### Session LII Summary (February 26, 2026)
+
+**Focus:** Complete rebuild of verticals page using real client categorization data (606 clients mapped across 15 verticals). Replaced fictional market-value stats with real client counts and notable client names.
+
+**What was done:**
+
+1. **Verticals data rewrite** (`lib/industries-data.ts`):
+   - 9 fictional verticals → 15 data-backed verticals with real client counts
+   - 10 HR Tech sub-verticals: TA&R (109), L&D (76), Engagement (57), Core HCM (42), Wellbeing (36), PEO (33), Benefits (32), Payroll (30), Talent Mgmt (23), Analytics (13)
+   - 5 Adjacent: Enterprise SaaS (34), MarTech (16), Cybersecurity (15), HealthTech (12), FinTech (11)
+   - Dropped: DevTools, Cloud Infrastructure, AI/ML Platforms (no real client data)
+   - 60 AEO-optimized answer capsules (4 per vertical) with standalone-quotable first sentences
+   - Full detail page content: market context, pain points, how-we-help, notable clients, buyer titles
+
+2. **Hub page layout** (`app/verticals/page.tsx`):
+   - Flat grid — all 15 cards together (user rejected HR Tech / Beyond HR Tech section grouping)
+   - CoinSlotCTA replaces ServiceCTA at bottom
+   - Updated metadata for new vertical structure
+
+3. **Card improvements** (`components/industries/IndustryCard.tsx`):
+   - Cards show real client count (e.g., "109 CLIENTS SERVED") instead of market values
+   - Top 4 notable clients shown as pills — removed "+N" overflow indicator
+
+4. **Hero + FAQs**:
+   - Hero subhead: "Thousands of B2B technology companies across dozens of verticals. If you sell software or services to businesses, we get you."
+   - Hub FAQ updated for 15 verticals + new Q about why 10 HR Tech sub-verticals
+   - Homepage FAQ updated to reference new vertical structure
+
+5. **Footer** (`components/Footer.tsx`):
+   - Contact moved from Company section to Connect section
+
+**Commits this session:**
+- `f34e871` — feat: Rebuild verticals with real client data — 15 verticals, 60 AEO capsules
+- `50cfca0` — docs: Session LII closeout — ledger, handoff, roadmap
+
+**Results:**
+- 127 pages (up from 121 — 6 net new vertical sub-pages)
+- User declared verticals hub page DONE: "the verticals page is brilliant"
+- Interior pages need polish next session
+
+**Key decisions (do not re-debate):**
+- 15 verticals based on real client data (not aspirational markets)
+- No section headers — flat grid
+- Hero uses "Thousands" / "dozens" — no specific numbers
+- Don't mention "77% HR Tech" stat
+- CoinSlotCTA at bottom of verticals page
+- Footer: Contact under Connect, not Company
+
+**What must happen next:**
+- Review and polish vertical detail pages (interior content when clicking cards)
+- Test Space Invaders game on verticals page
+- Copy pipeline infrastructure from AEO (lib/pipeline/*.ts)
+- Create MongoDB index on `leads` collection (timestamp: -1)
+- Build chatbot (chaDbot) — copy RAG from AEO
+
+---
 
 ### Session LI Summary (February 26, 2026)
 

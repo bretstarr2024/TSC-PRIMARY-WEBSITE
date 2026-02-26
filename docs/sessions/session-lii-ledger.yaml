@@ -1,0 +1,95 @@
+session_id: "LII"
+date: "2026-02-26"
+branch: main
+version: "0.31.0"  # MINOR: Rebuild verticals with real client data — 15 verticals, 60 AEO capsules
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "tZuhG4GtF0W42EOoAUPv"
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "Client-side data file and component changes only — no MongoDB schema changes."
+
+commits:
+  - hash: "f34e871"
+    message: "feat: Rebuild verticals with real client data — 15 verticals, 60 AEO capsules"
+  - hash: "50cfca0"
+    message: "docs: Session LII closeout — ledger, handoff, roadmap"
+
+artifacts_updated:
+  - "lib/industries-data.ts — Complete rewrite: 9 verticals → 15 verticals (10 HR Tech sub-verticals + 5 adjacent) with real client counts, notable clients, AEO capsules"
+  - "app/verticals/page.tsx — Flat grid layout, CoinSlotCTA replaces ServiceCTA, updated metadata"
+  - "components/industries/IndustriesHero.tsx — New subhead: 'Thousands of B2B technology companies across dozens of verticals'"
+  - "components/industries/IndustryCard.tsx — Removed +N overflow indicator on client pills"
+  - "lib/schema/hub-faqs.ts — Updated verticals FAQ (15 verticals), updated homepage FAQ vertical references"
+  - "components/Footer.tsx — Moved Contact from Company to Connect section"
+
+decisions_made:
+  - decision: "15 verticals: 10 HR Tech sub-verticals + 5 adjacent"
+    rationale: "Based on real client categorization data (606 clients mapped). HR Tech broken into sub-verticals because TA&R (109 clients) is fundamentally different from Payroll (30 clients). Adjacent verticals kept where TSC has meaningful client history."
+    reversible: true
+  - decision: "Dropped DevTools, Cloud Infrastructure, AI/ML Platforms"
+    rationale: "No real client data to back these verticals. User directive."
+    reversible: true
+  - decision: "No section headers (HR Tech / Beyond HR Tech) — flat grid"
+    rationale: "User rejected grouped layout. Don't mention '77% HR Tech' stat."
+    reversible: true
+  - decision: "Hero says 'Thousands' and 'dozens' — not specific numbers"
+    rationale: "User directive — round numbers feel more confident and don't lock messaging to exact counts."
+    reversible: true
+  - decision: "Verticals hub page declared DONE by user"
+    rationale: "User said 'the verticals page is brilliant. we can call it done except for the video game which we can test next.'"
+    reversible: true
+  - decision: "CoinSlotCTA at bottom of verticals page"
+    rationale: "User preferred coin slot graphic over orange 'New Game' button for CTA."
+    reversible: true
+  - decision: "Footer: Contact moved from Company to Connect"
+    rationale: "User directive — Contact is a 'connect' action, not a company info page."
+    reversible: true
+
+known_risks:
+  - risk: "Old vertical URLs (hr-tech, devtools, cloud-infrastructure, ai-ml-platforms) now 404"
+    mitigation: "Domain is TBD — no public traffic to these URLs yet. If needed, add redirects in next.config.js."
+    severity: low
+  - risk: "Game loop uses requestAnimationFrame without delta-time normalization"
+    mitigation: "Works correctly on 60Hz displays. On 120Hz displays game runs 2x fast. All 9 games share this pattern."
+    severity: low
+
+explicitly_deferred:
+  - "Vertical interior page polish — Session LIII"
+  - "Space Invaders game testing on verticals page — Session LIII"
+  - "Pipeline infrastructure from AEO — Session LIII+"
+  - "MongoDB index on leads collection (timestamp: -1) — Session LIII+"
+  - "Chatbot (chaDbot) deployment — future session"
+  - "Vercel Analytics initialization — future session"
+  - "Delta-time normalization for all arcade games — future session"
+
+next_actions:
+  - "Review and polish vertical detail pages (interior content)"
+  - "Test Space Invaders game on verticals page"
+  - "Copy pipeline infrastructure from AEO (lib/pipeline/*.ts)"
+  - "Create MongoDB index on leads collection (timestamp: -1)"
+  - "Build chatbot (chaDbot) — copy RAG from AEO"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "Homepage, Services, Pricing, all 9 arcade games — DONE per user directive"
+  - "Verticals hub page is DONE per user directive (except Space Invaders game testing)"
+  - "All page heroes use GradientText single-word headline + subhead pattern"
+  - "All general CTAs -> /contact; service-specific CTAs -> /book"
+  - "15 verticals: 10 HR Tech sub-verticals + 5 adjacent (no DevTools, Cloud Infra, AI/ML)"
+  - "Verticals hero: 'Thousands' and 'dozens' — never specific client counts in hero"
+  - "No section headers on verticals page — flat grid only"
+  - "Don't mention '77% HR Tech' stat — user directive"
+  - "Footer: Contact lives under Connect, not Company"
