@@ -13,8 +13,8 @@ export function IndustriesHero() {
               <GradientText>Verticals</GradientText>
             </h1>
             <p className="text-xl md:text-2xl text-shroomy leading-relaxed max-w-2xl">
-              We work exclusively with B2B technology companies. If you sell software
-              or services to businesses, we probably already understand your market.
+              Thousands of B2B technology companies across dozens of verticals.
+              If you sell software or services to businesses, we get you.
             </p>
           </div>
         </AnimatedSection>

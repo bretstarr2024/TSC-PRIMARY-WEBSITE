@@ -4,20 +4,20 @@ import { Footer } from '@/components/Footer';
 import { IndustriesHero } from '@/components/industries/IndustriesHero';
 import { IndustryCard } from '@/components/industries/IndustryCard';
 import { AnswerCapsulesSection } from '@/components/AnswerCapsulesSection';
-import { ServiceCTA } from '@/components/services/ServiceCTA';
 import { INDUSTRIES } from '@/lib/industries-data';
 import { SpaceInvadersGameTrigger } from '@/components/industries/SpaceInvadersGameTrigger';
 import { verticalsCapsules } from '@/lib/schema/hub-faqs';
 import { getFaqSchema } from '@/lib/schema/service-faq';
+import { CoinSlotCTA } from '@/components/CoinSlotCTA';
 
 export const metadata: Metadata = {
   title: 'Verticals | The Starr Conspiracy',
   description:
-    'B2B marketing expertise across HR Tech, SaaS, FinTech, Cybersecurity, HealthTech, MarTech, DevTools, Cloud Infrastructure, and AI/ML platforms. Vertical-specific strategies grounded in 25+ years of experience.',
+    'B2B marketing expertise across dozens of verticals — Talent Acquisition, Learning & Development, Employee Engagement, Core HCM, Enterprise SaaS, Cybersecurity, FinTech, and more. Vertical-specific strategies grounded in 25+ years of experience.',
   openGraph: {
     title: 'Verticals | The Starr Conspiracy',
     description:
-      'We work exclusively with B2B technology companies. If you sell software or services to businesses, we probably already understand your market.',
+      'Thousands of B2B technology companies across dozens of verticals. If you sell software or services to businesses, we get you.',
   },
 };
 
@@ -51,7 +51,14 @@ export default function VerticalsPage() {
           subheading="How deep B2B technology specialization translates into better marketing results."
         />
 
-        <ServiceCTA />
+        {/* CTA */}
+        <section className="relative py-32 md:py-40 overflow-hidden">
+          <div className="relative z-10 section-wide text-center">
+            <div className="flex justify-center">
+              <CoinSlotCTA href="/contact?cta=verticals-bottom" ctaId="verticals-bottom" />
+            </div>
+          </div>
+        </section>
       </main>
       <Footer />
 

@@ -15,7 +15,7 @@ export const homepageCapsules: AnswerCapsule[] = [
   {
     question: 'What types of B2B technology companies does TSC work with?',
     answer:
-      'TSC works exclusively with B2B technology companies between $5M and $500M ARR that are at a growth inflection point — scaling demand, repositioning, or navigating AI transformation. Our deepest expertise spans nine verticals: HR Tech, Enterprise SaaS, FinTech, Cybersecurity, HealthTech, MarTech, DevTools, Cloud Infrastructure, and AI/ML Platforms.',
+      'TSC works exclusively with B2B technology companies between $5M and $500M ARR that are at a growth inflection point — scaling demand, repositioning, or navigating AI transformation. Our deepest expertise spans 15 verticals — 10 in HR Tech alone (from Talent Acquisition to People Analytics) plus Enterprise SaaS, MarTech, Cybersecurity, HealthTech, and FinTech. 77% of our 600+ clients are in HR technology.',
   },
   {
     question: 'How does The Starr Conspiracy use AI in marketing?',
@@ -68,22 +68,22 @@ export const verticalsCapsules: AnswerCapsule[] = [
   {
     question: 'What B2B technology verticals does TSC specialize in?',
     answer:
-      'TSC specializes in nine core B2B technology verticals: HR Tech, Enterprise SaaS, FinTech, Cybersecurity, HealthTech, MarTech, DevTools, Cloud Infrastructure, and AI/ML Platforms. Our deepest roots are in HR Tech, where we have been operating since 1999 — but our expertise extends across the full B2B technology spectrum.',
+      'TSC specializes in 15 B2B technology verticals across two groups: 10 HR Tech sub-verticals (Talent Acquisition, Learning & Development, Employee Engagement, Core HCM, Employee Wellbeing, PEO & Staffing, Benefits & Compensation, Payroll & Workforce Management, Talent Management, and HR Analytics) plus 5 adjacent verticals (Enterprise SaaS, MarTech, Cybersecurity, HealthTech, and FinTech). 77% of our 600+ clients are in HR technology.',
   },
   {
     question: 'Do you only work with companies in these specific verticals?',
     answer:
-      'These nine verticals represent our deepest expertise, but we work with any B2B technology company that sells software or services to businesses. If your market involves complex buying committees, long sales cycles, and technical buyers, our playbooks and pattern recognition apply — even if your category is not listed here.',
+      'These 15 verticals represent our deepest expertise across 600+ client engagements, but we work with any B2B technology company that sells software or services to businesses. If your market involves complex buying committees, long sales cycles, and technical buyers, our playbooks and pattern recognition apply — even if your category is not listed here.',
   },
   {
     question: 'How does vertical expertise actually improve marketing results?',
     answer:
-      'Vertical expertise eliminates the agency learning curve — instead of spending months educating your agency on your market, you work with people who already know your buyers, competitors, and category dynamics. That translates to faster time-to-impact, more relevant messaging, and programs built for how your specific market actually buys.',
+      'Vertical expertise eliminates the agency learning curve — instead of spending months educating your agency on your market, you work with people who already know your buyers, competitors, and category dynamics. With 109 talent acquisition clients alone, we bring pattern recognition that generalist agencies cannot match, translating to faster time-to-impact and programs built for how your specific market actually buys.',
   },
   {
-    question: 'Which vertical has TSC worked in the longest?',
+    question: 'Why does TSC break HR Tech into 10 sub-verticals instead of treating it as one category?',
     answer:
-      'TSC has been marketing HR Tech companies since 1999, making it our longest-standing and deepest vertical expertise — we have worked with companies like ADP, Oracle, Korn Ferry, Indeed, ZipRecruiter, and dozens more across talent acquisition, HCM, and workforce management. That quarter-century of pattern recognition informs everything we do across all verticals.',
+      'HR Tech is not one market — it is at least 10 distinct buying environments with different buyers, competitors, sales cycles, and positioning challenges. Marketing a talent acquisition platform to a VP of recruiting requires fundamentally different strategy than marketing a payroll system to a CFO. Our sub-vertical depth means you get an agency that understands your specific corner of HR tech, not just the category label.',
   },
 ];
 

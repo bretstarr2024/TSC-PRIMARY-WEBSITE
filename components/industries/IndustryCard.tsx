@@ -75,11 +75,6 @@ export function IndustryCard({ industry, index }: IndustryCardProps) {
                 {client}
               </span>
             ))}
-            {industry.notableClients.length > 4 && (
-              <span className="text-[10px] text-greige px-1">
-                +{industry.notableClients.length - 4}
-              </span>
-            )}
           </div>
         )}
 

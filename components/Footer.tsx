@@ -19,7 +19,6 @@ const companyLinks = [
   { href: '/insights', label: 'Insights' },
   { href: '/pricing', label: 'Pricing' },
   { href: '/careers', label: 'Careers' },
-  { href: '/contact', label: 'Contact' },
 ];
 
 export function Footer() {
@@ -88,6 +87,14 @@ export function Footer() {
               Connect
             </h4>
             <ul className="space-y-2.5">
+              <li>
+                <Link
+                  href="/contact"
+                  className="text-sm text-greige hover:text-white transition-colors hover:no-underline"
+                >
+                  Contact
+                </Link>
+              </li>
               <li>
                 <a
                   href="https://www.linkedin.com/company/the-starr-conspiracy/"
