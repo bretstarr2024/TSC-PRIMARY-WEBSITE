@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import dynamic from 'next/dynamic';
-import { GradientText } from '@/components/AnimatedText';
 import { ArcadeButton } from '@/components/ArcadeButton';
 import { CoinSlotCTA } from '@/components/CoinSlotCTA';
 
@@ -17,16 +16,7 @@ const AsteroidsGame = dynamic(
   { ssr: false }
 );
 
-const ledGlow = {
-  color: '#FF7A40',
-  textShadow: [
-    '0 0 4px #FF5910',
-    '0 0 8px #FF5910',
-    '0 0 20px #FF5910',
-    '0 0 40px rgba(255,89,16,0.4)',
-    '0 0 60px rgba(255,89,16,0.2)',
-  ].join(', '),
-};
+const gradientClasses = 'inline-block bg-gradient-to-r from-atomic-tangerine via-neon-cactus to-tidal-wave bg-clip-text text-transparent bg-[length:200%_auto]';
 
 export function HeroSection() {
   const [playing, setPlaying] = useState(false);
@@ -52,11 +42,14 @@ export function HeroSection() {
       <div className="relative z-10 section-wide text-center px-4">
         {/* Arcade easter egg trigger */}
         {!playing && (
-          <ArcadeButton onClick={() => setPlaying(true)} delay={0.2} className="mb-6 mx-auto" />
+          <ArcadeButton onClick={() => setPlaying(true)} delay={0.2} className="mb-10 mx-auto" />
         )}
 
         {/* GAME OVER headline */}
-        <div className="relative">
+        <div
+          className="relative"
+          style={{ filter: 'drop-shadow(0 0 15px rgba(255,89,16,0.4)) drop-shadow(0 0 40px rgba(255,89,16,0.2))' }}
+        >
           <h1
             className="font-arcade leading-none tracking-[0.15em] text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl"
             style={{ WebkitFontSmoothing: 'none', MozOsxFontSmoothing: 'unset' } as React.CSSProperties}
@@ -73,10 +66,15 @@ export function HeroSection() {
               }}
             >
               <motion.span
-                className="inline-block"
-                style={ledGlow}
-                animate={flickerAnimation}
-                transition={{ ...flickerTransition, delay: 1.3 }}
+                className={gradientClasses}
+                animate={{
+                  backgroundPosition: ['0% center', '100% center', '0% center'],
+                  ...flickerAnimation,
+                }}
+                transition={{
+                  backgroundPosition: { duration: 5, repeat: Infinity, ease: 'linear' },
+                  opacity: { ...flickerTransition, delay: 1.3 },
+                }}
               >
                 GAME
               </motion.span>
@@ -94,10 +92,15 @@ export function HeroSection() {
               }}
             >
               <motion.span
-                className="inline-block"
-                style={ledGlow}
-                animate={flickerAnimation}
-                transition={{ ...flickerTransition, delay: 1.3 }}
+                className={gradientClasses}
+                animate={{
+                  backgroundPosition: ['0% center', '100% center', '0% center'],
+                  ...flickerAnimation,
+                }}
+                transition={{
+                  backgroundPosition: { duration: 5, repeat: Infinity, ease: 'linear' },
+                  opacity: { ...flickerTransition, delay: 1.3 },
+                }}
               >
                 OVER
               </motion.span>
@@ -116,19 +119,19 @@ export function HeroSection() {
 
         {/* Sub-headline */}
         <motion.p
-          className="mt-8 text-lg md:text-xl text-shroomy max-w-2xl mx-auto leading-relaxed"
+          className="mt-8 text-base md:text-lg text-shroomy max-w-[600px] mx-auto leading-relaxed"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 1.8 }}
         >
           The SaaS marketing era is over. AI-native marketing is a whole new game.
           TSC is the B2B agency you can trust to help you{' '}
-          <GradientText className="inline">level up</GradientText>.
+          <span className="text-white font-semibold">level up</span>.
         </motion.p>
 
         {/* CTA button — CoinSlotCTA (arcade coin slot) */}
         <motion.div
-          className="mt-8 flex items-center justify-center"
+          className="mt-20 flex items-center justify-center"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 2.4 }}
