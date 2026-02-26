@@ -1,16 +1,71 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 26, 2026 (Session LIX)
+**Last Updated:** February 26, 2026 (Session LX)
 
 ---
 
-## Current Phase: Phase 2 — Pipeline Hardened, Review Round 2 Complete
+## Current Phase: Phase 2 — Pipeline Hardened, Security + Performance Hardened
 
-The site is live with **143 pages** across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, Vercel Analytics + Speed Insights, and a **fully activated autonomous content pipeline**. All 47 code review findings from Round 1 (Session LVII) were resolved in Sessions LVII-LVIII. Round 2 of all 8 code reviews ran in Session LIX and found **4 critical + 24 warning** new findings — cataloged and ready for sprint planning.
+The site is live with **143 pages** across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, Vercel Analytics + Speed Insights, and a **fully activated autonomous content pipeline**. Two rounds of comprehensive code review (8 commands each) have been completed. All 47 Round 1 findings resolved (Sessions LVII-LVIII). All 16 Round 2 critical + high-priority findings resolved (Session LX). 12 medium-priority warnings remain (W13-W24).
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database), Resend email, 3 Vercel cron jobs (ACTIVE — CRON_SECRET set), Vercel Analytics + Speed Insights
-- **Next actions:** Sprint-plan and fix Round 2 review findings, monitor cron runs, build Work page
-- **Roadmap:** See `docs/roadmap.md` Session LIX
+- **Next actions:** Sprint-plan Round 2 medium warnings (W13-W24), monitor cron runs, build Work page
+- **Roadmap:** See `docs/roadmap.md` Session LX
+
+### Session LX Summary (February 26, 2026)
+
+**Focus:** Execute all 16 critical + high-priority findings from code review round 2.
+
+**What was done (3 sprints, 16 fixes):**
+
+**Sprint 1 — Critical Fixes + Quick Wins (C1-C4, W6-W7):**
+1. Removed phantom `openai` dep from `package.json` (C1)
+2. Added `'fractional cmo'` to FORBIDDEN_TERMS in `lib/pipeline/content-guardrails.ts` (C2)
+3. Added security headers (CSP, HSTS, X-Frame-Options, etc.) to `next.config.mjs` (C3)
+4. Added sr-only labels + id/htmlFor + autoComplete to `components/contact/ContactForm.tsx` (C4)
+5. Added skip-to-content link in `app/layout.tsx` + `#main-content` target (W6)
+6. Added email validation + game allowlist to `app/api/arcade-boss/route.ts` (W7)
+
+**Sprint 2 — Infrastructure (W1-W5, W8, W11):**
+7. Created `app/error.tsx` — global error boundary (W1)
+8. Created `lib/rate-limit.ts` — in-memory sliding window rate limiter (W2)
+9. Added rate limiting + field validation to `/api/lead` (5/min), `/api/track` (60/min), `/api/arcade-boss` (3/min) (W2+W3)
+10. Added `getTodaySpend()` to `lib/pipeline/logger.ts` — DB-backed spend tracking (W4)
+11. Added TTL indexes: `pipeline_logs` (90d), `interactions` (180d), `leads` timestamp (W5)
+12. Added MAX_RETRIES=3 ceiling to stuck item reset — exhausted items permanently failed (W8)
+13. Fixed pre-flight rejection: duplicate → 'rejected' (permanent), budget/cap → 'pending' (transient) (W11)
+
+**Sprint 3 — Performance (W9-W10, W12):**
+14. Added IntersectionObserver to `HeroParticles.tsx` — pauses Canvas when off-screen (W9)
+15. Refactored `ServiceDualUniverse`, `AiCascade`, `IndustryContent` to accept props (removes 62KB client bundle leak) (W10)
+16. Created `ContentSkeleton` + 13 `loading.tsx` files for all dynamic routes (W12)
+
+**Commits this session:**
+- `d5f03d5` — feat: Code review round 2 — 16 critical + high fixes
+- `e9d947b` — docs: Session LX closeout
+
+**Results:**
+- All 4 critical findings resolved
+- All 12 high-priority warnings resolved
+- Security headers live (CSP, HSTS, X-Frame-Options, etc.)
+- All public APIs rate-limited
+- Pipeline has retry ceiling + DB-backed spend tracking
+- Three.js pauses off-screen, client bundle reduced
+- 13 loading skeletons for dynamic routes
+
+**Key decisions (do not re-debate):**
+- In-memory rate limiting (not Redis/KV) — sufficient for serverless burst protection
+- Removed 'metadata' field from /api/track entirely rather than validating structure
+- Pre-flight rejection split: permanent vs transient (prevents infinite retry loops)
+- Server-to-client prop passing pattern for services-data (not dynamic imports or code splitting)
+
+**What must happen next:**
+1. Sprint-plan Round 2 medium-priority warnings (W13-W24)
+2. Monitor production cron runs — verify DB-backed spend tracking + retry ceiling
+3. Build Work page (needs user content direction)
+4. Domain configuration
+
+---
 
 ### Session LIX Summary (February 26, 2026)
 

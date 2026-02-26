@@ -1,0 +1,103 @@
+session_id: "LX"
+date: "2026-02-26"
+branch: main
+version: "0.38.0"  # MINOR: 16 code review fixes — security headers, rate limiting, error boundaries, pipeline hardening, performance
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "nw6bVZFDpC5lzk9w4V3p"
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "No data model changes this session — security, validation, pipeline logic, and performance fixes only"
+
+commits:
+  - hash: "d5f03d5"
+    message: "feat: Code review round 2 — 16 critical + high fixes (security, rate limiting, pipeline, performance)"
+  - hash: "e9d947b"
+    message: "docs: Session LX closeout — 16 review findings fixed across 3 sprints"
+
+artifacts_updated:
+  - "package.json — Removed phantom openai dependency"
+  - "next.config.mjs — Added security headers (CSP, HSTS, X-Frame-Options, etc.)"
+  - "lib/rate-limit.ts — NEW: In-memory sliding window rate limiter"
+  - "app/api/lead/route.ts — Rate limiting (5/min) + field length validation"
+  - "app/api/track/route.ts — Rate limiting (60/min) + field validation + removed metadata"
+  - "app/api/arcade-boss/route.ts — Rate limiting (3/min) + email/game validation"
+  - "app/error.tsx — NEW: Global error boundary with brand styling"
+  - "components/ContentSkeleton.tsx — NEW: Shared loading skeleton"
+  - "13 loading.tsx files — NEW: All dynamic routes"
+  - "lib/pipeline/content-guardrails.ts — Added 'fractional cmo' to FORBIDDEN_TERMS"
+  - "lib/pipeline/logger.ts — Added getTodaySpend() + ensurePipelineLogIndexes()"
+  - "lib/content-db.ts — Retry ceiling (MAX_RETRIES=3) + TTL indexes"
+  - "app/api/cron/generate-content/route.ts — DB-backed spend + pre-flight rejection fix"
+  - "components/contact/ContactForm.tsx — WCAG labels + autoComplete"
+  - "app/layout.tsx — Skip-to-content link + #main-content"
+  - "components/home/HeroParticles.tsx — IntersectionObserver for off-screen pause"
+  - "components/services/ServiceDualUniverse.tsx — Prop-based data (removed client bundle leak)"
+  - "components/services/AiCascade.tsx — Prop-based data"
+  - "components/industries/IndustryContent.tsx — Prop-based data"
+  - "app/services/page.tsx — Passes aiCategory prop to client components"
+  - "app/verticals/[slug]/page.tsx — Passes relevantServices prop"
+  - "docs/roadmap.md — Session LX section"
+  - "docs/HANDOFF.md — Session LX handoff"
+
+decisions_made:
+  - decision: "In-memory rate limiting (not Redis/KV) for serverless API routes"
+    rationale: "Vercel serverless instances are short-lived; in-memory is sufficient for burst protection. Full distributed rate limiting would require an external store and add latency."
+    reversible: true
+  - decision: "Remove 'metadata' field entirely from /api/track allowlist"
+    rationale: "W16 flagged arbitrary nested objects in metadata. Rather than validate structure, simpler and safer to remove — tracking only needs flat string/number fields."
+    reversible: true
+  - decision: "Pre-flight rejection: permanent (duplicate) vs transient (budget/cap) status"
+    rationale: "Duplicates should never retry (→ 'rejected'). Budget/cap violations may clear next cycle (→ 'pending'). Prevents the infinite retry loop W11 identified."
+    reversible: true
+  - decision: "Pass services-data as props from server pages to client components"
+    rationale: "W10 found 62KB services-data.ts pulled into client bundle via function imports. Server components can call the functions and pass serialized data as props."
+    reversible: true
+
+known_risks:
+  - risk: "In-memory rate limiter resets on each serverless cold start"
+    mitigation: "Acceptable for burst protection; persistent abuse requires Vercel WAF or external rate limiting"
+    severity: low
+  - risk: "CSP may block legitimate third-party scripts if new integrations are added"
+    mitigation: "Review CSP policy when adding new third-party services (analytics, embeds, etc.)"
+    severity: low
+  - risk: "12 medium-priority warnings (W13-W24) still unaddressed"
+    mitigation: "Sprint-plan in next session; none are blocking or security-critical"
+    severity: low
+
+explicitly_deferred:
+  - "Round 2 medium-priority warnings (W13-W24) — cataloged, not blocking, planned for next sprint"
+  - "Work page — needs content direction from user"
+  - "Domain configuration"
+  - "OG images / social cards"
+
+next_actions:
+  - "Sprint-plan and execute Round 2 medium-priority warnings (W13-W24: aria-expanded, keyboard nav, dialog roles, dedup, response shapes, projections, query limits, date types, mobile CTA text, reduced-motion, animation throttling)"
+  - "Monitor production cron runs — verify DB-backed spend tracking and retry ceiling work in prod"
+  - "Build Work page (needs user content direction — real or fabricated case studies)"
+  - "Domain configuration when ready to go live"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "Cron auth defaults to DENY when CRON_SECRET unset"
+  - "All API clients use pure fetch (no SDK dependencies)"
+  - "maxPoolSize: 3 on MongoDB connections (Vercel serverless)"
+  - "Pipeline uses atomic findOneAndUpdate for queue claims"
+  - "All getAllPublished* functions have explicit .limit()"
+  - "CRON_SECRET must not contain leading/trailing whitespace"
+  - "All public API routes have rate limiting (lead: 5/min, track: 60/min, arcade-boss: 3/min)"
+  - "Security headers (CSP, HSTS, etc.) configured in next.config.mjs headers()"
+  - "Pipeline items have MAX_RETRIES=3 ceiling — exhausted items marked permanently failed"
+  - "Pre-flight rejected items: permanent (duplicate) → 'rejected', transient (budget/cap) → 'pending'"

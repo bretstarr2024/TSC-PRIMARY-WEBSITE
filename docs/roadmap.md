@@ -1269,6 +1269,45 @@ Build: 131 pages (up from 127), 0 type errors.
 - [ ] Domain configuration
 - [ ] OG images / social cards
 
+#### Session LX: Code Review Round 2 — All 16 Critical + High Findings Fixed ✅ COMPLETE (Feb 26, 2026)
+
+**Focus:** Sprint-plan and execute all 4 critical (C1-C4) and 12 high-priority warning (W1-W12) findings from Round 2 code review.
+
+**What was done (3 sprints, 16 fixes):**
+
+**Sprint 1 — Critical Fixes + Quick Wins (C1-C4, W6-W7):**
+1. C1: Removed phantom `openai` dep from `package.json` (supply chain surface reduction)
+2. C2: Added `'fractional cmo'` to `FORBIDDEN_TERMS` in `lib/pipeline/content-guardrails.ts`
+3. C3: Added security headers to `next.config.mjs` — CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy
+4. C4: Added sr-only labels, id/htmlFor, autoComplete to `components/contact/ContactForm.tsx` (WCAG)
+5. W6: Added skip-to-content link in `app/layout.tsx` with `#main-content` target
+6. W7: Added email validation + game allowlist + field length checks to `app/api/arcade-boss/route.ts`
+
+**Sprint 2 — Infrastructure (W1-W5, W8, W11):**
+7. W1: Created `app/error.tsx` — global error boundary with brand styling
+8. W2: Created `lib/rate-limit.ts` — in-memory sliding window rate limiter
+9. W2+W3: Added rate limiting + field validation to `/api/lead` (5/min), `/api/track` (60/min), `/api/arcade-boss` (3/min)
+10. W4: Added `getTodaySpend()` to `lib/pipeline/logger.ts` — DB-backed spend tracking via aggregation
+11. W5: Added TTL indexes — `pipeline_logs` (90d), `interactions` (180d), `leads` timestamp index
+12. W8: Added MAX_RETRIES=3 ceiling to `resetStuckGeneratingItems()` — exhausted items permanently failed
+13. W11: Fixed pre-flight rejection: permanent issues (duplicate) → 'rejected', transient (budget/cap) → 'pending'
+
+**Sprint 3 — Performance (W9-W10, W12):**
+14. W9: Added IntersectionObserver to `HeroParticles.tsx` — pauses Three.js Canvas when off-screen
+15. W10: Refactored `ServiceDualUniverse`, `AiCascade`, `IndustryContent` to accept data as props (removes 62KB services-data from client bundle)
+16. W12: Created `ContentSkeleton` component + 13 `loading.tsx` files for all dynamic routes
+
+**Build:** 143 pages, PASS
+
+**Still needed (next sessions):**
+- [ ] Sprint-plan and execute Round 2 medium-priority warnings (W13-W24)
+- [ ] Monitor production cron runs — verify Sprint 2 + 3 fixes work in prod
+- [ ] Work page — last remaining stub
+- [ ] Domain configuration
+- [ ] OG images / social cards
+
+---
+
 #### Session LIX: Vercel Deploy Fix + Code Review Round 2 ✅ COMPLETE (Feb 26, 2026)
 
 **Focus:** Fix broken Vercel deployments (CRON_SECRET whitespace) + re-run all 8 code review commands for fresh findings.
