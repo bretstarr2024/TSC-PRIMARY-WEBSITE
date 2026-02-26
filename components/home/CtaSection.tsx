@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { AnimatedSection } from '@/components/AnimatedSection';
-import { MagneticButton } from '@/components/MagneticButton';
+import { CoinSlotCTA } from '@/components/CoinSlotCTA';
 
 export function CtaSection() {
   return (
@@ -33,10 +33,8 @@ export function CtaSection() {
           </p>
         </AnimatedSection>
 
-        <AnimatedSection delay={0.2} className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <MagneticButton href="/contact?cta=homepage-cta" variant="primary" ctaId="homepage-cta">
-            New Game
-          </MagneticButton>
+        <AnimatedSection delay={0.2} className="flex items-center justify-center">
+          <CoinSlotCTA href="/contact?cta=homepage-cta" ctaId="homepage-cta" />
         </AnimatedSection>
       </div>
     </section>

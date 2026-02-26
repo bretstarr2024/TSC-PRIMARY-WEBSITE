@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import { ArcadeButton } from '@/components/ArcadeButton';
-import { CoinSlotCTA } from '@/components/CoinSlotCTA';
 
 const HeroParticles = dynamic(
   () => import('./HeroParticles').then((mod) => ({ default: mod.HeroParticles })),
@@ -119,7 +118,7 @@ export function HeroSection() {
 
         {/* Sub-headline */}
         <motion.p
-          className="mt-8 text-base md:text-lg text-shroomy max-w-[600px] mx-auto leading-relaxed"
+          className="mt-10 text-base md:text-lg text-shroomy max-w-[480px] mx-auto leading-relaxed"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 1.8 }}
@@ -128,16 +127,6 @@ export function HeroSection() {
           TSC is the B2B agency you can trust to help you{' '}
           <span className="text-white font-semibold">level up</span>.
         </motion.p>
-
-        {/* CTA button — CoinSlotCTA (arcade coin slot) */}
-        <motion.div
-          className="mt-20 flex items-center justify-center"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 2.4 }}
-        >
-          <CoinSlotCTA href="/contact?cta=homepage-hero" ctaId="homepage-hero" />
-        </motion.div>
       </div>
 
       {/* Scroll indicator */}
