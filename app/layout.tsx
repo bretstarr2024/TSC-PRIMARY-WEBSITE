@@ -69,10 +69,16 @@ export default function RootLayout({
   return (
     <html lang="en" className={`dark ${inter.variable} ${pressStart.variable}`}>
       <body className="bg-heart-of-darkness text-white antialiased font-sans">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[99999] focus:px-4 focus:py-2 focus:bg-atomic-tangerine focus:text-white focus:rounded-lg focus:text-sm focus:font-medium"
+        >
+          Skip to content
+        </a>
         <SmoothScroll>
           <NoiseOverlay />
           <TrackingProvider />
-          {children}
+          <div id="main-content">{children}</div>
           <Analytics />
           <SpeedInsights />
         </SmoothScroll>

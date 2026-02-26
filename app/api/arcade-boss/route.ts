@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { escapeHtml } from '@/lib/escape-html';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 function getResendClient() {
   const apiKey = process.env.RESEND_API_KEY;
@@ -22,11 +23,35 @@ const GAME_NAMES: Record<string, string> = {
 
 export async function POST(request: Request) {
   try {
+    // Rate limit: 3 boss submissions per minute per IP
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+    const rl = checkRateLimit(`boss:${ip}`, { maxRequests: 3, windowMs: 60_000 });
+    if (rl.limited) {
+      return NextResponse.json(
+        { error: 'Too many requests' },
+        { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.retryAfterMs || 60_000) / 1000)) } }
+      );
+    }
+
     const body = await request.json();
     const { email, game, score, initials } = body;
 
     if (!email || !game) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (typeof email !== 'string' || email.length > 320 || !emailRegex.test(email)) {
+      return NextResponse.json({ error: 'Invalid email' }, { status: 400 });
+    }
+
+    // Field length validation
+    if (typeof game !== 'string' || !GAME_NAMES[game]) {
+      return NextResponse.json({ error: 'Invalid game' }, { status: 400 });
+    }
+    if (initials && (typeof initials !== 'string' || initials.length > 10)) {
+      return NextResponse.json({ error: 'Invalid initials' }, { status: 400 });
     }
 
     const timestamp = new Date();

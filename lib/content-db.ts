@@ -318,21 +318,27 @@ export async function getContentPublishedToday(contentType: ContentType): Promis
 /**
  * Reset queue items stuck in 'generating' status back to 'pending'.
  * Catches orphaned items from crashed pipeline runs.
+ * Items that exceed MAX_RETRIES are marked as 'failed' instead of retried.
  */
+const MAX_RETRIES = 3;
+
 export async function resetStuckGeneratingItems(olderThanMs: number = 600000): Promise<number> {
   const collection = await getContentQueueCollection();
   const clientId = getClientId();
 
   const cutoff = new Date(Date.now() - olderThanMs);
 
-  const result = await collection.updateMany(
+  // Items below retry ceiling → reset to pending
+  const retryable = await collection.updateMany(
     {
       clientId,
       status: 'generating',
       processedAt: { $lt: cutoff },
+      retryCount: { $lt: MAX_RETRIES },
     },
     {
       $set: { status: 'pending' },
+      $inc: { retryCount: 1 },
       $push: {
         statusHistory: {
           status: 'pending',
@@ -343,11 +349,32 @@ export async function resetStuckGeneratingItems(olderThanMs: number = 600000): P
     }
   );
 
-  if (result.modifiedCount > 0) {
-    console.log(`[Content DB] Reset ${result.modifiedCount} stuck generating items`);
+  // Items at or above retry ceiling → mark as permanently failed
+  const exhausted = await collection.updateMany(
+    {
+      clientId,
+      status: 'generating',
+      processedAt: { $lt: cutoff },
+      retryCount: { $gte: MAX_RETRIES },
+    },
+    {
+      $set: { status: 'failed', lastError: `Exceeded ${MAX_RETRIES} retry attempts` },
+      $push: {
+        statusHistory: {
+          status: 'failed',
+          timestamp: new Date(),
+          reason: `Exceeded ${MAX_RETRIES} retry attempts — stuck in generating`,
+        },
+      },
+    }
+  );
+
+  const total = retryable.modifiedCount + exhausted.modifiedCount;
+  if (total > 0) {
+    console.log(`[Content DB] Reset ${retryable.modifiedCount} stuck items to pending, ${exhausted.modifiedCount} permanently failed (retry ceiling)`);
   }
 
-  return result.modifiedCount;
+  return total;
 }
 
 // ===========================================
@@ -450,6 +477,7 @@ export async function upsertBlogPost(post: Omit<BlogPost, '_id'>): Promise<void>
 // ===========================================
 
 export async function ensureContentIndexes(): Promise<void> {
+  const db = await getDatabase();
   const queue = await getContentQueueCollection();
   const posts = await getBlogPostsCollection();
 
@@ -463,6 +491,23 @@ export async function ensureContentIndexes(): Promise<void> {
   await posts.createIndex({ clientId: 1, status: 1, date: -1 });
   await posts.createIndex({ clientId: 1, origin: 1, status: 1 });
   await posts.createIndex({ clientId: 1, tags: 1 });
+
+  // TTL indexes on operational collections
+  const interactions = db.collection('interactions');
+  await interactions.createIndex(
+    { timestamp: 1 },
+    { expireAfterSeconds: 180 * 24 * 60 * 60, name: 'ttl_180d' }
+  );
+
+  const pipelineLogs = db.collection('pipeline_logs');
+  await pipelineLogs.createIndex(
+    { timestamp: 1 },
+    { expireAfterSeconds: 90 * 24 * 60 * 60, name: 'ttl_90d' }
+  );
+
+  // Leads index (deferred since Session XLII)
+  const leads = db.collection('leads');
+  await leads.createIndex({ timestamp: -1 });
 
   console.log('[Content DB] Indexes created successfully');
 }

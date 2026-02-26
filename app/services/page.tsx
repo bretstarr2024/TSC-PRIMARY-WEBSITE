@@ -8,7 +8,7 @@ import { AiCascade } from '@/components/services/AiCascade';
 import { BridgeStatement } from '@/components/services/BridgeStatement';
 import { ServiceCTA } from '@/components/services/ServiceCTA';
 import { AnswerCapsulesSection } from '@/components/AnswerCapsulesSection';
-import { getStrategicCategories } from '@/lib/services-data';
+import { getStrategicCategories, getAiCategory } from '@/lib/services-data';
 import { servicesCapsules } from '@/lib/schema/hub-faqs';
 import { getFaqSchema } from '@/lib/schema/service-faq';
 
@@ -25,13 +25,14 @@ export const metadata: Metadata = {
 
 export default function ServicesPage() {
   const strategicCategories = getStrategicCategories();
+  const aiCategory = getAiCategory();
 
   return (
     <>
       <Header />
       <main>
         <ServicesHero />
-        <ServiceDualUniverse />
+        <ServiceDualUniverse aiCategory={aiCategory} />
         {strategicCategories.map((category, index) => (
           <ServiceCategoryStrip
             key={category.slug}
@@ -39,7 +40,7 @@ export default function ServicesPage() {
             index={index}
           />
         ))}
-        <AiCascade />
+        <AiCascade aiCategory={aiCategory} />
         <BridgeStatement />
 
         <AnswerCapsulesSection

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { getDatabase } from '@/lib/mongodb';
 import { escapeHtml } from '@/lib/escape-html';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 // Lazy Resend initialization — avoids build-time errors when env var is not set
 function getResendClient() {
@@ -11,6 +12,13 @@ function getResendClient() {
   }
   return new Resend(apiKey);
 }
+
+// Field length limits
+const MAX_NAME_LENGTH = 200;
+const MAX_EMAIL_LENGTH = 320;
+const MAX_MESSAGE_LENGTH = 5000;
+const MAX_SOURCE_LENGTH = 200;
+const MAX_CTAID_LENGTH = 100;
 
 interface LeadData {
   name: string;
@@ -22,6 +30,16 @@ interface LeadData {
 
 export async function POST(request: Request) {
   try {
+    // Rate limit: 5 submissions per minute per IP
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+    const rl = checkRateLimit(ip, { maxRequests: 5, windowMs: 60_000 });
+    if (rl.limited) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please try again later.' },
+        { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.retryAfterMs || 60_000) / 1000)) } }
+      );
+    }
+
     const data: LeadData = await request.json();
 
     // Validate required fields
@@ -30,6 +48,23 @@ export async function POST(request: Request) {
         { error: 'Name and email are required' },
         { status: 400 }
       );
+    }
+
+    // Field length validation
+    if (typeof data.name !== 'string' || data.name.length > MAX_NAME_LENGTH) {
+      return NextResponse.json({ error: 'Name is too long' }, { status: 400 });
+    }
+    if (typeof data.email !== 'string' || data.email.length > MAX_EMAIL_LENGTH) {
+      return NextResponse.json({ error: 'Email is too long' }, { status: 400 });
+    }
+    if (data.message && (typeof data.message !== 'string' || data.message.length > MAX_MESSAGE_LENGTH)) {
+      return NextResponse.json({ error: 'Message is too long' }, { status: 400 });
+    }
+    if (data.source && (typeof data.source !== 'string' || data.source.length > MAX_SOURCE_LENGTH)) {
+      return NextResponse.json({ error: 'Invalid source' }, { status: 400 });
+    }
+    if (data.ctaId && (typeof data.ctaId !== 'string' || data.ctaId.length > MAX_CTAID_LENGTH)) {
+      return NextResponse.json({ error: 'Invalid ctaId' }, { status: 400 });
     }
 
     // Validate email format

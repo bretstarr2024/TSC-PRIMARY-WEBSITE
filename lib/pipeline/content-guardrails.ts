@@ -58,6 +58,7 @@ const FORBIDDEN_TERMS = [
   'thought leader',
   'synergy',
   'pioneers of aeo',
+  'fractional cmo',
   'customer',    // should be "client"
   'contract',    // should be "engagement"
   'vendor',      // should be "partner"

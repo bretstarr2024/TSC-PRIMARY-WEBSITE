@@ -330,6 +330,61 @@ export async function getLogStats(since?: Date): Promise<LogStats> {
 }
 
 // ============================================
+// Spend Tracking
+// ============================================
+
+/**
+ * Get estimated total spend from today's pipeline runs.
+ * Queries run_complete log entries for today and sums their totalSpend metadata.
+ */
+export async function getTodaySpend(): Promise<number> {
+  const collection = await getLogCollection();
+  const startOfDay = new Date();
+  startOfDay.setHours(0, 0, 0, 0);
+
+  const pipeline = [
+    {
+      $match: {
+        phase: 'pipeline',
+        action: 'run_complete',
+        timestamp: { $gte: startOfDay },
+        'metadata.totalSpend': { $exists: true },
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        total: { $sum: '$metadata.totalSpend' },
+      },
+    },
+  ];
+
+  const [result] = await collection.aggregate(pipeline).toArray();
+  return (result?.total as number) || 0;
+}
+
+// ============================================
+// Index Setup
+// ============================================
+
+/**
+ * Create TTL and query indexes for pipeline_logs.
+ * Call during index initialization.
+ */
+export async function ensurePipelineLogIndexes(): Promise<void> {
+  const collection = await getLogCollection();
+  // TTL: auto-delete logs older than 90 days
+  await collection.createIndex(
+    { timestamp: 1 },
+    { expireAfterSeconds: 90 * 24 * 60 * 60, name: 'ttl_90d' }
+  );
+  // Query indexes
+  await collection.createIndex({ phase: 1, action: 1, timestamp: -1 });
+  await collection.createIndex({ contentId: 1, timestamp: -1 });
+  console.log('[Logger] Pipeline log indexes created');
+}
+
+// ============================================
 // Log Cleanup
 // ============================================
 

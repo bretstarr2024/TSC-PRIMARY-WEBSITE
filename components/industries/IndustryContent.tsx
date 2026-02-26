@@ -3,17 +3,15 @@
 import Link from 'next/link';
 import { AnimatedSection, StaggerContainer, StaggerItem } from '@/components/AnimatedSection';
 import { MagneticButton } from '@/components/MagneticButton';
-import { getCategoryBySlug } from '@/lib/services-data';
+import type { ServiceCategory } from '@/lib/services-data';
 import type { Industry } from '@/lib/industries-data';
 
 interface IndustryContentProps {
   industry: Industry;
+  relevantServices: ServiceCategory[];
 }
 
-export function IndustryContent({ industry }: IndustryContentProps) {
-  const relevantServices = industry.relevantServiceSlugs
-    .map((slug) => getCategoryBySlug(slug))
-    .filter(Boolean);
+export function IndustryContent({ industry, relevantServices }: IndustryContentProps) {
 
   return (
     <>

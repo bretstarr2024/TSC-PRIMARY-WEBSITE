@@ -44,7 +44,7 @@ import { callOpenAI } from '@/lib/pipeline/openai-client';
 import { parseGeneratedContent } from '@/lib/pipeline/schemas';
 import { canAttempt, getAllCircuitBreakerStatus, formatCircuitBreakerStatus } from '@/lib/pipeline/circuit-breaker';
 import { classifyError, detectPhaseFromError } from '@/lib/pipeline/error-classifier';
-import { logPipelineEvent, logClassifiedError } from '@/lib/pipeline/logger';
+import { logPipelineEvent, logClassifiedError, getTodaySpend } from '@/lib/pipeline/logger';
 import { estimateContentCost, formatCostBreakdown, estimateDailyRunCost } from '@/lib/pipeline/cost-estimator';
 import {
   runPreFlight,
@@ -351,7 +351,8 @@ export async function GET(request: NextRequest) {
     reason?: string;
   }> = [];
 
-  let totalSpend = 0;
+  // DB-backed spend tracking — seed from today's previous pipeline runs
+  let totalSpend = await getTodaySpend();
 
   // Process queue items by type, respecting daily caps
   const contentTypes: ContentType[] = [
@@ -394,8 +395,11 @@ export async function GET(request: NextRequest) {
 
       if (!preflight.approved) {
         const reason = preflight.issues.map((i) => i.message).join('; ');
-        // Return to pending since we already claimed it
-        await updateQueueItemStatus(itemId, 'pending', `Pre-flight rejected: ${reason}`);
+        // Permanent rejections (duplicate title) → rejected status (won't retry)
+        // Transient rejections (budget, cap) → pending status (will retry next run)
+        const hasPermanentIssue = preflight.issues.some((i) => i.check === 'duplicate');
+        const newStatus = hasPermanentIssue ? 'rejected' : 'pending';
+        await updateQueueItemStatus(itemId, newStatus as 'rejected' | 'pending', `Pre-flight rejected: ${reason}`);
         results.push({ contentType, title: item.title || '', status: 'skipped', reason });
         continue;
       }

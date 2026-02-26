@@ -169,19 +169,35 @@ function Scene() {
 
 export function HeroParticles() {
   const [mounted, setMounted] = useState(false);
+  const [visible, setVisible] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  // Pause rendering when off-screen to save GPU cycles
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setVisible(entry.isIntersecting),
+      { threshold: 0 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [mounted]);
+
   if (!mounted) return null;
 
   return (
-    <div className="absolute inset-0 -z-10">
+    <div ref={containerRef} className="absolute inset-0 -z-10">
       <Canvas
         camera={{ position: [0, 0, 10], fov: 45 }}
         dpr={[1, 2]}
         gl={{ antialias: true, alpha: true }}
+        frameloop={visible ? 'always' : 'never'}
       >
         <Scene />
       </Canvas>

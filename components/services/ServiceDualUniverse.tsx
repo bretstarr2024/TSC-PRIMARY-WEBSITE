@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { AnimatedSection } from '@/components/AnimatedSection';
-import { getAiCategory } from '@/lib/services-data';
+import type { ServiceCategory } from '@/lib/services-data';
 
 const strategicCapabilities = [
   {
@@ -32,8 +32,11 @@ const strategicCapabilities = [
   },
 ];
 
-export function ServiceDualUniverse() {
-  const aiCategory = getAiCategory();
+interface ServiceDualUniverseProps {
+  aiCategory: ServiceCategory | undefined;
+}
+
+export function ServiceDualUniverse({ aiCategory }: ServiceDualUniverseProps) {
 
   return (
     <section className="relative py-32 md:py-40">

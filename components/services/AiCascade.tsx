@@ -3,12 +3,15 @@
 import { motion } from 'framer-motion';
 import { AnimatedSection } from '@/components/AnimatedSection';
 import { GradientText } from '@/components/AnimatedText';
-import { getAiCategory } from '@/lib/services-data';
+import type { ServiceCategory } from '@/lib/services-data';
 
 const offsets = [0, 12, 4, 16, 8, 20, 6, 14];
 
-export function AiCascade() {
-  const aiCategory = getAiCategory();
+interface AiCascadeProps {
+  aiCategory: ServiceCategory | undefined;
+}
+
+export function AiCascade({ aiCategory }: AiCascadeProps) {
   if (!aiCategory) return null;
 
   return (

@@ -11,6 +11,7 @@ import {
   getIndustryBySlug,
   getRelatedIndustries,
 } from '@/lib/industries-data';
+import { getCategoryBySlug } from '@/lib/services-data';
 import { verticalBreadcrumb } from '@/lib/schema/breadcrumbs';
 import { getFaqSchema } from '@/lib/schema/service-faq';
 
@@ -56,7 +57,12 @@ export default function VerticalPage({ params }: PageProps) {
         />
 
         <IndustryHero industry={industry} />
-        <IndustryContent industry={industry} />
+        <IndustryContent
+          industry={industry}
+          relevantServices={industry.relevantServiceSlugs
+            .map((slug) => getCategoryBySlug(slug))
+            .filter((c): c is NonNullable<typeof c> => c !== undefined)}
+        />
 
         <AnswerCapsulesSection
           capsules={industry.answerCapsules}

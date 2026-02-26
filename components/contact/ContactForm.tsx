@@ -91,27 +91,35 @@ export function ContactForm({ source, ctaId }: ContactFormProps) {
             transition={{ duration: 0.3 }}
           >
             <div>
+              <label htmlFor="contact-name" className="sr-only">Your name</label>
               <input
+                id="contact-name"
                 type="text"
                 name="name"
                 required
+                autoComplete="name"
                 placeholder="Your name"
                 className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-greige focus:border-atomic-tangerine focus:ring-1 focus:ring-atomic-tangerine outline-none transition-colors text-sm"
                 disabled={formState === 'loading'}
               />
             </div>
             <div>
+              <label htmlFor="contact-email" className="sr-only">Email address</label>
               <input
+                id="contact-email"
                 type="email"
                 name="email"
                 required
+                autoComplete="email"
                 placeholder="you@company.com"
                 className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-greige focus:border-atomic-tangerine focus:ring-1 focus:ring-atomic-tangerine outline-none transition-colors text-sm"
                 disabled={formState === 'loading'}
               />
             </div>
             <div>
+              <label htmlFor="contact-message" className="sr-only">Message</label>
               <textarea
+                id="contact-message"
                 name="message"
                 rows={3}
                 placeholder="What are you working on?"
