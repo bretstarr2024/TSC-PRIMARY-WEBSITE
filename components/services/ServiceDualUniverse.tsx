@@ -2,10 +2,37 @@
 
 import { motion } from 'framer-motion';
 import { AnimatedSection } from '@/components/AnimatedSection';
-import { getStrategicCategories, getAiCategory } from '@/lib/services-data';
+import { getAiCategory } from '@/lib/services-data';
+
+const strategicCapabilities = [
+  {
+    name: 'Brand & Positioning',
+    color: '#FF5910',
+    items: ['Market Positioning', 'Messaging Frameworks', 'Brand Architecture', 'Visual Identity & Design Systems', 'Thought Leadership Programs', 'Analyst Relations'],
+  },
+  {
+    name: 'GTM Strategy & Architecture',
+    color: '#FFBDAE',
+    items: ['ICP & Buyer Journey Mapping', 'Competitive Positioning', 'Launch Strategy', 'Sales Enablement', 'Channel Strategy', 'Revenue Architecture'],
+  },
+  {
+    name: 'Demand & Pipeline',
+    color: '#73F5FF',
+    items: ['Full-Funnel Demand Gen', 'Account-Based Marketing', 'Marketing Automation & Nurture', 'Lead Scoring & Routing', 'Pipeline Analytics', 'Campaign Operations'],
+  },
+  {
+    name: 'Digital Performance',
+    color: '#E1FF00',
+    items: ['Paid Search & Social', 'Programmatic & Retargeting', 'SEO & Technical SEO', 'PR & Analyst Relations', 'Social Media Management', 'Conversion Rate Optimization'],
+  },
+  {
+    name: 'Content & Creative',
+    color: '#ED0AD2',
+    items: ['Content Strategy & Production', 'Research & Original Data', 'Campaign Creative & Design', 'Video & Motion', 'Web & Interactive', 'Brand Editorial'],
+  },
+];
 
 export function ServiceDualUniverse() {
-  const strategic = getStrategicCategories();
   const aiCategory = getAiCategory();
 
   return (
@@ -50,34 +77,34 @@ export function ServiceDualUniverse() {
               want to grow. No fluff. No filler.
             </p>
 
-            <div className="space-y-4">
-              {strategic.map((cat, i) => (
-                <motion.a
-                  key={cat.slug}
-                  href={`#${cat.slug}`}
-                  className="flex items-center gap-3 group"
+            <div className="space-y-6">
+              {strategicCapabilities.map((cat, i) => (
+                <motion.div
+                  key={cat.name}
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.4 + i * 0.1, duration: 0.5 }}
                 >
-                  <span
-                    className="w-2.5 h-2.5 rounded-full flex-shrink-0 transition-transform group-hover:scale-125"
-                    style={{ backgroundColor: cat.color }}
-                  />
-                  <span className="text-white font-medium group-hover:translate-x-1 transition-transform">
-                    {cat.name}
-                  </span>
-                  <span className="text-greige text-sm hidden sm:inline">
-                    — {cat.services.length} services
-                  </span>
-                </motion.a>
+                  <div className="flex items-center gap-3 mb-2">
+                    <span
+                      className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                      style={{ backgroundColor: cat.color }}
+                    />
+                    <span className="text-white font-medium">
+                      {cat.name}
+                    </span>
+                  </div>
+                  <p className="text-sm text-greige pl-[22px]">
+                    {cat.items.join(' · ')}
+                  </p>
+                </motion.div>
               ))}
             </div>
 
             <p className="mt-8 text-sm text-greige">
-              {strategic.reduce((acc, cat) => acc + cat.services.length, 0)} services across{' '}
-              {strategic.length} disciplines
+              {strategicCapabilities.reduce((acc, cat) => acc + cat.items.length, 0)} capabilities across{' '}
+              {strategicCapabilities.length} disciplines
             </p>
           </AnimatedSection>
 
