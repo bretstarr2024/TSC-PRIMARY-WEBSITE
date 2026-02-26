@@ -124,6 +124,11 @@ export function ContactHero() {
           You&apos;ve seen what we do. Now let&apos;s talk about what you need.
         </motion.p>
       </div>
+      {/* Bottom fade — dissolves starfield into background */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-64 pointer-events-none z-[5]"
+        style={{ background: 'linear-gradient(to bottom, transparent 0%, #141213 100%)' }}
+      />
     </section>
   );
 }

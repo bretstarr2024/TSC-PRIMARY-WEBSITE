@@ -39,11 +39,6 @@ export function HeroSection() {
       {playing && <AsteroidsGame onClose={() => setPlaying(false)} />}
 
       <div className="relative z-10 section-wide text-center px-4">
-        {/* Arcade easter egg trigger */}
-        {!playing && (
-          <ArcadeButton onClick={() => setPlaying(true)} delay={0.2} className="mb-10 mx-auto" />
-        )}
-
         {/* GAME OVER headline */}
         <div
           className="relative"
@@ -128,6 +123,13 @@ export function HeroSection() {
           <span className="text-white font-semibold">level up</span>.
         </motion.p>
       </div>
+
+      {/* Arcade easter egg trigger — positioned 1/3 into the gap below the sphere */}
+      {!playing && (
+        <div className="absolute bottom-[22%] left-1/2 -translate-x-1/2 z-10">
+          <ArcadeButton onClick={() => setPlaying(true)} delay={0.2} />
+        </div>
+      )}
 
       {/* Scroll indicator */}
       <motion.div
