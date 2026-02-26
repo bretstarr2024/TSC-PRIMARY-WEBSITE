@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Press_Start_2P } from "next/font/google";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { NoiseOverlay } from "@/components/GradientBackground";
 import { TrackingProvider } from "@/components/TrackingProvider";
@@ -71,6 +73,8 @@ export default function RootLayout({
           <NoiseOverlay />
           <TrackingProvider />
           {children}
+          <Analytics />
+          <SpeedInsights />
         </SmoothScroll>
       </body>
     </html>

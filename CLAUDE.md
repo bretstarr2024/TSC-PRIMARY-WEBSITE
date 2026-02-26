@@ -57,13 +57,6 @@ The content brain lives at:
 
 Reference kernel YAML: `gtm_kernel/kernels/tsc/kernel.yaml` (1,736 lines, all 20 components)
 
-## Chatbot
-
-- Named **"chaDbot"** (inside joke, keep it)
-- Powered by GPT-5.2 via OpenAI API
-- RAG-powered from indexed site content
-- Requires OPENAI_API_KEY env var in Vercel
-
 ## Key Conventions
 
 - **Brand voice:** Direct, strategic, irreverent, practical. Sage + Rebel archetype.
