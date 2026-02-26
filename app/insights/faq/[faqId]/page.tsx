@@ -88,7 +88,7 @@ export default async function FaqDetailPage({
           <nav className="flex items-center gap-2 text-sm text-greige mb-8">
             <Link href="/" className="hover:text-atomic-tangerine">Home</Link>
             <span>/</span>
-            <Link href="/insights" className="hover:text-atomic-tangerine">Insights</Link>
+            <Link href="/insights" className="hover:text-atomic-tangerine">Grist</Link>
             <span>/</span>
             <Link href="/insights/faq" className="hover:text-atomic-tangerine">FAQ</Link>
             <span>/</span>

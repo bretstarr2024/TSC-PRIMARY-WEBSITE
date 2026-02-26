@@ -8,7 +8,7 @@ import { getAllPublishedTools, Tool } from '@/lib/resources-db';
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: 'Tools | Insights',
+  title: 'Tools | Grist',
   description: 'Interactive checklists, assessments, and calculators for B2B marketing leaders.',
 };
 
@@ -49,7 +49,7 @@ export default async function ToolsListingPage() {
           <nav className="flex items-center gap-2 text-sm text-greige mb-8">
             <Link href="/" className="hover:text-atomic-tangerine">Home</Link>
             <span>/</span>
-            <Link href="/insights" className="hover:text-atomic-tangerine">Insights</Link>
+            <Link href="/insights" className="hover:text-atomic-tangerine">Grist</Link>
             <span>/</span>
             <span className="text-shroomy">Tools</span>
           </nav>

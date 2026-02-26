@@ -7,7 +7,7 @@ import { getAllPublishedGlossaryTerms, GlossaryTerm } from '@/lib/resources-db';
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: 'Glossary | Insights',
+  title: 'Glossary | Grist',
   description: 'Clear definitions for the terms that matter in modern B2B marketing, AI, and go-to-market strategy.',
 };
 
@@ -38,7 +38,7 @@ export default async function GlossaryListingPage() {
           <nav className="flex items-center gap-2 text-sm text-greige mb-8">
             <Link href="/" className="hover:text-atomic-tangerine">Home</Link>
             <span>/</span>
-            <Link href="/insights" className="hover:text-atomic-tangerine">Insights</Link>
+            <Link href="/insights" className="hover:text-atomic-tangerine">Grist</Link>
             <span>/</span>
             <span className="text-shroomy">Glossary</span>
           </nav>

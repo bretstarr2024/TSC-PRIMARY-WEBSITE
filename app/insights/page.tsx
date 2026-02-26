@@ -13,7 +13,7 @@ import { SnakeGameTrigger } from '@/components/insights/SnakeGameTrigger';
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: 'Insights',
+  title: 'Grist',
   description: 'Strategic insights on B2B marketing, AI transformation, and growth strategy from The Starr Conspiracy.',
 };
 
@@ -90,6 +90,22 @@ const CONTENT_TYPES = [
     color: '#F472B6',
     icon: '09',
   },
+  {
+    type: 'videos',
+    label: 'Videos',
+    description: 'Strategic video perspectives on B2B marketing, AI, and growth.',
+    href: '/insights/videos',
+    color: '#10B981',
+    icon: '10',
+  },
+  {
+    type: 'infographics',
+    label: 'Infographics',
+    description: 'Visual breakdowns of data, frameworks, and strategies worth sharing.',
+    href: '/insights/infographics',
+    color: '#818CF8',
+    icon: '11',
+  },
 ];
 
 export default function InsightsPage() {
@@ -104,7 +120,7 @@ export default function InsightsPage() {
           <AnimatedSection>
             <div className="max-w-4xl">
               <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-                <GradientText>Insights</GradientText>
+                <GradientText>Grist</GradientText>
               </h1>
               <p className="text-xl md:text-2xl text-shroomy leading-relaxed max-w-2xl">
                 {config.brand.brandPromise

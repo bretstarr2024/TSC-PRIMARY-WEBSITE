@@ -88,7 +88,7 @@ export default async function ExpertQaDetailPage({
           <nav className="flex items-center gap-2 text-sm text-greige mb-8">
             <Link href="/" className="hover:text-atomic-tangerine">Home</Link>
             <span>/</span>
-            <Link href="/insights" className="hover:text-atomic-tangerine">Insights</Link>
+            <Link href="/insights" className="hover:text-atomic-tangerine">Grist</Link>
             <span>/</span>
             <Link href="/insights/expert-qa" className="hover:text-atomic-tangerine">Expert Q&A</Link>
             <span>/</span>

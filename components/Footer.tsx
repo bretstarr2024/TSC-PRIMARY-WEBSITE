@@ -16,7 +16,7 @@ const companyLinks = [
   { href: '/about', label: 'About' },
   { href: '/work', label: 'Work' },
   { href: '/verticals', label: 'Verticals' },
-  { href: '/insights', label: 'Insights' },
+  { href: '/insights', label: 'Grist' },
   { href: '/pricing', label: 'Pricing' },
   { href: '/careers', label: 'Careers' },
 ];

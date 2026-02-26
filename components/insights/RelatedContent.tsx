@@ -17,6 +17,7 @@ const TYPE_COLORS: Record<RelatedItemType, string> = {
   'industry-brief': '#D97706',
   video: '#10B981',
   tool: '#F472B6',
+  infographic: '#818CF8',
 };
 
 const TYPE_LABELS: Record<RelatedItemType, string> = {
@@ -30,6 +31,7 @@ const TYPE_LABELS: Record<RelatedItemType, string> = {
   'industry-brief': 'Industry Brief',
   video: 'Video',
   tool: 'Tool',
+  infographic: 'Infographic',
 };
 
 interface RelatedContentProps {
@@ -58,7 +60,7 @@ export async function RelatedContent({
 
   return (
     <section className="my-12">
-      <h3 className="text-lg font-semibold text-white mb-6">Related Insights</h3>
+      <h3 className="text-lg font-semibold text-white mb-6">Related Grist</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {items.map((item) => {
           const color = TYPE_COLORS[item.type];

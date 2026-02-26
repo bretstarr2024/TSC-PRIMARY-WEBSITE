@@ -341,6 +341,29 @@ export interface Tool {
 }
 
 // ===========================================
+// Infographics
+// ===========================================
+
+export interface Infographic {
+  _id?: ObjectId;
+  clientId: string;
+  infographicId: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  altText: string;
+  category?: string;
+  tags: string[];
+  seedId?: number;
+  clusterName?: string;
+  status: ResourceStatus;
+  origin: ResourceOrigin;
+  createdAt: Date;
+  publishedAt?: Date;
+  updatedAt: Date;
+}
+
+// ===========================================
 // Collection Helpers
 // ===========================================
 
@@ -358,6 +381,7 @@ export const getCaseStudyCollection = () => getCollection<CaseStudy>('case_studi
 export const getIndustryBriefCollection = () => getCollection<IndustryBrief>('industry_briefs');
 export const getVideoCollection = () => getCollection<Video>('videos');
 export const getToolCollection = () => getCollection<Tool>('tools');
+export const getInfographicCollection = () => getCollection<Infographic>('infographics');
 export const getQueryCoverageCollection = () => getCollection<QueryCoverage>('query_coverage');
 
 // ===========================================
@@ -654,13 +678,45 @@ export async function getToolsByType(toolType: ToolType): Promise<Tool[]> {
 }
 
 // ===========================================
+// Infographic Operations
+// ===========================================
+
+export async function createInfographic(item: Omit<Infographic, '_id' | 'clientId' | 'createdAt' | 'updatedAt'>): Promise<string> {
+  const collection = await getInfographicCollection();
+  const clientId = getClientId();
+  const result = await collection.insertOne({ ...item, clientId, createdAt: new Date(), updatedAt: new Date() });
+  return result.insertedId.toString();
+}
+
+export async function getInfographicById(infographicId: string): Promise<Infographic | null> {
+  const collection = await getInfographicCollection();
+  return collection.findOne({ clientId: getClientId(), infographicId });
+}
+
+export async function getPublishedInfographicById(infographicId: string): Promise<Infographic | null> {
+  const collection = await getInfographicCollection();
+  return collection.findOne({ clientId: getClientId(), infographicId, status: 'published' });
+}
+
+export async function getAllPublishedInfographics(): Promise<Infographic[]> {
+  const collection = await getInfographicCollection();
+  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ createdAt: -1 }).toArray();
+}
+
+export async function getAllInfographicIds(): Promise<string[]> {
+  const collection = await getInfographicCollection();
+  const items = await collection.find({ clientId: getClientId(), status: 'published' }).project({ infographicId: 1 }).toArray();
+  return items.map((i) => i.infographicId);
+}
+
+// ===========================================
 // Resource Counts (for hub page)
 // ===========================================
 
 export async function getResourceCounts(): Promise<Record<string, number>> {
   const clientId = getClientId();
 
-  const [faqs, glossary, comparisons, expertQa, news, caseStudies, industryBriefs, videos, tools] = await Promise.all([
+  const [faqs, glossary, comparisons, expertQa, news, caseStudies, industryBriefs, videos, tools, infographics] = await Promise.all([
     (await getFaqCollection()).countDocuments({ clientId, status: 'published' }),
     (await getGlossaryCollection()).countDocuments({ clientId, status: 'published' }),
     (await getComparisonCollection()).countDocuments({ clientId, status: 'published' }),
@@ -670,9 +726,10 @@ export async function getResourceCounts(): Promise<Record<string, number>> {
     (await getIndustryBriefCollection()).countDocuments({ clientId, status: 'published' }),
     (await getVideoCollection()).countDocuments({ clientId, status: 'published' }),
     (await getToolCollection()).countDocuments({ clientId, status: 'published' }),
+    (await getInfographicCollection()).countDocuments({ clientId, status: 'published' }),
   ]);
 
-  return { faqs, glossary, comparisons, expertQa, news, caseStudies, industryBriefs, videos, tools };
+  return { faqs, glossary, comparisons, expertQa, news, caseStudies, industryBriefs, videos, tools, infographics };
 }
 
 // ===========================================
@@ -793,6 +850,12 @@ export async function ensureResourcesIndexes(): Promise<void> {
   await tool.createIndex({ clientId: 1, status: 1 });
   await tool.createIndex({ clientId: 1, toolType: 1, status: 1 });
   await tool.createIndex({ clientId: 1, tags: 1 });
+
+  // Infographic indexes
+  const infographic = await getInfographicCollection();
+  await infographic.createIndex({ clientId: 1, infographicId: 1 }, { unique: true });
+  await infographic.createIndex({ clientId: 1, status: 1 });
+  await infographic.createIndex({ clientId: 1, tags: 1 });
 
   // Query coverage indexes
   await coverage.createIndex({ clientId: 1, queryNormalized: 1 }, { unique: true });

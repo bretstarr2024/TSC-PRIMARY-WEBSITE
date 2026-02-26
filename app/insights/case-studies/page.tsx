@@ -7,7 +7,7 @@ import { getAllPublishedCaseStudies, CaseStudy } from '@/lib/resources-db';
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: 'Case Studies | Insights',
+  title: 'Case Studies | Grist',
   description: 'Real engagement outcomes with measurable results from The Starr Conspiracy.',
 };
 
@@ -27,7 +27,7 @@ export default async function CaseStudiesListingPage() {
           <nav className="flex items-center gap-2 text-sm text-greige mb-8">
             <Link href="/" className="hover:text-atomic-tangerine">Home</Link>
             <span>/</span>
-            <Link href="/insights" className="hover:text-atomic-tangerine">Insights</Link>
+            <Link href="/insights" className="hover:text-atomic-tangerine">Grist</Link>
             <span>/</span>
             <span className="text-shroomy">Case Studies</span>
           </nav>

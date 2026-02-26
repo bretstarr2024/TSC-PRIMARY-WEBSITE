@@ -8,7 +8,7 @@ import { getAllPublishedExpertQa, ExpertQaItem } from '@/lib/resources-db';
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: 'Expert Q&A | Insights',
+  title: 'Expert Q&A | Grist',
   description: 'Candid perspectives from experienced B2B marketing leaders on strategy, AI, and growth.',
 };
 
@@ -28,7 +28,7 @@ export default async function ExpertQaListingPage() {
           <nav className="flex items-center gap-2 text-sm text-greige mb-8">
             <Link href="/" className="hover:text-atomic-tangerine">Home</Link>
             <span>/</span>
-            <Link href="/insights" className="hover:text-atomic-tangerine">Insights</Link>
+            <Link href="/insights" className="hover:text-atomic-tangerine">Grist</Link>
             <span>/</span>
             <span className="text-shroomy">Expert Q&A</span>
           </nav>

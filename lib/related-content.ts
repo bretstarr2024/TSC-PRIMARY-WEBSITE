@@ -18,7 +18,8 @@ export type RelatedItemType =
   | 'case-study'
   | 'industry-brief'
   | 'video'
-  | 'tool';
+  | 'tool'
+  | 'infographic';
 
 export interface RelatedItem {
   type: RelatedItemType;
@@ -43,6 +44,7 @@ const TYPE_CONFIG: Record<
   'industry-brief': { collection: 'industry_briefs', idField: 'briefId', titleField: 'title', descField: 'summary', pathPrefix: '/insights/industry-briefs/' },
   video: { collection: 'videos', idField: 'videoId', titleField: 'title', descField: 'description', pathPrefix: '/insights/videos/' },
   tool: { collection: 'tools', idField: 'toolId', titleField: 'title', descField: 'description', pathPrefix: '/insights/tools/' },
+  infographic: { collection: 'infographics', idField: 'infographicId', titleField: 'title', descField: 'description', pathPrefix: '/insights/infographics/' },
 };
 
 /**
