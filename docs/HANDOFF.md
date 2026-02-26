@@ -9,7 +9,7 @@
 The site is live with **137 pages** across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, and a **fully activated autonomous content pipeline**. All 3 Vercel cron jobs are auth-protected via CRON_SECRET, MongoDB indexes are in place (including TTL auto-expiry on pipeline_logs), and the pipeline has been tested end-to-end with 11 items published successfully.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database), Resend email, 3 Vercel cron jobs (ACTIVE — CRON_SECRET set)
-- **Next actions:** Monitor first production cron runs, build chatbot (chaDbot), Vercel Analytics
+- **Next actions:** Monitor first production cron runs, Vercel Analytics
 - **Roadmap:** See `docs/roadmap.md` Session LV
 
 ### Session LV Summary (February 26, 2026)

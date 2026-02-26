@@ -1,12 +1,12 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION LV** | Last Updated: February 26, 2026
+**Status: SESSION LVI** | Last Updated: February 26, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
 - Stack: Next.js 14 (App Router, TS, Tailwind), Framer Motion, Three.js, MongoDB (`tsc`), Vercel
 - Grounded in the full GTM Kernel (20 components, 5 domains, 3 JTBD clusters)
-- 10 content types, 10 cron jobs, video pipeline, RAG chatbot, analytics dashboard
+- 10 content types, 10 cron jobs, video pipeline, analytics dashboard
 - Donor platform: AEO site at `/Volumes/Queen Amara/AnswerEngineOptimization.com/`
 
 ---
@@ -1039,7 +1039,6 @@ Build: 131 pages (up from 127), 0 type errors.
 - [x] Set `CRON_SECRET` env var in Vercel (all 3 environments) — done Session LV
 - [x] Add `pipeline_logs` TTL index (30-day expiry) — done Session LV
 - [x] Create MongoDB index on `leads` collection (timestamp: -1) — done Session LV
-- [ ] Build chatbot (chaDbot) — copy RAG from AEO
 - [ ] Initialize Vercel Analytics
 
 #### Session LV: Pipeline Activation + End-to-End Testing ✅ COMPLETE (Feb 26, 2026)
@@ -1079,10 +1078,62 @@ Build: 131 pages (up from 127), 0 type errors.
 **Build:** 137 pages, PASS
 
 **Still needed (next session):**
-- [ ] Build chatbot (chaDbot) — copy RAG from AEO
-- [ ] Initialize Vercel Analytics
+- [x] Initialize Vercel Analytics — done Session LVI
 - [ ] Monitor first production cron runs (check pipeline_logs after 8am UTC)
 - [ ] Tune content prompts further if forbidden term rejection rate stays high
+
+#### Session LVI: Chatbot Dropped + Vercel Analytics + Careers Page ✅ COMPLETE (Feb 26, 2026)
+
+**Focus:** Drop chatbot from scope, initialize Vercel Analytics + Speed Insights, build full Careers page.
+
+**What was done:**
+
+1. **Chatbot (chaDbot) dropped from scope:**
+   - Removed from CLAUDE.md, roadmap.md (scope, Phase 3 goal, Session XIII, still-needed lists), HANDOFF.md
+   - Rationale: Zero AEO value (AI models don't crawl chatbot responses), no differentiation (every agency has one), conversion funnel pressure release valve
+   - Session XIII marked as DROPPED in roadmap
+
+2. **Vercel Analytics + Speed Insights initialized:**
+   - Added `<Analytics />` and `<SpeedInsights />` to root layout (`app/layout.tsx`)
+   - Packages were already installed (`@vercel/analytics`, `@vercel/speed-insights`)
+   - Dashboards available in Vercel project → Analytics and Speed Insights tabs
+
+3. **Careers page built (6 sections, 5 new components):**
+   - `components/careers/CareersHero.tsx` — GradientText "Careers" + subhead
+   - `components/careers/CultureSection.tsx` — 4 value cards: Remote-first, Senior by default, AI-native ops, Irreverent on purpose
+   - `components/careers/RolesSection.tsx` — 2 roles: AI Workflow Engineer (Neon Cactus), Senior B2B Marketing Strategist (Tidal Wave)
+   - `components/careers/CareersContact.tsx` — Reuses ContactForm with `source="careers"` + `ctaId="careers-form"`
+   - `lib/schema/careers-faq.ts` — 5 answer capsules
+   - `lib/schema/breadcrumbs.ts` — Added `careersBreadcrumb()`
+   - `app/careers/page.tsx` — Full page with metadata, BreadcrumbList + FAQPage JSON-LD
+   - PacManGameTrigger preserved (easter egg)
+   - Form submissions go to same LEAD_RECIPIENTS via existing `/api/lead` endpoint
+
+**Files modified:**
+- [x] `CLAUDE.md` — Removed Chatbot section
+- [x] `docs/roadmap.md` — Dropped chatbot, marked analytics + careers done, added Session LVI
+- [x] `docs/HANDOFF.md` — Removed chatbot from next actions
+- [x] `app/layout.tsx` — Added Analytics + SpeedInsights components
+- [x] `app/careers/page.tsx` — Complete rewrite from stub
+- [x] `components/careers/CareersHero.tsx` — New
+- [x] `components/careers/CultureSection.tsx` — New
+- [x] `components/careers/RolesSection.tsx` — New
+- [x] `components/careers/CareersContact.tsx` — New
+- [x] `lib/schema/careers-faq.ts` — New
+- [x] `lib/schema/breadcrumbs.ts` — Added careersBreadcrumb()
+
+**Key decisions:**
+- Chatbot dropped permanently — not deferred. The autonomous content pipeline is the AI differentiator.
+- Careers roles are fabricated (AI Workflow Engineer + Senior B2B Marketing Strategist) per user directive
+- No application submission system — form goes to same LEAD_RECIPIENTS as contact page
+- Careers form uses `source: "careers"` to distinguish from contact leads
+
+**Build:** 137 pages, PASS
+
+**Still needed (next session):**
+- [ ] Monitor first production cron runs (check pipeline_logs after 8am UTC)
+- [ ] Tune content prompts further if forbidden term rejection rate stays high
+- [ ] Work page — last remaining stub
 
 ---
 
@@ -1121,7 +1172,7 @@ Build: 131 pages (up from 127), 0 type errors.
 
 ### Phase 3: Full Frontend (Sessions IX–XIII)
 
-**Goal:** All pillar pages built, chatbot operational, design polish.
+**Goal:** All pillar pages built, design polish.
 
 #### Session IX: Home Page ✅ PULLED FORWARD to Session I
 (See Phase 1 Session I above)
@@ -1140,13 +1191,10 @@ Build: 131 pages (up from 127), 0 type errors.
 - [x] About: 10 leadership bios, founding story, 52-client marquee, FAQ, AEO schemas (Session VII)
 - [x] Contact: Full page with "CONTINUE?" hero, dual-path (form + Cal.com), lead API, FAQ capsules (Session XLII)
 - [ ] Work: Case study showcase
-- [ ] Careers: Job listings, culture
+- [x] Careers: Full page with hero, culture section, 2 open roles, contact form, 5 FAQ capsules (Session LVI)
 
-#### Session XIII: Chatbot (chaDbot)
-- [ ] Copy RAG infrastructure from AEO
-- [ ] Copy chat components
-- [ ] Adapt system prompt for full TSC scope
-- [ ] Wire to OpenAI GPT-5.2
+#### ~~Session XIII: Chatbot (chaDbot)~~ — DROPPED (Session LVI)
+Chatbot dropped from scope. No AEO value (AI models don't crawl chatbot responses), no differentiation (every agency has one), and it's a conversion funnel pressure release valve. The autonomous content pipeline is the real AI-native differentiator.
 
 ---
 
