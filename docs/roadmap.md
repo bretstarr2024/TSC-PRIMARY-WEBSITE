@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XXXVI** | Last Updated: February 25, 2026
+**Status: SESSION XXXVII** | Last Updated: February 25, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -725,15 +725,46 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 119 pages (unchanged — no new routes)
 
-#### Session XXXVII (upcoming): Pipeline Infrastructure + Contact + CoinSlotCTA
+#### Session XXXVII: CTA Attribution System + AEO Gap Analysis ✅ COMPLETE (Feb 25, 2026)
+
+**Focus:** Build site-wide interaction tracking infrastructure, CTA attribution to Cal.com bookings, swap homepage hero CTA to CoinSlotCTA, and comprehensive AEO donor gap analysis.
+
+**New files:**
+- [x] `lib/tracking.ts` — Client-side tracking utility (sendBeacon, sessionStorage UUID, TrackEvent type)
+- [x] `app/api/track/route.ts` — POST endpoint → MongoDB `interactions` collection (follows arcade-boss pattern)
+- [x] `components/TrackingProvider.tsx` — Global `data-track-*` click listener + automatic page view tracking
+
+**Modified files:**
+- [x] `app/layout.tsx` — Added `<TrackingProvider />` for site-wide tracking
+- [x] `components/CoinSlotCTA.tsx` — Added optional `ctaId` prop + data-track attributes
+- [x] `components/MagneticButton.tsx` — Added optional `ctaId` prop + data-track attributes
+- [x] `components/insights/CtaStrip.tsx` — Added optional `ctaId` prop (default: `'insights-strip'`) + auto-appends `?cta=` to href
+- [x] `components/home/HeroSection.tsx` — **Swapped plain "Let's Talk" Link to CoinSlotCTA** (`ctaId="homepage-hero"`)
+- [x] `components/home/CtaSection.tsx` — `ctaId="homepage-cta"`
+- [x] `components/Header.tsx` — Desktop `ctaId="header-nav"`, mobile `ctaId="header-mobile"`
+- [x] `components/Footer.tsx` — `ctaId="footer"`
+- [x] `components/services/ServiceCTA.tsx` — `ctaId="services-bottom"`
+- [x] `components/services/ServiceCategoryStrip.tsx` — Dynamic `ctaId="services-{slug}"`
+- [x] `components/pricing/PricingCards.tsx` — `pricing-subscription` + `pricing-project`
+- [x] `components/industries/IndustryContent.tsx` — `ctaId="vertical-bottom"`
+- [x] `app/book/page.tsx` — Reads `?cta=` param, includes in Cal.com notes as `"Source: {ctaId}"`
+
+**AEO Gap Analysis:** Comprehensive comparison of AEO vs TSC infrastructure documented in plan file. See `docs/sessions/session-xxxvii-ledger.yaml` for full gap table.
+
+**Build:** 119 pages (unchanged — new `/api/track` route added, no new static pages)
+
+#### Session XXXVIII (upcoming): Contact Form + Pipeline Infrastructure + Expand CoinSlotCTA
+- [ ] Build Contact page with form (Resend integration) — copy pattern from AEO `/api/lead`
+- [ ] Add RESEND_API_KEY, LEAD_RECIPIENTS, RESEND_FROM to Vercel env vars
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
 - [ ] Create source monitors for B2B/AI marketing news
-- [ ] Build Contact page with form (Resend integration)
+- [ ] Place CoinSlotCTA on more pages (homepage CTA section, services, pricing)
+- [ ] Expand "Game Over" concept to other pages
 - [ ] Build chatbot (chaDbot) — copy RAG from AEO
-- [ ] Place CoinSlotCTA on pages (homepage CTA section, potentially others)
-- [ ] Expand "Game Over" concept to other pages (services, pricing, etc.)
+- [ ] Create MongoDB indexes for `interactions` collection (via Atlas UI)
+- [ ] Initialize Vercel Analytics (`@vercel/analytics` already installed)
 
 ---
 

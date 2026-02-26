@@ -1,0 +1,152 @@
+session_id: "XXXVII"
+date: "2026-02-25"
+branch: main
+version: "0.26.0"  # MINOR: Site-wide CTA tracking + attribution system, CoinSlotCTA on homepage hero
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "TBD"
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "New 'interactions' collection created via insertOne (no existing records to drift). No changes to existing collections."
+
+commits:
+  - hash: "e39be71"
+    message: "feat: Add site-wide CTA tracking + attribution system, swap homepage hero to CoinSlotCTA"
+
+artifacts_updated:
+  - "lib/tracking.ts — Client-side tracking utility (sendBeacon, anonymous sessionId)"
+  - "app/api/track/route.ts — Server endpoint writing to MongoDB interactions collection"
+  - "components/TrackingProvider.tsx — Global click listener for data-track-* attributes + page view tracking"
+  - "app/layout.tsx — Added TrackingProvider to body"
+  - "components/CoinSlotCTA.tsx — Added ctaId prop + data-track attributes"
+  - "components/MagneticButton.tsx — Added ctaId prop + data-track attributes"
+  - "components/insights/CtaStrip.tsx — Added ctaId prop with default 'insights-strip'"
+  - "components/home/HeroSection.tsx — Swapped plain Link to CoinSlotCTA for homepage hero"
+  - "components/home/CtaSection.tsx — Added ctaId='homepage-cta' attribution"
+  - "components/Header.tsx — Added attribution to desktop (header-nav) and mobile (header-mobile) CTAs"
+  - "components/Footer.tsx — Added attribution to Let's Talk link (footer)"
+  - "components/services/ServiceCTA.tsx — Added ctaId='services-bottom' attribution"
+  - "components/services/ServiceCategoryStrip.tsx — Added dynamic ctaId per service category"
+  - "components/pricing/PricingCards.tsx — Added attribution to subscription and project cards"
+  - "components/industries/IndustryContent.tsx — Added ctaId='vertical-bottom' attribution"
+  - "app/book/page.tsx — Reads ?cta= param, passes CTA source into Cal.com iframe notes"
+  - "docs/roadmap.md — Session XXXVII section + AEO gap analysis + Session XXXVIII upcoming"
+
+decisions_made:
+  - decision: "Use navigator.sendBeacon for tracking (not fetch)"
+    rationale: "sendBeacon survives page navigation — CTAs navigate to /book, so fetch would be cancelled. Beacon is fire-and-forget with fetch fallback."
+    reversible: true
+  - decision: "Global click listener via data-track-* attributes instead of per-component tracking imports"
+    rationale: "Single TrackingProvider listens for clicks on any element with data-track-cta. Avoids importing tracking utility in every component. Clean separation of concerns."
+    reversible: true
+  - decision: "Anonymous sessionStorage UUID (no cookies, no GDPR concerns)"
+    rationale: "sessionStorage dies with the tab — no persistent tracking. crypto.randomUUID() for uniqueness. No cookies means no consent banner needed."
+    reversible: true
+  - decision: "Always return 200 from /api/track (even on error)"
+    rationale: "Beacons don't retry on failure. Returning errors would just waste client resources. Graceful degradation — log warning if MongoDB unavailable."
+    reversible: true
+  - decision: "Reuse AEO's Resend API key for TSC email notifications"
+    rationale: "Same company, same Resend account. Add RESEND_API_KEY + LEAD_RECIPIENTS + RESEND_FROM to Vercel env vars when ready."
+    reversible: true
+  - decision: "Same 5 LEAD_RECIPIENTS as AEO site"
+    rationale: "User confirmed: melissa@, bret@, jj@, dan@, racheal@ thestarrconspiracy.com"
+    reversible: true
+  - decision: "Full CTA rollout — all 35+ buttons instrumented this session"
+    rationale: "User chose full rollout over incremental. All CTAs now have ?cta= params and data-track attributes."
+    reversible: true
+
+cta_id_registry:
+  - id: homepage-hero
+    component: CoinSlotCTA
+    page: Homepage
+  - id: homepage-cta
+    component: MagneticButton
+    page: Homepage bottom
+  - id: header-nav
+    component: Link
+    page: Every page (desktop)
+  - id: header-mobile
+    component: Link
+    page: Every page (mobile)
+  - id: footer
+    component: Link
+    page: Every page
+  - id: services-bottom
+    component: MagneticButton
+    page: Services hub + sub-pages + pricing + about + verticals
+  - id: services-{slug}
+    component: MagneticButton
+    page: Services hub (6 categories)
+  - id: pricing-subscription
+    component: Link
+    page: Pricing
+  - id: pricing-project
+    component: Link
+    page: Pricing
+  - id: vertical-bottom
+    component: MagneticButton
+    page: Verticals hub + sub-pages
+  - id: insights-strip
+    component: Link
+    page: All insight pages
+
+known_risks:
+  - risk: "MongoDB interactions collection has no indexes yet"
+    mitigation: "Create indexes via Atlas UI: {timestamp:-1}, {ctaId:1,timestamp:-1}, {sessionId:1,timestamp:1}, TTL 180 days"
+    severity: low
+  - risk: "Resend email infrastructure is code-ready but not configured in Vercel env vars"
+    mitigation: "Add RESEND_API_KEY, LEAD_RECIPIENTS, RESEND_FROM to Vercel project settings"
+    severity: low
+  - risk: "No contact form yet — email notifications have no trigger beyond Cal.com"
+    mitigation: "Contact page form is next session's scope"
+    severity: low
+
+explicitly_deferred:
+  - "Contact page form with Resend email notifications — next session"
+  - "MongoDB indexes on interactions collection — post-deploy via Atlas UI"
+  - "Vercel env vars for Resend — post-session manual setup"
+  - "Vercel Analytics initialization — quick win, future session"
+  - "Sentry error tracking configuration — quick win, future session"
+  - "Pipeline infrastructure from AEO (10 pipeline modules) — future sessions"
+  - "Chatbot (chaDbot) deployment — future session"
+  - "Content generation crons (10 cron jobs) — future sessions"
+  - "Newsletter subscriptions — future session"
+  - "Dashboard analytics — future session"
+  - "Video pipeline (ElevenLabs → HeyGen) — future session"
+
+next_actions:
+  - "Verify CTA tracking in production: click CTAs, check network tab for /api/track beacons"
+  - "Verify Cal.com notes attribution: navigate to /book?service=Subscription&cta=pricing-subscription"
+  - "Create MongoDB indexes on interactions collection via Atlas UI"
+  - "Add Resend env vars to Vercel: RESEND_API_KEY, LEAD_RECIPIENTS, RESEND_FROM"
+  - "Build Contact page form with Resend email notifications"
+  - "Initialize Vercel Analytics (already installed, not activated)"
+  - "Configure Sentry error tracking (already installed, not configured)"
+
+aeo_gap_analysis:
+  summary: "Comprehensive comparison of AEO donor site vs TSC. AEO has 47 API routes, 10 cron jobs, full video pipeline, RAG chatbot, dashboard, newsletter, lead capture. TSC now has CTA tracking (this session) but still missing most infrastructure."
+  reference: "Full gap analysis table in plan file and docs/roadmap.md Session XXXVII"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All CTAs -> /book (internal Cal.com iframe) with ?cta= attribution param"
+  - "Pricing page is DONE per user directive — no further changes unless requested"
+  - "9 arcade games: all triggered by ArcadeButton (motion.div with role=button)"
+  - "ArcadeButton MUST be conditionally rendered with {!playing && ...} on EVERY page"
+  - "'Game Over' is the site's creative concept"
+  - "TrackingProvider in layout.tsx — global click listener for data-track-* attributes"
+  - "CTA IDs follow pattern: {page}-{section} (e.g., homepage-hero, pricing-subscription)"
+  - "/api/track always returns 200 (beacons don't retry)"
+  - "Resend recipients: melissa@, bret@, jj@, dan@, racheal@ thestarrconspiracy.com"

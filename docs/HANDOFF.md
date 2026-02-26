@@ -1,16 +1,62 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 25, 2026 (Session XXXVI)
+**Last Updated:** February 25, 2026 (Session XXXVII)
 
 ---
 
-## Current Phase: Phase 1 COMPLETE + "Game Over" Concept LIVE on Homepage + 9 Arcade Games + CoinSlotCTA Ready
+## Current Phase: Phase 1 COMPLETE + CTA Tracking System LIVE + CoinSlotCTA on Homepage Hero
 
-The site is live with **119 pages** (118 static + 1 API route) across 10 content types, 9 verticals, a full Pricing page (declared done), 89 answer capsules, and **9 hidden arcade games** — one on every page — with a shared boss celebration system. The "Game Over" creative concept is now **live on the homepage hero** — the first visible public-facing execution. The headline "GAME OVER" renders in Press Start 2P with LED glow, CRT flicker, and scanline overlay. A CoinSlotCTA component is ready for placement on other pages.
+The site is live with **119 pages** (118 static + 2 API routes) across 10 content types, 9 verticals, a full Pricing page (declared done), 89 answer capsules, **9 hidden arcade games**, and now a **site-wide CTA tracking + attribution system**. Every CTA click is tracked to MongoDB with full context (page, component, label, destination, ctaId). The homepage hero now uses the CoinSlotCTA arcade button. CTA attribution flows through to Cal.com booking notes so the team can see which button drove each meeting.
 
-- **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections)
-- **Next actions:** Place CoinSlotCTA on pages, expand Game Over concept to other pages, Contact page form
-- **Roadmap:** See `docs/roadmap.md` Session XXXVI
+- **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections + new `interactions` collection)
+- **Next actions:** Create MongoDB indexes on `interactions`, add Resend env vars to Vercel, build Contact page form
+- **Roadmap:** See `docs/roadmap.md` Session XXXVII
+
+### Session XXXVII Summary (February 25, 2026)
+
+**Focus:** Site-wide CTA tracking + attribution system. AEO gap analysis. CoinSlotCTA on homepage hero.
+
+**What was done:**
+
+1. **Created tracking infrastructure** — 3 new files:
+   - `lib/tracking.ts` — Client utility using `navigator.sendBeacon` with anonymous sessionStorage UUIDs
+   - `app/api/track/route.ts` — Server endpoint writing to MongoDB `interactions` collection (graceful degradation)
+   - `components/TrackingProvider.tsx` — Global click listener for `data-track-*` attributes + page view tracking on pathname change
+
+2. **Instrumented all 35+ CTAs across 13 files** — Every CTA now has:
+   - `?cta=<ctaId>` query param appended to `/book` href
+   - `data-track-cta`, `data-track-component`, `data-track-label`, `data-track-destination` attributes
+   - CTA ID registry: homepage-hero, homepage-cta, header-nav, header-mobile, footer, services-bottom, services-{slug} (6), pricing-subscription, pricing-project, vertical-bottom, insights-strip
+
+3. **Swapped homepage hero CTA** from plain `<Link>` to `<CoinSlotCTA>` component — the arcade-style "25¢ PUSH" button
+
+4. **Updated `/book` page** to read `?cta=` param and pass CTA source into Cal.com iframe notes alongside existing `?service=` context
+
+5. **AEO donor site gap analysis** — Comprehensive comparison documented in roadmap:
+   - AEO has: 47 API routes, 10 cron jobs, full video pipeline, RAG chatbot, dashboard, newsletter, lead capture, GA4 events, Resend email notifications
+   - TSC now has: CTA tracking (this session). Still missing: contact form, email notifications, crons, video pipeline, chatbot, dashboard, newsletter
+   - Same 5 LEAD_RECIPIENTS confirmed, same Resend API key to reuse
+
+**Commits this session:**
+- `e39be71` — feat: Add site-wide CTA tracking + attribution system, swap homepage hero to CoinSlotCTA
+
+**Results:**
+- All CTA clicks tracked to MongoDB `interactions` collection
+- CTA attribution visible in Cal.com booking notes
+- Homepage hero uses CoinSlotCTA (arcade-style button)
+- Build: 119 pages + 2 API routes, PASS
+
+**Donor files referenced:**
+- AEO `lib/tracking.ts` pattern (GA4 events) — adapted to MongoDB-first approach
+- AEO `app/api/lead/route.ts` (Resend email pattern) — noted for next session's contact form
+- AEO `vercel.json` (10 cron jobs) — documented in gap analysis for future sessions
+- AEO `.env.local` (LEAD_RECIPIENTS, RESEND_API_KEY) — confirmed for TSC reuse
+
+**Post-session manual steps:**
+- Add MongoDB indexes on `interactions` collection via Atlas UI
+- Add env vars to Vercel: `RESEND_API_KEY`, `LEAD_RECIPIENTS`, `RESEND_FROM`
+
+---
 
 ### Session XXXVI Summary (February 25, 2026)
 
