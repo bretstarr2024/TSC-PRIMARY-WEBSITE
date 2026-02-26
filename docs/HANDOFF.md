@@ -1,12 +1,55 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 25, 2026 (Session XXXVII)
+**Last Updated:** February 25, 2026 (Session XXXVIII)
 
 ---
 
-## Current Phase: Phase 1 COMPLETE + CTA Tracking System LIVE + CoinSlotCTA on Homepage Hero
+## Current Phase: Phase 1 COMPLETE + "New Game" CTA Rebrand LIVE + Real CoinSlotCTA Image
 
-The site is live with **119 pages** (118 static + 2 API routes) across 10 content types, 9 verticals, a full Pricing page (declared done), 89 answer capsules, **9 hidden arcade games**, and now a **site-wide CTA tracking + attribution system**. Every CTA click is tracked to MongoDB with full context (page, component, label, destination, ctaId). The homepage hero now uses the CoinSlotCTA arcade button. CTA attribution flows through to Cal.com booking notes so the team can see which button drove each meeting.
+The site is live with **120 pages** across 10 content types, 9 verticals, a full Pricing page (declared done), 89 answer capsules, **9 hidden arcade games**, site-wide CTA tracking, and now a **full "New Game" CTA rebrand** aligning all buttons with the Game Over creative concept. The CoinSlotCTA on the homepage hero uses a custom arcade panel image (`coin_slot.png`) with radial glow instead of the old CSS-drawn version.
+
+- **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections + `interactions` collection)
+- **Next actions:** Build Contact page form, add Resend env vars, create MongoDB indexes on `interactions`
+- **Roadmap:** See `docs/roadmap.md` Session XXXVIII
+
+### Session XXXVIII Summary (February 25, 2026)
+
+**Focus:** Replace CSS-drawn CoinSlotCTA with real coin_slot.png image. Rebrand all CTA buttons from "Let's Talk!" to "New Game" site-wide.
+
+**What was done:**
+
+1. **Replaced CoinSlotCTA image** (`components/CoinSlotCTA.tsx`):
+   - Removed entire CSS-drawn coin slot (metallic frame, corner screws, recessed display, LED "25¢"/"PUSH" text, divider)
+   - Added user-created `coin_slot.png` (128×128 transparent PNG, red "25¢ INSERT COIN TO PLAY" arcade panel)
+   - Rendered at 200×200 via `next/image` with `unoptimized`
+   - Radial background glow: Atomic Tangerine gradient, blur 20px, scale 1.5x
+   - Drop shadow: dual-layer orange (8px tight + 20px diffuse)
+   - Same spring hover/tap motion preserved, all tracking attributes preserved
+
+2. **Rebranded all CTA buttons to "New Game"** (7 files):
+   - `components/Header.tsx` — desktop nav + mobile menu (2 instances)
+   - `components/Footer.tsx` — "New Game →"
+   - `components/home/CtaSection.tsx` — homepage bottom MagneticButton
+   - `components/services/ServiceCTA.tsx` — services/about/pricing/verticals bottom CTA
+   - `components/services/ServiceCategoryStrip.tsx` — per-service-category CTA (was "Let's Talk about {name}")
+   - `components/industries/IndustryContent.tsx` — verticals sub-page bottom CTA
+   - `components/insights/CtaStrip.tsx` — default button text on all insight pages
+
+3. **Pricing card CTAs left unchanged** — "Let's talk about a subscription/project" (pricing page is DONE per user directive)
+
+**Commits this session:**
+- `076c6ac` — feat: Replace CoinSlotCTA with real coin_slot.png + rebrand all CTAs to "New Game"
+
+**Results:**
+- CoinSlotCTA now shows real arcade panel image with glow effect
+- All site-wide CTA buttons say "New Game" (Game Over concept alignment)
+- Build: 120 pages, PASS
+
+**Key invariant added:**
+- CTA button text is "New Game" site-wide (except pricing cards which remain specific)
+- CoinSlotCTA uses `coin_slot.png` image (not CSS-drawn)
+
+---
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections + new `interactions` collection)
 - **Next actions:** Create MongoDB indexes on `interactions`, add Resend env vars to Vercel, build Contact page form

@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XXXVII** | Last Updated: February 25, 2026
+**Status: SESSION XXXVIII** | Last Updated: February 25, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -753,15 +753,36 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 119 pages (unchanged — new `/api/track` route added, no new static pages)
 
-#### Session XXXVIII (upcoming): Contact Form + Pipeline Infrastructure + Expand CoinSlotCTA
+#### Session XXXVIII: CoinSlotCTA Image Swap + "New Game" CTA Rebrand ✅ COMPLETE (Feb 25, 2026)
+
+**Focus:** Replace CSS-drawn CoinSlotCTA with real coin_slot.png image + background glow. Rebrand all site-wide CTA buttons from "Let's Talk!" to "New Game" (Game Over concept alignment).
+
+**Modified files:**
+- [x] `components/CoinSlotCTA.tsx` — Replaced entire CSS-drawn coin slot (metallic frame, screws, LED text, divider) with `coin_slot.png` image via `next/image` + radial background glow + drop-shadow
+- [x] `components/Header.tsx` — Desktop + mobile nav CTA: "Let's Talk!" → "New Game"
+- [x] `components/Footer.tsx` — Footer CTA link: "Let's Talk! →" → "New Game →"
+- [x] `components/home/CtaSection.tsx` — Homepage bottom CTA: "Let's Talk!" → "New Game"
+- [x] `components/services/ServiceCTA.tsx` — Services/about/pricing/verticals bottom CTA: "Let's Talk!" → "New Game"
+- [x] `components/services/ServiceCategoryStrip.tsx` — Per-category CTA: "Let's Talk about {name}" → "New Game"
+- [x] `components/industries/IndustryContent.tsx` — Verticals sub-page bottom CTA: "Let's Talk!" → "New Game"
+- [x] `components/insights/CtaStrip.tsx` — Default button text on all insight pages: "Let's Talk!" → "New Game"
+
+**New assets:**
+- [x] `public/images/coin_slot.png` — 128×128 transparent PNG, real "25¢ INSERT COIN TO PLAY" arcade panel
+
+**Not changed (pricing page is DONE per user directive):**
+- Pricing cards still say "Let's talk about a subscription" / "Let's talk about a project"
+
+**Build:** 120 pages, PASS
+
+#### Session XXXIX (upcoming): Contact Form + Pipeline Infrastructure
 - [ ] Build Contact page with form (Resend integration) — copy pattern from AEO `/api/lead`
 - [ ] Add RESEND_API_KEY, LEAD_RECIPIENTS, RESEND_FROM to Vercel env vars
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
 - [ ] Create source monitors for B2B/AI marketing news
-- [ ] Place CoinSlotCTA on more pages (homepage CTA section, services, pricing)
-- [ ] Expand "Game Over" concept to other pages
+- [ ] Expand "Game Over" concept to other page copy/headlines
 - [ ] Build chatbot (chaDbot) — copy RAG from AEO
 - [ ] Create MongoDB indexes for `interactions` collection (via Atlas UI)
 - [ ] Initialize Vercel Analytics (`@vercel/analytics` already installed)

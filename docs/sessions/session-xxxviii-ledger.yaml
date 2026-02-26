@@ -1,0 +1,89 @@
+session_id: "XXXVIII"
+date: "2026-02-25"
+branch: main
+version: "0.27.0"  # MINOR: CoinSlotCTA image swap + "New Game" CTA rebrand site-wide
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "TBD"
+  status: pending
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "No data model changes this session — UI text and image swap only."
+
+commits:
+  - hash: "076c6ac"
+    message: "feat: Replace CoinSlotCTA with real coin_slot.png + rebrand all CTAs to \"New Game\""
+
+artifacts_updated:
+  - "components/CoinSlotCTA.tsx — Replaced CSS-drawn coin slot with coin_slot.png image + radial glow + drop-shadow"
+  - "components/Header.tsx — Desktop + mobile nav CTA text: 'Let's Talk!' → 'New Game'"
+  - "components/Footer.tsx — Footer CTA link text: 'Let's Talk! →' → 'New Game →'"
+  - "components/home/CtaSection.tsx — Homepage bottom MagneticButton: 'Let's Talk!' → 'New Game'"
+  - "components/services/ServiceCTA.tsx — Services bottom MagneticButton: 'Let's Talk!' → 'New Game'"
+  - "components/services/ServiceCategoryStrip.tsx — Per-category MagneticButton: 'Let's Talk about {name}' → 'New Game'"
+  - "components/industries/IndustryContent.tsx — Verticals bottom MagneticButton: 'Let's Talk!' → 'New Game'"
+  - "components/insights/CtaStrip.tsx — Default buttonText: 'Let's Talk!' → 'New Game'"
+  - "public/images/coin_slot.png — New 128×128 transparent PNG arcade panel asset"
+  - "docs/roadmap.md — Session XXXVIII section + Session XXXIX upcoming"
+
+decisions_made:
+  - decision: "Replace CSS-drawn CoinSlotCTA with real coin_slot.png image"
+    rationale: "User created a custom 'INSERT COIN TO PLAY' panel image. The old CSS version was cartoonish. New image is a proper red arcade panel with LED text."
+    reversible: true
+  - decision: "Rebrand all CTA buttons from 'Let's Talk!' to 'New Game'"
+    rationale: "Aligns CTA language with the site's 'Game Over' creative concept. User directive."
+    reversible: true
+  - decision: "Leave pricing card CTAs unchanged ('Let's talk about a subscription/project')"
+    rationale: "Pricing page declared DONE per user directive (Session XXVII). These CTAs are contextual and specific to pricing tiers."
+    reversible: true
+
+known_risks:
+  - risk: "MongoDB interactions collection still has no indexes"
+    mitigation: "Create indexes via Atlas UI: {timestamp:-1}, {ctaId:1,timestamp:-1}, {sessionId:1,timestamp:1}, TTL 180 days"
+    severity: low
+  - risk: "Resend email infrastructure still not configured in Vercel env vars"
+    mitigation: "Add RESEND_API_KEY, LEAD_RECIPIENTS, RESEND_FROM to Vercel project settings"
+    severity: low
+  - risk: "CTA tracking data-track-label still says '25¢ PUSH' on CoinSlotCTA and old labels on some buttons"
+    mitigation: "Tracking labels in data attributes updated for Header/Footer; CoinSlotCTA label is for analytics only — update if needed"
+    severity: low
+
+explicitly_deferred:
+  - "Contact page form with Resend email notifications — next session"
+  - "MongoDB indexes on interactions collection — Atlas UI manual step"
+  - "Vercel env vars for Resend — manual setup"
+  - "Pipeline infrastructure from AEO — future sessions"
+  - "Chatbot (chaDbot) deployment — future session"
+  - "Content generation crons — future sessions"
+  - "Vercel Analytics initialization — future session"
+
+next_actions:
+  - "Verify coin_slot.png renders correctly in production (check homepage hero CTA)"
+  - "Verify 'New Game' text on all CTA buttons across pages"
+  - "Create MongoDB indexes on interactions collection via Atlas UI"
+  - "Add Resend env vars to Vercel"
+  - "Build Contact page form with Resend email notifications"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All CTAs -> /book (internal Cal.com iframe) with ?cta= attribution param"
+  - "Pricing page is DONE per user directive — no further changes unless requested"
+  - "CTA button text is 'New Game' site-wide (except pricing cards)"
+  - "CoinSlotCTA uses coin_slot.png image (not CSS-drawn)"
+  - "9 arcade games: all triggered by ArcadeButton (motion.div with role=button)"
+  - "ArcadeButton MUST be conditionally rendered with {!playing && ...} on EVERY page"
+  - "'Game Over' is the site's creative concept"
+  - "TrackingProvider in layout.tsx — global click listener for data-track-* attributes"
+  - "CTA IDs follow pattern: {page}-{section}"
+  - "/api/track always returns 200 (beacons don't retry)"
