@@ -100,12 +100,12 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/book?cta=footer"
+                  href="/contact?cta=footer"
                   className="text-sm text-atomic-tangerine hover:text-hot-sauce transition-colors hover:no-underline"
                   data-track-cta="footer"
                   data-track-component="Footer"
                   data-track-label="New Game →"
-                  data-track-destination="/book"
+                  data-track-destination="/contact"
                 >
                   New Game →
                 </Link>

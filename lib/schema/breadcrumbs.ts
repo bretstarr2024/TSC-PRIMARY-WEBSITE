@@ -116,3 +116,6 @@ export const verticalBreadcrumb = (name?: string) =>
     { name: 'Verticals', url: '/verticals' },
     ...(name ? [{ name, url: '#' }] : []),
   ]);
+
+export const contactBreadcrumb = () =>
+  breadcrumb([{ name: 'Home', url: '/' }, { name: 'Contact', url: '/contact' }]);

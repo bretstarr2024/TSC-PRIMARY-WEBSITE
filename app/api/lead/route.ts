@@ -1,0 +1,158 @@
+import { NextResponse } from 'next/server';
+import { Resend } from 'resend';
+import { getDatabase } from '@/lib/mongodb';
+
+// Lazy Resend initialization — avoids build-time errors when env var is not set
+function getResendClient() {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    throw new Error('RESEND_API_KEY environment variable is not set');
+  }
+  return new Resend(apiKey);
+}
+
+interface LeadData {
+  name: string;
+  email: string;
+  message?: string;
+  source?: string;
+  ctaId?: string;
+}
+
+export async function POST(request: Request) {
+  try {
+    const data: LeadData = await request.json();
+
+    // Validate required fields
+    if (!data.name || !data.email) {
+      return NextResponse.json(
+        { error: 'Name and email are required' },
+        { status: 400 }
+      );
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(data.email)) {
+      return NextResponse.json(
+        { error: 'Invalid email format' },
+        { status: 400 }
+      );
+    }
+
+    const recipients = process.env.LEAD_RECIPIENTS?.split(',').map((e) => e.trim()) || [];
+    const fromEmail = process.env.RESEND_FROM || 'hello@thestarrconspiracy.com';
+
+    if (recipients.length === 0) {
+      console.error('No LEAD_RECIPIENTS configured');
+      return NextResponse.json(
+        { error: 'Server configuration error' },
+        { status: 500 }
+      );
+    }
+
+    const timestamp = new Date();
+    const timestampCT = timestamp.toLocaleString('en-US', { timeZone: 'America/Chicago' });
+
+    // Store lead in MongoDB
+    try {
+      const db = await getDatabase();
+      await db.collection('leads').insertOne({
+        name: data.name,
+        email: data.email,
+        message: data.message || null,
+        source: data.source || null,
+        ctaId: data.ctaId || null,
+        timestamp,
+        userAgent: request.headers.get('user-agent') || null,
+      });
+    } catch (dbError) {
+      // Log but don't fail — email is the critical path
+      console.error('Failed to store lead in MongoDB:', dbError);
+    }
+
+    // Team notification email
+    const teamHtml = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #FF5910; margin-bottom: 20px;">New Lead</h2>
+        <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+          <tr>
+            <td style="padding: 10px 0; border-bottom: 1px solid #333; font-weight: bold; color: #999; width: 100px;">Name</td>
+            <td style="padding: 10px 0; border-bottom: 1px solid #333; color: #fff;">${data.name}</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px 0; border-bottom: 1px solid #333; font-weight: bold; color: #999;">Email</td>
+            <td style="padding: 10px 0; border-bottom: 1px solid #333;"><a href="mailto:${data.email}" style="color: #73F5FF;">${data.email}</a></td>
+          </tr>
+          ${data.message ? `
+          <tr>
+            <td style="padding: 10px 0; border-bottom: 1px solid #333; font-weight: bold; color: #999; vertical-align: top;">Message</td>
+            <td style="padding: 10px 0; border-bottom: 1px solid #333; color: #fff;">${data.message}</td>
+          </tr>
+          ` : ''}
+          ${data.source ? `
+          <tr>
+            <td style="padding: 10px 0; border-bottom: 1px solid #333; font-weight: bold; color: #999;">Source</td>
+            <td style="padding: 10px 0; border-bottom: 1px solid #333; color: #fff;">${data.source}</td>
+          </tr>
+          ` : ''}
+          ${data.ctaId ? `
+          <tr>
+            <td style="padding: 10px 0; border-bottom: 1px solid #333; font-weight: bold; color: #999;">CTA</td>
+            <td style="padding: 10px 0; border-bottom: 1px solid #333; color: #fff;">${data.ctaId}</td>
+          </tr>
+          ` : ''}
+        </table>
+        <p style="color: #666; font-size: 13px;">
+          Submitted: ${timestampCT} CT
+        </p>
+        <hr style="border: none; border-top: 1px solid #333; margin: 20px 0;">
+        <p style="color: #666; font-size: 12px;">
+          thestarrconspiracy.com
+        </p>
+      </div>
+    `;
+
+    // Auto-reply to submitter
+    const replyHtml = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+        <p>Hey ${data.name},</p>
+        <p>Thanks for reaching out. Someone from our team will be in touch within one business day.</p>
+        <p>If you'd rather skip the wait and book a call now:</p>
+        <p style="margin: 24px 0;">
+          <a href="https://thestarrconspiracy.com/book"
+             style="background-color: #FF5910; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: 500;">
+            Book a Call
+          </a>
+        </p>
+        <p style="margin-top: 32px; color: #666;">&mdash; The Starr Conspiracy</p>
+      </div>
+    `;
+
+    const resend = getResendClient();
+
+    // Send both emails in parallel
+    await Promise.all([
+      resend.emails.send({
+        from: fromEmail,
+        to: recipients,
+        subject: `[TSC] New lead: ${data.name} (${data.email})`,
+        html: teamHtml,
+      }),
+      resend.emails.send({
+        from: fromEmail,
+        to: data.email,
+        subject: 'We got your message',
+        html: replyHtml,
+      }),
+    ]);
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Lead submission error:', error);
+    return NextResponse.json(
+      { error: 'Failed to process submission' },
+      { status: 500 }
+    );
+  }
+}

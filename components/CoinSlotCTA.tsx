@@ -12,7 +12,7 @@ interface CoinSlotCTAProps {
 }
 
 export function CoinSlotCTA({
-  href = '/book',
+  href = '/contact',
   onClick,
   className = '',
   ctaId,

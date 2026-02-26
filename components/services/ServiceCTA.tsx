@@ -33,7 +33,7 @@ export function ServiceCTA() {
         </AnimatedSection>
 
         <AnimatedSection delay={0.2} className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <MagneticButton href="/book?cta=services-bottom" variant="primary" ctaId="services-bottom">
+          <MagneticButton href="/contact?cta=services-bottom" variant="primary" ctaId="services-bottom">
             New Game
           </MagneticButton>
         </AnimatedSection>

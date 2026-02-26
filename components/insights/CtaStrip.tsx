@@ -8,7 +8,7 @@ interface CtaStripProps {
 export function CtaStrip({
   headline = 'Ready to talk strategy?',
   buttonText = "New Game",
-  buttonHref = '/book',
+  buttonHref = '/contact',
   ctaId = 'insights-strip',
 }: CtaStripProps) {
   const isExternal = buttonHref.startsWith('http');

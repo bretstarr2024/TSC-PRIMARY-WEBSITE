@@ -70,12 +70,12 @@ export function Header() {
               </Link>
             ))}
             <Link
-              href="/book?cta=header-nav"
+              href="/contact?cta=header-nav"
               className="ml-4 inline-flex items-center px-5 py-2.5 text-sm font-medium text-white bg-atomic-tangerine rounded-lg hover:bg-hot-sauce transition-colors hover:no-underline"
               data-track-cta="header-nav"
               data-track-component="Header"
               data-track-label="New Game"
-              data-track-destination="/book"
+              data-track-destination="/contact"
             >
               New Game
             </Link>
@@ -139,13 +139,13 @@ export function Header() {
                 transition={{ delay: navLinks.length * 0.08, duration: 0.4 }}
               >
                 <Link
-                  href="/book?cta=header-mobile"
+                  href="/contact?cta=header-mobile"
                   onClick={() => setMenuOpen(false)}
                   className="mt-4 inline-flex items-center px-8 py-4 text-lg font-medium text-white bg-atomic-tangerine rounded-lg hover:bg-hot-sauce transition-colors hover:no-underline"
                   data-track-cta="header-mobile"
                   data-track-component="Header"
                   data-track-label="Let's Talk!"
-                  data-track-destination="/book"
+                  data-track-destination="/contact"
                 >
                   Let&apos;s Talk!
                 </Link>
