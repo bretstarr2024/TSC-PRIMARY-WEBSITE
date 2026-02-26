@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XXXIX** | Last Updated: February 25, 2026
+**Status: SESSION XL** | Last Updated: February 25, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -785,7 +785,17 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 120 pages, PASS
 
-#### Session XL (upcoming): Contact Form + Pipeline Infrastructure
+#### Session XL: Hero Composition Polish ✅ COMPLETE (Feb 25, 2026)
+
+**Focus:** Refine homepage hero composition — GAME OVER gradient, spatial layout within sphere, subhead tightening.
+
+**Modified files:**
+- [x] `components/home/HeroSection.tsx` — Moving gradient on GAME OVER headline, arcade button spacing mb-6→mb-10, subhead narrowed max-w-2xl→max-w-[600px] with text-base/md:text-lg, coin slot pushed below sphere mt-8→mt-20, "level up" changed from animated gradient to white bold
+- [x] Removed `GradientText` import and `ledGlow` constant (replaced by gradient classes + drop-shadow)
+
+**Build:** 120 pages, PASS
+
+#### Session XLI (upcoming): Contact Form + Pipeline Infrastructure
 - [ ] Build Contact page with form (Resend integration) — copy pattern from AEO `/api/lead`
 - [ ] Add RESEND_API_KEY, LEAD_RECIPIENTS, RESEND_FROM to Vercel env vars
 - [ ] Copy pipeline infrastructure from AEO:

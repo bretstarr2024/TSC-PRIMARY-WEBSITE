@@ -1,0 +1,90 @@
+session_id: "XL"
+date: "2026-02-25"
+branch: main
+version: "0.27.2"  # PATCH: Hero composition polish — gradient headline, spatial refinements
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "TBD"
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "No data model changes — UI rendering changes only."
+
+commits:
+  - hash: "9f7fb4d"
+    message: "feat: Hero composition polish — GAME OVER gradient, spatial refinements"
+
+artifacts_updated:
+  - "components/home/HeroSection.tsx — Moving gradient on GAME OVER, arcade button mb-6→mb-10, subhead max-w-2xl→max-w-[600px] text-xl→text-lg, coin slot mt-8→mt-20, level up white bold"
+  - "docs/roadmap.md — Session XL section added, Session XLI upcoming"
+
+decisions_made:
+  - decision: "Replace solid LED glow with animated moving gradient on GAME OVER headline"
+    rationale: "User directive — gradient sweeping through brand colors (Atomic Tangerine → Neon Cactus → Tidal Wave) is more dynamic and visually striking than static orange glow."
+    reversible: true
+  - decision: "Use drop-shadow filter on parent div for headline glow instead of textShadow"
+    rationale: "bg-clip-text with text-transparent makes textShadow invisible. drop-shadow on parent creates glow from rendered letter shapes."
+    reversible: true
+  - decision: "Change 'level up' from animated GradientText to plain white bold"
+    rationale: "User directive — gradient treatment moved to the headline, so subhead gets clean treatment. White font-semibold provides emphasis without competing."
+    reversible: true
+  - decision: "Narrow subhead from max-w-2xl (672px) to max-w-[600px] with smaller text"
+    rationale: "User directive — text needs to fit more neatly inside the sphere. Stepped down from md:text-xl to md:text-lg to maintain 2-line layout."
+    reversible: true
+  - decision: "Push coin slot from mt-8 to mt-20 (80px)"
+    rationale: "User directive — coin slot should sit just below the sphere in the background, not overlap with it."
+    reversible: true
+  - decision: "Increase arcade button spacing from mb-6 to mb-10"
+    rationale: "User directive — more breathing room between 1-player button and GAME OVER headline while staying inside sphere."
+    reversible: true
+
+known_risks:
+  - risk: "MongoDB interactions collection still has no indexes"
+    mitigation: "Create indexes via Atlas UI: {timestamp:-1}, {ctaId:1,timestamp:-1}, {sessionId:1,timestamp:1}, TTL 180 days"
+    severity: low
+  - risk: "Resend email infrastructure still not configured in Vercel env vars"
+    mitigation: "Add RESEND_API_KEY, LEAD_RECIPIENTS, RESEND_FROM to Vercel project settings"
+    severity: low
+  - risk: "drop-shadow + bg-clip-text combination may render differently across browsers"
+    mitigation: "Tested in Chromium. Verify in Safari/Firefox. Fallback: move glow to a duplicated text layer behind the gradient text."
+    severity: low
+
+explicitly_deferred:
+  - "Contact page form with Resend email notifications — next session"
+  - "MongoDB indexes on interactions collection — Atlas UI manual step"
+  - "Vercel env vars for Resend — manual setup"
+  - "Pipeline infrastructure from AEO — future sessions"
+  - "Chatbot (chaDbot) deployment — future session"
+  - "Content generation crons — future sessions"
+  - "Vercel Analytics initialization — future session"
+
+next_actions:
+  - "Verify hero gradient and spatial layout in production across browsers"
+  - "Create MongoDB indexes on interactions collection via Atlas UI"
+  - "Add Resend env vars to Vercel"
+  - "Build Contact page form with Resend email notifications"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All CTAs -> /book (internal Cal.com iframe) with ?cta= attribution param"
+  - "Pricing page is DONE per user directive — no further changes unless requested"
+  - "CTA button text is 'New Game' site-wide (except pricing cards)"
+  - "CoinSlotCTA renders at native 128×128 with imageRendering: pixelated"
+  - "GAME OVER headline uses animated moving gradient (not solid LED glow)"
+  - "'level up' in subhead is white bold (not GradientText)"
+  - "9 arcade games: all triggered by ArcadeButton (motion.div with role=button)"
+  - "'Game Over' is the site's creative concept"
+  - "TrackingProvider in layout.tsx — global click listener for data-track-* attributes"
+  - "CTA IDs follow pattern: {page}-{section}"
+  - "/api/track always returns 200 (beacons don't retry)"

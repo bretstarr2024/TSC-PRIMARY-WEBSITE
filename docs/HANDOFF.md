@@ -1,12 +1,51 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 25, 2026 (Session XXXIX)
+**Last Updated:** February 25, 2026 (Session XL)
 
 ---
 
-## Current Phase: Phase 1 COMPLETE + CoinSlotCTA Pixel-Perfect
+## Current Phase: Phase 1 COMPLETE + Hero Composition Polish
 
-The site is live with **120 pages** across 10 content types, 9 verticals, a full Pricing page (declared done), 89 answer capsules, **9 hidden arcade games**, site-wide CTA tracking, "New Game" CTA rebrand, and now a **pixel-perfect CoinSlotCTA** rendering at native 128px with crisp retro edges.
+The site is live with **120 pages** across 10 content types, 9 verticals, a full Pricing page (declared done), 89 answer capsules, **9 hidden arcade games**, site-wide CTA tracking, "New Game" CTA rebrand, pixel-perfect CoinSlotCTA, and now a **polished hero composition** with moving gradient headline, tighter spatial layout within the sphere, and refined typography.
+
+- **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections + `interactions` collection)
+- **Next actions:** Verify hero in production, build Contact page form, add Resend env vars, create MongoDB indexes on `interactions`
+- **Roadmap:** See `docs/roadmap.md` Session XL
+
+### Session XL Summary (February 25, 2026)
+
+**Focus:** Polish homepage hero composition — gradient headline, spatial layout refinements, subhead tightening.
+
+**What was done:**
+
+1. **GAME OVER headline gradient** (`components/home/HeroSection.tsx`):
+   - Replaced solid orange LED glow (`ledGlow` textShadow) with animated moving gradient (Atomic Tangerine → Neon Cactus → Tidal Wave)
+   - Uses `bg-clip-text text-transparent bg-[length:200%_auto]` with animated `backgroundPosition`
+   - Added `drop-shadow` filter on parent div for warm orange glow around gradient text
+   - CRT flicker animation preserved alongside gradient animation (per-property transitions)
+
+2. **Spatial refinements** (`components/home/HeroSection.tsx`):
+   - Arcade button: `mb-6` → `mb-10` (more breathing room between button and headline)
+   - Coin slot CTA: `mt-8` → `mt-20` (pushed below the sphere in background)
+   - Subhead: `max-w-2xl` → `max-w-[600px]`, text `md:text-xl` → `md:text-lg` (fits neatly in sphere)
+
+3. **"level up" treatment** (`components/home/HeroSection.tsx`):
+   - Changed from `<GradientText>` animated component to plain `<span className="text-white font-semibold">`
+   - Removed `GradientText` import from HeroSection (no longer used there)
+
+**Commits this session:**
+- `9f7fb4d` — feat: Hero composition polish — GAME OVER gradient, spatial refinements
+
+**Results:**
+- GAME OVER headline shows animated color sweep through brand palette
+- Hero elements compose within the wireframe sphere: button breathes, headline centered, subhead tight, coin slot below
+- Build: 120 pages, PASS
+
+**Key invariants added:**
+- GAME OVER headline uses animated moving gradient (not solid LED glow)
+- "level up" in subhead is white bold (not GradientText)
+
+---
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections + `interactions` collection)
 - **Next actions:** Build Contact page form, add Resend env vars, create MongoDB indexes on `interactions`
