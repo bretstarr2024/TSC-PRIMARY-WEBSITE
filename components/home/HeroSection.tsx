@@ -129,7 +129,7 @@ export function HeroSection() {
 
       {/* Bottom spacer — button centered between content and section edge */}
       {!playing && (
-        <div className="flex-1 flex items-center justify-center z-10">
+        <div className="flex-1 flex items-center justify-center z-10 pt-[10vh]">
           <ArcadeButton onClick={() => setPlaying(true)} delay={2.8} />
         </div>
       )}
