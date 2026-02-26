@@ -1,0 +1,105 @@
+session_id: "XLII"
+date: "2026-02-25"
+branch: main
+version: "0.28.0"  # MINOR: Contact page "CONTINUE?" — dual-path form + calendar, lead API, CTA routing
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "TBD"
+  status: pending
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "New `leads` collection created (no existing records to backfill). Existing collections unchanged."
+
+commits:
+  - hash: "dc3e7d8"
+    message: "feat: Contact page 'CONTINUE?' — dual-path form + calendar, lead API, CTA routing"
+  - hash: "521bdc8"
+    message: "docs: Update roadmap for Session XLII — Contact page complete, XLIII upcoming"
+
+artifacts_updated:
+  - "app/contact/page.tsx — Replaced placeholder with full Contact page"
+  - "app/api/lead/route.ts — New lead API: validate, store in MongoDB, send dual Resend emails"
+  - "components/contact/ContactHero.tsx — CONTINUE? headline with animated gradient, CRT flicker, HeroParticles"
+  - "components/contact/ContactDualPath.tsx — Side-by-side glass cards: form + Cal.com calendar"
+  - "components/contact/ContactForm.tsx — 3-field form (name, email, message) with state management"
+  - "components/contact/ContactCalendar.tsx — Cal.com iframe with postMessage resize + query param forwarding"
+  - "lib/schema/contact-faq.ts — 5 answer capsules for Contact page"
+  - "lib/schema/breadcrumbs.ts — Added contactBreadcrumb()"
+  - "CTA routing: 8 files updated (Header, Footer, HeroSection, CtaSection, ServiceCTA, IndustryContent, CtaStrip, CoinSlotCTA) — general CTAs /book → /contact"
+  - "docs/roadmap.md — Session XLII section added, Session XLIII upcoming, Session XII updated"
+
+decisions_made:
+  - decision: "Contact headline is 'CONTINUE?' — completes GAME OVER → CONTINUE? arcade narrative arc"
+    rationale: "The canonical arcade prompt after game over. Asks a question, mirrors the page's purpose (inviting next step). Strategic, not gimmicky."
+    reversible: true
+  - decision: "Dual-path UX: side-by-side form + calendar (not tabbed or sequential)"
+    rationale: "Tabbed hides one option → friction. Sequential implies hierarchy. Side-by-side lets visitor self-select in one glance."
+    reversible: true
+  - decision: "CTA routing split: general CTAs → /contact, service-specific CTAs (with ?service=) → /book"
+    rationale: "/contact is 'I'm interested, let's connect' (has both form + calendar). /book is 'I know what I want, schedule now' (direct calendar with service context)."
+    reversible: true
+  - decision: "Form collects only 3 fields: name, email, optional message"
+    rationale: "User directive: 'gather the least amount of information possible, research everything else with agents or Clay.'"
+    reversible: true
+  - decision: "Leads stored in MongoDB `leads` collection AND emailed via Resend"
+    rationale: "Gives queryable lead history + CTA attribution data + backup if emails get lost."
+    reversible: true
+
+known_risks:
+  - risk: "Resend domain may still need verification for email sending to work"
+    mitigation: "User confirmed DNS records are done and domain verified. Test in production after deploy."
+    severity: low
+  - risk: "Cal.com embed inside a glass card may have height/overflow issues on some viewports"
+    mitigation: "postMessage resize listener handles dynamic height. Test on mobile after deploy."
+    severity: low
+  - risk: "drop-shadow + bg-clip-text combination may render differently across browsers (carried from XL)"
+    mitigation: "Tested in Chromium. Verify in Safari/Firefox. Fallback: duplicated text layer."
+    severity: low
+
+explicitly_deferred:
+  - "Pipeline infrastructure from AEO — Session XLIII"
+  - "Chatbot (chaDbot) deployment — future session"
+  - "Content generation crons — future sessions"
+  - "Vercel Analytics initialization — future session"
+  - "Expand 'Game Over' concept to other page copy/headlines — Session XLIII"
+  - "MongoDB index on `leads` collection — create timestamp_desc index next session"
+
+next_actions:
+  - "Create MongoDB index on `leads` collection (timestamp: -1)"
+  - "Test contact form end-to-end in production (submit form, verify MongoDB insert + both emails)"
+  - "Copy pipeline infrastructure from AEO (lib/pipeline/*.ts)"
+  - "Expand 'Game Over' concept to other pages"
+  - "Build chatbot (chaDbot) — copy RAG from AEO"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All general CTAs -> /contact (dual-path: form + calendar)"
+  - "Service-specific CTAs (pricing cards, service category buttons with ?service=) -> /book (direct calendar)"
+  - "Pricing page is DONE per user directive — no further changes unless requested"
+  - "CTA button text is 'New Game' site-wide (except pricing cards)"
+  - "CoinSlotCTA renders at native 128×128 with imageRendering: pixelated"
+  - "GAME OVER headline uses animated moving gradient (not solid LED glow)"
+  - "CONTINUE? headline on contact page uses same gradient + CRT treatment"
+  - "'level up' in subhead is white bold (not GradientText)"
+  - "9 arcade games: all triggered by ArcadeButton (motion.div with role=button)"
+  - "'Game Over' is the site's creative concept"
+  - "TrackingProvider in layout.tsx — global click listener for data-track-* attributes"
+  - "CTA IDs follow pattern: {page}-{section}"
+  - "/api/track always returns 200 (beacons don't retry)"
+  - "/api/lead stores in MongoDB `leads` collection AND sends dual Resend emails"
+  - "Contact form: name (required), email (required), message (optional)"
+  - "New CTA IDs: contact-form, contact-calendar"
+  - "Vercel CLI linked to tsc-primary-website (bretstarr2024 account)"
+  - "Resend env vars set: RESEND_API_KEY, LEAD_RECIPIENTS, RESEND_FROM"
+  - "MongoDB interactions indexes: timestamp_desc, ctaId_timestamp, sessionId_timestamp, ttl_180d"

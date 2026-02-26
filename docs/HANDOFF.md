@@ -1,16 +1,69 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 25, 2026 (Session XLI)
+**Last Updated:** February 25, 2026 (Session XLII)
 
 ---
 
-## Current Phase: Phase 1 COMPLETE + Infrastructure Ops
+## Current Phase: Phase 1 COMPLETE + Contact Live
 
-The site is live with **120 pages** across 10 content types, 9 verticals, a full Pricing page (declared done), 89 answer capsules, **9 hidden arcade games**, site-wide CTA tracking, "New Game" CTA rebrand, pixel-perfect CoinSlotCTA, polished hero composition, and now **full email infrastructure** (Resend env vars set, MongoDB indexes created, domain pending DNS verification).
+The site is live with **121 pages** across 10 content types, 9 verticals, a full Pricing page (declared done), 94 answer capsules (89 + 5 new on Contact), **9 hidden arcade games**, site-wide CTA tracking, "New Game" CTA rebrand, pixel-perfect CoinSlotCTA, polished hero composition, **full email infrastructure** (Resend verified), and now a **full Contact page** with "CONTINUE?" arcade headline, dual-path UX (form + calendar), lead API with MongoDB storage + Resend notifications, and **CTA routing migration** (general CTAs → /contact, service-specific → /book).
 
-- **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections + indexed `interactions` collection), Vercel CLI linked
-- **Next actions:** Add Resend DNS records at domain provider, verify domain, build Contact page form
-- **Roadmap:** See `docs/roadmap.md` Session XLI
+- **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections + `interactions` + `leads` collections), Vercel CLI linked
+- **Next actions:** Test contact form in production, create `leads` collection index, copy pipeline infrastructure from AEO
+- **Roadmap:** See `docs/roadmap.md` Session XLII
+
+### Session XLII Summary (February 25, 2026)
+
+**Focus:** Build full Contact page with "CONTINUE?" headline, dual-path form + calendar, lead API, CTA routing migration.
+
+**What was done:**
+
+1. **Built Contact page** (`app/contact/page.tsx`) — replaced "Coming soon." placeholder with full page:
+   - **ContactHero**: "CONTINUE?" headline in Press Start 2P with animated gradient (Atomic Tangerine → Neon Cactus → Tidal Wave), CRT flicker, scanlines, Three.js HeroParticles, background glow orb
+   - **ContactDualPath**: Two side-by-side glass cards — "Drop a line" (form) + "Book a call" (Cal.com embed)
+   - **ContactForm**: 3 fields (name, email, optional message), idle/loading/success/error states, Framer Motion AnimatePresence transitions
+   - **ContactCalendar**: Cal.com iframe with postMessage resize listener, forwards `?service=` and `?cta=` query params
+   - **AnswerCapsulesSection**: 5 FAQ capsules about the engagement process with FAQPage JSON-LD
+   - **PongGameTrigger**: Preserved (hidden arcade easter egg)
+   - **BreadcrumbList JSON-LD** via new `contactBreadcrumb()`
+
+2. **Created Lead API** (`app/api/lead/route.ts`) adapted from AEO donor pattern:
+   - Validates name + email (required), email format (regex)
+   - Stores in MongoDB `tsc.leads` collection (name, email, message, source, ctaId, timestamp, userAgent)
+   - Sends team notification email via Resend to LEAD_RECIPIENTS
+   - Sends auto-reply to submitter ("We got your message" + link to book a call)
+   - Both emails sent in parallel via `Promise.all`
+   - MongoDB storage failure doesn't block email sending (graceful degradation)
+
+3. **Migrated CTA routing** (8 files, 10 locations):
+   - General CTAs (header desktop/mobile, footer, homepage hero/CTA, services bottom, verticals bottom, insights strip) now route to `/contact`
+   - Service-specific CTAs (pricing subscription/project, service category buttons with `?service=`) remain on `/book`
+   - Updated `data-track-destination` attributes to match
+   - Updated default `href` props in `CoinSlotCTA` and `CtaStrip` from `/book` to `/contact`
+
+**Commits this session:**
+- `dc3e7d8` — feat: Contact page "CONTINUE?" — dual-path form + calendar, lead API, CTA routing
+- `521bdc8` — docs: Update roadmap for Session XLII — Contact page complete, XLIII upcoming
+
+**Results:**
+- Contact page live with full UX: "CONTINUE?" headline + dual-path (form + calendar) + 5 FAQ capsules
+- Lead API ready for production (Resend + MongoDB)
+- CTA routing split: general → /contact, service-specific → /book
+- Build: 121 pages, PASS
+
+**Key decisions (do not re-debate):**
+- "CONTINUE?" headline completes GAME OVER → CONTINUE? arcade narrative arc
+- Side-by-side layout (not tabbed) — both options visible, zero friction
+- 3 form fields only (name, email, message) — research the rest with AI/Clay
+- CTA routing split keeps `/book` for direct booking with service context
+- Leads stored in MongoDB AND emailed (dual persistence)
+
+**What must happen next:**
+- Create MongoDB index on `leads` collection (`{ timestamp: -1 }`)
+- Test contact form end-to-end in production
+- Copy pipeline infrastructure from AEO
+
+---
 
 ### Session XLI Summary (February 25, 2026)
 
