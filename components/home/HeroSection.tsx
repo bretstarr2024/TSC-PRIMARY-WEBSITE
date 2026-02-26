@@ -131,7 +131,7 @@ export function HeroSection() {
 
       {/* Scroll indicator */}
       <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 3.2, duration: 1 }}
@@ -142,6 +142,12 @@ export function HeroSection() {
           transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
         />
       </motion.div>
+
+      {/* Bottom fade — dissolves starfield into background */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-64 pointer-events-none z-[5]"
+        style={{ background: 'linear-gradient(to bottom, transparent 0%, #141213 100%)' }}
+      />
     </section>
   );
 }

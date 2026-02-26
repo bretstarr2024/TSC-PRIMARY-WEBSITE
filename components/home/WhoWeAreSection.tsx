@@ -4,7 +4,7 @@ import { AnimatedSection } from '@/components/AnimatedSection';
 
 export function WhoWeAreSection() {
   return (
-    <section className="relative py-24 md:py-32">
+    <section className="relative -mt-20 md:-mt-28 pt-24 md:pt-32 pb-24 md:pb-32 z-10">
       <div className="section-wide">
         <AnimatedSection>
           <p className="text-xs font-semibold text-greige uppercase tracking-[0.3em] mb-6">
