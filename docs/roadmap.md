@@ -1188,8 +1188,8 @@ Build: 131 pages (up from 127), 0 type errors.
 
 **Still needed (next sessions):**
 - [x] Sprint 2: Pipeline reliability (resetStuckGeneratingItems, DB-backed caps, atomic queue transitions, title dedup) ✅ Session LVIII
-- [ ] Sprint 3: Scale + cleanup (unbounded queries, phantom deps, maxPoolSize, /book metadata, sitemap)
-- [ ] Monitor first production cron runs
+- [x] Sprint 3: Scale + cleanup (unbounded queries, phantom deps, maxPoolSize, /book metadata, sitemap) ✅ Session LVIII
+- [ ] Monitor first production cron runs — verify stuck reset, DB caps, coverage linking work in prod
 - [ ] Work page — last remaining stub
 
 #### Session LVIII: Sprint 2 — Pipeline Reliability ✅ COMPLETE (Feb 26, 2026)

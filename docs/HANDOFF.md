@@ -1,16 +1,63 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 26, 2026 (Session LVII)
+**Last Updated:** February 26, 2026 (Session LVIII)
 
 ---
 
-## Current Phase: Phase 2 — Pipeline ACTIVE + Security Hardened
+## Current Phase: Phase 2 — Pipeline Hardened + Scale-Ready
 
-The site is live with **143 pages** across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, Vercel Analytics + Speed Insights, and a **fully activated autonomous content pipeline**. All API routes have been security-hardened: cron auth defaults to DENY, email templates escape user input, and the tracking endpoint uses a field allowlist. 8 tailored code review commands are now available for ongoing quality assurance. Only the Work page remains as a stub.
+The site is live with **143 pages** across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, Vercel Analytics + Speed Insights, and a **fully activated autonomous content pipeline**. All 47 code review findings from Session LVII are now resolved: security hardening (Sprint 1), pipeline reliability (Sprint 2), and scale/cleanup (Sprint 3) are all complete. The pipeline now uses atomic queue claims, DB-backed daily caps, title dedup, and a coverage feedback loop. All database queries are bounded. 8 phantom npm deps removed (323 transitive packages eliminated).
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database), Resend email, 3 Vercel cron jobs (ACTIVE — CRON_SECRET set), Vercel Analytics + Speed Insights
-- **Next actions:** Sprint 2 (pipeline reliability), Sprint 3 (scale/cleanup), build Work page
-- **Roadmap:** See `docs/roadmap.md` Session LVII
+- **Next actions:** Monitor post-fix cron runs, build Work page
+- **Roadmap:** See `docs/roadmap.md` Session LVIII
+
+### Session LVIII Summary (February 26, 2026)
+
+**Focus:** Sprint 2 (pipeline reliability) + Sprint 3 (scale/cleanup) — 12 fixes completing all 47 code review findings.
+
+**What was done:**
+
+1. **Sprint 2 — Pipeline reliability (6 fixes):**
+   - `lib/content-db.ts` — `claimNextPendingItem()`: atomic `findOneAndUpdate` replaces read-then-update race condition
+   - `lib/content-db.ts` — `getRecentPublishedTitles()`: 90-day sliding window for title dedup
+   - `app/api/cron/generate-content/route.ts` — Major rewrite: stuck item reset wired in, DB-backed daily caps (not in-memory), atomic claims, Jaccard title dedup, coverage feedback loop (`linkContentToQuery`), pre-flight rejected items returned to `pending`
+   - `lib/resources-db.ts` — `answerCapsule` field added to `FaqItem` interface, `getCoverageFieldName()` mapping, `linkContentToQuery` now recalculates `coverageScore`
+
+2. **Sprint 3 — Scale + cleanup (6 fixes):**
+   - `lib/content-db.ts`, `lib/resources-db.ts` — Added `.limit()` to 12 `getAllPublished*` functions (was unbounded)
+   - `package.json` — Removed 8 phantom deps: @clerk/nextjs, @sentry/nextjs, @vercel/blob, cloudinary, gray-matter, react-markdown, recharts, sharp (323 transitive packages)
+   - `lib/mongodb.ts` — `maxPoolSize: 3`, `waitQueueTimeoutMS: 5000` for serverless
+   - `app/book/page.tsx` + `components/BookPageContent.tsx` — Split into server + client components for metadata
+   - `app/sitemap.ts` — Added 8 missing static pages + dynamic service/infographic routes
+   - `app/api/lead/route.ts`, `app/api/arcade-boss/route.ts` — `Promise.allSettled` for independent parallel operations
+
+**Commits this session:**
+- `6cb4400` — feat: Sprint 2 pipeline reliability — 6 fixes for stuck items, caps, races, dedup, coverage
+- `e57043a` — feat: Sprint 3 scale + cleanup — bounded queries, phantom deps, pool size, sitemap, metadata
+- `72151ac` — docs: Update roadmap with Sprint 3 completion in Session LVIII
+
+**Results:**
+- All 47 code review findings resolved across 3 sprints (Sessions LVII-LVIII)
+- Pipeline now race-condition-free with atomic queue claims
+- 323 transitive npm packages eliminated
+- All database queries bounded with explicit limits
+- 143 pages, 0 type errors
+
+**Key decisions (do not re-debate):**
+- Atomic `findOneAndUpdate` for queue claims (prevents concurrent claim races)
+- Jaccard similarity 0.6 threshold for title dedup
+- `maxPoolSize: 3` for Vercel serverless
+- Default limits: 500 blog posts, 200-1000 other resource types
+- `sharp` removed — Next.js uses its own internal sharp
+
+**What must happen next:**
+1. Monitor first post-fix cron runs (check `pipeline_logs` after 8am UTC)
+2. Verify coverage feedback loop activates (linkContentToQuery → query_coverage)
+3. Build Work page (needs content direction from user)
+4. Add `leads` collection index `{ timestamp: -1 }` (pending since Session XLII)
+
+---
 
 ### Session LVII Summary (February 26, 2026)
 

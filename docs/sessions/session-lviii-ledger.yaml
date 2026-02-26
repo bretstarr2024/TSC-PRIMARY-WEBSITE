@@ -1,0 +1,97 @@
+session_id: "LVIII"
+date: "2026-02-26"
+branch: main
+version: "0.37.0"  # MINOR: Pipeline reliability + scale/cleanup (12 fixes from code review)
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "MLTlh2zVVHqabVVauJAe"
+  status: triggered
+  note: "Two deploys triggered — Sprint 2 (e15Nzsj8VNOvn0qWVEvM) and Sprint 3 (MLTlh2zVVHqabVVauJAe)"
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "pass"
+  collections_checked:
+    - faqs
+    - content_queue
+    - query_coverage
+  notes: "faqs collection empty (0 docs) — answerCapsule field added to code but no existing docs to diverge. content_queue (72 docs) has expected conditional fields only (processedAt, lastError, publishedAt). query_coverage (40 docs) perfectly consistent."
+
+commits:
+  - hash: "6cb4400"
+    message: "feat: Sprint 2 pipeline reliability — 6 fixes for stuck items, caps, races, dedup, coverage"
+  - hash: "e57043a"
+    message: "feat: Sprint 3 scale + cleanup — bounded queries, phantom deps, pool size, sitemap, metadata"
+  - hash: "72151ac"
+    message: "docs: Update roadmap with Sprint 3 completion in Session LVIII"
+
+artifacts_updated:
+  - "lib/content-db.ts — claimNextPendingItem (atomic), getRecentPublishedTitles, .limit() on getAllPublishedBlogPosts"
+  - "lib/resources-db.ts — answerCapsule on FaqItem, getCoverageFieldName, linkContentToQuery coverage recalc, .limit() on 11 functions, Promise.allSettled in getResourceCounts"
+  - "app/api/cron/generate-content/route.ts — stuck reset, DB-backed caps, atomic claims, title dedup, coverage feedback, pre-flight requeue"
+  - "lib/mongodb.ts — maxPoolSize: 3, waitQueueTimeoutMS: 5000"
+  - "app/api/lead/route.ts — Promise.allSettled for dual email sends"
+  - "app/api/arcade-boss/route.ts — Promise.allSettled for dual email sends"
+  - "app/book/page.tsx — server component with metadata exports"
+  - "components/BookPageContent.tsx — NEW: client component extracted from /book"
+  - "app/sitemap.ts — 8 missing static pages + dynamic service/infographic routes"
+  - "package.json — removed 8 phantom deps (323 transitive packages)"
+  - "docs/roadmap.md — Sprint 2 and Sprint 3 completion"
+
+decisions_made:
+  - decision: "Use findOneAndUpdate for atomic queue claims instead of read-then-update"
+    rationale: "Prevents two concurrent pipeline runs from claiming the same item"
+    reversible: true
+  - decision: "Jaccard similarity threshold 0.6 for title dedup"
+    rationale: "Balances catching near-duplicates vs. allowing topically related content"
+    reversible: true
+  - decision: "maxPoolSize: 3 for MongoDB connections"
+    rationale: "Vercel serverless functions share limited connection resources; 3 is conservative and safe"
+    reversible: true
+  - decision: "Remove 8 phantom npm deps including sharp"
+    rationale: "sharp was unused (Next.js uses its own sharp internally); others never imported"
+    reversible: true
+  - decision: "Default limit 500 for blog posts, 200-1000 for other resource types"
+    rationale: "Prevents unbounded memory usage while allowing room for growth"
+    reversible: true
+
+known_risks:
+  - risk: "answerCapsule field exists in TypeScript but faqs collection is empty — field untested in production"
+    mitigation: "Will be exercised when FAQ pipeline runs; monitor first FAQ generation"
+    severity: low
+  - risk: "Coverage feedback loop (linkContentToQuery) untested in production"
+    mitigation: "Monitor pipeline_logs for coverage score updates after next cron run"
+    severity: low
+  - risk: "Jaccard title dedup threshold (0.6) may need tuning"
+    mitigation: "Monitor for false positives (good content rejected) or false negatives (dupes published)"
+    severity: low
+
+explicitly_deferred:
+  - "Work page — needs content direction (real or fabricated case studies)"
+  - "Error boundaries on client components — low risk, can add incrementally"
+  - "Accessibility audit — keyboard navigation, ARIA labels, color contrast"
+  - "leads collection index { timestamp: -1 } — still pending from Session XLII"
+
+next_actions:
+  - "Monitor first production cron runs post-Sprint 2 fixes (check pipeline_logs after 8am UTC)"
+  - "Verify coverage feedback loop activates (linkContentToQuery writes to query_coverage)"
+  - "Build Work page (needs user decision on content approach)"
+  - "Add leads collection index { timestamp: -1 }"
+  - "Consider error boundaries on key client components"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "Cron auth defaults to DENY when CRON_SECRET unset"
+  - "All API clients use pure fetch (no SDK dependencies)"
+  - "maxPoolSize: 3 on MongoDB connections (Vercel serverless)"
+  - "Pipeline uses atomic findOneAndUpdate for queue claims"
+  - "All getAllPublished* functions have explicit .limit()"
