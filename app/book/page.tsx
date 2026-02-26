@@ -47,19 +47,15 @@ const photoSparkles = [
 ];
 
 function BookPageContent() {
-  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const calContainerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const searchParams = useSearchParams();
   const service = searchParams.get('service');
-  const ctaSource = searchParams.get('cta');
 
-  // Build Cal.com URL with optional service + CTA attribution in notes
+  // Build Cal.com URL with optional service context in notes (no internal tracking metadata)
   const calBaseUrl = 'https://cal.com/team/tsc/25-50?embed=true&theme=dark&layout=month_view';
-  const notesParts: string[] = [];
-  if (service) notesParts.push(`Interested in: ${service}`);
-  if (ctaSource) notesParts.push(`Source: ${ctaSource}`);
-  const calUrl = notesParts.length > 0
-    ? `${calBaseUrl}&notes=${encodeURIComponent(notesParts.join(' | '))}`
+  const calUrl = service
+    ? `${calBaseUrl}&notes=${encodeURIComponent(`Interested in: ${service}`)}`
     : calBaseUrl;
 
   // Auto-rotate team members every 4 seconds
@@ -74,20 +70,18 @@ function BookPageContent() {
 
   const activeMember = teamMembers[activeIndex];
 
-  // Listen for Cal.com embed resize messages so the calendar never overflows
+  // Listen for Cal.com embed resize messages — smooth CSS transition handles the animation
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
-      // Cal.com embed sends height updates via postMessage
-      if (iframeRef.current) {
+      if (calContainerRef.current) {
         const data = e.data;
-        // Cal.com uses various message formats for resize
         if (data && typeof data === 'object') {
           const height =
             data.iframeHeight ||
             data?.data?.iframeHeight ||
             (data.type === 'CAL:iframe:resize' && data.data?.height);
-          if (height && typeof height === 'number' && height > 400) {
-            iframeRef.current.style.height = `${height + 40}px`;
+          if (height && typeof height === 'number' && height > 300) {
+            calContainerRef.current.style.height = `${height}px`;
           }
         }
       }
@@ -349,12 +343,14 @@ function BookPageContent() {
                   background: 'radial-gradient(ellipse at center, #FF591008 0%, transparent 60%)',
                 }}
               />
-              <div className="rounded-2xl overflow-hidden">
+              <div
+                ref={calContainerRef}
+                className="rounded-2xl overflow-hidden"
+                style={{ height: 700, transition: 'height 0.3s ease' }}
+              >
                 <iframe
-                  ref={iframeRef}
                   src={calUrl}
-                  className="w-full border-0"
-                  style={{ height: 1000 }}
+                  className="w-full h-full border-0"
                   title="Book a meeting with The Starr Conspiracy"
                   allow="payment"
                 />

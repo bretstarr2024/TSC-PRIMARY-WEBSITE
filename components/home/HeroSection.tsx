@@ -124,26 +124,12 @@ export function HeroSection() {
         </motion.p>
       </div>
 
-      {/* Arcade easter egg trigger — positioned 1/3 into the gap below the sphere */}
+      {/* Arcade easter egg trigger — replaces scroll indicator at bottom of hero */}
       {!playing && (
-        <div className="absolute bottom-[22%] left-1/2 -translate-x-1/2 z-10">
-          <ArcadeButton onClick={() => setPlaying(true)} delay={0.2} />
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
+          <ArcadeButton onClick={() => setPlaying(true)} delay={2.8} />
         </div>
       )}
-
-      {/* Scroll indicator */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 3.2, duration: 1 }}
-      >
-        <motion.div
-          className="w-px h-16 bg-gradient-to-b from-transparent via-atomic-tangerine to-transparent"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-        />
-      </motion.div>
 
       {/* Bottom fade — dissolves starfield into background */}
       <div

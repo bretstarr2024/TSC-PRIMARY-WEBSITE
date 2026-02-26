@@ -57,7 +57,7 @@ export function ContactDualPath() {
                 <p className="text-sm text-greige mb-6">
                   25 minutes with a senior strategist.
                 </p>
-                <ContactCalendar service={service} ctaSource={ctaSource} />
+                <ContactCalendar service={service} />
               </div>
             </motion.div>
           </AnimatedSection>
