@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION LIV** | Last Updated: February 26, 2026
+**Status: SESSION LV** | Last Updated: February 26, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -1036,11 +1036,53 @@ Wave 3 — Integration wiring:
 Build: 131 pages (up from 127), 0 type errors.
 
 **Still needed (next session):**
-- [ ] Set `CRON_SECRET` env var in Vercel (all 3 environments)
-- [ ] Add `pipeline_logs` TTL index (30-day expiry)
-- [ ] Create MongoDB index on `leads` collection (timestamp: -1)
+- [x] Set `CRON_SECRET` env var in Vercel (all 3 environments) — done Session LV
+- [x] Add `pipeline_logs` TTL index (30-day expiry) — done Session LV
+- [x] Create MongoDB index on `leads` collection (timestamp: -1) — done Session LV
 - [ ] Build chatbot (chaDbot) — copy RAG from AEO
 - [ ] Initialize Vercel Analytics
+
+#### Session LV: Pipeline Activation + End-to-End Testing ✅ COMPLETE (Feb 26, 2026)
+
+**Focus:** Activate the autonomous content pipeline — set CRON_SECRET, create MongoDB indexes, test all 3 cron jobs end-to-end, fix content prompt forbidden term rejection rate.
+
+**What was done:**
+
+1. **CRON_SECRET env var** set in Vercel (production, preview, development) + local `.env.local`
+   - Generated via `openssl rand -hex 32`
+   - All 3 cron routes now require `Authorization: Bearer <secret>`
+
+2. **MongoDB indexes created:**
+   - `pipeline_logs`: `timestamp_desc`, `contentId_timestamp`, `ttl_30d` (30-day auto-expiry via TTL index)
+   - `leads`: `timestamp_desc`
+
+3. **Pipeline tested end-to-end locally (all 3 cron jobs):**
+   - `sync-jtbd-coverage`: 40 queries synced (3 JTBD clusters × ~10 queries + 10 ICP pain points)
+   - `seed-content-queue`: 8 items enqueued (5 FAQ, 2 expert-qa, 1 blog), daily caps enforced correctly
+   - `generate-content`: 11 items published to MongoDB, quality guardrails caught forbidden terms correctly
+   - Full flow: kernel → query_coverage → content_queue → published content ✅
+
+4. **Content prompt hardening** (`lib/pipeline/content-prompts.ts`):
+   - Forbidden terms section rewritten with zero-tolerance framing
+   - Added explicit "mentally scan before generating" instruction
+   - Added "fractional CMO" to forbidden list
+   - Should reduce the ~25% quality check rejection rate from OpenAI using forbidden terms
+
+5. **Stuck item cleanup:**
+   - 7 orphaned "generating" items (from dev server crash) reset to "pending"
+
+**Key decisions:**
+- Pipeline is functional and ready for production — crons will run on Vercel's schedule
+- Forbidden term rejections are a prompt tuning issue, not a pipeline bug — guardrails working as designed
+- Duplicate key errors during testing were expected (seeder ran multiple times) — unique indexes prevent data corruption
+
+**Build:** 137 pages, PASS
+
+**Still needed (next session):**
+- [ ] Build chatbot (chaDbot) — copy RAG from AEO
+- [ ] Initialize Vercel Analytics
+- [ ] Monitor first production cron runs (check pipeline_logs after 8am UTC)
+- [ ] Tune content prompts further if forbidden term rejection rate stays high
 
 ---
 

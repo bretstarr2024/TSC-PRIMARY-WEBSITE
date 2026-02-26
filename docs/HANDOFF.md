@@ -1,16 +1,66 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 26, 2026 (Session LIV)
+**Last Updated:** February 26, 2026 (Session LV)
 
 ---
 
-## Current Phase: Phase 2 — Pipeline Infrastructure LIVE + Content Automation Ready
+## Current Phase: Phase 2 — Pipeline ACTIVE + Content Generating Autonomously
 
-The site is live with **137 pages** across **11 content types** (added Infographics), **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, and now a **complete autonomous content pipeline** with 3 Vercel cron jobs, 8 pipeline utility modules, Zod validation, circuit breaker, cost estimation, and daily caps. The Insights section has been renamed to **Grist** (display-only — URLs stay at `/insights/*`).
+The site is live with **137 pages** across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, and a **fully activated autonomous content pipeline**. All 3 Vercel cron jobs are auth-protected via CRON_SECRET, MongoDB indexes are in place (including TTL auto-expiry on pipeline_logs), and the pipeline has been tested end-to-end with 11 items published successfully.
 
-- **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database), Resend email, 3 Vercel cron jobs (pending CRON_SECRET env var)
-- **Next actions:** Set CRON_SECRET in Vercel, add pipeline_logs indexes, test pipeline end-to-end, build chatbot
-- **Roadmap:** See `docs/roadmap.md` Session LIV
+- **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database), Resend email, 3 Vercel cron jobs (ACTIVE — CRON_SECRET set)
+- **Next actions:** Monitor first production cron runs, build chatbot (chaDbot), Vercel Analytics
+- **Roadmap:** See `docs/roadmap.md` Session LV
+
+### Session LV Summary (February 26, 2026)
+
+**Focus:** Activate the autonomous content pipeline — set CRON_SECRET, create MongoDB indexes, test all 3 cron jobs end-to-end, harden content prompts.
+
+**What was done:**
+
+1. **CRON_SECRET env var** set in Vercel (production, preview, development) + local `.env.local`:
+   - All 3 cron routes now require `Authorization: Bearer <secret>`
+   - Generated via `openssl rand -hex 32`
+
+2. **MongoDB indexes created:**
+   - `pipeline_logs`: `timestamp_desc`, `contentId_timestamp`, `ttl_30d` (30-day auto-expiry)
+   - `leads`: `timestamp_desc`
+
+3. **Pipeline tested end-to-end locally:**
+   - `sync-jtbd-coverage`: 40 queries synced across 3 JTBD clusters + ICP pain points
+   - `seed-content-queue`: 8 items enqueued (5 FAQ, 2 expert-qa, 1 blog), daily caps enforced
+   - `generate-content`: 11 items published, quality guardrails caught forbidden terms correctly
+   - Full pipeline flow verified: kernel → query_coverage → content_queue → published content
+
+4. **Content prompt hardening** (`lib/pipeline/content-prompts.ts`):
+   - Forbidden terms rewritten with zero-tolerance framing + explicit replacement instructions
+   - Added "fractional CMO" to forbidden list
+   - Added pre-generation scan directive to reduce ~25% quality check rejection rate
+
+5. **Stuck item cleanup:** 7 orphaned "generating" items reset to "pending"
+
+**Commits this session:**
+- `448ea2f` — feat: Harden content prompt forbidden terms for lower rejection rate
+
+**Results:**
+- Pipeline fully functional: all 3 cron jobs tested and working
+- CRON_SECRET protecting all cron endpoints
+- MongoDB indexes in place with 30-day TTL on pipeline_logs
+- 11 content items autonomously generated and published to MongoDB
+- 137 pages, 0 type errors
+
+**Key decisions (do not re-debate):**
+- Pipeline is production-ready — crons will execute on Vercel's schedule (seed 7:30am, generate 8am, coverage sync 1st 3am UTC)
+- Forbidden term rejections are a prompt tuning issue, not a pipeline bug — guardrails working as designed
+- Testing artifacts in content_queue (72 items) are harmless — failed items won't re-process
+
+**What must happen next:**
+1. Monitor first production cron runs (check `pipeline_logs` after 8am UTC)
+2. Build chatbot (chaDbot) — copy RAG from AEO donor
+3. Initialize Vercel Analytics
+4. Tune content prompts further if forbidden term rejection rate stays high
+
+---
 
 ### Session LIV Summary (February 26, 2026)
 

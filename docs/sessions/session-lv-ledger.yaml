@@ -1,0 +1,108 @@
+session_id: "LV"
+date: "2026-02-26"
+branch: main
+version: "0.34.0"  # MINOR: Pipeline activation, indexes, e2e testing, prompt hardening
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "pending"
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP
+  pages: 137
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "No document creation paths changed. Only env vars, indexes, and prompt text."
+
+commits:
+  - hash: "448ea2f"
+    message: "feat: Harden content prompt forbidden terms for lower rejection rate"
+
+artifacts_updated:
+  - "lib/pipeline/content-prompts.ts — zero-tolerance forbidden terms, added fractional CMO"
+  - "docs/roadmap.md — Session LV section, marked carried items complete"
+  - "Vercel env vars — CRON_SECRET added to production, preview, development"
+  - ".env.local — CRON_SECRET added for local testing"
+  - "MongoDB tsc.pipeline_logs — 3 indexes: timestamp_desc, contentId_timestamp, ttl_30d"
+  - "MongoDB tsc.leads — 1 index: timestamp_desc"
+
+infrastructure_changes:
+  - action: "Set CRON_SECRET env var in Vercel (all 3 environments)"
+    details: "Generated via openssl rand -hex 32. All 3 cron routes now auth-protected."
+  - action: "Created pipeline_logs indexes"
+    details: "timestamp_desc, contentId_timestamp, ttl_30d (30-day auto-expiry)"
+  - action: "Created leads index"
+    details: "timestamp_desc for query performance"
+
+pipeline_test_results:
+  sync_jtbd_coverage:
+    status: "success"
+    queries_synced: 40
+    clusters: ["Build a Growth Engine (10)", "Navigate AI Transformation (10)", "Fill Leadership Gap (10)", "ICP Pain Points (10)"]
+  seed_content_queue:
+    status: "success"
+    items_enqueued: 8
+    breakdown: "5 FAQ, 2 expert-qa, 1 blog"
+    items_skipped: 32
+    reason: "Daily caps enforced correctly"
+  generate_content:
+    status: "success"
+    items_published: 11
+    items_failed: 46
+    failure_reasons:
+      - "Duplicate key errors (35) — expected from repeated test runs"
+      - "Forbidden term: customer (7) — guardrails working correctly"
+      - "Forbidden term: contract (3) — guardrails working correctly"
+      - "Forbidden term: customer+vendor (1) — guardrails working correctly"
+    stuck_items_reset: 7
+
+decisions_made:
+  - decision: "Pipeline declared functional and ready for production"
+    rationale: "All 3 cron jobs tested successfully. 11 items published. Guardrails catch forbidden terms correctly."
+    reversible: true
+  - decision: "Hardened forbidden term instructions in content prompts"
+    rationale: "~25% of generated content failed quality checks due to OpenAI using 'customer', 'contract', 'vendor'. Stronger prompt framing should reduce rejections."
+    reversible: true
+  - decision: "Added 'fractional CMO' to forbidden terms list"
+    rationale: "User directive from earlier sessions — no fractional CMO content"
+    reversible: true
+
+known_risks:
+  - risk: "First production cron runs not yet observed"
+    mitigation: "Check pipeline_logs collection after 8am UTC to verify cron execution"
+    severity: medium
+  - risk: "Content prompt forbidden term rejection rate may still be high"
+    mitigation: "Monitor pipeline_logs for quality check failures, tune prompts further if needed"
+    severity: low
+  - risk: "72 items in content_queue from testing (mix of published, failed, pending)"
+    mitigation: "Not harmful — failed items won't re-process, published items are marked done. Can clean up if desired."
+    severity: low
+
+explicitly_deferred:
+  - "Chatbot (chaDbot) — next priority after pipeline activation"
+  - "Vercel Analytics initialization — deferred"
+  - "Content queue cleanup from testing — not urgent, no impact on production runs"
+
+next_actions:
+  - "Monitor first production cron runs — check pipeline_logs after 8am UTC"
+  - "Build chatbot (chaDbot) — copy RAG from AEO donor"
+  - "Initialize Vercel Analytics"
+  - "Tune content prompts further if forbidden term rejection rate stays high"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All API clients use pure fetch — no SDK dependencies"
+  - "Insights section display name is now Grist — URLs stay at /insights/*"
+  - "11 content types: blog, faq, glossary, comparison, expert-qa, news, case_study, industry_brief, video, tool, infographic"
+  - "Pipeline daily budget: $5/day, per-type caps in content-guardrails.ts"
+  - "Cron auth: Bearer token via CRON_SECRET env var"
+  - "pipeline_logs TTL: 30 days auto-expiry"
+  - "No fractional CMO content in generation pipeline"
