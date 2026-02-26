@@ -1,12 +1,59 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 25, 2026 (Session XL)
+**Last Updated:** February 25, 2026 (Session XLI)
 
 ---
 
-## Current Phase: Phase 1 COMPLETE + Hero Composition Polish
+## Current Phase: Phase 1 COMPLETE + Infrastructure Ops
 
-The site is live with **120 pages** across 10 content types, 9 verticals, a full Pricing page (declared done), 89 answer capsules, **9 hidden arcade games**, site-wide CTA tracking, "New Game" CTA rebrand, pixel-perfect CoinSlotCTA, and now a **polished hero composition** with moving gradient headline, tighter spatial layout within the sphere, and refined typography.
+The site is live with **120 pages** across 10 content types, 9 verticals, a full Pricing page (declared done), 89 answer capsules, **9 hidden arcade games**, site-wide CTA tracking, "New Game" CTA rebrand, pixel-perfect CoinSlotCTA, polished hero composition, and now **full email infrastructure** (Resend env vars set, MongoDB indexes created, domain pending DNS verification).
+
+- **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections + indexed `interactions` collection), Vercel CLI linked
+- **Next actions:** Add Resend DNS records at domain provider, verify domain, build Contact page form
+- **Roadmap:** See `docs/roadmap.md` Session XLI
+
+### Session XLI Summary (February 25, 2026)
+
+**Focus:** Clear carry-forward ops debt — Vercel env vars, MongoDB indexes, Resend domain setup.
+
+**What was done:**
+
+1. **Linked Vercel CLI** to `tsc-primary-website` project (`.vercel/` created, `bretstarr2024` account authenticated)
+
+2. **Added 3 Resend env vars** to Vercel (all environments: production, preview, development):
+   - `RESEND_API_KEY` — reused from AEO Resend account (same team, same key)
+   - `LEAD_RECIPIENTS` — melissa, bret, jj, dan, racheal @ thestarrconspiracy.com
+   - `RESEND_FROM` — `hello@thestarrconspiracy.com`
+
+3. **Created 4 MongoDB indexes** on `tsc.interactions` collection:
+   - `timestamp_desc` — `{timestamp: -1}` for sorting by time
+   - `ctaId_timestamp` — `{ctaId: 1, timestamp: -1}` for CTA analytics queries
+   - `sessionId_timestamp` — `{sessionId: 1, timestamp: 1}` for session reconstruction
+   - `ttl_180d` — `{timestamp: 1}` with `expireAfterSeconds: 15552000` (180 days auto-cleanup)
+
+4. **Added thestarrconspiracy.com** domain to Resend dashboard — DNS records provided, pending user action at domain provider:
+   - TXT `resend._domainkey` → DKIM public key
+   - MX `send` → `feedback[...]ses.com` priority 10
+   - TXT `send` → `v=spf1 i[...]om ~all`
+
+5. **Confirmed tracking system is live** — 42 interactions in MongoDB including real user sessions with full click-through attribution (page_view → cta_click → /book landing)
+
+**Commits this session:**
+- `38811f9` — docs: Session XLI closeout — ledger, handoff, roadmap update
+
+**Results:**
+- Vercel project now has all 5 required env vars (MONGODB_URI, OPENAI_API_KEY, RESEND_API_KEY, LEAD_RECIPIENTS, RESEND_FROM)
+- MongoDB `interactions` collection fully indexed (was only `_id_`, now 5 indexes including TTL)
+- Email sending blocked only on DNS record addition at domain provider
+- Build: 120 pages, PASS
+
+**What must happen before emails work:**
+- User adds 3 DNS records at thestarrconspiracy.com domain provider
+- User clicks "I've added the records" in Resend dashboard
+- DNS propagation (minutes to 48h)
+- Then Contact page form can be built with working email notifications
+
+---
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections + `interactions` collection)
 - **Next actions:** Verify hero in production, build Contact page form, add Resend env vars, create MongoDB indexes on `interactions`

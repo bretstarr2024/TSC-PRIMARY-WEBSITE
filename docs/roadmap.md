@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XL** | Last Updated: February 25, 2026
+**Status: SESSION XLI** | Last Updated: February 25, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -795,16 +795,29 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 120 pages, PASS
 
-#### Session XLI (upcoming): Contact Form + Pipeline Infrastructure
+#### Session XLI: Infrastructure Ops — Vercel Env Vars + MongoDB Indexes + Resend Domain ✅ COMPLETE (Feb 25, 2026)
+
+**Focus:** Clear carry-forward ops debt — set up Resend email infrastructure, create MongoDB indexes, link Vercel CLI.
+
+- [x] Link Vercel CLI to tsc-primary-website project
+- [x] Add RESEND_API_KEY, LEAD_RECIPIENTS, RESEND_FROM to Vercel env vars (all 3 environments)
+- [x] Create MongoDB indexes for `interactions` collection (timestamp_desc, ctaId_timestamp, sessionId_timestamp, ttl_180d)
+- [x] Add thestarrconspiracy.com domain to Resend dashboard
+- [ ] Add Resend DNS records at domain provider for thestarrconspiracy.com (user action):
+  - TXT `resend._domainkey` → DKIM public key (from Resend dashboard)
+  - MX `send` → `feedback[...]ses.com` priority 10
+  - TXT `send` → `v=spf1 i[...]om ~all`
+
+**Build:** 120 pages, PASS
+
+#### Session XLII (upcoming): Contact Form + Pipeline Infrastructure
 - [ ] Build Contact page with form (Resend integration) — copy pattern from AEO `/api/lead`
-- [ ] Add RESEND_API_KEY, LEAD_RECIPIENTS, RESEND_FROM to Vercel env vars
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
 - [ ] Create source monitors for B2B/AI marketing news
 - [ ] Expand "Game Over" concept to other page copy/headlines
 - [ ] Build chatbot (chaDbot) — copy RAG from AEO
-- [ ] Create MongoDB indexes for `interactions` collection (via Atlas UI)
 - [ ] Initialize Vercel Analytics (`@vercel/analytics` already installed)
 
 ---

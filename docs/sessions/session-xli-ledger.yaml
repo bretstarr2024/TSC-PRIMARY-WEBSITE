@@ -1,0 +1,88 @@
+session_id: "XLI"
+date: "2026-02-25"
+branch: main
+version: "0.27.3"  # PATCH: Infrastructure ops — Vercel env vars, MongoDB indexes, Resend domain
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "TBD"
+  status: pending
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "No data model changes — ops-only session (env vars, indexes, DNS)."
+
+commits:
+  - hash: "38811f9"
+    message: "docs: Session XLI closeout — ledger, handoff, roadmap update"
+
+artifacts_updated:
+  - "docs/roadmap.md — Session XLI section added, Session XLII upcoming, completed items marked"
+  - "Vercel env vars — RESEND_API_KEY, LEAD_RECIPIENTS, RESEND_FROM added to all 3 environments"
+  - "MongoDB tsc.interactions — 4 indexes created (timestamp_desc, ctaId_timestamp, sessionId_timestamp, ttl_180d)"
+  - "Resend dashboard — thestarrconspiracy.com domain added, DNS records pending"
+  - "Vercel CLI — linked to tsc-primary-website project (.vercel/ created)"
+
+decisions_made:
+  - decision: "Reuse AEO Resend API key for TSC project"
+    rationale: "Same Resend account, same team. MEMORY.md and user confirmed this approach."
+    reversible: true
+  - decision: "Set RESEND_FROM to hello@thestarrconspiracy.com"
+    rationale: "Brand-appropriate sender address. AEO uses its own domain. TSC needs its own."
+    reversible: true
+  - decision: "TTL index at 180 days on interactions collection"
+    rationale: "Auto-cleanup of tracking data. 6 months is sufficient for analytics while preventing unbounded growth."
+    reversible: true
+  - decision: "Use Vercel CLI for env var management instead of manual dashboard"
+    rationale: "User asked why ops tasks were listed as manual when MCP/CLI tools available. Vercel CLI was installed and authenticated."
+    reversible: true
+
+known_risks:
+  - risk: "Resend DNS records not yet added at domain provider"
+    mitigation: "User has the records from Resend dashboard. Needs to add TXT (DKIM), MX (send), TXT (SPF) at domain provider."
+    severity: medium
+  - risk: "RESEND_FROM domain not yet verified — emails will fail until DNS propagates"
+    mitigation: "DNS records added → click 'I've added the records' in Resend → verification usually minutes, up to 48h"
+    severity: medium
+  - risk: "drop-shadow + bg-clip-text combination may render differently across browsers (carried from XL)"
+    mitigation: "Tested in Chromium. Verify in Safari/Firefox. Fallback: duplicated text layer behind gradient text."
+    severity: low
+
+explicitly_deferred:
+  - "Contact page form — next session (XLII), blocked on Resend domain verification for email sending"
+  - "Pipeline infrastructure from AEO — future sessions"
+  - "Chatbot (chaDbot) deployment — future session"
+  - "Content generation crons — future sessions"
+  - "Vercel Analytics initialization — future session"
+
+next_actions:
+  - "Add Resend DNS records at domain provider (TXT resend._domainkey, MX send, TXT send)"
+  - "Verify domain in Resend dashboard after DNS propagation"
+  - "Build Contact page form with Resend email notifications"
+  - "Copy pipeline infrastructure from AEO"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All CTAs -> /book (internal Cal.com iframe) with ?cta= attribution param"
+  - "Pricing page is DONE per user directive — no further changes unless requested"
+  - "CTA button text is 'New Game' site-wide (except pricing cards)"
+  - "CoinSlotCTA renders at native 128×128 with imageRendering: pixelated"
+  - "GAME OVER headline uses animated moving gradient (not solid LED glow)"
+  - "'level up' in subhead is white bold (not GradientText)"
+  - "9 arcade games: all triggered by ArcadeButton (motion.div with role=button)"
+  - "'Game Over' is the site's creative concept"
+  - "TrackingProvider in layout.tsx — global click listener for data-track-* attributes"
+  - "CTA IDs follow pattern: {page}-{section}"
+  - "/api/track always returns 200 (beacons don't retry)"
+  - "Vercel CLI linked to tsc-primary-website (bretstarr2024 account)"
+  - "Resend env vars set: RESEND_API_KEY, LEAD_RECIPIENTS, RESEND_FROM"
+  - "MongoDB interactions indexes: timestamp_desc, ctaId_timestamp, sessionId_timestamp, ttl_180d"
