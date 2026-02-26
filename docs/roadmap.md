@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION LVI** | Last Updated: February 26, 2026
+**Status: SESSION LVII** | Last Updated: February 26, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -1133,6 +1133,63 @@ Build: 131 pages (up from 127), 0 type errors.
 **Still needed (next session):**
 - [ ] Monitor first production cron runs (check pipeline_logs after 8am UTC)
 - [ ] Tune content prompts further if forbidden term rejection rate stays high
+- [ ] Work page — last remaining stub
+
+#### Session LVII: Security Hardening + Code Review Suite ✅ COMPLETE (Feb 26, 2026)
+
+**Focus:** Comprehensive code review (8 automated reviews, 47 findings), then Sprint 1 security fixes across all API routes.
+
+**What was done:**
+
+1. **Generated 8 tailored code review commands** (`.claude/commands/review-*.md`):
+   - architecture, security, performance, data-integrity, frontend, api-contracts, pipeline, queries
+   - Each references actual project file paths, conventions, and anti-patterns
+
+2. **Ran all 8 reviews — 47 unique findings across P0/P1/P2:**
+   - P0 (Critical): 4 security issues, 11 unbounded queries, 6 pipeline reliability issues
+   - P1 (Warning): 8 phantom npm deps, accessibility gaps, missing sitemap pages
+   - P2 (Info): /book metadata, Promise.allSettled suggestion, error boundaries
+
+3. **Sprint 1 — Security fixes (all 4 P0 security issues resolved):**
+   - `lib/cron-auth.ts` — New shared cron auth module, **defaults to DENY** when CRON_SECRET unset (was fail-open)
+   - Updated all 3 cron routes to use shared `verifyCronAuth()` import (removed duplicated local `verifyAuth`)
+   - `lib/escape-html.ts` — New HTML entity escaping utility (prevents XSS in email templates)
+   - `app/api/lead/route.ts` — Applied `escapeHtml()` to all 5 user-interpolated fields in email HTML
+   - `app/api/arcade-boss/route.ts` — Applied `escapeHtml()` to all 3 user-interpolated fields in email HTML
+   - `app/api/track/route.ts` — Replaced `...body` spread with `pickTrackingFields()` allowlist (10 fields)
+
+**Files created:**
+- [x] `.claude/commands/review-architecture.md`
+- [x] `.claude/commands/review-security.md`
+- [x] `.claude/commands/review-performance.md`
+- [x] `.claude/commands/review-data-integrity.md`
+- [x] `.claude/commands/review-frontend.md`
+- [x] `.claude/commands/review-api-contracts.md`
+- [x] `.claude/commands/review-pipeline.md`
+- [x] `.claude/commands/review-queries.md`
+- [x] `lib/cron-auth.ts` — Shared cron authentication (fail-closed)
+- [x] `lib/escape-html.ts` — HTML entity escaping utility
+
+**Files modified:**
+- [x] `app/api/cron/generate-content/route.ts` — Uses shared verifyCronAuth
+- [x] `app/api/cron/seed-content-queue/route.ts` — Uses shared verifyCronAuth
+- [x] `app/api/cron/sync-jtbd-coverage/route.ts` — Uses shared verifyCronAuth
+- [x] `app/api/lead/route.ts` — HTML escaping on all user interpolations
+- [x] `app/api/arcade-boss/route.ts` — HTML escaping on all user interpolations
+- [x] `app/api/track/route.ts` — Field allowlist replaces body spread
+
+**Key decisions:**
+- Cron auth defaults to DENY (not fail-open) — if CRON_SECRET is unset, all cron requests are rejected
+- HTML escaping handles &, <, >, ", ' — covers OWASP XSS vectors in email templates
+- Track endpoint allowlist: type, sessionId, page, component, label, destination, ctaId, referrer, userAgent, viewport, metadata
+- Sprint 2 (pipeline) and Sprint 3 (scale) deferred to next sessions
+
+**Build:** 143 pages, PASS
+
+**Still needed (next sessions):**
+- [ ] Sprint 2: Pipeline reliability (resetStuckGeneratingItems, DB-backed caps, atomic queue transitions, title dedup)
+- [ ] Sprint 3: Scale + cleanup (unbounded queries, phantom deps, maxPoolSize, /book metadata, sitemap)
+- [ ] Monitor first production cron runs
 - [ ] Work page — last remaining stub
 
 ---
