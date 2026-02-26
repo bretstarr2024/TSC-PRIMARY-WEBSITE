@@ -38,6 +38,7 @@ const UFO_FIRE_INTERVAL = 150;
 const UFO_BULLET_V = 4;
 const UFO_SPAWN_MIN = 600;
 const UFO_SPAWN_MAX = 1200;
+const UFO_COLORS = ['#FF5910', '#73F5FF', '#E1FF00', '#ED0AD2', '#FFBDAE', '#088BA0'];
 /* High scores */
 const HS_KEY = 'tsc-asteroids-scores';
 const HS_MAX = 10;
@@ -279,6 +280,7 @@ interface Ufo {
   baseY: number;
   sinPhase: number;
   cooldown: number;
+  color: string;
 }
 
 interface HighScore {
@@ -382,13 +384,15 @@ function hit(ax: number, ay: number, ar: number, bx: number, by: number, br: num
 
 function spawnUfo(w: number, h: number): Ufo {
   const fromLeft = Math.random() > 0.5;
+  const yPos = UFO_R + Math.random() * (h - UFO_R * 2);
   return {
     x: fromLeft ? -UFO_R * 2 : w + UFO_R * 2,
-    y: h * 0.15 + Math.random() * h * 0.7,
+    y: yPos,
     vx: (fromLeft ? 1 : -1) * UFO_SPEED,
-    baseY: h * 0.15 + Math.random() * h * 0.7,
+    baseY: yPos,
     sinPhase: Math.random() * Math.PI * 2,
     cooldown: Math.floor(UFO_FIRE_INTERVAL * 0.4),
+    color: UFO_COLORS[Math.floor(Math.random() * UFO_COLORS.length)],
   };
 }
 
@@ -953,8 +957,8 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
       if (g.ufo) {
         const u = g.ufo;
         ctx.save();
-        ctx.fillStyle = C.ufo;
-        ctx.shadowColor = C.ufo;
+        ctx.fillStyle = u.color;
+        ctx.shadowColor = u.color;
         ctx.shadowBlur = 10;
         /* Saucer body */
         ctx.beginPath();
@@ -967,8 +971,8 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
         ctx.restore();
       }
 
-      /* UFO bullets (pink) */
-      ctx.fillStyle = C.ufo;
+      /* UFO bullets (match UFO color) */
+      ctx.fillStyle = g.ufo?.color ?? C.ufo;
       for (const b of g.ufoBullets) {
         ctx.beginPath(); ctx.arc(b.x, b.y, 3, 0, Math.PI * 2); ctx.fill();
       }

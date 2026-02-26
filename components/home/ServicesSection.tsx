@@ -6,37 +6,37 @@ import { AnimatedSection } from '@/components/AnimatedSection';
 const services = [
   {
     category: 'Brand & Positioning',
-    items: ['Brand Strategy & Positioning', 'Visual Brand Development', 'Thought Leadership'],
+    items: ['Market Positioning', 'Messaging Frameworks', 'Brand Architecture', 'Visual Identity & Design Systems', 'Thought Leadership Programs', 'Analyst Relations'],
     color: '#FF5910',
     borderColor: 'border-atomic-tangerine/30',
   },
   {
     category: 'GTM Strategy & Architecture',
-    items: ['Go-to-Market Strategy'],
+    items: ['ICP & Buyer Journey Mapping', 'Competitive Positioning', 'Launch Strategy', 'Sales Enablement', 'Channel Strategy', 'Revenue Architecture'],
     color: '#FFBDAE',
     borderColor: 'border-fing-peachy/30',
   },
   {
     category: 'Demand & Pipeline',
-    items: ['Demand Generation', 'Account-Based Marketing', 'Marketing Automation'],
+    items: ['Full-Funnel Demand Gen', 'Account-Based Marketing', 'Marketing Automation & Nurture', 'Lead Scoring & Routing', 'Pipeline Analytics', 'Campaign Operations'],
     color: '#73F5FF',
     borderColor: 'border-tidal-wave/30',
   },
   {
     category: 'Digital Performance',
-    items: ['Paid Media', 'Earned Media', 'Owned Media'],
+    items: ['Paid Search & Social', 'Programmatic & Retargeting', 'SEO & Technical SEO', 'PR & Analyst Relations', 'Social Media Management', 'Conversion Rate Optimization'],
     color: '#E1FF00',
     borderColor: 'border-neon-cactus/30',
   },
   {
     category: 'Content & Creative',
-    items: ['Content Marketing', 'Creative Services'],
+    items: ['Content Strategy & Production', 'Research & Original Data', 'Campaign Creative & Design', 'Video & Motion', 'Web & Interactive', 'Brand Editorial'],
     color: '#ED0AD2',
     borderColor: 'border-sprinkles/30',
   },
   {
     category: 'AI-Native Solutions',
-    items: ['AI Marketing Strategy', 'AI GTM Activation', 'AI Content Studio', 'AI Design Studio', 'Answer Engine Optimization', 'Autonomous Outbound AI', 'AI Managed Services'],
+    items: ['AI Marketing Strategy', 'AI GTM Activation', 'AI Content Studio', 'AI Design Studio', 'Answer Engine Optimization', 'Autonomous Outbound AI', 'Managed Services'],
     color: '#088BA0',
     borderColor: 'border-hurricane-sky/30',
   },
