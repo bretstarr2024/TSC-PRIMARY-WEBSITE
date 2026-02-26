@@ -1187,9 +1187,46 @@ Build: 131 pages (up from 127), 0 type errors.
 **Build:** 143 pages, PASS
 
 **Still needed (next sessions):**
-- [ ] Sprint 2: Pipeline reliability (resetStuckGeneratingItems, DB-backed caps, atomic queue transitions, title dedup)
+- [x] Sprint 2: Pipeline reliability (resetStuckGeneratingItems, DB-backed caps, atomic queue transitions, title dedup) ✅ Session LVIII
 - [ ] Sprint 3: Scale + cleanup (unbounded queries, phantom deps, maxPoolSize, /book metadata, sitemap)
 - [ ] Monitor first production cron runs
+- [ ] Work page — last remaining stub
+
+#### Session LVIII: Sprint 2 — Pipeline Reliability ✅ COMPLETE (Feb 26, 2026)
+
+**Focus:** Fix all 6 pipeline reliability issues identified in Session LVII code review.
+
+**What was done:**
+
+1. **Stuck item recovery** — `resetStuckGeneratingItems()` now called at the start of every generate-content cron run. Items stuck in `generating` for >10 minutes are reset to `pending` with status history audit trail.
+
+2. **DB-backed daily caps** — `publishedToday` counter now queries actual `content_queue` documents via `getContentPublishedToday()` instead of starting at 0 each run. Prevents cap bypass if cron runs multiple times per day.
+
+3. **Atomic queue transitions** — New `claimNextPendingItem()` uses `findOneAndUpdate` to atomically transition `pending → generating`. Eliminates race condition where two concurrent runs could claim the same item.
+
+4. **Title dedup wired** — `getRecentPublishedTitles()` loads titles from the last 90 days. These are passed to `runPreFlight()` as `existingTitles`, enabling the Jaccard similarity check that was previously dead code. Titles from the current run are also appended for intra-run dedup.
+
+5. **FAQ answerCapsule preserved** — Added `answerCapsule?: string` to `FaqItem` interface and passed it through in `writeContentToDb`. Previously, Zod validated the field but it was silently dropped before DB write.
+
+6. **Coverage feedback loop closed** — After publishing, `linkContentToQuery()` is now called for each target query, linking the new content ID to the `query_coverage` collection and recalculating `coverageScore`. This prevents the seeder from re-queuing already-covered queries.
+
+**Also added:**
+- `getCoverageFieldName()` utility — maps `ContentType` (`faq_item`) to coverage field names (`faqItems`)
+- Coverage score recalculation in `linkContentToQuery` — each distinct content type covering a query adds 10 points (max 100)
+- `stuckItemsReset` field in pipeline response JSON for observability
+- Pre-flight rejected items returned to `pending` (not left in `generating`) with reason in status history
+
+**Key decisions:**
+- Stuck threshold: 10 minutes (600,000ms) — generous for 5-min cron timeout
+- Title dedup window: 90 days — balances memory vs freshness
+- Coverage score formula: `min(100, coveredTypes * 10)` — simple, effective, incrementally correct
+- Pre-flight rejections go back to `pending` rather than `failed` — they can be retried next run
+
+**Build:** 143 pages, PASS
+
+**Still needed (next sessions):**
+- [ ] Sprint 3: Scale + cleanup (unbounded queries, phantom deps, maxPoolSize, /book metadata, sitemap)
+- [ ] Monitor production cron runs — verify stuck reset, DB caps, coverage linking work in prod
 - [ ] Work page — last remaining stub
 
 ---

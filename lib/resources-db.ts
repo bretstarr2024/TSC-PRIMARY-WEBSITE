@@ -55,6 +55,7 @@ export interface FaqItem {
   faqId: string;
   question: string;
   answer: string;
+  answerCapsule?: string;
   category: string;
   tags: string[];
   relatedFaqs: string[];
@@ -764,6 +765,26 @@ export async function upsertQueryCoverage(
   );
 }
 
+/**
+ * Map ContentType enum values to QueryCoverage field names.
+ */
+const CONTENT_TYPE_TO_COVERAGE_FIELD: Record<string, keyof QueryCoverage['coverage']> = {
+  faq_item: 'faqItems',
+  glossary_term: 'glossaryTerms',
+  blog_post: 'blogPosts',
+  comparison: 'comparisons',
+  expert_qa: 'expertQa',
+  news_item: 'newsItems',
+  case_study: 'caseStudies',
+  industry_brief: 'industryBriefs',
+  video: 'videos',
+  tool: 'tools',
+};
+
+export function getCoverageFieldName(contentType: string): keyof QueryCoverage['coverage'] | null {
+  return CONTENT_TYPE_TO_COVERAGE_FIELD[contentType] || null;
+}
+
 export async function linkContentToQuery(
   queryNormalized: string,
   contentType: keyof QueryCoverage['coverage'],
@@ -772,10 +793,25 @@ export async function linkContentToQuery(
   const collection = await getQueryCoverageCollection();
   const clientId = getClientId();
 
-  await collection.updateOne(
+  // Link content and recalculate coverage score in one round-trip
+  const doc = await collection.findOneAndUpdate(
     { clientId, queryNormalized },
-    { $addToSet: { [`coverage.${contentType}`]: contentId }, $set: { updatedAt: new Date() } }
+    {
+      $addToSet: { [`coverage.${contentType}`]: contentId },
+      $set: { updatedAt: new Date() },
+    },
+    { returnDocument: 'after' }
   );
+
+  // Recalculate coverage score: each distinct content type adds ~10 points (max 100)
+  if (doc) {
+    const coveredTypes = Object.values(doc.coverage).filter((arr) => arr.length > 0).length;
+    const score = Math.min(100, coveredTypes * 10);
+    await collection.updateOne(
+      { clientId, queryNormalized },
+      { $set: { coverageScore: score } }
+    );
+  }
 }
 
 export async function getUncoveredQueries(limit: number = 20): Promise<QueryCoverage[]> {

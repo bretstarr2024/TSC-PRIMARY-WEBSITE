@@ -17,9 +17,12 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import {
-  getNextPendingItems,
+  claimNextPendingItem,
   updateQueueItemStatus,
   markQueueItemFailed,
+  getContentPublishedToday,
+  getRecentPublishedTitles,
+  resetStuckGeneratingItems,
   type ContentType,
   type ContentQueueItem,
 } from '@/lib/content-db';
@@ -33,6 +36,8 @@ import {
   createIndustryBrief,
   createVideo,
   createTool,
+  linkContentToQuery,
+  getCoverageFieldName,
 } from '@/lib/resources-db';
 import { createBlogPost } from '@/lib/content-db';
 import { callOpenAI } from '@/lib/pipeline/openai-client';
@@ -127,6 +132,7 @@ async function writeContentToDb(
         faqId: (data.faqId as string) || '',
         question: (data.question as string) || '',
         answer: (data.answer as string) || '',
+        answerCapsule: (data.answerCapsule as string) || undefined,
         category: (data.category as string) || 'strategy',
         tags: (data.tags as string[]) || [],
         relatedFaqs: [],
@@ -324,6 +330,20 @@ export async function GET(request: NextRequest) {
     });
   }
 
+  // --- FIX #1: Reset stuck generating items before processing ---
+  const stuckReset = await resetStuckGeneratingItems(600000); // 10 minutes
+  if (stuckReset > 0) {
+    await logPipelineEvent({
+      contentId: null,
+      phase: 'preflight',
+      action: 'reset_stuck_items',
+      success: true,
+      durationMs: 0,
+      metadata: { resetCount: stuckReset },
+      pipelineRunId,
+    });
+  }
+
   const results: Array<{
     contentType: ContentType;
     title: string;
@@ -339,34 +359,48 @@ export async function GET(request: NextRequest) {
     'news_item', 'case_study', 'industry_brief', 'video', 'tool',
   ];
 
+  // --- FIX #2: DB-backed daily caps (query actual published-today counts) ---
   const publishedToday: Record<string, number> = {};
+  for (const ct of contentTypes) {
+    publishedToday[ct] = await getContentPublishedToday(ct);
+  }
 
   for (const contentType of contentTypes) {
     const cap = DAILY_CAPS[contentType] || 1;
+    const alreadyPublished = publishedToday[contentType] || 0;
 
-    // Get pending items for this type
-    const items = await getNextPendingItems(cap, contentType);
-    if (items.length === 0) continue;
+    // Skip if already at cap before even claiming items
+    if (alreadyPublished >= cap) continue;
 
-    for (const item of items) {
+    // --- FIX #4: Load existing titles for dedup ---
+    const existingTitles = await getRecentPublishedTitles(contentType);
+
+    const remaining = cap - alreadyPublished;
+    for (let i = 0; i < remaining; i++) {
+      // --- FIX #3: Atomic claim (findOneAndUpdate) prevents race conditions ---
+      const item = await claimNextPendingItem(contentType);
+      if (!item) break; // No more pending items of this type
+
       const itemId = item._id?.toString() || '';
 
-      // Pre-flight for this item
+      // Pre-flight for this item (now with DB-backed counts and existing titles)
       const preflight = runPreFlight({
         contentType: item.contentType,
         candidateTitle: item.title,
+        existingTitles,
         publishedToday: publishedToday[contentType] || 0,
         estimatedSpendToday: totalSpend,
       });
 
       if (!preflight.approved) {
         const reason = preflight.issues.map((i) => i.message).join('; ');
+        // Return to pending since we already claimed it
+        await updateQueueItemStatus(itemId, 'pending', `Pre-flight rejected: ${reason}`);
         results.push({ contentType, title: item.title || '', status: 'skipped', reason });
         continue;
       }
 
-      // Mark as generating
-      await updateQueueItemStatus(itemId, 'generating');
+      // Item is already in 'generating' status from claimNextPendingItem
 
       const context = `JTBD cluster: ${item.clusterName || 'General'}\nTarget queries: ${(item.targetQueries || []).join(', ')}`;
 
@@ -421,6 +455,23 @@ export async function GET(request: NextRequest) {
 
         publishedToday[contentType] = (publishedToday[contentType] || 0) + 1;
 
+        // Add published title to dedup list for this run
+        if (item.title) existingTitles.push(item.title);
+
+        // --- FIX #6: Coverage feedback loop ---
+        if (item.targetQueries && item.targetQueries.length > 0) {
+          const coverageField = getCoverageFieldName(contentType);
+          if (coverageField) {
+            for (const query of item.targetQueries) {
+              try {
+                await linkContentToQuery(query.toLowerCase().trim(), coverageField, contentId);
+              } catch (linkErr) {
+                console.error(`[Pipeline] Failed to link coverage for query "${query}":`, linkErr);
+              }
+            }
+          }
+        }
+
         await logPipelineEvent({
           contentId,
           phase: 'content_generation',
@@ -471,6 +522,7 @@ export async function GET(request: NextRequest) {
     status: 'complete',
     pipelineRunId,
     durationMs,
+    stuckItemsReset: stuckReset,
     summary: { published, failed, skipped },
     totalSpend: Math.round(totalSpend * 10000) / 10000,
     costBreakdown: formatCostBreakdown(costBreakdown),

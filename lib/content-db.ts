@@ -196,6 +196,59 @@ export async function getNextPendingItems(
     .toArray();
 }
 
+/**
+ * Atomically claim a pending queue item by setting status to 'generating'.
+ * Uses findOneAndUpdate to prevent two concurrent runs from claiming the same item.
+ * Returns null if no pending items of this type remain.
+ */
+export async function claimNextPendingItem(
+  contentType: ContentType
+): Promise<ContentQueueItem | null> {
+  const collection = await getContentQueueCollection();
+  const clientId = getClientId();
+
+  const result = await collection.findOneAndUpdate(
+    { clientId, status: 'pending', contentType },
+    {
+      $set: { status: 'generating' as ContentQueueStatus, processedAt: new Date() },
+      $push: {
+        statusHistory: {
+          status: 'generating' as ContentQueueStatus,
+          timestamp: new Date(),
+          reason: 'Claimed by pipeline',
+        },
+      },
+    },
+    { sort: { priority: 1, createdAt: 1 }, returnDocument: 'after' }
+  );
+
+  return result ?? null;
+}
+
+/**
+ * Get titles of recently published queue items for dedup checking.
+ * Looks at items published in the last 90 days for the given content type.
+ */
+export async function getRecentPublishedTitles(
+  contentType: ContentType,
+  days: number = 90
+): Promise<string[]> {
+  const collection = await getContentQueueCollection();
+  const clientId = getClientId();
+
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - days);
+
+  const items = await collection
+    .find(
+      { clientId, contentType, status: 'published', publishedAt: { $gte: cutoff } },
+      { projection: { title: 1 } }
+    )
+    .toArray();
+
+  return items.map((i) => i.title).filter((t): t is string => !!t);
+}
+
 export async function updateQueueItemStatus(
   itemId: string,
   newStatus: ContentQueueStatus,
