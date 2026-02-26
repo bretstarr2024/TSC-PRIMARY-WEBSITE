@@ -240,6 +240,14 @@ export async function markQueueItemFailed(itemId: string, error: string): Promis
 }
 
 export async function getBlogPostsPublishedToday(): Promise<number> {
+  return getContentPublishedToday('blog_post');
+}
+
+/**
+ * Get the number of items of a given content type published today.
+ * Generalizes getBlogPostsPublishedToday for all content types.
+ */
+export async function getContentPublishedToday(contentType: ContentType): Promise<number> {
   const collection = await getContentQueueCollection();
   const clientId = getClientId();
 
@@ -248,10 +256,45 @@ export async function getBlogPostsPublishedToday(): Promise<number> {
 
   return collection.countDocuments({
     clientId,
-    contentType: 'blog_post',
+    contentType,
     status: 'published',
     publishedAt: { $gte: startOfDay },
   });
+}
+
+/**
+ * Reset queue items stuck in 'generating' status back to 'pending'.
+ * Catches orphaned items from crashed pipeline runs.
+ */
+export async function resetStuckGeneratingItems(olderThanMs: number = 600000): Promise<number> {
+  const collection = await getContentQueueCollection();
+  const clientId = getClientId();
+
+  const cutoff = new Date(Date.now() - olderThanMs);
+
+  const result = await collection.updateMany(
+    {
+      clientId,
+      status: 'generating',
+      processedAt: { $lt: cutoff },
+    },
+    {
+      $set: { status: 'pending' },
+      $push: {
+        statusHistory: {
+          status: 'pending',
+          timestamp: new Date(),
+          reason: `Reset from stuck generating (older than ${olderThanMs}ms)`,
+        },
+      },
+    }
+  );
+
+  if (result.modifiedCount > 0) {
+    console.log(`[Content DB] Reset ${result.modifiedCount} stuck generating items`);
+  }
+
+  return result.modifiedCount;
 }
 
 // ===========================================

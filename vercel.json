@@ -1,0 +1,16 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/seed-content-queue",
+      "schedule": "30 7 * * *"
+    },
+    {
+      "path": "/api/cron/generate-content",
+      "schedule": "0 8 * * *"
+    },
+    {
+      "path": "/api/cron/sync-jtbd-coverage",
+      "schedule": "0 3 1 * *"
+    }
+  ]
+}
