@@ -122,7 +122,7 @@ export async function POST(request: Request) {
           </div>
         `;
 
-        await Promise.all([
+        const emailResults = await Promise.allSettled([
           resend.emails.send({
             from: fromEmail,
             to: recipients,
@@ -136,6 +136,11 @@ export async function POST(request: Request) {
             html: replyHtml,
           }),
         ]);
+        emailResults.forEach((r, i) => {
+          if (r.status === 'rejected') {
+            console.error(`arcade-boss: Email ${i === 0 ? 'team' : 'player'} send failed:`, r.reason);
+          }
+        });
       }
     } catch (emailError) {
       // Log but don't fail — MongoDB storage is the critical path

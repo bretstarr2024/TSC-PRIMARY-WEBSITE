@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { INDUSTRIES } from '@/lib/industries-data';
+import { SERVICE_CATEGORIES } from '@/lib/services-data';
 import { getAllPublishedBlogPosts } from '@/lib/content-db';
 import {
   getAllPublishedFaqs,
@@ -11,6 +12,7 @@ import {
   getAllPublishedIndustryBriefs,
   getAllPublishedVideos,
   getAllPublishedTools,
+  getAllPublishedInfographics,
 } from '@/lib/resources-db';
 
 const BASE_URL = 'https://tsc-primary-website.vercel.app';
@@ -19,13 +21,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
     { url: `${BASE_URL}/`, changeFrequency: 'weekly', priority: 1 },
+    { url: `${BASE_URL}/about`, changeFrequency: 'monthly', priority: 0.9 },
     { url: `${BASE_URL}/services`, changeFrequency: 'monthly', priority: 0.9 },
+    ...SERVICE_CATEGORIES.map((cat) => ({
+      url: `${BASE_URL}/services/${cat.slug}`,
+      changeFrequency: 'monthly' as const,
+      priority: 0.8,
+    })),
     { url: `${BASE_URL}/verticals`, changeFrequency: 'monthly', priority: 0.9 },
     ...INDUSTRIES.map((ind) => ({
       url: `${BASE_URL}/verticals/${ind.slug}`,
       changeFrequency: 'monthly' as const,
       priority: 0.8,
     })),
+    { url: `${BASE_URL}/pricing`, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${BASE_URL}/book`, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${BASE_URL}/contact`, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${BASE_URL}/careers`, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE_URL}/work`, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${BASE_URL}/insights`, changeFrequency: 'daily', priority: 0.9 },
     { url: `${BASE_URL}/insights/blog`, changeFrequency: 'daily', priority: 0.8 },
     { url: `${BASE_URL}/insights/faq`, changeFrequency: 'daily', priority: 0.8 },
@@ -37,10 +50,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/insights/industry-briefs`, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${BASE_URL}/insights/videos`, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${BASE_URL}/insights/tools`, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${BASE_URL}/insights/infographics`, changeFrequency: 'weekly', priority: 0.7 },
   ];
 
-  // Dynamic content pages — query all 10 collections in parallel
-  const [blogs, faqs, glossary, comparisons, expertQa, news, caseStudies, briefs, videos, tools] = await Promise.all([
+  // Dynamic content pages — query all 11 collections in parallel
+  const [blogs, faqs, glossary, comparisons, expertQa, news, caseStudies, briefs, videos, tools, infographics] = await Promise.all([
     getAllPublishedBlogPosts().catch(() => []),
     getAllPublishedFaqs().catch(() => []),
     getAllPublishedGlossaryTerms().catch(() => []),
@@ -51,6 +65,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     getAllPublishedIndustryBriefs().catch(() => []),
     getAllPublishedVideos().catch(() => []),
     getAllPublishedTools().catch(() => []),
+    getAllPublishedInfographics().catch(() => []),
   ]);
 
   const dynamicPages: MetadataRoute.Sitemap = [
@@ -111,6 +126,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...tools.map((t) => ({
       url: `${BASE_URL}/insights/tools/${t.toolId}`,
       lastModified: t.publishedAt || t.createdAt,
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+    })),
+    ...infographics.map((ig) => ({
+      url: `${BASE_URL}/insights/infographics/${ig.infographicId}`,
+      lastModified: ig.publishedAt || ig.createdAt,
       changeFrequency: 'monthly' as const,
       priority: 0.6,
     })),

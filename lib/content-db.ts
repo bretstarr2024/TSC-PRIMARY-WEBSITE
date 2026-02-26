@@ -383,10 +383,10 @@ export async function getPublishedBlogPostBySlug(slug: string): Promise<BlogPost
   return collection.findOne({ clientId, slug, status: 'published' });
 }
 
-export async function getAllPublishedBlogPosts(): Promise<BlogPost[]> {
+export async function getAllPublishedBlogPosts(limit: number = 500): Promise<BlogPost[]> {
   const collection = await getBlogPostsCollection();
   const clientId = getClientId();
-  return collection.find({ clientId, status: 'published' }).sort({ date: -1 }).toArray();
+  return collection.find({ clientId, status: 'published' }).sort({ date: -1 }).limit(limit).toArray();
 }
 
 export async function getAllBlogPostSlugs(): Promise<string[]> {

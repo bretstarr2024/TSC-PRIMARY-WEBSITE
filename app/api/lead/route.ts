@@ -139,8 +139,8 @@ export async function POST(request: Request) {
 
     const resend = getResendClient();
 
-    // Send both emails in parallel
-    await Promise.all([
+    // Send both emails in parallel — allSettled so one failure doesn't block the other
+    const emailResults = await Promise.allSettled([
       resend.emails.send({
         from: fromEmail,
         to: recipients,
@@ -154,6 +154,13 @@ export async function POST(request: Request) {
         html: replyHtml,
       }),
     ]);
+
+    // Log individual failures but still return success (lead is already stored)
+    emailResults.forEach((r, i) => {
+      if (r.status === 'rejected') {
+        console.error(`Lead email ${i === 0 ? 'team notification' : 'auto-reply'} failed:`, r.reason);
+      }
+    });
 
     return NextResponse.json({ success: true });
   } catch (error) {

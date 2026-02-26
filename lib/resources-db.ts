@@ -406,9 +406,9 @@ export async function getPublishedFaqById(faqId: string): Promise<FaqItem | null
   return collection.findOne({ clientId: getClientId(), faqId, status: 'published' });
 }
 
-export async function getAllPublishedFaqs(): Promise<FaqItem[]> {
+export async function getAllPublishedFaqs(limit: number = 500): Promise<FaqItem[]> {
   const collection = await getFaqCollection();
-  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ category: 1, createdAt: -1 }).toArray();
+  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ category: 1, createdAt: -1 }).limit(limit).toArray();
 }
 
 export async function getAllFaqIds(): Promise<string[]> {
@@ -438,9 +438,9 @@ export async function getPublishedGlossaryTermById(termId: string): Promise<Glos
   return collection.findOne({ clientId: getClientId(), termId, status: 'published' });
 }
 
-export async function getAllPublishedGlossaryTerms(): Promise<GlossaryTerm[]> {
+export async function getAllPublishedGlossaryTerms(limit: number = 1000): Promise<GlossaryTerm[]> {
   const collection = await getGlossaryCollection();
-  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ term: 1 }).toArray();
+  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ term: 1 }).limit(limit).toArray();
 }
 
 export async function getAllGlossaryTermIds(): Promise<string[]> {
@@ -470,9 +470,9 @@ export async function getPublishedComparisonById(comparisonId: string): Promise<
   return collection.findOne({ clientId: getClientId(), comparisonId, status: 'published' });
 }
 
-export async function getAllPublishedComparisons(): Promise<Comparison[]> {
+export async function getAllPublishedComparisons(limit: number = 200): Promise<Comparison[]> {
   const collection = await getComparisonCollection();
-  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ createdAt: -1 }).toArray();
+  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ createdAt: -1 }).limit(limit).toArray();
 }
 
 export async function getAllComparisonIds(): Promise<string[]> {
@@ -502,9 +502,9 @@ export async function getPublishedExpertQaById(qaId: string): Promise<ExpertQaIt
   return collection.findOne({ clientId: getClientId(), qaId, status: 'published' });
 }
 
-export async function getAllPublishedExpertQa(): Promise<ExpertQaItem[]> {
+export async function getAllPublishedExpertQa(limit: number = 200): Promise<ExpertQaItem[]> {
   const collection = await getExpertQaCollection();
-  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ createdAt: -1 }).toArray();
+  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ createdAt: -1 }).limit(limit).toArray();
 }
 
 export async function getAllExpertQaIds(): Promise<string[]> {
@@ -534,9 +534,9 @@ export async function getPublishedNewsItemById(newsId: string): Promise<NewsItem
   return collection.findOne({ clientId: getClientId(), newsId, status: 'published' });
 }
 
-export async function getAllPublishedNews(): Promise<NewsItem[]> {
+export async function getAllPublishedNews(limit: number = 200): Promise<NewsItem[]> {
   const collection = await getNewsCollection();
-  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ 'source.publishedAt': -1 }).toArray();
+  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ 'source.publishedAt': -1 }).limit(limit).toArray();
 }
 
 export async function getAllNewsIds(): Promise<string[]> {
@@ -566,9 +566,9 @@ export async function getPublishedCaseStudyById(caseStudyId: string): Promise<Ca
   return collection.findOne({ clientId: getClientId(), caseStudyId, status: 'published' });
 }
 
-export async function getAllPublishedCaseStudies(): Promise<CaseStudy[]> {
+export async function getAllPublishedCaseStudies(limit: number = 200): Promise<CaseStudy[]> {
   const collection = await getCaseStudyCollection();
-  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ createdAt: -1 }).toArray();
+  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ createdAt: -1 }).limit(limit).toArray();
 }
 
 export async function getAllCaseStudyIds(): Promise<string[]> {
@@ -598,9 +598,9 @@ export async function getPublishedIndustryBriefById(briefId: string): Promise<In
   return collection.findOne({ clientId: getClientId(), briefId, status: 'published' });
 }
 
-export async function getAllPublishedIndustryBriefs(): Promise<IndustryBrief[]> {
+export async function getAllPublishedIndustryBriefs(limit: number = 200): Promise<IndustryBrief[]> {
   const collection = await getIndustryBriefCollection();
-  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ createdAt: -1 }).toArray();
+  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ createdAt: -1 }).limit(limit).toArray();
 }
 
 export async function getAllIndustryBriefIds(): Promise<string[]> {
@@ -630,9 +630,9 @@ export async function getPublishedVideoById(videoId: string): Promise<Video | nu
   return collection.findOne({ clientId: getClientId(), videoId, status: 'published' });
 }
 
-export async function getAllPublishedVideos(): Promise<Video[]> {
+export async function getAllPublishedVideos(limit: number = 200): Promise<Video[]> {
   const collection = await getVideoCollection();
-  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ createdAt: -1 }).toArray();
+  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ createdAt: -1 }).limit(limit).toArray();
 }
 
 export async function getAllVideoIds(): Promise<string[]> {
@@ -662,9 +662,9 @@ export async function getPublishedToolById(toolId: string): Promise<Tool | null>
   return collection.findOne({ clientId: getClientId(), toolId, status: 'published' });
 }
 
-export async function getAllPublishedTools(): Promise<Tool[]> {
+export async function getAllPublishedTools(limit: number = 200): Promise<Tool[]> {
   const collection = await getToolCollection();
-  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ createdAt: -1 }).toArray();
+  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ createdAt: -1 }).limit(limit).toArray();
 }
 
 export async function getAllToolIds(): Promise<string[]> {
@@ -673,9 +673,9 @@ export async function getAllToolIds(): Promise<string[]> {
   return items.map((i) => i.toolId);
 }
 
-export async function getToolsByType(toolType: ToolType): Promise<Tool[]> {
+export async function getToolsByType(toolType: ToolType, limit: number = 100): Promise<Tool[]> {
   const collection = await getToolCollection();
-  return collection.find({ clientId: getClientId(), toolType, status: 'published' }).sort({ createdAt: -1 }).toArray();
+  return collection.find({ clientId: getClientId(), toolType, status: 'published' }).sort({ createdAt: -1 }).limit(limit).toArray();
 }
 
 // ===========================================
@@ -699,9 +699,9 @@ export async function getPublishedInfographicById(infographicId: string): Promis
   return collection.findOne({ clientId: getClientId(), infographicId, status: 'published' });
 }
 
-export async function getAllPublishedInfographics(): Promise<Infographic[]> {
+export async function getAllPublishedInfographics(limit: number = 200): Promise<Infographic[]> {
   const collection = await getInfographicCollection();
-  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ createdAt: -1 }).toArray();
+  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ createdAt: -1 }).limit(limit).toArray();
 }
 
 export async function getAllInfographicIds(): Promise<string[]> {
@@ -717,7 +717,7 @@ export async function getAllInfographicIds(): Promise<string[]> {
 export async function getResourceCounts(): Promise<Record<string, number>> {
   const clientId = getClientId();
 
-  const [faqs, glossary, comparisons, expertQa, news, caseStudies, industryBriefs, videos, tools, infographics] = await Promise.all([
+  const results = await Promise.allSettled([
     (await getFaqCollection()).countDocuments({ clientId, status: 'published' }),
     (await getGlossaryCollection()).countDocuments({ clientId, status: 'published' }),
     (await getComparisonCollection()).countDocuments({ clientId, status: 'published' }),
@@ -730,7 +730,15 @@ export async function getResourceCounts(): Promise<Record<string, number>> {
     (await getInfographicCollection()).countDocuments({ clientId, status: 'published' }),
   ]);
 
-  return { faqs, glossary, comparisons, expertQa, news, caseStudies, industryBriefs, videos, tools, infographics };
+  const val = (r: PromiseSettledResult<number>) => r.status === 'fulfilled' ? r.value : 0;
+  const [faqs, glossary, comparisons, expertQa, news, caseStudies, industryBriefs, videos, tools, infographics] = results;
+
+  return {
+    faqs: val(faqs), glossary: val(glossary), comparisons: val(comparisons),
+    expertQa: val(expertQa), news: val(news), caseStudies: val(caseStudies),
+    industryBriefs: val(industryBriefs), videos: val(videos), tools: val(tools),
+    infographics: val(infographics),
+  };
 }
 
 // ===========================================
