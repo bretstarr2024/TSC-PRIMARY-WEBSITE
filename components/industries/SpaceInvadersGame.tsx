@@ -33,14 +33,35 @@ const BULLET_H = 10;
 const PLAYER_BULLET_SPEED = 7;
 const ENEMY_BULLET_SPEED = 3;
 const PLAYER_SPEED = 5;
-const MAX_PLAYER_BULLETS = 2;
+const MAX_PLAYER_BULLETS = 10;
 const SHIELD_COUNT = 4;
 const SHIELD_W = 44;
 const SHIELD_H = 32;
 const SHIELD_PIXEL = 2;
 const BASE_MOVE_INTERVAL = 30;
 const UFO_SPEED = 2;
-const FIRE_COOLDOWN = 15;
+const FIRE_COOLDOWN = 8;
+
+/* ── UFO color alternation (same pattern as Asteroids) ── */
+const UFO_COLORS = ['#FF5910', '#73F5FF', '#E1FF00', '#ED0AD2', '#FFBDAE', '#088BA0'];
+
+/* ── UFO shot-counter scoring table (authentic 1978 pattern) ── */
+const UFO_SCORE_TABLE = [50, 50, 100, 150, 100, 100, 50, 300, 100, 100, 100, 50, 150, 100, 100, 50];
+
+/* ── Dramatic speed curve — authentic Space Invaders feel ── */
+function getSpeedInterval(aliveCount: number, level: number): number {
+  let base: number;
+  if (aliveCount >= 50) base = 20;
+  else if (aliveCount >= 40) base = 16;
+  else if (aliveCount >= 30) base = 12;
+  else if (aliveCount >= 20) base = 8;
+  else if (aliveCount >= 15) base = 5;
+  else if (aliveCount >= 10) base = 3;
+  else if (aliveCount >= 5) base = 2;
+  else if (aliveCount >= 3) base = 1;
+  else base = 1;
+  return Math.max(1, base - Math.min(level - 1, 5));
+}
 
 /* High scores */
 const HS_KEY = 'tsc-invaders-scores';
@@ -117,19 +138,20 @@ class SFX {
     src.start(); src.stop(c.currentTime + dur);
   }
 
-  march(step: number) {
+  march(step: number, interval?: number) {
     const c = this.ensure();
     if (!c || this._muted) return;
     const freqs = [55, 65, 75, 85];
     const freq = freqs[step % 4];
+    const dur = interval ? Math.min(0.12, Math.max(0.03, interval * 0.003)) : 0.05;
     const o = c.createOscillator();
     const g = c.createGain();
     o.type = 'sine';
     o.frequency.setValueAtTime(freq, c.currentTime);
     g.gain.setValueAtTime(0.08, c.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.05);
+    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur);
     o.connect(g).connect(c.destination);
-    o.start(); o.stop(c.currentTime + 0.05);
+    o.start(); o.stop(c.currentTime + dur);
   }
 
   ufoSound() {
@@ -207,8 +229,9 @@ interface Enemy {
   animFrame: 0 | 1;
 }
 interface Bullet { x: number; y: number; vy: number }
+interface EnemyBullet extends Bullet { shotType: 'rolling' | 'plunger' | 'squiggly' }
 interface Shield { x: number; y: number; pixels: boolean[][] }
-interface Ufo { x: number; dir: 1 | -1; points: number; showPts: number; ptsX: number; ptsY: number }
+interface Ufo { x: number; dir: 1 | -1; points: number; showPts: number; ptsX: number; ptsY: number; color: string }
 interface Spark { x: number; y: number; vx: number; vy: number; life: number; max: number; color: string }
 interface HighScore { initials: string; score: number }
 
@@ -223,7 +246,7 @@ interface Game {
   playerAlive: boolean;
   playerRespawn: number;
   bullets: Bullet[];
-  enemyBullets: Bullet[];
+  enemyBullets: EnemyBullet[];
   shields: Shield[];
   ufo: Ufo | null;
   ufoTimer: number;
@@ -231,6 +254,9 @@ interface Game {
   score: number;
   lives: number;
   level: number;
+  shotCount: number;
+  plungerCol: number;
+  flashTimer: number;
   fireCooldown: number;
   over: boolean;
   overTimer: number;
@@ -250,7 +276,7 @@ function makeEnemies(canvasW: number, level: number): Enemy[] {
   const enemies: Enemy[] = [];
   const formW = COLS * ENEMY_W + (COLS - 1) * ENEMY_GAP_X;
   const startX = (canvasW - formW) / 2;
-  const startY = 80 + Math.min(level - 1, 6) * 12;
+  const startY = 80 + Math.min(level - 1, 8) * 14;
   for (let r = 0; r < ROWS; r++) {
     const type: 0 | 1 | 2 = r === 0 ? 0 : r <= 2 ? 1 : 2;
     for (let c = 0; c < COLS; c++) {
@@ -300,11 +326,11 @@ function makeShields(canvasW: number, canvasH: number): Shield[] {
   return shields;
 }
 
-function boom(x: number, y: number, n: number, color: string): Spark[] {
+function boom(x: number, y: number, n: number, color: string, intense = false): Spark[] {
   return Array.from({ length: n }, () => {
     const a = Math.random() * Math.PI * 2;
-    const v = 1 + Math.random() * 3;
-    const life = 15 + Math.floor(Math.random() * 20);
+    const v = intense ? (2 + Math.random() * 5) : (1 + Math.random() * 3);
+    const life = intense ? (20 + Math.floor(Math.random() * 30)) : (15 + Math.floor(Math.random() * 20));
     return { x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life, max: life, color };
   });
 }
@@ -491,8 +517,8 @@ function drawUfo(ctx: CanvasRenderingContext2D, ufo: Ufo) {
   const cx = ufo.x;
   const cy = 50;
   ctx.save();
-  ctx.fillStyle = C.ufo;
-  ctx.shadowColor = C.ufo;
+  ctx.fillStyle = ufo.color;
+  ctx.shadowColor = ufo.color;
   ctx.shadowBlur = 10;
   // Saucer body
   ctx.beginPath();
@@ -553,6 +579,9 @@ export function SpaceInvadersGame({ onClose }: { onClose: () => void }) {
     score: 0,
     lives: 3,
     level: 1,
+    shotCount: 0,
+    plungerCol: 0,
+    flashTimer: 0,
     fireCooldown: 0,
     over: false,
     overTimer: 0,
@@ -759,6 +788,7 @@ export function SpaceInvadersGame({ onClose }: { onClose: () => void }) {
           if ((k.has(' ') || ta['fire']) && g.fireCooldown <= 0 && g.bullets.length < MAX_PLAYER_BULLETS) {
             g.bullets.push({ x: g.playerX, y: playerY - PLAYER_H, vy: -PLAYER_BULLET_SPEED });
             g.fireCooldown = FIRE_COOLDOWN;
+            g.shotCount++;
             sfx.shoot();
           }
         }
@@ -775,17 +805,17 @@ export function SpaceInvadersGame({ onClose }: { onClose: () => void }) {
         /* ── Enemy movement ── */
         g.enemyMoveTimer++;
         const aliveCount = g.enemies.filter(e => e.alive).length;
-        g.enemyMoveInterval = Math.max(3, BASE_MOVE_INTERVAL - (55 - aliveCount) * 0.5);
+        g.enemyMoveInterval = getSpeedInterval(aliveCount, g.level);
 
         if (g.enemyMoveTimer >= g.enemyMoveInterval) {
           g.enemyMoveTimer = 0;
           g.enemyMoveStep++;
-          sfx.march(g.enemyMoveStep);
+          sfx.march(g.enemyMoveStep, g.enemyMoveInterval);
 
           if (g.enemyDrop) {
             // Drop all enemies
             for (const e of g.enemies) {
-              if (e.alive) e.y += 12;
+              if (e.alive) e.y += 20;
             }
             g.enemyDrop = false;
           } else {
@@ -814,11 +844,10 @@ export function SpaceInvadersGame({ onClose }: { onClose: () => void }) {
           }
         }
 
-        /* ── Enemy shooting ── */
-        const maxEnemyBullets = 3 + Math.floor(g.level / 2);
-        const fireChance = Math.max(20, 40 - g.level * 3);
+        /* ── Enemy shooting (3 types: rolling/plunger/squiggly — authentic pattern) ── */
+        const maxEnemyBullets = Math.min(3 + g.level, 8);
+        const fireChance = Math.max(15, 35 - g.level * 3);
         if (g.enemyBullets.length < maxEnemyBullets && Math.random() * fireChance < 1) {
-          // Find lowest alive enemy per column, pick random column
           const colBottoms: Enemy[] = [];
           for (let c = 0; c < COLS; c++) {
             let bottom: Enemy | null = null;
@@ -830,11 +859,30 @@ export function SpaceInvadersGame({ onClose }: { onClose: () => void }) {
             if (bottom) colBottoms.push(bottom);
           }
           if (colBottoms.length > 0) {
-            const shooter = colBottoms[Math.floor(Math.random() * colBottoms.length)];
+            const roll = Math.random();
+            let shooter: Enemy;
+            let shotType: 'rolling' | 'plunger' | 'squiggly';
+            if (roll < 0.4) {
+              // Rolling: aimed at player X (most dangerous)
+              shooter = colBottoms.reduce((best, e) =>
+                Math.abs((e.x + ENEMY_W / 2) - g.playerX) < Math.abs((best.x + ENEMY_W / 2) - g.playerX) ? e : best
+              );
+              shotType = 'rolling';
+            } else if (roll < 0.7) {
+              // Plunger: cycling columns
+              shooter = colBottoms[g.plungerCol % colBottoms.length];
+              g.plungerCol++;
+              shotType = 'plunger';
+            } else {
+              // Squiggly: random column
+              shooter = colBottoms[Math.floor(Math.random() * colBottoms.length)];
+              shotType = 'squiggly';
+            }
             g.enemyBullets.push({
               x: shooter.x + ENEMY_W / 2,
               y: shooter.y + ENEMY_H,
-              vy: ENEMY_BULLET_SPEED,
+              vy: ENEMY_BULLET_SPEED + Math.min(g.level * 0.3, 2),
+              shotType,
             });
           }
         }
@@ -862,7 +910,8 @@ export function SpaceInvadersGame({ onClose }: { onClose: () => void }) {
               const pts = e.type === 0 ? 30 : e.type === 1 ? 20 : 10;
               g.score += pts;
               const color = e.type === 0 ? C.enemyTop : e.type === 1 ? C.enemyMid : C.enemyBot;
-              g.sparks.push(...boom(e.x + ENEMY_W / 2, e.y + ENEMY_H / 2, 8, color));
+              g.sparks.push(...boom(e.x + ENEMY_W / 2, e.y + ENEMY_H / 2, 12, color));
+              g.flashTimer = 3;
               sfx.enemyHit();
               hit = true;
               break;
@@ -877,7 +926,8 @@ export function SpaceInvadersGame({ onClose }: { onClose: () => void }) {
             const b = g.bullets[bi];
             if (Math.abs(b.x - g.ufo.x) < 20 && b.y < 58 && b.y > 34) {
               g.score += g.ufo.points;
-              g.sparks.push(...boom(g.ufo.x, 50, 12, C.ufo));
+              g.sparks.push(...boom(g.ufo.x, 50, 20, g.ufo.color, true));
+              g.shake = 6;
               sfx.enemyHit();
               sfx.stopUfo();
               wasUfo = false;
@@ -953,7 +1003,7 @@ export function SpaceInvadersGame({ onClose }: { onClose: () => void }) {
               g.playerRespawn = 90;
               g.lives--;
               g.shake = 10;
-              g.sparks.push(...boom(g.playerX, playerY - PLAYER_H / 2, 15, C.player));
+              g.sparks.push(...boom(g.playerX, playerY - PLAYER_H / 2, 20, C.player, true));
               sfx.playerHit();
               if (g.lives <= 0) {
                 g.over = true;
@@ -1008,7 +1058,7 @@ export function SpaceInvadersGame({ onClose }: { onClose: () => void }) {
           g.ufoTimer--;
           if (g.ufoTimer <= 0) {
             const dir: 1 | -1 = Math.random() < 0.5 ? 1 : -1;
-            const pts = [100, 150, 300][Math.floor(Math.random() * 3)];
+            const pts = UFO_SCORE_TABLE[g.shotCount % 16];
             g.ufo = {
               x: dir === 1 ? -20 : w + 20,
               dir,
@@ -1016,6 +1066,7 @@ export function SpaceInvadersGame({ onClose }: { onClose: () => void }) {
               showPts: 0,
               ptsX: 0,
               ptsY: 0,
+              color: UFO_COLORS[Math.floor(Math.random() * UFO_COLORS.length)],
             };
             sfx.ufoSound();
             wasUfo = true;
@@ -1051,12 +1102,28 @@ export function SpaceInvadersGame({ onClose }: { onClose: () => void }) {
           g.enemyDrop = false;
           g.bullets = [];
           g.enemyBullets = [];
-          g.shields = makeShields(w, h);
+          // Partially repair shields (75% of destroyed pixels restored — progressive degradation)
+          const gridCols = Math.floor(SHIELD_W / SHIELD_PIXEL);
+          const gridRows = Math.floor(SHIELD_H / SHIELD_PIXEL);
+          const cx = gridCols / 2;
+          for (const sh of g.shields) {
+            for (let r = 0; r < gridRows; r++) {
+              for (let c = 0; c < gridCols; c++) {
+                if (!sh.pixels[r][c]) {
+                  const dx = c - cx;
+                  const distTop = Math.sqrt(dx * dx + r * r);
+                  const shouldExist = distTop < gridCols * 0.7 && !(r >= gridRows - 5 && Math.abs(c - cx) < 3);
+                  if (shouldExist && Math.random() < 0.75) {
+                    sh.pixels[r][c] = true;
+                  }
+                }
+              }
+            }
+          }
           g.ufo = null;
           g.ufoTimer = 1200 + Math.floor(Math.random() * 1200);
           g.playerAlive = true;
           g.playerX = w / 2;
-          g.fireCooldown = 0;
         }
       }
 
@@ -1092,6 +1159,9 @@ export function SpaceInvadersGame({ onClose }: { onClose: () => void }) {
         if (g.shake < 0.5) g.shake = 0;
       }
 
+      /* ── Flash timer decay ── */
+      if (g.flashTimer > 0) g.flashTimer--;
+
       if (g.over) g.overTimer++;
 
       /* ═══════════════════════════════════
@@ -1102,6 +1172,12 @@ export function SpaceInvadersGame({ onClose }: { onClose: () => void }) {
 
       ctx.fillStyle = C.bg;
       ctx.fillRect(-10, -10, w + 20, h + 20);
+
+      /* ── Kill flash ── */
+      if (g.flashTimer > 0) {
+        ctx.fillStyle = `rgba(255,255,255,${g.flashTimer * 0.03})`;
+        ctx.fillRect(0, 0, w, h);
+      }
 
       /* ── Scanlines ── */
       ctx.save();
@@ -1158,21 +1234,38 @@ export function SpaceInvadersGame({ onClose }: { onClose: () => void }) {
         ctx.fillRect(b.x - BULLET_W / 2, b.y - BULLET_H / 2, BULLET_W, BULLET_H);
       }
 
-      /* ── Enemy bullets ── */
+      /* ── Enemy bullets (visually distinct by type) ── */
       for (const b of g.enemyBullets) {
         ctx.save();
-        ctx.fillStyle = '#FF5910';
-        ctx.shadowColor = '#FF5910';
-        ctx.shadowBlur = 4;
-        ctx.fillRect(b.x - BULLET_W / 2, b.y - BULLET_H / 2, BULLET_W, BULLET_H);
+        if (b.shotType === 'rolling') {
+          ctx.fillStyle = '#FF5910';
+          ctx.shadowColor = '#FF5910';
+          ctx.shadowBlur = 6;
+          const zigX = Math.sin(b.y * 0.3) * 2;
+          ctx.fillRect(b.x - BULLET_W / 2 + zigX, b.y - BULLET_H / 2, BULLET_W, BULLET_H);
+        } else if (b.shotType === 'plunger') {
+          ctx.fillStyle = '#ED0AD2';
+          ctx.shadowColor = '#ED0AD2';
+          ctx.shadowBlur = 4;
+          ctx.fillRect(b.x - 1, b.y - 5, 2, 10);
+          ctx.fillRect(b.x - 3, b.y - 1, 6, 2);
+        } else {
+          ctx.fillStyle = '#73F5FF';
+          ctx.shadowColor = '#73F5FF';
+          ctx.shadowBlur = 4;
+          const squigX = Math.sin(b.y * 0.5) * 3;
+          ctx.fillRect(b.x - BULLET_W / 2 + squigX, b.y - BULLET_H / 2, BULLET_W, BULLET_H);
+        }
         ctx.restore();
       }
 
       /* ── Sparks ── */
       for (const p of g.sparks) {
-        ctx.globalAlpha = p.life / p.max;
+        const t = p.life / p.max;
+        ctx.globalAlpha = t;
         ctx.fillStyle = p.color;
-        ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI * 2); ctx.fill();
+        const size = 1 + t * 3;
+        ctx.beginPath(); ctx.arc(p.x, p.y, size, 0, Math.PI * 2); ctx.fill();
       }
       ctx.globalAlpha = 1;
 
