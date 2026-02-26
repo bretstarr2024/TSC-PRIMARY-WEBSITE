@@ -23,11 +23,12 @@ const PADDLE_BOTTOM = 50;
 const BALL_R = 8;
 const BASE_SPEED = 4.5;
 const SPEED_INC = 0.4;
+const DEPTH_SPEED_BONUS = 0.6;
 const BRICK_ROWS = 6;
 const BRICK_H = 22;
 const BRICK_GAP = 3;
 const BRICK_TOP = 80;
-const START_PADDLE_W = 100;
+const START_PADDLE_W = 150;
 const MIN_PADDLE_W = 60;
 const PADDLE_SHRINK = 6;
 
@@ -211,6 +212,7 @@ interface Game {
   highScores: HighScore[];
   scoreSubmitted: boolean;
   scoreIndex: number;
+  deepestRowHit: number;
 }
 
 /* ── Helpers ── */
@@ -361,6 +363,7 @@ export function BreakoutGame({ onClose }: { onClose: () => void }) {
     highScores: [],
     scoreSubmitted: false,
     scoreIndex: -1,
+    deepestRowHit: BRICK_ROWS,
   }), []);
 
   useEffect(() => {
@@ -646,6 +649,20 @@ export function BreakoutGame({ onClose }: { onClose: () => void }) {
               g.sparks.push(...boom(brick.x + brick.w / 2, brick.y + brick.h / 2, 8, brick.color));
               sfx.brickBreak(brick.row);
 
+              /* Speed up when hitting deeper rows */
+              if (brick.row < g.deepestRowHit) {
+                g.deepestRowHit = brick.row;
+                const depthBonus = (BRICK_ROWS - brick.row) * DEPTH_SPEED_BONUS;
+                const newSpeed = BASE_SPEED + SPEED_INC * (g.level - 1) + depthBonus;
+                const currentSpeed = Math.hypot(g.ballVX, g.ballVY);
+                if (currentSpeed > 0) {
+                  const scale = newSpeed / currentSpeed;
+                  g.ballVX *= scale;
+                  g.ballVY *= scale;
+                }
+                g.speed = newSpeed;
+              }
+
               if (Math.abs(dx) > Math.abs(dy)) {
                 g.ballVX = -g.ballVX;
               } else {
@@ -670,6 +687,7 @@ export function BreakoutGame({ onClose }: { onClose: () => void }) {
         if (g.levelFlash <= 0) {
           g.paddleW = Math.max(MIN_PADDLE_W, START_PADDLE_W - PADDLE_SHRINK * (g.level - 1));
           g.speed = BASE_SPEED + SPEED_INC * (g.level - 1);
+          g.deepestRowHit = BRICK_ROWS;
           g.bricks = makeBricks(w, g.level);
           g.launched = false;
           g.ballX = g.paddleX;
