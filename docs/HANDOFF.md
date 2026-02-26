@@ -1,16 +1,44 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 25, 2026 (Session XXXVIII)
+**Last Updated:** February 25, 2026 (Session XXXIX)
 
 ---
 
-## Current Phase: Phase 1 COMPLETE + "New Game" CTA Rebrand LIVE + Real CoinSlotCTA Image
+## Current Phase: Phase 1 COMPLETE + CoinSlotCTA Pixel-Perfect
 
-The site is live with **120 pages** across 10 content types, 9 verticals, a full Pricing page (declared done), 89 answer capsules, **9 hidden arcade games**, site-wide CTA tracking, and now a **full "New Game" CTA rebrand** aligning all buttons with the Game Over creative concept. The CoinSlotCTA on the homepage hero uses a custom arcade panel image (`coin_slot.png`) with radial glow instead of the old CSS-drawn version.
+The site is live with **120 pages** across 10 content types, 9 verticals, a full Pricing page (declared done), 89 answer capsules, **9 hidden arcade games**, site-wide CTA tracking, "New Game" CTA rebrand, and now a **pixel-perfect CoinSlotCTA** rendering at native 128px with crisp retro edges.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections + `interactions` collection)
 - **Next actions:** Build Contact page form, add Resend env vars, create MongoDB indexes on `interactions`
-- **Roadmap:** See `docs/roadmap.md` Session XXXVIII
+- **Roadmap:** See `docs/roadmap.md` Session XXXIX
+
+### Session XXXIX Summary (February 25, 2026)
+
+**Focus:** Fix blurry CoinSlotCTA — render at native resolution with pixel-perfect rendering, proportional glow, tighter hero spacing.
+
+**What was done:**
+
+1. **Fixed CoinSlotCTA rendering** (`components/CoinSlotCTA.tsx`):
+   - Image size 200×200 → 128×128 (native resolution — eliminates upscale blur)
+   - Added `imageRendering: 'pixelated'` — forces nearest-neighbor interpolation for retro asset
+   - Drop shadow scaled proportionally: 8px/20px → 5px/14px
+
+2. **Tightened hero CTA spacing** (`components/home/HeroSection.tsx`):
+   - CTA wrapper `mt-12` → `mt-8` — CTA feels connected to copy instead of floating
+
+**Commits this session:**
+- `dcce7eb` — fix: CoinSlotCTA pixel-perfect rendering — native size, pixelated mode, proportional glow
+
+**Results:**
+- CoinSlotCTA renders crisp at native 128px with pixelated edges
+- Glow proportional to smaller image size
+- Hero CTA visually connected to copy above
+- Build: 120 pages, PASS
+
+**Key invariant added:**
+- CoinSlotCTA renders at native 128×128 with `imageRendering: pixelated`
+
+---
 
 ### Session XXXVIII Summary (February 25, 2026)
 
@@ -21,9 +49,7 @@ The site is live with **120 pages** across 10 content types, 9 verticals, a full
 1. **Replaced CoinSlotCTA image** (`components/CoinSlotCTA.tsx`):
    - Removed entire CSS-drawn coin slot (metallic frame, corner screws, recessed display, LED "25¢"/"PUSH" text, divider)
    - Added user-created `coin_slot.png` (128×128 transparent PNG, red "25¢ INSERT COIN TO PLAY" arcade panel)
-   - Rendered at 200×200 via `next/image` with `unoptimized`
    - Radial background glow: Atomic Tangerine gradient, blur 20px, scale 1.5x
-   - Drop shadow: dual-layer orange (8px tight + 20px diffuse)
    - Same spring hover/tap motion preserved, all tracking attributes preserved
 
 2. **Rebranded all CTA buttons to "New Game"** (7 files):

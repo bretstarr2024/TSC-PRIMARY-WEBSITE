@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XXXVIII** | Last Updated: February 25, 2026
+**Status: SESSION XXXIX** | Last Updated: February 25, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -775,7 +775,17 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 120 pages, PASS
 
-#### Session XXXIX (upcoming): Contact Form + Pipeline Infrastructure
+#### Session XXXIX: CoinSlotCTA Pixel-Perfect Rendering Fix ✅ COMPLETE (Feb 25, 2026)
+
+**Focus:** Fix blurry upscaled CoinSlotCTA image — render at native 128×128, add pixelated rendering, scale glow proportionally, tighten hero spacing.
+
+**Modified files:**
+- [x] `components/CoinSlotCTA.tsx` — Image 200×200 → 128×128, added `imageRendering: 'pixelated'`, drop-shadow 8px/20px → 5px/14px
+- [x] `components/home/HeroSection.tsx` — CTA wrapper `mt-12` → `mt-8`
+
+**Build:** 120 pages, PASS
+
+#### Session XL (upcoming): Contact Form + Pipeline Infrastructure
 - [ ] Build Contact page with form (Resend integration) — copy pattern from AEO `/api/lead`
 - [ ] Add RESEND_API_KEY, LEAD_RECIPIENTS, RESEND_FROM to Vercel env vars
 - [ ] Copy pipeline infrastructure from AEO:
