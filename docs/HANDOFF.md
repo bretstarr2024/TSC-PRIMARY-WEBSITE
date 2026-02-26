@@ -1,16 +1,64 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 26, 2026 (Session LVI)
+**Last Updated:** February 26, 2026 (Session LVII)
 
 ---
 
-## Current Phase: Phase 2 — Pipeline ACTIVE + Content Generating Autonomously
+## Current Phase: Phase 2 — Pipeline ACTIVE + Security Hardened
 
-The site is live with **137 pages** across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, Vercel Analytics + Speed Insights, and a **fully activated autonomous content pipeline**. All 3 Vercel cron jobs are auth-protected via CRON_SECRET, MongoDB indexes are in place, and the pipeline has been tested end-to-end with 11 items published successfully. Chatbot was evaluated and dropped from scope. Only the Work page remains as a stub.
+The site is live with **143 pages** across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, Vercel Analytics + Speed Insights, and a **fully activated autonomous content pipeline**. All API routes have been security-hardened: cron auth defaults to DENY, email templates escape user input, and the tracking endpoint uses a field allowlist. 8 tailored code review commands are now available for ongoing quality assurance. Only the Work page remains as a stub.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database), Resend email, 3 Vercel cron jobs (ACTIVE — CRON_SECRET set), Vercel Analytics + Speed Insights
-- **Next actions:** Monitor production cron runs, build Work page, configure domain
-- **Roadmap:** See `docs/roadmap.md` Session LVI
+- **Next actions:** Sprint 2 (pipeline reliability), Sprint 3 (scale/cleanup), build Work page
+- **Roadmap:** See `docs/roadmap.md` Session LVII
+
+### Session LVII Summary (February 26, 2026)
+
+**Focus:** Comprehensive code review (8 automated reviews, 47 findings) + Sprint 1 security fixes.
+
+**What was done:**
+
+1. **Generated 8 tailored code review commands** in `.claude/commands/review-*.md`:
+   - architecture, security, performance, data-integrity, frontend, api-contracts, pipeline, queries
+   - Each references actual project file paths, conventions, and anti-patterns
+   - Run any review with `/review-{name}` in Claude Code
+
+2. **Ran all 8 reviews — identified 47 unique findings:**
+   - P0 (Critical): 4 security issues, 11 unbounded queries, 6 pipeline reliability issues
+   - P1 (Warning): 8 phantom npm deps, accessibility gaps, missing sitemap pages
+   - P2 (Info): /book metadata, Promise.allSettled, error boundaries
+
+3. **Sprint 1 — Security fixes (all 4 P0 security issues resolved):**
+   - `lib/cron-auth.ts` — Shared cron auth module, **defaults to DENY** when CRON_SECRET unset (was fail-open)
+   - All 3 cron routes now use shared `verifyCronAuth()` (eliminated duplicated local implementations)
+   - `lib/escape-html.ts` — HTML entity escaping for `&<>"'` (prevents XSS in email templates)
+   - `app/api/lead/route.ts` — All 5 user-interpolated fields escaped before HTML interpolation
+   - `app/api/arcade-boss/route.ts` — All 3 user-interpolated fields escaped before HTML interpolation
+   - `app/api/track/route.ts` — `pickTrackingFields()` allowlist (10 fields) replaces `...body` spread
+
+**Commits this session:**
+- `660c14f` — feat: Security hardening — cron auth fail-closed, HTML escaping, track allowlist
+- `ee09547` — chore: Add 8 tailored code review commands, update roadmap for Session LVII
+
+**Results:**
+- All 4 P0 security vulnerabilities resolved
+- 8 reusable review commands for ongoing code quality
+- 47 findings cataloged and prioritized into 3 sprints
+- 143 pages, 0 type errors
+
+**Key decisions (do not re-debate):**
+- Cron auth defaults to DENY — if CRON_SECRET is unset, all cron requests rejected (not silently allowed)
+- HTML escaping via custom 5-char utility — no need for full sanitization library for email templates
+- Track allowlist: type, sessionId, page, component, label, destination, ctaId, referrer, userAgent, viewport, metadata
+- Sprint 2 (pipeline reliability) and Sprint 3 (scale/cleanup) deferred — independent of security fixes
+
+**What must happen next:**
+1. Sprint 2: Pipeline reliability (resetStuckGeneratingItems, DB-backed daily caps, atomic queue transitions, title dedup)
+2. Sprint 3: Scale + cleanup (unbounded queries .limit(), phantom deps, maxPoolSize, /book metadata, sitemap)
+3. Monitor first production cron runs (check `pipeline_logs` after 8am UTC)
+4. Build Work page (needs content direction — real or fabricated case studies)
+
+---
 
 ### Session LVI Summary (February 26, 2026)
 
