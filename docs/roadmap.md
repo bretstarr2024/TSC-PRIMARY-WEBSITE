@@ -1225,9 +1225,49 @@ Build: 131 pages (up from 127), 0 type errors.
 **Build:** 143 pages, PASS
 
 **Still needed (next sessions):**
-- [ ] Sprint 3: Scale + cleanup (unbounded queries, phantom deps, maxPoolSize, /book metadata, sitemap)
+- [x] Sprint 3: Scale + cleanup (unbounded queries, phantom deps, maxPoolSize, /book metadata, sitemap) ✅ Session LVIII
 - [ ] Monitor production cron runs — verify stuck reset, DB caps, coverage linking work in prod
 - [ ] Work page — last remaining stub
+
+#### Session LVIII (continued): Sprint 3 — Scale + Cleanup ✅ COMPLETE (Feb 26, 2026)
+
+**Focus:** Fix all remaining Sprint 3 findings from Session LVII code review.
+
+**What was done:**
+
+1. **Bounded all 12 unbounded queries** — Added `.limit()` to every `getAllPublished*` function:
+   - `getAllPublishedBlogPosts` (500), `getAllPublishedFaqs` (500), `getAllPublishedGlossaryTerms` (1000)
+   - All others: 200 default limit. `getToolsByType`: 100.
+   - Existing callers unaffected (limits are generous enough for current data volumes)
+
+2. **Removed 8 phantom npm dependencies** — 323 transitive packages removed:
+   - `@clerk/nextjs`, `@sentry/nextjs`, `@vercel/blob`, `cloudinary`, `gray-matter`, `react-markdown`, `recharts`, `sharp`
+
+3. **MongoDB serverless pool config** — `maxPoolSize: 3`, `waitQueueTimeoutMS: 5000` (was unlimited default)
+
+4. **`/book` page metadata** — Split into server component (`app/book/page.tsx` with metadata export) + client component (`components/BookPageContent.tsx`). Now has title, description, keywords, and Open Graph tags.
+
+5. **Sitemap gaps filled** — Added 8 missing pages:
+   - Static: `/about`, `/pricing`, `/book`, `/contact`, `/careers`, `/work`, `/insights/infographics`
+   - Dynamic: `/services/[slug]` (all 6 service categories), `/insights/infographics/[id]`
+
+6. **Promise.allSettled** — 3 locations fixed:
+   - `app/api/lead/route.ts` — one email failure no longer blocks the other
+   - `app/api/arcade-boss/route.ts` — same pattern
+   - `lib/resources-db.ts` `getResourceCounts()` — one collection count failure returns 0 instead of crashing
+
+**Key decisions:**
+- Query limits are generous defaults, not hard caps — callers can override via optional parameter
+- `maxPoolSize: 3` is conservative for Vercel serverless — can increase if latency rises
+- `/book` metadata follows `/contact` pattern (server wrapper + client content component)
+
+**Build:** 143 pages, PASS
+
+**Still needed (next sessions):**
+- [ ] Monitor production cron runs — verify Sprint 2 + 3 fixes work in prod
+- [ ] Work page — last remaining stub
+- [ ] Domain configuration
+- [ ] OG images / social cards
 
 ---
 
