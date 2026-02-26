@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { escapeHtml } from '@/lib/escape-html';
 
 function getResendClient() {
   const apiKey = process.env.RESEND_API_KEY;
@@ -30,9 +31,14 @@ export async function POST(request: Request) {
 
     const timestamp = new Date();
     const timestampCT = timestamp.toLocaleString('en-US', { timeZone: 'America/Chicago' });
-    const gameName = GAME_NAMES[game] || game;
+    const rawGameName = GAME_NAMES[game] || game;
     const scoreStr = String(score || 0).padStart(6, '0');
-    const playerInitials = initials || '???';
+    const rawInitials = initials || '???';
+
+    // Escape user input before interpolation into HTML
+    const gameName = escapeHtml(String(rawGameName));
+    const playerInitials = escapeHtml(String(rawInitials).slice(0, 10));
+    const safeEmail = escapeHtml(String(email));
 
     // Store in MongoDB
     try {
@@ -78,7 +84,7 @@ export async function POST(request: Request) {
               </tr>
               <tr>
                 <td style="padding: 10px 0; border-bottom: 1px solid #333; font-weight: bold; color: #999;">Email</td>
-                <td style="padding: 10px 0; border-bottom: 1px solid #333;"><a href="mailto:${email}" style="color: #73F5FF;">${email}</a></td>
+                <td style="padding: 10px 0; border-bottom: 1px solid #333;"><a href="mailto:${safeEmail}" style="color: #73F5FF;">${safeEmail}</a></td>
               </tr>
             </table>
             <p style="color: #666; font-size: 13px;">
@@ -120,7 +126,7 @@ export async function POST(request: Request) {
           resend.emails.send({
             from: fromEmail,
             to: recipients,
-            subject: `[TSC] &#x1F3C6; New Arcade Boss: ${playerInitials} topped ${gameName} (${scoreStr})`,
+            subject: `[TSC] New Arcade Boss: ${playerInitials} topped ${gameName} (${scoreStr})`,
             html: teamHtml,
           }),
           resend.emails.send({

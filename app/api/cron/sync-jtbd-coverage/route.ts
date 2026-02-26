@@ -16,22 +16,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getClientConfig } from '@/lib/kernel/client';
 import { upsertQueryCoverage } from '@/lib/resources-db';
 import { logPipelineEvent } from '@/lib/pipeline/logger';
+import { verifyCronAuth } from '@/lib/cron-auth';
 
 export const maxDuration = 60; // 1 minute
-
-// ============================================
-// Auth
-// ============================================
-
-function verifyAuth(request: NextRequest): boolean {
-  const cronSecret = process.env.CRON_SECRET;
-  if (!cronSecret) {
-    console.log('[Sync JTBD Coverage] No CRON_SECRET set, allowing request');
-    return true;
-  }
-  const authHeader = request.headers.get('authorization');
-  return authHeader === `Bearer ${cronSecret}`;
-}
 
 // ============================================
 // Main Handler
@@ -41,7 +28,7 @@ export async function GET(request: NextRequest) {
   const startTime = Date.now();
 
   // Auth check
-  if (!verifyAuth(request)) {
+  if (!verifyCronAuth(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

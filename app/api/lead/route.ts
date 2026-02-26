@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { getDatabase } from '@/lib/mongodb';
+import { escapeHtml } from '@/lib/escape-html';
 
 // Lazy Resend initialization — avoids build-time errors when env var is not set
 function getResendClient() {
@@ -71,6 +72,13 @@ export async function POST(request: Request) {
       console.error('Failed to store lead in MongoDB:', dbError);
     }
 
+    // Escape user input before interpolation into HTML
+    const safeName = escapeHtml(data.name);
+    const safeEmail = escapeHtml(data.email);
+    const safeMessage = data.message ? escapeHtml(data.message) : '';
+    const safeSource = data.source ? escapeHtml(data.source) : '';
+    const safeCtaId = data.ctaId ? escapeHtml(data.ctaId) : '';
+
     // Team notification email
     const teamHtml = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -78,28 +86,28 @@ export async function POST(request: Request) {
         <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
           <tr>
             <td style="padding: 10px 0; border-bottom: 1px solid #333; font-weight: bold; color: #999; width: 100px;">Name</td>
-            <td style="padding: 10px 0; border-bottom: 1px solid #333; color: #fff;">${data.name}</td>
+            <td style="padding: 10px 0; border-bottom: 1px solid #333; color: #fff;">${safeName}</td>
           </tr>
           <tr>
             <td style="padding: 10px 0; border-bottom: 1px solid #333; font-weight: bold; color: #999;">Email</td>
-            <td style="padding: 10px 0; border-bottom: 1px solid #333;"><a href="mailto:${data.email}" style="color: #73F5FF;">${data.email}</a></td>
+            <td style="padding: 10px 0; border-bottom: 1px solid #333;"><a href="mailto:${safeEmail}" style="color: #73F5FF;">${safeEmail}</a></td>
           </tr>
           ${data.message ? `
           <tr>
             <td style="padding: 10px 0; border-bottom: 1px solid #333; font-weight: bold; color: #999; vertical-align: top;">Message</td>
-            <td style="padding: 10px 0; border-bottom: 1px solid #333; color: #fff;">${data.message}</td>
+            <td style="padding: 10px 0; border-bottom: 1px solid #333; color: #fff;">${safeMessage}</td>
           </tr>
           ` : ''}
           ${data.source ? `
           <tr>
             <td style="padding: 10px 0; border-bottom: 1px solid #333; font-weight: bold; color: #999;">Source</td>
-            <td style="padding: 10px 0; border-bottom: 1px solid #333; color: #fff;">${data.source}</td>
+            <td style="padding: 10px 0; border-bottom: 1px solid #333; color: #fff;">${safeSource}</td>
           </tr>
           ` : ''}
           ${data.ctaId ? `
           <tr>
             <td style="padding: 10px 0; border-bottom: 1px solid #333; font-weight: bold; color: #999;">CTA</td>
-            <td style="padding: 10px 0; border-bottom: 1px solid #333; color: #fff;">${data.ctaId}</td>
+            <td style="padding: 10px 0; border-bottom: 1px solid #333; color: #fff;">${safeCtaId}</td>
           </tr>
           ` : ''}
         </table>
@@ -116,7 +124,7 @@ export async function POST(request: Request) {
     // Auto-reply to submitter
     const replyHtml = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
-        <p>Hey ${data.name},</p>
+        <p>Hey ${safeName},</p>
         <p>Thanks for reaching out. Someone from our team will be in touch within one business day.</p>
         <p>If you'd rather skip the wait and book a call now:</p>
         <p style="margin: 24px 0;">
@@ -136,7 +144,7 @@ export async function POST(request: Request) {
       resend.emails.send({
         from: fromEmail,
         to: recipients,
-        subject: `[TSC] New lead: ${data.name} (${data.email})`,
+        subject: `[TSC] New lead: ${safeName} (${safeEmail})`,
         html: teamHtml,
       }),
       resend.emails.send({

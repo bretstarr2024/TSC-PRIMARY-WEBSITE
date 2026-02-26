@@ -19,6 +19,7 @@ import { enqueueContent, type ContentType } from '@/lib/content-db';
 import { getClientConfig } from '@/lib/kernel/client';
 import { logPipelineEvent } from '@/lib/pipeline/logger';
 import { DAILY_CAPS } from '@/lib/pipeline/content-guardrails';
+import { verifyCronAuth } from '@/lib/cron-auth';
 
 export const maxDuration = 60; // 1 minute
 
@@ -27,20 +28,6 @@ const QUESTION_PATTERNS = /^(how|what|why|when|can|should|does|is|are|will|where
 const DEFINITION_PATTERNS = /\b(definition|meaning|what is|what are|explain|overview)\b/i;
 const SHORT_TERM_PATTERN = /^[a-z0-9\s\-]{3,40}$/i;
 const COMPARISON_PATTERNS = /\b(vs\.?|versus|compared to|difference between|better|alternative)\b/i;
-
-// ============================================
-// Auth
-// ============================================
-
-function verifyAuth(request: NextRequest): boolean {
-  const cronSecret = process.env.CRON_SECRET;
-  if (!cronSecret) {
-    console.log('[Seed Content Queue] No CRON_SECRET set, allowing request');
-    return true;
-  }
-  const authHeader = request.headers.get('authorization');
-  return authHeader === `Bearer ${cronSecret}`;
-}
 
 // ============================================
 // Query Classification
@@ -82,7 +69,7 @@ export async function GET(request: NextRequest) {
   const startTime = Date.now();
 
   // Auth check
-  if (!verifyAuth(request)) {
+  if (!verifyCronAuth(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

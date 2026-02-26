@@ -60,22 +60,9 @@ import {
   getToolPrompts,
 } from '@/lib/pipeline/content-prompts';
 import { getClientConfig } from '@/lib/kernel/client';
+import { verifyCronAuth } from '@/lib/cron-auth';
 
 export const maxDuration = 300; // 5 minutes
-
-// ============================================
-// Auth
-// ============================================
-
-function verifyAuth(request: NextRequest): boolean {
-  const cronSecret = process.env.CRON_SECRET;
-  if (!cronSecret) {
-    console.log('[Generate Content] No CRON_SECRET set, allowing request');
-    return true;
-  }
-  const authHeader = request.headers.get('authorization');
-  return authHeader === `Bearer ${cronSecret}`;
-}
 
 // ============================================
 // Prompt Routing
@@ -306,7 +293,7 @@ export async function GET(request: NextRequest) {
   const startTime = Date.now();
 
   // Auth check
-  if (!verifyAuth(request)) {
+  if (!verifyCronAuth(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

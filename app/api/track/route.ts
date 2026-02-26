@@ -1,5 +1,23 @@
 import { NextResponse } from 'next/server';
 
+// Allowlisted fields for tracking interactions.
+// Only these fields are stored — everything else is discarded.
+function pickTrackingFields(body: Record<string, unknown>): Record<string, unknown> {
+  const ALLOWED_KEYS = [
+    'type', 'sessionId', 'page', 'component', 'label',
+    'destination', 'ctaId', 'referrer', 'userAgent', 'viewport',
+    'metadata',
+  ] as const;
+
+  const picked: Record<string, unknown> = {};
+  for (const key of ALLOWED_KEYS) {
+    if (body[key] !== undefined) {
+      picked[key] = body[key];
+    }
+  }
+  return picked;
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -12,7 +30,7 @@ export async function POST(request: Request) {
       const { getDatabase } = await import('@/lib/mongodb');
       const db = await getDatabase();
       await db.collection('interactions').insertOne({
-        ...body,
+        ...pickTrackingFields(body),
         timestamp: new Date(),
       });
     } catch {
