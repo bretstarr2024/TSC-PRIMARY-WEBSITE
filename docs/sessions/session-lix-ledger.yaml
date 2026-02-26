@@ -1,0 +1,76 @@
+session_id: "LIX"
+date: "2026-02-26"
+branch: main
+version: "0.37.1"  # PATCH: Vercel deploy fix (CRON_SECRET whitespace) + code review round 2
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "AmS1GFuKNocBX5Y8Bltn"
+  status: triggered
+  note: "Fix deploy triggered mid-session after CRON_SECRET whitespace fix. Closeout deploy also triggered."
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "No data model changes this session — ops fix + code review only"
+
+commits:
+  - hash: "0da0eec"
+    message: "docs: Session LIX closeout — Vercel deploy fix, code review round 2 (4 critical + 24 warnings)"
+
+artifacts_updated:
+  - "docs/roadmap.md — Session LIX section with review round 2 findings summary"
+  - "docs/HANDOFF.md — Session LIX handoff with full findings catalog"
+  - "docs/sessions/session-lix-ledger.yaml — Session ledger"
+
+decisions_made:
+  - decision: "Catalog all 28 review findings before fixing any — review-only session"
+    rationale: "Establish the full picture before sprint planning. Previous round (47 findings) was fixed across 3 sprints; same approach for round 2."
+    reversible: true
+  - decision: "Fix CRON_SECRET via Vercel CLI (remove + re-add without trailing newline)"
+    rationale: "16+ deployments failing for 8 hours due to whitespace in env var. CLI fix was fastest path to restore deployments."
+    reversible: true
+
+known_risks:
+  - risk: "No security headers (CSP, HSTS, X-Frame-Options) — site serves with default Next.js headers only"
+    mitigation: "Add via next.config.mjs headers() or middleware.ts in next sprint"
+    severity: high
+  - risk: "No rate limiting on public API endpoints — bots can spam lead form and burn Resend quota"
+    mitigation: "Add IP-based throttling via Vercel Edge Middleware or in-memory store"
+    severity: high
+  - risk: "'fractional cmo' missing from FORBIDDEN_TERMS in content-guardrails.ts — prompt blocks it but post-generation quality check doesn't catch it"
+    mitigation: "One-line fix: add to FORBIDDEN_TERMS array"
+    severity: medium
+  - risk: "Phantom openai dependency in package.json — never imported, adds supply chain surface"
+    mitigation: "Remove from dependencies"
+    severity: low
+
+explicitly_deferred:
+  - "All 28 code review findings — cataloged for sprint planning next session"
+  - "Work page — needs content direction (real or fabricated case studies)"
+  - "leads collection index { timestamp: -1 } — still pending from Session XLII"
+  - "Domain configuration"
+  - "OG images / social cards"
+
+next_actions:
+  - "Sprint-plan and execute Round 2 critical findings (C1-C4: phantom openai dep, fractional cmo guardrail, security headers, form labels)"
+  - "Sprint-plan and execute Round 2 high-priority warnings (W1-W12)"
+  - "Monitor production cron runs post-Sprint 2+3 fixes from Session LVIII"
+  - "Build Work page (needs user content direction)"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "Cron auth defaults to DENY when CRON_SECRET unset"
+  - "All API clients use pure fetch (no SDK dependencies)"
+  - "maxPoolSize: 3 on MongoDB connections (Vercel serverless)"
+  - "Pipeline uses atomic findOneAndUpdate for queue claims"
+  - "All getAllPublished* functions have explicit .limit()"
+  - "CRON_SECRET must not contain leading/trailing whitespace (Vercel validates this at build time)"

@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION LVII** | Last Updated: February 26, 2026
+**Status: SESSION LIX** | Last Updated: February 26, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -1264,6 +1264,42 @@ Build: 131 pages (up from 127), 0 type errors.
 **Build:** 143 pages, PASS
 
 **Still needed (next sessions):**
+- [ ] Monitor production cron runs — verify Sprint 2 + 3 fixes work in prod
+- [ ] Work page — last remaining stub
+- [ ] Domain configuration
+- [ ] OG images / social cards
+
+#### Session LIX: Vercel Deploy Fix + Code Review Round 2 ✅ COMPLETE (Feb 26, 2026)
+
+**Focus:** Fix broken Vercel deployments (CRON_SECRET whitespace) + re-run all 8 code review commands for fresh findings.
+
+**What was done:**
+
+1. **Diagnosed and fixed Vercel deployment failures:**
+   - All deployments for ~8 hours were failing instantly (4-11 second durations) with: `Error: The CRON_SECRET environment variable contains leading or trailing whitespace`
+   - Root cause: CRON_SECRET env var had a trailing `\n` (newline) from copy-paste when it was set 8 hours prior
+   - Fix: Removed CRON_SECRET from all 3 Vercel environments (Production, Preview, Development), re-added with clean value
+   - Verified: New deployment succeeded (46s build, ● Ready status)
+
+2. **Ran all 8 code review commands in parallel:**
+   - review-architecture, review-security, review-performance, review-data-integrity
+   - review-frontend, review-api-contracts, review-pipeline, review-queries
+   - Found **4 critical + 24 warning** findings (previous round: 47 findings, all resolved in Sessions LVII-LVIII)
+
+**Review findings summary (Round 2):**
+
+- **CRITICAL (4):** Phantom `openai` dep in package.json, "fractional cmo" missing from FORBIDDEN_TERMS guardrail, no security headers (CSP/HSTS/etc), form inputs lack labels (WCAG)
+- **WARNING High (12):** No error.tsx boundaries, no rate limiting on public APIs, no field length validation, in-memory budget resets per invocation, no TTL indexes on pipeline_logs/interactions, no skip-nav link, arcade-boss missing email validation, no retry ceiling on stuck items, Three.js renders off-screen, 62KB services-data in client bundle, pre-flight rejected items loop forever, no loading.tsx skeletons
+- **WARNING Medium (12):** Missing aria-expanded on accordions, leadership cards not keyboard-accessible, modal missing dialog role, metadata field accepts arbitrary objects, no lead/arcade-boss dedup, inconsistent success response shapes, full document fetches when summaries suffice, unbounded ID queries, news publishedAt stored as string, header mobile CTA text mismatch, no prefers-reduced-motion checks, 25+ infinite animations on /book page
+
+**Key decisions:**
+- All 28 findings cataloged and ready for sprint planning in next session
+- No code fixes attempted this session — review-only to establish the full picture first
+
+**Build:** 143 pages, PASS
+
+**Still needed (next sessions):**
+- [ ] Sprint planning and execution for Round 2 review findings (4 critical + 24 warnings)
 - [ ] Monitor production cron runs — verify Sprint 2 + 3 fixes work in prod
 - [ ] Work page — last remaining stub
 - [ ] Domain configuration

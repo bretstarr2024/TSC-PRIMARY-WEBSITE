@@ -1,16 +1,84 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 26, 2026 (Session LVIII)
+**Last Updated:** February 26, 2026 (Session LIX)
 
 ---
 
-## Current Phase: Phase 2 — Pipeline Hardened + Scale-Ready
+## Current Phase: Phase 2 — Pipeline Hardened, Review Round 2 Complete
 
-The site is live with **143 pages** across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, Vercel Analytics + Speed Insights, and a **fully activated autonomous content pipeline**. All 47 code review findings from Session LVII are now resolved: security hardening (Sprint 1), pipeline reliability (Sprint 2), and scale/cleanup (Sprint 3) are all complete. The pipeline now uses atomic queue claims, DB-backed daily caps, title dedup, and a coverage feedback loop. All database queries are bounded. 8 phantom npm deps removed (323 transitive packages eliminated).
+The site is live with **143 pages** across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, Vercel Analytics + Speed Insights, and a **fully activated autonomous content pipeline**. All 47 code review findings from Round 1 (Session LVII) were resolved in Sessions LVII-LVIII. Round 2 of all 8 code reviews ran in Session LIX and found **4 critical + 24 warning** new findings — cataloged and ready for sprint planning.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database), Resend email, 3 Vercel cron jobs (ACTIVE — CRON_SECRET set), Vercel Analytics + Speed Insights
-- **Next actions:** Monitor post-fix cron runs, build Work page
-- **Roadmap:** See `docs/roadmap.md` Session LVIII
+- **Next actions:** Sprint-plan and fix Round 2 review findings, monitor cron runs, build Work page
+- **Roadmap:** See `docs/roadmap.md` Session LIX
+
+### Session LIX Summary (February 26, 2026)
+
+**Focus:** Fix broken Vercel deployments + run code review round 2.
+
+**What was done:**
+
+1. **Fixed Vercel deployment failures (CRON_SECRET whitespace):**
+   - All deployments for ~8 hours were failing instantly with: `Error: The CRON_SECRET environment variable contains leading or trailing whitespace`
+   - Root cause: trailing `\n` (newline) from copy-paste when CRON_SECRET was set
+   - Fix: Removed from all 3 Vercel environments, re-added with clean value via `vercel env rm` + `vercel env add`
+   - Verified: deployment succeeded (46s build, ● Ready)
+
+2. **Ran all 8 code review commands in parallel — found 28 new findings:**
+
+   **CRITICAL (4):**
+   - C1: Phantom `openai` dep in package.json — never imported, pure fetch used (`package.json`)
+   - C2: "fractional cmo" missing from `FORBIDDEN_TERMS` in quality check (`lib/pipeline/content-guardrails.ts`)
+   - C3: No security headers — no CSP, HSTS, X-Frame-Options, X-Content-Type-Options (`next.config.mjs`)
+   - C4: Form inputs lack labels — ContactForm uses only placeholder text, not WCAG compliant (`components/contact/ContactForm.tsx`)
+
+   **WARNING — High Priority (12):**
+   - W1: No `error.tsx` boundaries on any route (DB failures show default error page)
+   - W2: No rate limiting on `/api/lead`, `/api/track`, `/api/arcade-boss`
+   - W3: No field length validation on public endpoints
+   - W4: In-memory `totalSpend` resets per cron invocation (budget can be exceeded)
+   - W5: No TTL indexes on `pipeline_logs` or `interactions` (unbounded growth)
+   - W6: No skip-to-content navigation link (WCAG 2.4.1)
+   - W7: `/api/arcade-boss` missing email format validation
+   - W8: No retry ceiling on stuck items (infinite loop risk)
+   - W9: Three.js canvas renders at 60fps when off-screen (3 pages)
+   - W10: 62KB `services-data.ts` pulled into client bundle via function imports
+   - W11: Pre-flight rejected items returned to `pending` loop forever
+   - W12: No `loading.tsx` skeletons on dynamic routes
+
+   **WARNING — Medium Priority (12):**
+   - W13: Accordion buttons missing `aria-expanded`
+   - W14: Leadership cards not keyboard-accessible
+   - W15: Leadership modal missing `role="dialog"`, `aria-modal`
+   - W16: `metadata` field in `/api/track` accepts arbitrary nested objects
+   - W17: No deduplication on lead or arcade-boss submissions
+   - W18: Inconsistent success response shapes (`success` vs `ok`)
+   - W19: `getAllPublished*()` fetch full documents when callers need summaries only
+   - W20: 11 `getAll*Ids()` + `getRecentPublishedTitles()` lack `.limit()` caps
+   - W21: News `source.publishedAt` stored as string, not BSON Date
+   - W22: Header mobile CTA says "Let's Talk!" instead of "New Game"
+   - W23: `prefers-reduced-motion` not checked on most infinite animations
+   - W24: ~25 concurrent infinite Framer Motion animations on `/book`
+
+**Commits this session:**
+- `0da0eec` — docs: Session LIX closeout — Vercel deploy fix, code review round 2 (4 critical + 24 warnings)
+
+**Results:**
+- Vercel deployments restored (were broken for ~8 hours)
+- 28 new findings cataloged across all 8 review domains
+- Ready for sprint planning next session
+
+**Key decisions (do not re-debate):**
+- Review-only session — catalog all findings before fixing any (same approach as Session LVII)
+- CRON_SECRET fix via CLI remove+re-add (not dashboard edit)
+
+**What must happen next:**
+1. Sprint-plan Round 2 fixes: start with criticals (C1-C4), then high-priority warnings
+2. Suggested sprint structure: Sprint 1 = C1-C4 + W6-W7 (quick fixes), Sprint 2 = W1-W5 (infrastructure), Sprint 3 = W8-W12 (pipeline + performance)
+3. Monitor production cron runs (check `pipeline_logs` after 8am UTC)
+4. Build Work page (needs user content direction)
+
+---
 
 ### Session LVIII Summary (February 26, 2026)
 
