@@ -1,0 +1,86 @@
+session_id: "LVI"
+date: "2026-02-26"
+branch: main
+version: "0.35.0"  # MINOR: Drop chatbot, Vercel Analytics, full Careers page
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "MQM9aJOQY6ZK6ku2Iuuo"
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP
+  pages: 137
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "No document creation paths changed. Careers form reuses existing /api/lead endpoint."
+
+commits:
+  - hash: "27a18ab"
+    message: "feat: Drop chatbot, add Vercel Analytics, build Careers page"
+  - hash: "5b26261"
+    message: "docs: Session LVI closeout — chatbot dropped, analytics, careers page"
+
+artifacts_updated:
+  - "CLAUDE.md — Removed Chatbot section"
+  - "app/layout.tsx — Added Analytics + SpeedInsights components"
+  - "app/careers/page.tsx — Complete rewrite from stub to full page"
+  - "components/careers/CareersHero.tsx — New: GradientText hero"
+  - "components/careers/CultureSection.tsx — New: 4 value cards (remote-first, senior, AI-native, irreverent)"
+  - "components/careers/RolesSection.tsx — New: 2 role cards with responsibilities + qualifications"
+  - "components/careers/CareersContact.tsx — New: Reuses ContactForm with source=careers"
+  - "lib/schema/careers-faq.ts — New: 5 answer capsules"
+  - "lib/schema/breadcrumbs.ts — Added careersBreadcrumb()"
+  - "docs/roadmap.md — Dropped chatbot, marked analytics + careers done, added Session LVI"
+  - "docs/HANDOFF.md — Removed chatbot from next actions"
+
+decisions_made:
+  - decision: "Chatbot (chaDbot) permanently dropped from scope"
+    rationale: "Zero AEO value (AI models don't crawl chatbot responses), no differentiation (every agency has one), conversion funnel pressure release valve. The autonomous content pipeline is the real AI differentiator."
+    reversible: true
+  - decision: "Careers roles are fabricated"
+    rationale: "User directive — AI Workflow Engineer and Senior B2B Marketing Strategist are aspirational/representational, not actual open positions."
+    reversible: true
+  - decision: "Careers form reuses existing lead API with source='careers'"
+    rationale: "No need for separate application system. Submissions go to same LEAD_RECIPIENTS. Source field distinguishes career inquiries from contact leads."
+    reversible: true
+
+known_risks:
+  - risk: "First production cron runs still not observed"
+    mitigation: "Check pipeline_logs collection after 8am UTC to verify cron execution"
+    severity: medium
+  - risk: "Content prompt forbidden term rejection rate may still be high"
+    mitigation: "Monitor pipeline_logs for quality check failures, tune prompts further if needed"
+    severity: low
+
+explicitly_deferred:
+  - "Work page — last remaining stub, needs case study content (real or fabricated)"
+  - "Pipeline monitoring — check if production crons have actually fired"
+  - "Domain configuration — still on vercel.app"
+  - "OG images / social cards — none yet"
+  - "Video pipeline — Phase 4, untouched"
+
+next_actions:
+  - "Monitor first production cron runs — check pipeline_logs after 8am UTC"
+  - "Build Work page — case study showcase (needs content direction from user)"
+  - "Configure production domain when ready"
+  - "Tune content prompts further if forbidden term rejection rate stays high"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All API clients use pure fetch — no SDK dependencies"
+  - "Insights section display name is now Grist — URLs stay at /insights/*"
+  - "11 content types: blog, faq, glossary, comparison, expert-qa, news, case_study, industry_brief, video, tool, infographic"
+  - "Pipeline daily budget: $5/day, per-type caps in content-guardrails.ts"
+  - "Cron auth: Bearer token via CRON_SECRET env var"
+  - "pipeline_logs TTL: 30 days auto-expiry"
+  - "No fractional CMO content in generation pipeline"
+  - "No chatbot — dropped from scope Session LVI"
+  - "Careers form submissions use source='careers', ctaId='careers-form' via existing /api/lead"

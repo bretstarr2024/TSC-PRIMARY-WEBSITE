@@ -1,16 +1,64 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 26, 2026 (Session LV)
+**Last Updated:** February 26, 2026 (Session LVI)
 
 ---
 
 ## Current Phase: Phase 2 — Pipeline ACTIVE + Content Generating Autonomously
 
-The site is live with **137 pages** across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, and a **fully activated autonomous content pipeline**. All 3 Vercel cron jobs are auth-protected via CRON_SECRET, MongoDB indexes are in place (including TTL auto-expiry on pipeline_logs), and the pipeline has been tested end-to-end with 11 items published successfully.
+The site is live with **137 pages** across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, Vercel Analytics + Speed Insights, and a **fully activated autonomous content pipeline**. All 3 Vercel cron jobs are auth-protected via CRON_SECRET, MongoDB indexes are in place, and the pipeline has been tested end-to-end with 11 items published successfully. Chatbot was evaluated and dropped from scope. Only the Work page remains as a stub.
 
-- **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database), Resend email, 3 Vercel cron jobs (ACTIVE — CRON_SECRET set)
-- **Next actions:** Monitor first production cron runs, Vercel Analytics
-- **Roadmap:** See `docs/roadmap.md` Session LV
+- **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database), Resend email, 3 Vercel cron jobs (ACTIVE — CRON_SECRET set), Vercel Analytics + Speed Insights
+- **Next actions:** Monitor production cron runs, build Work page, configure domain
+- **Roadmap:** See `docs/roadmap.md` Session LVI
+
+### Session LVI Summary (February 26, 2026)
+
+**Focus:** Drop chatbot from scope, initialize Vercel Analytics, build full Careers page.
+
+**What was done:**
+
+1. **Chatbot (chaDbot) permanently dropped from scope:**
+   - Removed from CLAUDE.md (entire section), roadmap.md (scope, Phase 3 goal, Session XIII, all "still needed" lists), HANDOFF.md (next actions)
+   - Rationale: Zero AEO value, no differentiation, conversion funnel pressure release valve
+
+2. **Vercel Analytics + Speed Insights initialized:**
+   - `app/layout.tsx` — Added `<Analytics />` from `@vercel/analytics/react` and `<SpeedInsights />` from `@vercel/speed-insights/next`
+   - Dashboards live at Vercel project → Analytics and Speed Insights tabs
+
+3. **Careers page built (6 sections, 5 new components):**
+   - `components/careers/CareersHero.tsx` — GradientText "Careers" + "We hire people who build things" subhead
+   - `components/careers/CultureSection.tsx` — 4 glass value cards: Remote-first, Senior by default, AI-native ops, Irreverent on purpose
+   - `components/careers/RolesSection.tsx` — AI Workflow Engineer (Neon Cactus accent) + Senior B2B Marketing Strategist (Tidal Wave accent), each with responsibilities + qualifications
+   - `components/careers/CareersContact.tsx` — Reuses ContactForm with `source="careers"`, `ctaId="careers-form"`
+   - `lib/schema/careers-faq.ts` — 5 answer capsules (remote-first, interview process, agency experience, AI role details, how to apply)
+   - `lib/schema/breadcrumbs.ts` — Added `careersBreadcrumb()`
+   - `app/careers/page.tsx` — Full page with BreadcrumbList + FAQPage JSON-LD, PacManGameTrigger preserved
+   - Form submissions → same `/api/lead` → same LEAD_RECIPIENTS
+
+**Commits this session:**
+- `27a18ab` — feat: Drop chatbot, add Vercel Analytics, build Careers page
+- `5b26261` — docs: Session LVI closeout — chatbot dropped, analytics, careers page
+
+**Results:**
+- Chatbot permanently removed from roadmap
+- Vercel Analytics + Speed Insights collecting data on next deploy
+- Careers page fully built — no longer a stub
+- Only Work page remains as a stub
+- 137 pages, 0 type errors
+
+**Key decisions (do not re-debate):**
+- Chatbot has no AEO value and is not coming back. The content pipeline is the AI differentiator.
+- Careers roles are fabricated per user directive (representational, not actual open positions)
+- No separate application system — careers form goes to same LEAD_RECIPIENTS with `source: "careers"`
+
+**What must happen next:**
+1. Monitor first production cron runs (check `pipeline_logs` after 8am UTC)
+2. Build Work page (needs content direction — real or fabricated case studies)
+3. Configure production domain when ready
+4. Tune content prompts if forbidden term rejection rate stays high
+
+---
 
 ### Session LV Summary (February 26, 2026)
 
