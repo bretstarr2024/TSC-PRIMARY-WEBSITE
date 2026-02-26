@@ -26,7 +26,7 @@ export default function WorkPage() {
             <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
               <GradientText>Work</GradientText>
             </h1>
-            <p className="text-xl text-shroomy max-w-2xl">
+            <p className="text-xl md:text-2xl text-shroomy leading-relaxed max-w-2xl">
               Coming soon.
             </p>
           </AnimatedSection>
