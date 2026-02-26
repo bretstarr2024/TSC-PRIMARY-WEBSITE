@@ -7,8 +7,8 @@ deployment:
   platform: vercel
   url: "tsc-primary-website.vercel.app"
   environment: production
-  job_id: "pending"
-  status: pending
+  job_id: "gzCZsA1DkfNEgjEIK4Q0"
+  status: triggered
 
 build_verification:
   next_build: PASS
