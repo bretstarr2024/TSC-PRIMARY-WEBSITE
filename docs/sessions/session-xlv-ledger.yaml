@@ -1,0 +1,65 @@
+session_id: "XLV"
+date: "2026-02-25"
+branch: main
+version: "0.28.3"  # PATCH: Hero button repositioned below sphere + contact starfield fade
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "pending"
+  status: pending
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "CSS/layout-only changes — no data model modifications."
+
+commits:
+  - hash: "8115bc3"
+    message: "feat: Move arcade button below sphere, add starfield fade to contact hero"
+
+artifacts_updated:
+  - "components/home/HeroSection.tsx — Moved ArcadeButton from inside centered content div to absolute bottom-[22%] position below the particle sphere"
+  - "components/contact/ContactHero.tsx — Added h-64 bottom gradient fade (transparent → #141213) matching homepage treatment"
+  - "docs/roadmap.md — Session XLV added, status updated, Session XLVI upcoming"
+
+decisions_made:
+  - decision: "ArcadeButton positioned at absolute bottom-[22%] of hero section"
+    rationale: "User requested 1/3 of the gap between sphere bottom and WhoWeAre section. 22% from bottom approximates this given min-h-screen hero with centered sphere and -mt-20/-mt-28 overlap."
+    reversible: true
+  - decision: "Contact hero gets same h-64 gradient fade as homepage"
+    rationale: "User liked the homepage starfield dissolve and requested the same treatment for the contact page."
+    reversible: true
+
+explicitly_deferred:
+  - "Pipeline infrastructure from AEO — Session XLVI"
+  - "MongoDB index on leads collection (timestamp: -1) — Session XLVI"
+  - "Chatbot (chaDbot) deployment — future session"
+  - "Expand Game Over concept to other page copy — future session"
+  - "Vercel Analytics initialization — future session"
+
+next_actions:
+  - "Copy pipeline infrastructure from AEO (lib/pipeline/*.ts)"
+  - "Create MongoDB index on leads collection (timestamp: -1)"
+  - "Expand Game Over concept to other page copy/headlines"
+  - "Build chatbot (chaDbot) — copy RAG from AEO"
+  - "Initialize Vercel Analytics"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "Homepage hero: GAME OVER headline + subhead centered in sphere; ArcadeButton below sphere at bottom-[22%]"
+  - "Hero has bottom fade gradient (h-64) dissolving starfield into background"
+  - "Contact hero also has bottom fade gradient (h-64) dissolving starfield"
+  - "WhoWeAreSection layers over fading starfield with negative top margin"
+  - "CoinSlotCTA is in the bottom CtaSection (not the hero)"
+  - "All general CTAs -> /contact; service-specific CTAs -> /book"
+  - "Pricing page is DONE per user directive — no further changes unless requested"
+  - "9 arcade games: all triggered by ArcadeButton (motion.div with role=button)"
+  - "Game Over is the site's creative concept"

@@ -1,16 +1,50 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 25, 2026 (Session XLIV)
+**Last Updated:** February 25, 2026 (Session XLV)
 
 ---
 
 ## Current Phase: Phase 1 COMPLETE + Contact Live
 
-The site is live with **121 pages** across 10 content types, 9 verticals, a full Pricing page (declared done), 94 answer capsules, **9 hidden arcade games**, site-wide CTA tracking, **full email infrastructure** (Resend verified), a **full Contact page** with "CONTINUE?" arcade headline + dual-path UX (form + calendar) + lead API, and **CTA routing migration** (general CTAs → /contact, service-specific → /book). Homepage hero has smooth starfield-to-content transition — gradient fade dissolves particles into background, "Who We Are" section layers over the fading stars.
+The site is live with **121 pages** across 10 content types, 9 verticals, a full Pricing page (declared done), 94 answer capsules, **9 hidden arcade games**, site-wide CTA tracking, **full email infrastructure** (Resend verified), a **full Contact page** with "CONTINUE?" arcade headline + dual-path UX (form + calendar) + lead API, and **CTA routing migration** (general CTAs → /contact, service-specific → /book). Homepage hero has smooth starfield-to-content transition — gradient fade dissolves particles into background, "Who We Are" section layers over the fading stars. Arcade button now sits below the particle sphere, and contact hero has the same starfield fade treatment.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections + `interactions` + `leads` collections), Vercel CLI linked
 - **Next actions:** Copy pipeline infrastructure from AEO, create `leads` collection index, expand Game Over concept
-- **Roadmap:** See `docs/roadmap.md` Session XLIV
+- **Roadmap:** See `docs/roadmap.md` Session XLV
+
+### Session XLV Summary (February 25, 2026)
+
+**Focus:** Final homepage hero polish — move arcade button below the sphere; add starfield fade to contact page hero.
+
+**What was done:**
+
+1. **ArcadeButton repositioned** (`components/home/HeroSection.tsx`):
+   - Moved from above the GAME OVER headline (inside the centered content div) to below the particle sphere
+   - Absolutely positioned at `bottom-[22%]` — approximately 1/3 of the gap between sphere bottom and WhoWeAre section
+   - Hero headline + subhead now stand alone inside the sphere, cleaner composition
+
+2. **Contact hero starfield fade** (`components/contact/ContactHero.tsx`):
+   - Added `h-64` bottom gradient overlay (transparent → #141213), matching the homepage treatment
+   - Starfield particles now dissolve smoothly instead of hard-cutting at the section boundary
+
+**Commits this session:**
+- `8115bc3` — feat: Move arcade button below sphere, add starfield fade to contact hero
+
+**Results:**
+- Homepage hero is cleaner — headline/subhead centered in sphere, button deliberately placed below
+- Contact page transition matches homepage quality
+- Build: 121 pages, PASS
+
+**Key decisions (do not re-debate):**
+- ArcadeButton at bottom-[22%] = ~1/3 into the gap between sphere and WhoWeAre section — user directive
+- Contact hero gets same h-64 gradient fade as homepage — user requested it
+
+**What must happen next:**
+- Copy pipeline infrastructure from AEO
+- Create MongoDB index on `leads` collection (timestamp: -1)
+- Expand Game Over concept to other page copy/headlines
+
+---
 
 ### Session XLIV Summary (February 25, 2026)
 

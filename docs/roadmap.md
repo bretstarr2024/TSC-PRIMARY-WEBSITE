@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XLIV** | Last Updated: February 25, 2026
+**Status: SESSION XLV** | Last Updated: February 25, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -847,7 +847,17 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 121 pages, PASS
 
-#### Session XLV (upcoming): Pipeline Infrastructure + Game Over Expansion
+#### Session XLV: Homepage Hero Button + Contact Fade ✅ COMPLETE (Feb 25, 2026)
+
+**Focus:** Final homepage hero polish — move 1_player arcade button below the sphere; add starfield fade to contact page hero.
+
+**Files modified:**
+- [x] `components/home/HeroSection.tsx` — Moved ArcadeButton from above headline to below sphere, absolutely positioned at bottom-[22%] (1/3 into gap between sphere and WhoWeAre section)
+- [x] `components/contact/ContactHero.tsx` — Added h-64 bottom gradient fade (transparent → #141213), same treatment as homepage hero
+
+**Build:** 121 pages, PASS
+
+#### Session XLVI (upcoming): Pipeline Infrastructure + Game Over Expansion
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
