@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION L** | Last Updated: February 26, 2026
+**Status: SESSION LI** | Last Updated: February 26, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -936,7 +936,21 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 121 pages, PASS
 
-#### Session LI (upcoming): Pipeline Infrastructure + Game Over Expansion
+#### Session LI: Galaga Firing Tuning — DONE ✅ COMPLETE (Feb 26, 2026)
+
+**Focus:** Tune Galaga firing mechanics — remove restrictive 3-bullet cap for generous 10-bullet cap with faster cooldown, making button-mashing feel right. Galaga declared DONE by user.
+
+**Files modified:**
+- [x] `components/work/GalagaGame.tsx` — Removed MAX_BULLETS constant (was 3, dual 6), replaced with inline 10-bullet cap. Cooldown 7→3 frames. Unlimited mashing feel without screen flooding.
+
+**Key decisions:**
+- [x] 10 bullets on screen at once (tested unlimited first — too much)
+- [x] Cooldown 3 frames (~50ms at 60fps) — fast enough to feel like button mashing
+- [x] Galaga declared DONE by user — no further changes unless requested
+
+**Build:** 121 pages, PASS
+
+#### Session LII (upcoming): Pipeline Infrastructure + Game Over Expansion
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
@@ -945,7 +959,6 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 - [ ] Build chatbot (chaDbot) — copy RAG from AEO
 - [ ] Initialize Vercel Analytics (`@vercel/analytics` already installed)
 - [ ] Create MongoDB index on `leads` collection (timestamp: -1)
-- [ ] Verify Galaga challenge stage speed with user on production
 
 ---
 

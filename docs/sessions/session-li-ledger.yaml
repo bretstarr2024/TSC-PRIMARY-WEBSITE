@@ -1,0 +1,74 @@
+session_id: "LI"
+date: "2026-02-26"
+branch: main
+version: "0.30.1"  # PATCH: Tune Galaga firing mechanics — 10-bullet cap, faster cooldown
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "TBD"
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "Client-side game code only — no MongoDB schema changes."
+
+commits:
+  - hash: "88a4971"
+    message: "feat: Tune Galaga firing — 10-bullet cap with fast cooldown"
+
+artifacts_updated:
+  - "components/work/GalagaGame.tsx — Removed MAX_BULLETS constant (was 3/6), replaced with inline 10-bullet cap. Cooldown 7→3 frames."
+
+decisions_made:
+  - decision: "Galaga firing: 10 bullets on screen, 3-frame cooldown"
+    rationale: "User tested unlimited ammo first — too much. 10-bullet cap with fast cooldown gives satisfying mashing without flooding the screen."
+    reversible: true
+  - decision: "Galaga game declared DONE"
+    rationale: "User tested and confirmed 'It's perfect. We can call galaga done.'"
+    reversible: true
+
+known_risks:
+  - risk: "Game loop uses requestAnimationFrame without delta-time normalization"
+    mitigation: "Works correctly on 60Hz displays. On 120Hz displays game runs 2x fast. All 9 games share this pattern — would need a global fix."
+    severity: low
+
+explicitly_deferred:
+  - "Pipeline infrastructure from AEO — Session LII"
+  - "MongoDB index on leads collection (timestamp: -1) — Session LII"
+  - "Chatbot (chaDbot) deployment — future session"
+  - "Expand Game Over concept to other page copy — future session"
+  - "Vercel Analytics initialization — future session"
+  - "SME review of expanded service descriptions — future session"
+  - "Delta-time normalization for all arcade games — future session (only matters for 120Hz displays)"
+
+next_actions:
+  - "Copy pipeline infrastructure from AEO (lib/pipeline/*.ts)"
+  - "Create MongoDB index on leads collection (timestamp: -1)"
+  - "Expand Game Over concept to other page copy/headlines"
+  - "Build chatbot (chaDbot) — copy RAG from AEO"
+  - "Initialize Vercel Analytics"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "Homepage hero: flex items-center justify-center (NOT flex-col)"
+  - "All page heroes use GradientText single-word headline + subhead pattern"
+  - "Services page is DONE per user directive — no further changes unless requested"
+  - "Homepage is DONE per user directive — no further changes unless requested"
+  - "Breakout game is DONE per user directive"
+  - "Pricing page is DONE per user directive"
+  - "Galaga game is DONE per user directive"
+  - "ServiceDualUniverse and ServicesSection share same capability lists — keep in sync"
+  - "All general CTAs -> /contact; service-specific CTAs -> /book"
+  - "9 arcade games: all triggered by ArcadeButton (motion.div with role=button)"
+  - "Game Over is the site's creative concept"
+  - "Galaga dual fighter is immune to tractor beams"
+  - "Galaga firing: 10-bullet cap, 3-frame cooldown"

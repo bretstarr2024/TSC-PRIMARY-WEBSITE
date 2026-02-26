@@ -1,16 +1,50 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 26, 2026 (Session L)
+**Last Updated:** February 26, 2026 (Session LI)
 
 ---
 
-## Current Phase: Phase 1 COMPLETE + Contact Live + Homepage & Services DONE + Galaga Rewritten
+## Current Phase: Phase 1 COMPLETE + All 9 Arcade Games DONE + Pipeline Infrastructure Next
 
-The site is live with **121 pages** across 10 content types, 9 verticals, **37 services** (30 strategic + 7 AI) with AEO-ready content, a full Pricing page (declared done), 94 answer capsules, **9 hidden arcade games** (all polished — Galaga completely rewritten to arcade-faithful in Session L), site-wide CTA tracking, **full email infrastructure** (Resend verified), a **full Contact page** with "CONTINUE?" arcade headline + dual-path UX (form + calendar) + lead API, and **CTA routing migration** (general CTAs → /contact, service-specific → /book). All major page heroes now use a consistent GradientText single-word headline + descriptive subhead pattern. Homepage and Services pages are **declared DONE** by the user.
+The site is live with **121 pages** across 10 content types, 9 verticals, **37 services** (30 strategic + 7 AI) with AEO-ready content, a full Pricing page (declared done), 94 answer capsules, **9 hidden arcade games** (all declared DONE — Galaga firing tuned in Session LI), site-wide CTA tracking, **full email infrastructure** (Resend verified), a **full Contact page** with "CONTINUE?" arcade headline + dual-path UX (form + calendar) + lead API, and **CTA routing migration** (general CTAs → /contact, service-specific → /book). All major page heroes now use a consistent GradientText single-word headline + descriptive subhead pattern. Homepage, Services, Pricing, and all arcade games are **declared DONE** by the user.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections + `interactions` + `leads` collections), Vercel CLI linked
-- **Next actions:** Verify Galaga challenge stage speed on production, copy pipeline infrastructure from AEO, create `leads` collection index
-- **Roadmap:** See `docs/roadmap.md` Session L
+- **Next actions:** Copy pipeline infrastructure from AEO, create `leads` collection index, build chatbot
+- **Roadmap:** See `docs/roadmap.md` Session LI
+
+### Session LI Summary (February 26, 2026)
+
+**Focus:** Tune Galaga firing mechanics — remove restrictive 3-bullet cap for generous 10-bullet on-screen cap with faster cooldown. Galaga declared DONE.
+
+**What was done:**
+
+1. **Galaga firing tuning** (`components/work/GalagaGame.tsx`):
+   - Removed `MAX_BULLETS` constant (was 3 normal, 6 dual fighter)
+   - Replaced with inline 10-bullet on-screen cap (no distinction between normal/dual)
+   - Fire cooldown reduced from 7 frames to 3 frames (~50ms at 60fps)
+   - Tested unlimited ammo first — user said "way too much," settled on 10-bullet cap
+   - Result: satisfying button-mashing without screen flooding
+
+**Commits this session:**
+- (see ledger for hashes after commit)
+
+**Results:**
+- Galaga firing feels right — fast mashing with reasonable cap
+- User declared Galaga DONE — no further changes unless requested
+- All 9 arcade games now declared DONE
+
+**Key decisions (do not re-debate):**
+- 10 bullets on screen at once (tested unlimited — rejected)
+- 3-frame cooldown for fast mashing feel
+- Galaga is DONE per user directive
+
+**What must happen next:**
+- Copy pipeline infrastructure from AEO (lib/pipeline/*.ts)
+- Create MongoDB index on `leads` collection (timestamp: -1)
+- Build chatbot (chaDbot) — copy RAG from AEO
+- Initialize Vercel Analytics
+
+---
 
 ### Session L Summary (February 26, 2026)
 
