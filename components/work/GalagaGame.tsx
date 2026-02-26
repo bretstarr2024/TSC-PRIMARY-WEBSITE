@@ -24,8 +24,7 @@ const PLAYER_H = 20;
 const PLAYER_SPEED = 5;
 const BULLET_SPEED = 8;
 const ENEMY_BULLET_SPEED = 4;
-const MAX_BULLETS = 3;
-const FIRE_COOLDOWN = 7;
+const FIRE_COOLDOWN = 3;
 const FORMATION_ROWS = 5;
 const FORMATION_COLS = 10;
 const ENEMY_SIZE = 22;
@@ -1043,8 +1042,7 @@ export function GalagaGame({ onClose }: { onClose: () => void }) {
             g.playerX = Math.min(w - PLAYER_W / 2 - 5, g.playerX + PLAYER_SPEED);
 
           if (g.fireCooldown > 0) g.fireCooldown--;
-          const maxBul = g.dualFighter ? 6 : MAX_BULLETS;
-          if ((k.has(' ') || ta['fire']) && g.fireCooldown <= 0 && g.bullets.length < maxBul) {
+          if ((k.has(' ') || ta['fire']) && g.fireCooldown <= 0 && g.bullets.length < 10) {
             if (g.dualFighter) {
               g.bullets.push({ x: g.playerX - 10, y: playerY - PLAYER_H / 2, vy: -BULLET_SPEED });
               g.bullets.push({ x: g.playerX + 10, y: playerY - PLAYER_H / 2, vy: -BULLET_SPEED });
