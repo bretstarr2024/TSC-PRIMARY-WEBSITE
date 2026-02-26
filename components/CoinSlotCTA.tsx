@@ -40,12 +40,13 @@ export function CoinSlotCTA({
       <Image
         src="/images/coin_slot.png"
         alt="Insert coin to play"
-        width={200}
-        height={200}
+        width={128}
+        height={128}
         unoptimized
         className="relative z-10"
         style={{
-          filter: 'drop-shadow(0 0 8px rgba(255,89,16,0.5)) drop-shadow(0 0 20px rgba(255,89,16,0.25))',
+          imageRendering: 'pixelated',
+          filter: 'drop-shadow(0 0 5px rgba(255,89,16,0.5)) drop-shadow(0 0 14px rgba(255,89,16,0.25))',
         }}
       />
 
