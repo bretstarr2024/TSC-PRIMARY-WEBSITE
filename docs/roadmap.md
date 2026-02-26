@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XLII** | Last Updated: February 25, 2026
+**Status: SESSION XLIII** | Last Updated: February 25, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -827,7 +827,17 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 121 pages, PASS
 
-#### Session XLIII (upcoming): Pipeline Infrastructure + Game Over Expansion
+#### Session XLIII: Homepage Hero Refinement ✅ COMPLETE (Feb 25, 2026)
+
+**Focus:** Declutter homepage hero — move CoinSlotCTA to bottom-of-page CTA section, center remaining hero content within the particle sphere.
+
+**Files modified:**
+- [x] `components/home/HeroSection.tsx` — Removed CoinSlotCTA, tightened subhead (max-w 600→480px, mt-8→mt-10), hero content now: arcade button + GAME OVER headline + subhead only
+- [x] `components/home/CtaSection.tsx` — Replaced MagneticButton "New Game" with CoinSlotCTA coin slot image
+
+**Build:** 121 pages, PASS
+
+#### Session XLIV (upcoming): Pipeline Infrastructure + Game Over Expansion
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
@@ -835,6 +845,7 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 - [ ] Expand "Game Over" concept to other page copy/headlines
 - [ ] Build chatbot (chaDbot) — copy RAG from AEO
 - [ ] Initialize Vercel Analytics (`@vercel/analytics` already installed)
+- [ ] Create MongoDB index on `leads` collection (timestamp: -1)
 
 ---
 

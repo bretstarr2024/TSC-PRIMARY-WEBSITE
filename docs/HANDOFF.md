@@ -1,16 +1,57 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 25, 2026 (Session XLII)
+**Last Updated:** February 25, 2026 (Session XLIII)
 
 ---
 
 ## Current Phase: Phase 1 COMPLETE + Contact Live
 
-The site is live with **121 pages** across 10 content types, 9 verticals, a full Pricing page (declared done), 94 answer capsules (89 + 5 new on Contact), **9 hidden arcade games**, site-wide CTA tracking, "New Game" CTA rebrand, pixel-perfect CoinSlotCTA, polished hero composition, **full email infrastructure** (Resend verified), and now a **full Contact page** with "CONTINUE?" arcade headline, dual-path UX (form + calendar), lead API with MongoDB storage + Resend notifications, and **CTA routing migration** (general CTAs → /contact, service-specific → /book).
+The site is live with **121 pages** across 10 content types, 9 verticals, a full Pricing page (declared done), 94 answer capsules, **9 hidden arcade games**, site-wide CTA tracking, **full email infrastructure** (Resend verified), a **full Contact page** with "CONTINUE?" arcade headline + dual-path UX (form + calendar) + lead API, and **CTA routing migration** (general CTAs → /contact, service-specific → /book). Homepage hero has been decluttered — CoinSlotCTA moved to bottom CTA section, hero content centered within the particle sphere.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections + `interactions` + `leads` collections), Vercel CLI linked
-- **Next actions:** Test contact form in production, create `leads` collection index, copy pipeline infrastructure from AEO
-- **Roadmap:** See `docs/roadmap.md` Session XLII
+- **Next actions:** Copy pipeline infrastructure from AEO, create `leads` collection index, expand Game Over concept
+- **Roadmap:** See `docs/roadmap.md` Session XLIII
+
+### Session XLIII Summary (February 25, 2026)
+
+**Focus:** Declutter homepage hero — move CoinSlotCTA to bottom-of-page CTA, center content within the particle sphere.
+
+**What was done:**
+
+1. **Homepage hero decluttered** (`components/home/HeroSection.tsx`):
+   - Removed CoinSlotCTA from hero — too much visual competition
+   - Remaining content (arcade button, GAME OVER headline, subhead) now sits cleanly inside the particle sphere
+   - Subhead max-width tightened from 600px → 480px for better containment
+   - Spacing adjusted (mt-8 → mt-10) for breathing room
+
+2. **CoinSlotCTA moved to bottom CTA** (`components/home/CtaSection.tsx`):
+   - Replaced MagneticButton "New Game" text button with the CoinSlotCTA coin slot image
+   - Stronger visual CTA — carries the arcade metaphor to the end of the page
+
+3. **Pre-existing fixes committed:**
+   - Removed unused CustomCursor from root layout (`app/layout.tsx`)
+   - Fixed Cal.com embed resize jitter — only grows, never shrinks (`components/contact/ContactCalendar.tsx`)
+
+**Commits this session:**
+- `0906c84` — fix: Remove CustomCursor, improve Cal.com embed resize stability
+- `e642593` — feat: Move CoinSlotCTA from hero to bottom CTA, center hero content in sphere
+
+**Results:**
+- Homepage hero is cleaner — 3 elements (button, headline, subhead) centered in sphere
+- CoinSlotCTA gets its own moment at the bottom of the page
+- Build: 121 pages, PASS
+
+**Key decisions (do not re-debate):**
+- CoinSlotCTA belongs at the bottom CTA section, not the hero — user directive
+- Hero content must feel intentionally placed inside the sphere boundary
+- CustomCursor is removed (was unused)
+
+**What must happen next:**
+- Copy pipeline infrastructure from AEO
+- Create MongoDB index on `leads` collection (timestamp: -1)
+- Expand Game Over concept to other page copy/headlines
+
+---
 
 ### Session XLII Summary (February 25, 2026)
 

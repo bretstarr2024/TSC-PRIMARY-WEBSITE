@@ -1,0 +1,71 @@
+session_id: "XLIII"
+date: "2026-02-25"
+branch: main
+version: "0.28.1"  # PATCH: Homepage hero declutter — CoinSlotCTA moved to bottom CTA section
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "TBD"
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "No data model changes this session — layout-only refactor."
+
+commits:
+  - hash: "0906c84"
+    message: "fix: Remove CustomCursor, improve Cal.com embed resize stability"
+  - hash: "e642593"
+    message: "feat: Move CoinSlotCTA from hero to bottom CTA, center hero content in sphere"
+
+artifacts_updated:
+  - "components/home/HeroSection.tsx — Removed CoinSlotCTA, tightened subhead (max-w 600→480px, mt-8→mt-10)"
+  - "components/home/CtaSection.tsx — Replaced MagneticButton 'New Game' with CoinSlotCTA"
+  - "app/layout.tsx — Removed CustomCursor (pre-existing uncommitted change)"
+  - "components/contact/ContactCalendar.tsx — Cal.com resize: only grow, never shrink (pre-existing fix)"
+  - "docs/roadmap.md — Session XLIII added, status updated"
+
+decisions_made:
+  - decision: "CoinSlotCTA moves from hero to bottom-of-page CtaSection"
+    rationale: "Hero was too cluttered — coin slot competed with headline and subhead. Moving it to the bottom gives it its own moment as the final CTA."
+    reversible: true
+  - decision: "Hero content (arcade button, GAME OVER, subhead) centered within the particle sphere"
+    rationale: "User directive: 'placed with intention inside the sphere.' Removing the coin slot and tightening the subhead width keeps all content visually inside the sphere boundary."
+    reversible: true
+  - decision: "CoinSlotCTA replaces MagneticButton 'New Game' in CtaSection"
+    rationale: "The coin slot image is a stronger visual CTA than a text button — it carries the arcade metaphor through to the bottom of the page."
+    reversible: true
+
+explicitly_deferred:
+  - "Pipeline infrastructure from AEO — Session XLIV"
+  - "MongoDB index on leads collection (timestamp: -1) — Session XLIV"
+  - "Chatbot (chaDbot) deployment — future session"
+  - "Expand Game Over concept to other page copy — future session"
+
+next_actions:
+  - "Copy pipeline infrastructure from AEO (lib/pipeline/*.ts)"
+  - "Create MongoDB index on leads collection (timestamp: -1)"
+  - "Expand Game Over concept to other page copy/headlines"
+  - "Build chatbot (chaDbot) — copy RAG from AEO"
+  - "Initialize Vercel Analytics"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "Homepage hero: arcade button + GAME OVER headline + subhead only (no CoinSlotCTA)"
+  - "CoinSlotCTA is now in the bottom CtaSection (not the hero)"
+  - "CustomCursor has been removed from root layout"
+  - "Cal.com embed resize only grows, never shrinks (prevents page jumping)"
+  - "All general CTAs -> /contact (dual-path: form + calendar)"
+  - "Service-specific CTAs (pricing cards, service category buttons with ?service=) -> /book (direct calendar)"
+  - "Pricing page is DONE per user directive — no further changes unless requested"
+  - "9 arcade games: all triggered by ArcadeButton (motion.div with role=button)"
+  - "Game Over is the site's creative concept"
