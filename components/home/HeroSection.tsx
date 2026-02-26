@@ -45,7 +45,7 @@ export function HeroSection() {
           style={{ filter: 'drop-shadow(0 0 15px rgba(255,89,16,0.4)) drop-shadow(0 0 40px rgba(255,89,16,0.2))' }}
         >
           <h1
-            className="font-arcade leading-none tracking-[0.15em] text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl"
+            className="font-arcade leading-none tracking-[0.15em] text-5xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem]"
             style={{ WebkitFontSmoothing: 'none', MozOsxFontSmoothing: 'unset' } as React.CSSProperties}
           >
             {/* GAME */}
@@ -113,7 +113,7 @@ export function HeroSection() {
 
         {/* Sub-headline */}
         <motion.p
-          className="mt-10 text-base md:text-lg text-shroomy max-w-[600px] mx-auto leading-relaxed"
+          className="mt-10 text-lg md:text-xl lg:text-2xl text-shroomy max-w-[600px] mx-auto leading-relaxed"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 1.8 }}
@@ -126,7 +126,7 @@ export function HeroSection() {
 
       {/* Arcade button — centered between sphere bottom and section bottom */}
       {!playing && (
-        <div className="absolute bottom-[20vh] left-1/2 -translate-x-1/2 z-10">
+        <div className="absolute bottom-[13vh] left-1/2 -translate-x-1/2 z-10">
           <ArcadeButton onClick={() => setPlaying(true)} delay={2.8} />
         </div>
       )}
