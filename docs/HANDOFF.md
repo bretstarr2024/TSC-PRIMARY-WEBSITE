@@ -1,16 +1,60 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 25, 2026 (Session XLV)
+**Last Updated:** February 25, 2026 (Session XLVI)
 
 ---
 
 ## Current Phase: Phase 1 COMPLETE + Contact Live
 
-The site is live with **121 pages** across 10 content types, 9 verticals, a full Pricing page (declared done), 94 answer capsules, **9 hidden arcade games**, site-wide CTA tracking, **full email infrastructure** (Resend verified), a **full Contact page** with "CONTINUE?" arcade headline + dual-path UX (form + calendar) + lead API, and **CTA routing migration** (general CTAs → /contact, service-specific → /book). Homepage hero has smooth starfield-to-content transition — gradient fade dissolves particles into background, "Who We Are" section layers over the fading stars. Arcade button now sits below the particle sphere, and contact hero has the same starfield fade treatment.
+The site is live with **121 pages** across 10 content types, 9 verticals, a full Pricing page (declared done), 94 answer capsules, **9 hidden arcade games**, site-wide CTA tracking, **full email infrastructure** (Resend verified), a **full Contact page** with "CONTINUE?" arcade headline + dual-path UX (form + calendar) + lead API, and **CTA routing migration** (general CTAs → /contact, service-specific → /book). Homepage hero is clean — GAME OVER headline + subhead centered in the particle sphere, ArcadeButton at the bottom replacing the scroll indicator. Cal.com embeds on both `/contact` and `/book` use smooth CSS height transitions (no jumpiness, no black box, no internal metadata leaked into the notes field).
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections + `interactions` + `leads` collections), Vercel CLI linked
 - **Next actions:** Copy pipeline infrastructure from AEO, create `leads` collection index, expand Game Over concept
-- **Roadmap:** See `docs/roadmap.md` Session XLV
+- **Roadmap:** See `docs/roadmap.md` Session XLVI
+
+### Session XLVI Summary (February 25, 2026)
+
+**Focus:** Move ArcadeButton to replace scroll indicator on homepage hero; fix Cal.com calendar embed issues (metadata leak, jumpiness, black box).
+
+**What was done:**
+
+1. **ArcadeButton replaces scroll indicator** (`components/home/HeroSection.tsx`):
+   - Removed the gradient line scroll indicator and the ArcadeButton from `bottom-[22%]`
+   - ArcadeButton now lives at `bottom-8` — same position the scroll indicator occupied
+   - Delay set to 2.8s so it fades in after the headline animation completes
+   - Hero content is now completely clean: just GAME OVER headline + subhead inside the sphere
+
+2. **Cal.com notes metadata removed** (`components/contact/ContactCalendar.tsx`, `app/book/page.tsx`):
+   - Removed "Source: contact-calendar" / "Source: {ctaId}" from the `notes` URL parameter
+   - This internal tracking data was leaking into the user-visible "Additional notes" field
+   - Service context ("Interested in: Subscription") still passes through when present — useful for the team
+
+3. **Cal.com iframe jumpiness + black box fixed** (both pages):
+   - Replaced "only grow, never shrink" resize logic with smooth CSS `transition: height 0.3s ease`
+   - Height now tracks Cal.com's actual content size in both directions
+   - Reduced initial heights (contact: 700→600px, book: 1000→700px) to eliminate the dark empty rectangle
+   - Iframe uses `h-full` to fill the transitioning container
+
+**Commits this session:**
+- `00269f8` — fix: Replace scroll indicator with ArcadeButton, fix Cal.com embed issues
+
+**Results:**
+- Homepage hero is the cleanest it's been — headline + subhead in sphere, ArcadeButton as a subtle bottom discovery element
+- Cal.com embeds no longer show internal tracking metadata to users
+- Cal.com embeds resize smoothly without jumpiness or dead space
+- Build: 121 pages, PASS
+
+**Key decisions (do not re-debate):**
+- ArcadeButton at bottom-8 replaces the scroll indicator — it has the same visual language (small, floating, animated) and serves double duty (scroll hint + game trigger)
+- Cal.com notes param carries only service context, no internal tracking — user saw "Source: contact-calendar" in the form and correctly flagged it
+- Bidirectional CSS height transitions (0.3s ease) replace "only grow" — eliminates the black box while keeping transitions smooth
+
+**What must happen next:**
+- Copy pipeline infrastructure from AEO
+- Create MongoDB index on `leads` collection (timestamp: -1)
+- Expand Game Over concept to other page copy/headlines
+
+---
 
 ### Session XLV Summary (February 25, 2026)
 

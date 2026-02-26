@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XLV** | Last Updated: February 25, 2026
+**Status: SESSION XLVI** | Last Updated: February 25, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -857,7 +857,19 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 121 pages, PASS
 
-#### Session XLVI (upcoming): Pipeline Infrastructure + Game Over Expansion
+#### Session XLVI: ArcadeButton Scroll Indicator + Cal.com Fixes ✅ COMPLETE (Feb 25, 2026)
+
+**Focus:** Move ArcadeButton to replace scroll indicator on homepage hero; fix Cal.com calendar embed (metadata leak, jumpiness, black box).
+
+**Files modified:**
+- [x] `components/home/HeroSection.tsx` — ArcadeButton replaces scroll indicator at bottom-8; delay 2.8s (fades in after headline animation)
+- [x] `components/contact/ContactCalendar.tsx` — Removed source tracking from Cal.com notes param; smooth CSS height transitions; container ref replaces iframe ref
+- [x] `components/contact/ContactDualPath.tsx` — Removed unused ctaSource prop from ContactCalendar
+- [x] `app/book/page.tsx` — Same Cal.com fixes: removed source tracking, smooth height transitions, container ref
+
+**Build:** 121 pages, PASS
+
+#### Session XLVII (upcoming): Pipeline Infrastructure + Game Over Expansion
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
