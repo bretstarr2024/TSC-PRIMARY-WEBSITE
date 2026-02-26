@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import dynamic from 'next/dynamic';
-import Link from 'next/link';
 import { GradientText } from '@/components/AnimatedText';
 import { ArcadeButton } from '@/components/ArcadeButton';
+import { CoinSlotCTA } from '@/components/CoinSlotCTA';
 
 const HeroParticles = dynamic(
   () => import('./HeroParticles').then((mod) => ({ default: mod.HeroParticles })),
@@ -126,19 +126,14 @@ export function HeroSection() {
           <GradientText className="inline">level up</GradientText>.
         </motion.p>
 
-        {/* CTA button */}
+        {/* CTA button — CoinSlotCTA (arcade coin slot) */}
         <motion.div
-          className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4"
+          className="mt-12 flex items-center justify-center"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 2.4 }}
         >
-          <Link
-            href="/book"
-            className="inline-flex items-center px-8 py-4 text-base font-medium text-white bg-atomic-tangerine rounded-lg hover:bg-hot-sauce transition-colors hover:no-underline"
-          >
-            Let&apos;s Talk!
-          </Link>
+          <CoinSlotCTA href="/book?cta=homepage-hero" ctaId="homepage-hero" />
         </motion.div>
       </div>
 

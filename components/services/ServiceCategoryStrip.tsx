@@ -43,7 +43,7 @@ export function ServiceCategoryStrip({ category, index }: ServiceCategoryStripPr
             <p className="text-shroomy leading-relaxed mb-8 max-w-lg">
               {category.description}
             </p>
-            <MagneticButton href={`/book?service=${encodeURIComponent(category.name)}`} variant="primary">
+            <MagneticButton href={`/book?service=${encodeURIComponent(category.name)}&cta=services-${category.slug}`} variant="primary" ctaId={`services-${category.slug}`}>
               Let&apos;s Talk about {category.name}
             </MagneticButton>
           </AnimatedSection>

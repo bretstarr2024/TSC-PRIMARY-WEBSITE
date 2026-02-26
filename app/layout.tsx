@@ -3,6 +3,7 @@ import { Inter, Press_Start_2P } from "next/font/google";
 import "./globals.css";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { NoiseOverlay } from "@/components/GradientBackground";
+import { TrackingProvider } from "@/components/TrackingProvider";
 import dynamic from "next/dynamic";
 
 const CustomCursor = dynamic(
@@ -75,6 +76,7 @@ export default function RootLayout({
         <SmoothScroll>
           <CustomCursor />
           <NoiseOverlay />
+          <TrackingProvider />
           {children}
         </SmoothScroll>
       </body>

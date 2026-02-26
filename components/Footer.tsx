@@ -100,8 +100,12 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/book"
+                  href="/book?cta=footer"
                   className="text-sm text-atomic-tangerine hover:text-hot-sauce transition-colors hover:no-underline"
+                  data-track-cta="footer"
+                  data-track-component="Footer"
+                  data-track-label="Let's Talk! →"
+                  data-track-destination="/book"
                 >
                   Let&apos;s Talk! →
                 </Link>

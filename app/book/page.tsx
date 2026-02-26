@@ -51,11 +51,15 @@ function BookPageContent() {
   const [activeIndex, setActiveIndex] = useState(0);
   const searchParams = useSearchParams();
   const service = searchParams.get('service');
+  const ctaSource = searchParams.get('cta');
 
-  // Build Cal.com URL with optional service context in notes
+  // Build Cal.com URL with optional service + CTA attribution in notes
   const calBaseUrl = 'https://cal.com/team/tsc/25-50?embed=true&theme=dark&layout=month_view';
-  const calUrl = service
-    ? `${calBaseUrl}&notes=${encodeURIComponent(`Interested in: ${service}`)}`
+  const notesParts: string[] = [];
+  if (service) notesParts.push(`Interested in: ${service}`);
+  if (ctaSource) notesParts.push(`Source: ${ctaSource}`);
+  const calUrl = notesParts.length > 0
+    ? `${calBaseUrl}&notes=${encodeURIComponent(notesParts.join(' | '))}`
     : calBaseUrl;
 
   // Auto-rotate team members every 4 seconds

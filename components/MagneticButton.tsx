@@ -12,6 +12,7 @@ interface MagneticButtonProps {
   variant?: 'primary' | 'secondary';
   isExternal?: boolean;
   magneticStrength?: number;
+  ctaId?: string;
 }
 
 export function MagneticButton({
@@ -22,6 +23,7 @@ export function MagneticButton({
   variant = 'primary',
   isExternal = false,
   magneticStrength = 0.3,
+  ctaId,
 }: MagneticButtonProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -67,14 +69,19 @@ export function MagneticButton({
   );
 
   if (href) {
+    const trackProps = ctaId ? {
+      'data-track-cta': ctaId,
+      'data-track-component': 'MagneticButton',
+      'data-track-destination': href,
+    } : {};
     if (isExternal) {
       return (
-        <a href={href} target="_blank" rel="noopener noreferrer">
+        <a href={href} target="_blank" rel="noopener noreferrer" {...trackProps}>
           {content}
         </a>
       );
     }
-    return <Link href={href}>{content}</Link>;
+    return <Link href={href} {...trackProps}>{content}</Link>;
   }
 
   return (

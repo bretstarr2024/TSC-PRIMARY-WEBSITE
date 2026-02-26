@@ -207,7 +207,7 @@ export function IndustryContent({ industry }: IndustryContentProps) {
           </AnimatedSection>
 
           <AnimatedSection delay={0.2} className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <MagneticButton href="/book" variant="primary">
+            <MagneticButton href="/book?cta=vertical-bottom" variant="primary" ctaId="vertical-bottom">
               Let&apos;s Talk!
             </MagneticButton>
           </AnimatedSection>

@@ -7,6 +7,7 @@ interface CoinSlotCTAProps {
   href?: string;
   onClick?: () => void;
   className?: string;
+  ctaId?: string;
 }
 
 function Screw({ className }: { className: string }) {
@@ -42,6 +43,7 @@ export function CoinSlotCTA({
   href = '/book',
   onClick,
   className = '',
+  ctaId,
 }: CoinSlotCTAProps) {
   const reducedMotion = useReducedMotion();
 
@@ -159,6 +161,10 @@ export function CoinSlotCTA({
       <Link
         href={href}
         className="inline-block hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-atomic-tangerine focus-visible:ring-offset-2 focus-visible:ring-offset-heart-of-darkness rounded-lg"
+        data-track-cta={ctaId || 'coin-slot'}
+        data-track-component="CoinSlotCTA"
+        data-track-label="25¢ PUSH"
+        data-track-destination={href}
       >
         {content}
       </Link>

@@ -67,8 +67,12 @@ export function PricingCards() {
                 </p>
 
                 <Link
-                  href="/book?service=Subscription"
+                  href="/book?service=Subscription&cta=pricing-subscription"
                   className="mt-auto block text-center px-6 py-3 bg-atomic-tangerine text-white font-medium rounded-lg hover:bg-hot-sauce transition-colors hover:no-underline"
+                  data-track-cta="pricing-subscription"
+                  data-track-component="PricingCards"
+                  data-track-label="Let's talk about a subscription"
+                  data-track-destination="/book?service=Subscription"
                 >
                   Let&apos;s talk about a subscription
                 </Link>
@@ -113,8 +117,12 @@ export function PricingCards() {
                 </p>
 
                 <Link
-                  href="/book?service=Project"
+                  href="/book?service=Project&cta=pricing-project"
                   className="mt-auto block text-center px-6 py-3 bg-white/10 text-white font-medium rounded-lg hover:bg-white/20 transition-colors hover:no-underline"
+                  data-track-cta="pricing-project"
+                  data-track-component="PricingCards"
+                  data-track-label="Let's talk about a project"
+                  data-track-destination="/book?service=Project"
                 >
                   Let&apos;s talk about a project
                 </Link>

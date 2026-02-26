@@ -34,7 +34,7 @@ export function CtaSection() {
         </AnimatedSection>
 
         <AnimatedSection delay={0.2} className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <MagneticButton href="/book" variant="primary">
+          <MagneticButton href="/book?cta=homepage-cta" variant="primary" ctaId="homepage-cta">
             Let&apos;s Talk!
           </MagneticButton>
         </AnimatedSection>
