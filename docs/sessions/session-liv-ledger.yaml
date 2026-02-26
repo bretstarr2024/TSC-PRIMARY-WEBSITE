@@ -1,0 +1,109 @@
+session_id: "LIV"
+date: "2026-02-26"
+branch: main
+version: "0.33.0"  # MINOR: Pipeline infrastructure + Grist rename + Infographics
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "pending"
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP
+  pages: 137
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "New collections only (pipeline_logs, infographics). No fields added to existing document creation paths."
+
+commits:
+  - hash: "4bc8123"
+    message: "feat: Rename Insights to Grist + add Infographics content type"
+  - hash: "33980f4"
+    message: "feat: Add autonomous content pipeline infrastructure"
+
+artifacts_updated:
+  - "components/Header.tsx — nav label Insights → Grist"
+  - "components/Footer.tsx — footer label Insights → Grist"
+  - "components/insights/RelatedContent.tsx — heading + infographic type"
+  - "app/insights/page.tsx — Grist hub with Videos + Infographics cards"
+  - "app/insights/infographics/ — listing + detail pages (new)"
+  - "lib/schema/breadcrumbs.ts — all breadcrumbs say Grist + infographicBreadcrumb"
+  - "lib/resources-db.ts — Infographic interface + CRUD + indexes"
+  - "lib/related-content.ts — infographic type config"
+  - "All 21 insights sub-pages — metadata titles + breadcrumb links"
+  - "lib/pipeline/circuit-breaker.ts — OpenAI-only circuit breaker (new)"
+  - "lib/pipeline/timeout-guard.ts — timeout wrappers (new)"
+  - "lib/pipeline/error-classifier.ts — structured error categories (new)"
+  - "lib/pipeline/cost-estimator.ts — gpt-4o cost estimation (new)"
+  - "lib/pipeline/schemas.ts — Zod schemas for all 10 content types (new)"
+  - "lib/pipeline/logger.ts — pipeline event logging (new)"
+  - "lib/pipeline/content-guardrails.ts — brand voice, caps, budget, dedup (new)"
+  - "lib/pipeline/openai-client.ts — pure-fetch OpenAI client (new)"
+  - "vercel.json — cron schedules for 3 jobs (new)"
+  - "app/api/cron/generate-content/route.ts — main generation cron (new)"
+  - "app/api/cron/seed-content-queue/route.ts — daily queue seeder (new)"
+  - "app/api/cron/sync-jtbd-coverage/route.ts — monthly JTBD sync (new)"
+  - "lib/content-db.ts — getContentPublishedToday + resetStuckGeneratingItems"
+  - "docs/roadmap.md — Session LIV section"
+
+decisions_made:
+  - decision: "Rename Insights section to Grist (display name only)"
+    rationale: "User preference — URLs stay at /insights/* for SEO continuity"
+    reversible: true
+  - decision: "Infographics added as 11th content type"
+    rationale: "User requested alongside Videos on Grist hub page"
+    reversible: true
+  - decision: "Pipeline guardrails use heuristic brand voice scoring (no extra API call)"
+    rationale: "Saves cost vs AEO's GPT-based brand voice validator. Checks forbidden terms, conversational tone, paragraph structure, jargon"
+    reversible: true
+  - decision: "Daily budget $5/day for content generation (up from AEO's $2/day)"
+    rationale: "TSC generates 10 content types vs AEO's 1 blog/day"
+    reversible: true
+  - decision: "No semantic embedding dedup (removed from AEO version)"
+    rationale: "TSC generates from kernel, not news claims — Jaccard title similarity sufficient"
+    reversible: true
+  - decision: "Cron schedule: seed 7:30am, generate 8am, coverage sync 1st of month 3am (all UTC)"
+    rationale: "Seed fills queue 30min before generation runs. Coverage sync is monthly since kernel changes infrequently"
+    reversible: true
+
+known_risks:
+  - risk: "CRON_SECRET not yet set in Vercel — crons will accept unauthenticated requests"
+    mitigation: "Set CRON_SECRET env var in Vercel immediately next session"
+    severity: medium
+  - risk: "pipeline_logs collection has no TTL index — will grow unbounded"
+    mitigation: "Add TTL index (30-day expiry) next session"
+    severity: low
+  - risk: "leads collection still missing timestamp index"
+    mitigation: "Create index next session (carried from Session LIII)"
+    severity: low
+
+explicitly_deferred:
+  - "CRON_SECRET env var in Vercel — need to generate and set in all 3 environments"
+  - "pipeline_logs TTL index — will add next session"
+  - "leads collection timestamp index — carried forward from Session LIII"
+  - "Chatbot (chaDbot) — deferred to next session"
+  - "Vercel Analytics initialization — deferred"
+
+next_actions:
+  - "Set CRON_SECRET env var in Vercel (all 3 environments)"
+  - "Add pipeline_logs indexes: { timestamp: -1 }, { contentId: 1, timestamp: -1 }, TTL 30 days"
+  - "Create leads collection index: { timestamp: -1 }"
+  - "Test pipeline locally: curl http://localhost:3000/api/cron/generate-content"
+  - "Deploy and verify cron jobs appear in Vercel dashboard"
+  - "Build chatbot (chaDbot) — copy RAG from AEO"
+  - "Initialize Vercel Analytics"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All API clients use pure fetch — no SDK dependencies"
+  - "Insights section display name is now Grist — URLs stay at /insights/*"
+  - "11 content types: blog, faq, glossary, comparison, expert-qa, news, case_study, industry_brief, video, tool, infographic"
+  - "Pipeline daily budget: $5/day, per-type caps in content-guardrails.ts"
+  - "Cron auth: Bearer token via CRON_SECRET env var (graceful fallback if unset)"

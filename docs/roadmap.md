@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION LIII** | Last Updated: February 26, 2026
+**Status: SESSION LIV** | Last Updated: February 26, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -999,13 +999,48 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Space Invaders declared DONE by user. All 9 arcade games now fully DONE.**
 
-#### Session LIV (upcoming): Pipeline Infrastructure
-- [ ] Copy pipeline infrastructure from AEO:
-  - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
-- [ ] Adapt `content-guardrails.ts` for new collections
-- [ ] Build chatbot (chaDbot) — copy RAG from AEO
-- [ ] Initialize Vercel Analytics (`@vercel/analytics` already installed)
+#### Session LIV: Pipeline Infrastructure + Grist Rename + Infographics ✅ COMPLETE (Feb 26, 2026)
+
+**Renamed Insights → Grist** (display-only, URLs stay at `/insights`):
+- [x] All nav labels, breadcrumbs, metadata titles, hero headlines — 30+ files updated
+- [x] `lib/schema/breadcrumbs.ts` — all breadcrumb generators say "Grist"
+
+**Infographics content type** (11th content type):
+- [x] `Infographic` interface + CRUD in `lib/resources-db.ts`
+- [x] Listing page `app/insights/infographics/page.tsx`
+- [x] Detail page `app/insights/infographics/[infographicId]/page.tsx`
+- [x] Related content + breadcrumbs wired
+- [x] Added Videos + Infographics cards to Grist hub page
+
+**Pipeline infrastructure (all 4 waves):**
+
+Wave 1 — Pipeline utility library (8 files in `lib/pipeline/`):
+- [x] `circuit-breaker.ts` — OpenAI-only circuit breaker (3 failures → open, 60s recovery)
+- [x] `timeout-guard.ts` — Timeout wrappers (OpenAI 60s, content gen 90s, MongoDB 30s)
+- [x] `error-classifier.ts` — Structured error categories (timeout, parse, validation, rate limit, etc.)
+- [x] `cost-estimator.ts` — gpt-4o cost estimation per content type
+- [x] `schemas.ts` — Zod validation schemas for all 10 content types + generic parser
+- [x] `logger.ts` — Pipeline event logging to MongoDB `pipeline_logs` collection
+- [x] `content-guardrails.ts` — Brand voice scoring, forbidden terms, daily caps, budget, dedup
+- [x] `openai-client.ts` — Pure-fetch OpenAI client with circuit breaker + timeout + cost logging
+
+Wave 2 — Cron routes + scheduling:
+- [x] `vercel.json` — Cron schedules (seed 7:30am, generate 8am, coverage sync 1st of month 3am)
+- [x] `app/api/cron/generate-content/route.ts` — Main generation cron
+- [x] `app/api/cron/seed-content-queue/route.ts` — Daily queue seeder from uncovered queries
+- [x] `app/api/cron/sync-jtbd-coverage/route.ts` — Monthly JTBD → query_coverage sync
+
+Wave 3 — Integration wiring:
+- [x] `lib/content-db.ts` — Added `getContentPublishedToday(contentType)` + `resetStuckGeneratingItems()`
+
+Build: 131 pages (up from 127), 0 type errors.
+
+**Still needed (next session):**
+- [ ] Set `CRON_SECRET` env var in Vercel (all 3 environments)
+- [ ] Add `pipeline_logs` TTL index (30-day expiry)
 - [ ] Create MongoDB index on `leads` collection (timestamp: -1)
+- [ ] Build chatbot (chaDbot) — copy RAG from AEO
+- [ ] Initialize Vercel Analytics
 
 ---
 

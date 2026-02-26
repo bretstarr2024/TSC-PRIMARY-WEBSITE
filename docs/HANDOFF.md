@@ -1,16 +1,88 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 26, 2026 (Session LIII)
+**Last Updated:** February 26, 2026 (Session LIV)
 
 ---
 
-## Current Phase: Phase 1 COMPLETE + All Games DONE + Pipeline Infrastructure Next
+## Current Phase: Phase 2 — Pipeline Infrastructure LIVE + Content Automation Ready
 
-The site is live with **127 pages** across 10 content types, **15 verticals** (10 HR Tech sub-verticals + 5 adjacent, rebuilt from real client data), **37 services** (30 strategic + 7 AI) with AEO-ready content, a full Pricing page, **60 AEO-optimized vertical answer capsules**, **9 hidden arcade games** (all declared DONE including Space Invaders), site-wide CTA tracking, **full email infrastructure** (Resend verified), a **full Contact page** with "CONTINUE?" arcade headline + dual-path UX (form + calendar) + lead API, **CTA routing migration** (general CTAs → /contact, service-specific → /book), and **arcade boss email notifications** (team + winner auto-reply for all 9 games). All major page heroes use GradientText single-word headline + descriptive subhead pattern. Homepage, Services, Pricing, Verticals hub + detail pages, and all 9 arcade games are **declared DONE** by the user.
+The site is live with **137 pages** across **11 content types** (added Infographics), **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, and now a **complete autonomous content pipeline** with 3 Vercel cron jobs, 8 pipeline utility modules, Zod validation, circuit breaker, cost estimation, and daily caps. The Insights section has been renamed to **Grist** (display-only — URLs stay at `/insights/*`).
 
-- **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections + `interactions` + `leads` + `arcade_bosses` collections), Vercel CLI linked, Resend email (leads + arcade boss notifications)
-- **Next actions:** Copy pipeline infrastructure from AEO, create MongoDB index on leads, build chatbot
-- **Roadmap:** See `docs/roadmap.md` Session LIII
+- **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database), Resend email, 3 Vercel cron jobs (pending CRON_SECRET env var)
+- **Next actions:** Set CRON_SECRET in Vercel, add pipeline_logs indexes, test pipeline end-to-end, build chatbot
+- **Roadmap:** See `docs/roadmap.md` Session LIV
+
+### Session LIV Summary (February 26, 2026)
+
+**Focus:** Rename Insights to Grist, add Infographics content type, and build full autonomous content pipeline infrastructure from AEO donor.
+
+**What was done:**
+
+1. **Renamed Insights → Grist** (display name only, 30+ files):
+   - Nav labels, breadcrumbs, metadata titles, hero headlines all say "Grist"
+   - URLs remain at `/insights/*` for SEO continuity
+
+2. **Added Infographics as 11th content type:**
+   - `lib/resources-db.ts` — Infographic interface + CRUD + indexes
+   - `app/insights/infographics/page.tsx` — listing page
+   - `app/insights/infographics/[infographicId]/page.tsx` — detail page
+   - `lib/related-content.ts` + `components/insights/RelatedContent.tsx` — wired
+   - Added Videos + Infographics cards to Grist hub page
+
+3. **Pipeline utility library (8 files in `lib/pipeline/`):**
+   - `circuit-breaker.ts` — OpenAI-only (3 failures → open, 60s recovery)
+   - `timeout-guard.ts` — Content gen 90s, OpenAI 60s, MongoDB 30s
+   - `error-classifier.ts` — Structured error categories
+   - `cost-estimator.ts` — gpt-4o pricing per content type
+   - `schemas.ts` — Zod validation for all 10 content types + generic parser
+   - `logger.ts` — Pipeline event logging to MongoDB `pipeline_logs`
+   - `content-guardrails.ts` — Brand voice scoring, forbidden terms, daily caps ($5/day budget), Jaccard dedup
+   - `openai-client.ts` — Pure-fetch client with circuit breaker + timeout + cost logging
+
+4. **Vercel cron routes (3 files):**
+   - `vercel.json` — Cron schedules (seed 7:30am, generate 8am, coverage sync 1st 3am UTC)
+   - `app/api/cron/generate-content/route.ts` — Process queue → generate → validate → publish
+   - `app/api/cron/seed-content-queue/route.ts` — Classify uncovered queries → enqueue
+   - `app/api/cron/sync-jtbd-coverage/route.ts` — Monthly kernel JTBD → query_coverage
+
+5. **content-db.ts additions:**
+   - `getContentPublishedToday(contentType)` — generalized from blog-only
+   - `resetStuckGeneratingItems(olderThanMs)` — catches orphaned generating items
+
+**Commits this session:**
+- `4bc8123` — feat: Rename Insights to Grist + add Infographics content type
+- `33980f4` — feat: Add autonomous content pipeline infrastructure
+
+**Results:**
+- 137 pages (up from 127), 0 type errors
+- Full pipeline flow: kernel → sync-jtbd-coverage → query_coverage → seed-content-queue → content_queue → generate-content → published content
+- Pipeline NOT yet active (needs CRON_SECRET env var + first deploy with vercel.json)
+
+**Donor files referenced:**
+- `/Volumes/Queen Amara/AnswerEngineOptimization.com/lib/pipeline/circuit-breaker.ts`
+- `/Volumes/Queen Amara/AnswerEngineOptimization.com/lib/pipeline/timeout-guard.ts`
+- `/Volumes/Queen Amara/AnswerEngineOptimization.com/lib/pipeline/error-classifier.ts`
+- `/Volumes/Queen Amara/AnswerEngineOptimization.com/lib/pipeline/logger.ts`
+- `/Volumes/Queen Amara/AnswerEngineOptimization.com/lib/pipeline/cost-estimator.ts`
+- `/Volumes/Queen Amara/AnswerEngineOptimization.com/lib/pipeline/content-guardrails.ts`
+- `/Volumes/Queen Amara/AnswerEngineOptimization.com/app/api/cron/generate-content/route.ts`
+- `/Volumes/Queen Amara/AnswerEngineOptimization.com/app/api/cron/seed-resource-queue/route.ts`
+
+**Key decisions (do not re-debate):**
+- "Grist" is the display name for the Insights section — URLs stay at `/insights/*`
+- Pipeline uses heuristic brand voice scoring (no extra GPT call) — saves cost
+- Daily budget $5/day (up from AEO's $2) — TSC generates 10 content types
+- No semantic embedding dedup — Jaccard title similarity sufficient for kernel-driven generation
+- Cron schedule: seed 7:30am UTC → generate 8am UTC → coverage sync 1st of month 3am UTC
+
+**What must happen next:**
+1. Set `CRON_SECRET` env var in Vercel (all 3 environments)
+2. Add `pipeline_logs` indexes (timestamp, contentId, TTL 30 days)
+3. Create `leads` collection index (timestamp: -1)
+4. Test pipeline locally then deployed
+5. Build chatbot (chaDbot)
+
+---
 
 ### Session LIII Summary (February 26, 2026)
 
