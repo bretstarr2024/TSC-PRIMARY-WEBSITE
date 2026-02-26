@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XLI** | Last Updated: February 25, 2026
+**Status: SESSION XLII** | Last Updated: February 25, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -803,15 +803,31 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 - [x] Add RESEND_API_KEY, LEAD_RECIPIENTS, RESEND_FROM to Vercel env vars (all 3 environments)
 - [x] Create MongoDB indexes for `interactions` collection (timestamp_desc, ctaId_timestamp, sessionId_timestamp, ttl_180d)
 - [x] Add thestarrconspiracy.com domain to Resend dashboard
-- [ ] Add Resend DNS records at domain provider for thestarrconspiracy.com (user action):
-  - TXT `resend._domainkey` → DKIM public key (from Resend dashboard)
-  - MX `send` → `feedback[...]ses.com` priority 10
-  - TXT `send` → `v=spf1 i[...]om ~all`
+- [x] Add Resend DNS records at domain provider for thestarrconspiracy.com (user confirmed done)
 
 **Build:** 120 pages, PASS
 
-#### Session XLII (upcoming): Contact Form + Pipeline Infrastructure
-- [ ] Build Contact page with form (Resend integration) — copy pattern from AEO `/api/lead`
+#### Session XLII: Contact Page "CONTINUE?" + CTA Routing ✅ COMPLETE (Feb 25, 2026)
+
+**Focus:** Build full Contact page with "CONTINUE?" arcade headline, dual-path UX (form + calendar), lead API, CTA routing migration.
+
+**New files created:**
+- [x] `app/api/lead/route.ts` — Lead API: validates name+email, stores in MongoDB `leads` collection, sends team notification + auto-reply via Resend
+- [x] `lib/schema/contact-faq.ts` — 5 answer capsules about the engagement process
+- [x] `components/contact/ContactHero.tsx` — "CONTINUE?" headline with animated gradient (same treatment as GAME OVER), CRT flicker, scanlines, HeroParticles
+- [x] `components/contact/ContactDualPath.tsx` — Side-by-side glass cards: "Drop a line" form + "Book a call" Cal.com embed
+- [x] `components/contact/ContactForm.tsx` — 3-field form (name, email, message) with idle/loading/success/error states
+- [x] `components/contact/ContactCalendar.tsx` — Cal.com iframe with postMessage resize + query param forwarding
+
+**Files modified:**
+- [x] `app/contact/page.tsx` — Replaced placeholder with full page (hero, dual-path, Pong trigger, FAQ capsules, JSON-LD)
+- [x] `lib/schema/breadcrumbs.ts` — Added `contactBreadcrumb()`
+- [x] CTA routing migration (8 files): general CTAs `/book` → `/contact`; service-specific CTAs stay on `/book`
+  - `components/Header.tsx` (desktop + mobile), `components/Footer.tsx`, `components/home/HeroSection.tsx`, `components/home/CtaSection.tsx`, `components/services/ServiceCTA.tsx`, `components/industries/IndustryContent.tsx`, `components/insights/CtaStrip.tsx`, `components/CoinSlotCTA.tsx`
+
+**Build:** 121 pages, PASS
+
+#### Session XLIII (upcoming): Pipeline Infrastructure + Game Over Expansion
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
@@ -874,7 +890,7 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 #### Session XII: About, Contact, Work, Careers
 - [x] `/about`, `/contact`, `/work`, `/careers` stub pages created (Session VI)
 - [x] About: 10 leadership bios, founding story, 52-client marquee, FAQ, AEO schemas (Session VII)
-- [ ] Contact: Form (Resend integration), booking link
+- [x] Contact: Full page with "CONTINUE?" hero, dual-path (form + Cal.com), lead API, FAQ capsules (Session XLII)
 - [ ] Work: Case study showcase
 - [ ] Careers: Job listings, culture
 
