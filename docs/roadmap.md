@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XLVIII** | Last Updated: February 26, 2026
+**Status: SESSION XLIX** | Last Updated: February 26, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -895,7 +895,33 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 121 pages, PASS
 
-#### Session XLIX (upcoming): Pipeline Infrastructure + Game Over Expansion
+#### Session XLIX: Headline Standardization + Services Overhaul + Game Polish ✅ COMPLETE (Feb 26, 2026)
+
+**Focus:** Standardize hero headlines across all major pages, expand service data from 26→37 services with AEO-ready content, polish homepage service cards and Asteroids/Breakout games.
+
+**What was done:**
+- [x] Homepage service cards expanded — 6 granular capabilities per card (was 1-3), inferred from GTM Kernel + B2B agency scope
+- [x] Asteroids UFO color variance — UFOs appear in random brand colors (6-color palette), spawn across full screen height
+- [x] Headline consistency — all 6 major page heroes (Services, Work, Verticals, About, Pricing + existing Insights) standardized to single GradientText word + descriptive subhead pattern
+- [x] ServiceDualUniverse synced — inline capability arrays match homepage cards, "30 capabilities across 5 disciplines"
+- [x] Full services-data.ts overhaul — 26→37 services, 6 per strategic category, AEO-ready descriptions, kernel-aligned, brand voice
+- [x] Breakout game tuned — START_PADDLE_W 150px (was 100), depth speed boost DEPTH_SPEED_BONUS 0.6 (was 0.3), paddle shrinks per round
+
+**Files modified:**
+- [x] `components/home/ServicesSection.tsx` — 6 items per card across all categories
+- [x] `components/home/AsteroidsGame.tsx` — UFO_COLORS array, random color selection, full-height spawn range
+- [x] `components/services/ServicesHero.tsx` — Rewritten to Insights pattern (GradientText "Services")
+- [x] `components/industries/IndustriesHero.tsx` — Rewritten to Insights pattern (GradientText "Verticals")
+- [x] `components/about/AboutHero.tsx` — Rewritten to Insights pattern (GradientText "About")
+- [x] `components/pricing/PricingHero.tsx` — Rewritten to Insights pattern (GradientText "Pricing")
+- [x] `app/work/page.tsx` — Subhead sizing matched (text-xl md:text-2xl + leading-relaxed)
+- [x] `components/services/ServiceDualUniverse.tsx` — Inline strategicCapabilities, capability lists instead of counts
+- [x] `lib/services-data.ts` — 37 services total (30 strategic + 7 AI), all AEO-ready
+- [x] `components/services/BreakoutGame.tsx` — 150px paddle, 0.6 depth bonus, paddle shrink per round
+
+**Build:** 121 pages, PASS
+
+#### Session L (upcoming): Pipeline Infrastructure + Game Over Expansion
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
