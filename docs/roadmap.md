@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XLVII** | Last Updated: February 26, 2026
+**Status: SESSION XLVIII** | Last Updated: February 26, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -880,7 +880,22 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 121 pages, PASS
 
-#### Session XLVIII (upcoming): Pipeline Infrastructure + Game Over Expansion
+#### Session XLVIII: Hero Text Sizing + Button Positioning ✅ COMPLETE (Feb 26, 2026)
+
+**Focus:** Fix undersized GAME OVER headline, undersized subhead, and mispositioned ArcadeButton. Used /stuck protocol with Three.js sphere geometry computation to derive correct button placement.
+
+**Root cause analysis:**
+- Headline at `text-8xl` (96px at xl) was too small for Press Start 2P — pixel fonts render visually compact
+- Subhead at `text-base md:text-lg` (16-18px) was body copy size, not hero subhead size
+- ArcadeButton at `bottom-[20vh]` was only 6vh below the sphere bottom (23% of the gap), not at the midpoint
+- Three.js sphere (Icosahedron radius 2, camera z=10 fov 45) has bottom edge at ~74vh — computed via `tan(22.5°) × 10 = 4.142` half-frustum
+
+**Files modified:**
+- [x] `components/home/HeroSection.tsx` — Headline bumped to `text-5xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem]`; subhead to `text-lg md:text-xl lg:text-2xl`; ArcadeButton to `bottom-[13vh]` (mathematical midpoint: sphere bottom 74vh, section bottom 100vh, mid = 87vh = 13vh from bottom)
+
+**Build:** 121 pages, PASS
+
+#### Session XLIX (upcoming): Pipeline Infrastructure + Game Over Expansion
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections

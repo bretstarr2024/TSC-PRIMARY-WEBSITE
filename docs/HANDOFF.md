@@ -1,16 +1,58 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 26, 2026 (Session XLVII)
+**Last Updated:** February 26, 2026 (Session XLVIII)
 
 ---
 
 ## Current Phase: Phase 1 COMPLETE + Contact Live
 
-The site is live with **121 pages** across 10 content types, 9 verticals, a full Pricing page (declared done), 94 answer capsules, **9 hidden arcade games**, site-wide CTA tracking, **full email infrastructure** (Resend verified), a **full Contact page** with "CONTINUE?" arcade headline + dual-path UX (form + calendar) + lead API, and **CTA routing migration** (general CTAs → /contact, service-specific → /book). Homepage hero is clean — GAME OVER headline + subhead centered in the particle sphere, ArcadeButton positioned between sphere bottom and next section. Cal.com embeds on both `/contact` and `/book` use smooth CSS height transitions (no jumpiness, no black box, no internal metadata leaked into the notes field).
+The site is live with **121 pages** across 10 content types, 9 verticals, a full Pricing page (declared done), 94 answer capsules, **9 hidden arcade games**, site-wide CTA tracking, **full email infrastructure** (Resend verified), a **full Contact page** with "CONTINUE?" arcade headline + dual-path UX (form + calendar) + lead API, and **CTA routing migration** (general CTAs → /contact, service-specific → /book). Homepage hero has large-format GAME OVER headline (10rem at xl in Press Start 2P) + properly-sized subhead (text-2xl at lg+) centered in the particle sphere, ArcadeButton geometrically centered between sphere bottom and section edge. Cal.com embeds on both `/contact` and `/book` use smooth CSS height transitions (no jumpiness, no black box, no internal metadata leaked into the notes field).
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections + `interactions` + `leads` collections), Vercel CLI linked
-- **Next actions:** Verify hero layout on deployed site, copy pipeline infrastructure from AEO, create `leads` collection index
-- **Roadmap:** See `docs/roadmap.md` Session XLVII
+- **Next actions:** Verify hero visuals on deployed site, copy pipeline infrastructure from AEO, create `leads` collection index
+- **Roadmap:** See `docs/roadmap.md` Session XLVIII
+
+### Session XLVIII Summary (February 26, 2026)
+
+**Focus:** Fix undersized hero headline/subhead and mispositioned ArcadeButton — used /stuck protocol with Three.js sphere geometry computation.
+
+**What was done:**
+
+1. **Headline scaled up** (`components/home/HeroSection.tsx`):
+   - From `text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl` (96px at xl)
+   - To `text-5xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem]` (160px at xl)
+   - Press Start 2P is a pixel font — needs ~67% oversizing vs proportional fonts for equivalent visual weight
+
+2. **Subhead scaled up** (`components/home/HeroSection.tsx`):
+   - From `text-base md:text-lg` (16-18px) — body copy size
+   - To `text-lg md:text-xl lg:text-2xl` (18-24px) — proper hero subhead size
+
+3. **ArcadeButton repositioned via sphere geometry** (`components/home/HeroSection.tsx`):
+   - Computed Three.js sphere bottom: Icosahedron radius 2, camera z=10 fov 45 → `tan(22.5°) × 10 = 4.142` half-frustum → sphere bottom at **74vh**
+   - Previous `bottom-[20vh]` placed button at 80vh = only 6vh below sphere (23% of gap)
+   - Changed to `bottom-[13vh]` = 87vh from top = mathematical midpoint of 26vh gap
+
+**Commits this session:**
+- `5bf8f5f` — fix: Scale up hero headline/subhead and reposition ArcadeButton via sphere geometry
+
+**Results:**
+- Headline 67% larger at xl breakpoint
+- Subhead 33% larger at lg+ breakpoint
+- ArcadeButton at geometric midpoint of sphere-to-section gap
+- Build: 121 pages, PASS
+
+**Key decisions (do not re-debate):**
+- Press Start 2P needs text-[10rem] at xl to have hero-scale visual impact — don't shrink it
+- Subhead text-2xl at lg+ is the minimum for hero readability
+- ArcadeButton position derived from actual sphere geometry (bottom-[13vh] = midpoint of 74vh sphere bottom to 100vh section edge) — don't adjust without recomputing
+- Hero section MUST use `flex items-center justify-center` (NOT flex-col) — established in Session XLVII
+
+**What must happen next:**
+- Verify hero visuals on deployed site
+- Copy pipeline infrastructure from AEO
+- Create MongoDB index on `leads` collection (timestamp: -1)
+
+---
 
 ### Session XLVII Summary (February 26, 2026)
 

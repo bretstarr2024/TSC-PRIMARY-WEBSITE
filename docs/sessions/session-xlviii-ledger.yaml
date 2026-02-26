@@ -1,0 +1,76 @@
+session_id: "XLVIII"
+date: "2026-02-26"
+branch: main
+version: "0.28.6"  # PATCH: Scale up hero headline/subhead, reposition ArcadeButton via sphere geometry
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "TBD"
+  status: triggered
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "CSS/layout changes only — no data model modifications."
+
+commits:
+  - hash: "5bf8f5f"
+    message: "fix: Scale up hero headline/subhead and reposition ArcadeButton via sphere geometry"
+
+artifacts_updated:
+  - "components/home/HeroSection.tsx — Headline text-5xl/7xl/8xl/9xl/[10rem]; subhead text-lg/xl/2xl; ArcadeButton bottom-[13vh]"
+  - "docs/roadmap.md — Session XLVIII added, Session XLIX upcoming"
+
+decisions_made:
+  - decision: "Headline scaled to text-[10rem] (160px) at xl breakpoint"
+    rationale: "Press Start 2P is a pixel font with compact letterforms — needs ~67% oversizing vs proportional fonts to achieve equivalent visual weight in a hero context."
+    reversible: true
+  - decision: "Subhead scaled to text-2xl (24px) at lg+ breakpoint"
+    rationale: "Previous text-lg (18px) was body copy size, not hero subhead size. 24px reads as a proper hero subhead."
+    reversible: true
+  - decision: "ArcadeButton repositioned to bottom-[13vh] based on Three.js sphere geometry"
+    rationale: "Icosahedron radius 2, camera z=10 fov 45 → sphere bottom at 74vh. Gap to section bottom = 26vh. Midpoint = 87vh from top = 13vh from bottom. Previous bottom-[20vh] placed button at only 23% of the gap."
+    reversible: true
+
+known_risks:
+  - risk: "10rem headline may overflow on small xl screens (1280px) with long tracking"
+    mitigation: "Press Start 2P 'GAME' and 'OVER' are only 4 letters each — width is manageable. Monitor on deploy."
+    severity: low
+  - risk: "ArcadeButton at bottom-[13vh] is inside the h-64 gradient fade zone on most viewports"
+    mitigation: "Button is z-10, fade is z-5 — button renders above the gradient. Verify visibility on deploy."
+    severity: low
+
+explicitly_deferred:
+  - "Pipeline infrastructure from AEO — Session XLIX"
+  - "MongoDB index on leads collection (timestamp: -1) — Session XLIX"
+  - "Chatbot (chaDbot) deployment — future session"
+  - "Expand Game Over concept to other page copy — future session"
+  - "Vercel Analytics initialization — future session"
+
+next_actions:
+  - "Verify hero visuals on deployed site — headline size, subhead size, button midpoint"
+  - "Copy pipeline infrastructure from AEO (lib/pipeline/*.ts)"
+  - "Create MongoDB index on leads collection (timestamp: -1)"
+  - "Expand Game Over concept to other page copy/headlines"
+  - "Build chatbot (chaDbot) — copy RAG from AEO"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "Homepage hero: flex items-center justify-center (NOT flex-col) — text must stay centered in sphere"
+  - "Subhead max-w-[600px] — do not narrow again"
+  - "Headline uses text-[10rem] at xl — Press Start 2P needs oversizing"
+  - "ArcadeButton at absolute bottom-[13vh] — derived from sphere geometry (74vh bottom + 26vh gap / 2)"
+  - "Hero + contact hero both have h-64 bottom fade gradients"
+  - "CoinSlotCTA is in the bottom CtaSection (not the hero)"
+  - "All general CTAs -> /contact; service-specific CTAs -> /book"
+  - "Pricing page is DONE per user directive — no further changes unless requested"
+  - "9 arcade games: all triggered by ArcadeButton (motion.div with role=button)"
+  - "Game Over is the site's creative concept"
