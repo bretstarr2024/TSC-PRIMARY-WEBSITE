@@ -1,16 +1,82 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 26, 2026 (Session XLVIII)
+**Last Updated:** February 26, 2026 (Session XLIX)
 
 ---
 
-## Current Phase: Phase 1 COMPLETE + Contact Live
+## Current Phase: Phase 1 COMPLETE + Contact Live + Homepage & Services DONE
 
-The site is live with **121 pages** across 10 content types, 9 verticals, a full Pricing page (declared done), 94 answer capsules, **9 hidden arcade games**, site-wide CTA tracking, **full email infrastructure** (Resend verified), a **full Contact page** with "CONTINUE?" arcade headline + dual-path UX (form + calendar) + lead API, and **CTA routing migration** (general CTAs → /contact, service-specific → /book). Homepage hero has large-format GAME OVER headline (10rem at xl in Press Start 2P) + properly-sized subhead (text-2xl at lg+) centered in the particle sphere, ArcadeButton geometrically centered between sphere bottom and section edge. Cal.com embeds on both `/contact` and `/book` use smooth CSS height transitions (no jumpiness, no black box, no internal metadata leaked into the notes field).
+The site is live with **121 pages** across 10 content types, 9 verticals, **37 services** (30 strategic + 7 AI) with AEO-ready content, a full Pricing page (declared done), 94 answer capsules, **9 hidden arcade games** (all polished), site-wide CTA tracking, **full email infrastructure** (Resend verified), a **full Contact page** with "CONTINUE?" arcade headline + dual-path UX (form + calendar) + lead API, and **CTA routing migration** (general CTAs → /contact, service-specific → /book). All major page heroes now use a consistent GradientText single-word headline + descriptive subhead pattern. Homepage and Services pages are **declared DONE** by the user.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections + `interactions` + `leads` collections), Vercel CLI linked
-- **Next actions:** Verify hero visuals on deployed site, copy pipeline infrastructure from AEO, create `leads` collection index
-- **Roadmap:** See `docs/roadmap.md` Session XLVIII
+- **Next actions:** Copy pipeline infrastructure from AEO, create `leads` collection index, build chatbot
+- **Roadmap:** See `docs/roadmap.md` Session XLIX
+
+### Session XLIX Summary (February 26, 2026)
+
+**Focus:** Standardize hero headlines across all pages, expand services from 26→37 with AEO-ready content, polish homepage service cards and arcade games.
+
+**What was done:**
+
+1. **Homepage service cards expanded** (`components/home/ServicesSection.tsx`):
+   - Each of 6 cards now shows 6 granular capabilities (was 1-3 sparse items)
+   - Capabilities inferred from GTM Kernel + B2B agency scope
+
+2. **Asteroids UFO enhancements** (`components/home/AsteroidsGame.tsx`):
+   - UFOs now appear in random brand colors (6-color palette from brand kit)
+   - UFOs spawn across full screen height (was limited to middle 70%)
+
+3. **Headline standardization** (5 hero components + 1 page):
+   - All 6 major pages now use identical pattern: single `<GradientText>` word headline, `text-5xl md:text-7xl`, descriptive subhead in `text-shroomy`, simple `AnimatedSection` fade
+   - Files: `ServicesHero.tsx`, `IndustriesHero.tsx`, `AboutHero.tsx`, `PricingHero.tsx`, `app/work/page.tsx`
+   - Removed: word-by-word 3D animations, section labels, background glows, stat lines, scroll indicators
+
+4. **ServiceDualUniverse synced** (`components/services/ServiceDualUniverse.tsx`):
+   - Replaced `getStrategicCategories()` import with inline `strategicCapabilities` array
+   - Shows capability item lists per category instead of service counts
+   - Summary: "30 capabilities across 5 disciplines"
+
+5. **Full services-data.ts overhaul** (`lib/services-data.ts`):
+   - Expanded from 26 to 37 total services (30 strategic + 7 AI)
+   - Each strategic category now has 6 services (was variable 1-3)
+   - New services: Messaging Frameworks, Brand Architecture, Analyst Relations, ICP & Buyer Journey Mapping, Competitive Positioning, Sales Enablement, Channel Strategy, Revenue Architecture, Lead Scoring & Routing, Pipeline Analytics, Campaign Operations, Programmatic & Retargeting, SEO & Technical SEO, Conversion Rate Optimization, Research & Original Data, Video & Motion, Web & Interactive, Brand Editorial
+   - All descriptions are AEO-ready (standalone quotable first sentences) and kernel-aligned
+
+6. **Breakout game tuned** (`components/services/BreakoutGame.tsx`):
+   - Starting paddle width: 100→150px
+   - Depth speed bonus: 0.3→0.6 per row (hitting deeper bricks now produces noticeably faster ball)
+   - Paddle still shrinks per round (existing mechanic preserved)
+
+**Commits this session:**
+- `7c1a0b1` — feat: Expand service card details and add UFO color/position variance to Asteroids
+- `659c5dc` — feat: Standardize hero headlines across all major pages to Insights pattern
+- `24a8ee4` — feat: Expand services from 26 to 37 with AEO-ready content and sync DualUniverse
+- `f47d325` — feat: Tune Breakout — wider paddle (150px), stronger depth speed boost (0.6)
+- `eaeeae6` — docs: Update roadmap with Session XLIX completion
+
+**Results:**
+- 37 services with AEO-ready content (was 26)
+- 6 page heroes visually consistent
+- Homepage service cards dense and informative
+- Asteroids and Breakout games polished
+- Homepage and Services pages declared DONE by user
+
+**Key decisions (do not re-debate):**
+- All page heroes use GradientText single-word headline + subhead — this is the standard
+- Services page is DONE — 37 services, DualUniverse synced, Breakout tuned
+- Homepage is DONE — service cards, Asteroids, hero all finalized
+- Breakout: 150px paddle, 0.6 depth bonus, shrink per round — user approved
+- ServiceDualUniverse uses inline arrays (not services-data.ts imports) for simplicity
+- Keep ServicesSection and ServiceDualUniverse capability lists in sync manually
+
+**What must happen next:**
+- Copy pipeline infrastructure from AEO (lib/pipeline/*.ts)
+- Create MongoDB index on `leads` collection (timestamp: -1)
+- Build chatbot (chaDbot) — copy RAG from AEO
+- Initialize Vercel Analytics
+- Have SMEs review expanded service descriptions
+
+---
 
 ### Session XLVIII Summary (February 26, 2026)
 
