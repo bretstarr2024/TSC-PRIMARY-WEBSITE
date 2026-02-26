@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION XLIII** | Last Updated: February 25, 2026
+**Status: SESSION XLIV** | Last Updated: February 25, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -837,7 +837,17 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 121 pages, PASS
 
-#### Session XLIV (upcoming): Pipeline Infrastructure + Game Over Expansion
+#### Session XLIV: Hero-to-Content Transition Polish ✅ COMPLETE (Feb 25, 2026)
+
+**Focus:** Smooth the harsh transition between the starfield hero and the "Who We Are" section — add gradient fade, layer content over fading stars, reduce gap by ~20%.
+
+**Files modified:**
+- [x] `components/home/HeroSection.tsx` — Added h-64 bottom gradient overlay (transparent → #141213) to dissolve starfield; scroll indicator gets z-10
+- [x] `components/home/WhoWeAreSection.tsx` — Negative margin (-mt-20 md:-mt-28) to overlap fading starfield; z-10 for layering; py split into explicit pt/pb
+
+**Build:** 121 pages, PASS
+
+#### Session XLV (upcoming): Pipeline Infrastructure + Game Over Expansion
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections

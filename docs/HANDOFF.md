@@ -1,16 +1,52 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 25, 2026 (Session XLIII)
+**Last Updated:** February 25, 2026 (Session XLIV)
 
 ---
 
 ## Current Phase: Phase 1 COMPLETE + Contact Live
 
-The site is live with **121 pages** across 10 content types, 9 verticals, a full Pricing page (declared done), 94 answer capsules, **9 hidden arcade games**, site-wide CTA tracking, **full email infrastructure** (Resend verified), a **full Contact page** with "CONTINUE?" arcade headline + dual-path UX (form + calendar) + lead API, and **CTA routing migration** (general CTAs → /contact, service-specific → /book). Homepage hero has been decluttered — CoinSlotCTA moved to bottom CTA section, hero content centered within the particle sphere.
+The site is live with **121 pages** across 10 content types, 9 verticals, a full Pricing page (declared done), 94 answer capsules, **9 hidden arcade games**, site-wide CTA tracking, **full email infrastructure** (Resend verified), a **full Contact page** with "CONTINUE?" arcade headline + dual-path UX (form + calendar) + lead API, and **CTA routing migration** (general CTAs → /contact, service-specific → /book). Homepage hero has smooth starfield-to-content transition — gradient fade dissolves particles into background, "Who We Are" section layers over the fading stars.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database with 10+ collections + `interactions` + `leads` collections), Vercel CLI linked
 - **Next actions:** Copy pipeline infrastructure from AEO, create `leads` collection index, expand Game Over concept
-- **Roadmap:** See `docs/roadmap.md` Session XLIII
+- **Roadmap:** See `docs/roadmap.md` Session XLIV
+
+### Session XLIV Summary (February 25, 2026)
+
+**Focus:** Polish the homepage hero-to-content transition — smooth the harsh starfield cutoff and reduce the gap between hero and "Who We Are" section.
+
+**What was done:**
+
+1. **Hero bottom fade** (`components/home/HeroSection.tsx`):
+   - Added `h-64` gradient overlay at bottom of hero section (transparent → #141213)
+   - Starfield particles now dissolve smoothly into the background instead of hard-cutting
+   - Scroll indicator raised to z-10 to stay visible above the fade
+
+2. **WhoWeAreSection overlap** (`components/home/WhoWeAreSection.tsx`):
+   - Negative top margin (`-mt-20 md:-mt-28`) pulls section up into the fading starfield zone
+   - `z-10` ensures text layers above the particles
+   - Padding split from `py-24 md:py-32` to explicit `pt/pb` to preserve bottom spacing
+
+**Commits this session:**
+- `5dd971d` — feat: Smooth hero-to-content transition — starfield fade + section overlap
+
+**Results:**
+- Seamless transition: starfield fades into darkness over 16rem, content overlaps the fade zone
+- Visual gap between hero and first content section reduced by ~20%
+- Build: 121 pages, PASS
+
+**Key decisions (do not re-debate):**
+- Gradient fade height is h-64 (16rem) — long enough for smooth dissolve, short enough to not obscure hero content
+- Negative margin overlap is -mt-20/md:-mt-28 — creates layered feel without content collision
+- WhoWeAreSection z-10 ensures text is always readable above particles
+
+**What must happen next:**
+- Copy pipeline infrastructure from AEO
+- Create MongoDB index on `leads` collection (timestamp: -1)
+- Expand Game Over concept to other page copy/headlines
+
+---
 
 ### Session XLIII Summary (February 25, 2026)
 
