@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION LI** | Last Updated: February 26, 2026
+**Status: SESSION LII** | Last Updated: February 26, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -950,12 +950,36 @@ Present all 6 kernel service categories (Strategic, Demand, Digital, Content, Ad
 
 **Build:** 121 pages, PASS
 
-#### Session LII (upcoming): Pipeline Infrastructure + Game Over Expansion
+#### Session LII: Verticals Overhaul — Real Client Data ✅ COMPLETE (Feb 26, 2026)
+
+**Focus:** Complete rebuild of verticals page using real client categorization data (606 clients mapped). Replaced 9 fictional verticals with 15 data-backed verticals (10 HR Tech sub-verticals + 5 adjacent). Dropped DevTools, Cloud Infrastructure, AI/ML Platforms. Each card now shows real client count and top 4 notable clients instead of market value stats.
+
+**Files modified:**
+- [x] `lib/industries-data.ts` — Complete rewrite: 15 verticals with real client counts, notable clients from CSV, AEO-optimized answer capsules (60 total), pain points, how-we-help, market context
+- [x] `app/verticals/page.tsx` — Flat grid (removed section headers), replaced ServiceCTA with CoinSlotCTA, updated metadata
+- [x] `components/industries/IndustriesHero.tsx` — New subhead: "Thousands of B2B technology companies across dozens of verticals"
+- [x] `components/industries/IndustryCard.tsx` — Removed "+N" overflow indicator on client pills
+- [x] `lib/schema/hub-faqs.ts` — Updated verticals FAQ (15 verticals, new Q about HR Tech sub-verticals), updated homepage FAQ vertical references
+- [x] `components/Footer.tsx` — Moved Contact from Company to Connect section
+
+**Key decisions:**
+- [x] 10 HR Tech sub-verticals (TA&R 109, L&D 76, Engagement 57, Core HCM 42, Wellbeing 36, PEO 33, Benefits 32, Payroll 30, Talent Mgmt 23, Analytics 13)
+- [x] 5 Adjacent verticals (Enterprise SaaS 34, MarTech 16, Cybersecurity 15, HealthTech 12, FinTech 11)
+- [x] Dropped: DevTools, Cloud Infrastructure, AI/ML Platforms (no real client data)
+- [x] No section headers — all 15 cards in one flat grid (user rejected HR Tech / Beyond HR Tech grouping)
+- [x] Don't mention "77% HR Tech" stat — user directive
+- [x] Hero: "Thousands of B2B technology companies across dozens of verticals" (not specific numbers)
+- [x] CoinSlotCTA replaces ServiceCTA at bottom of verticals page
+- [x] Verticals page declared DONE by user (except Space Invaders game testing)
+
+**Build:** 127 pages (+6 new vertical sub-pages), PASS
+
+#### Session LIII (upcoming): Verticals Interior Pages + Pipeline Infrastructure
+- [ ] Review and polish vertical detail pages (interior content)
+- [ ] Test Space Invaders game on verticals page
 - [ ] Copy pipeline infrastructure from AEO:
   - `lib/pipeline/*.ts` (circuit-breaker, error-classifier, logger, stuck-detector, etc.)
 - [ ] Adapt `content-guardrails.ts` for new collections
-- [ ] Create source monitors for B2B/AI marketing news
-- [ ] Expand "Game Over" concept to other page copy/headlines
 - [ ] Build chatbot (chaDbot) — copy RAG from AEO
 - [ ] Initialize Vercel Analytics (`@vercel/analytics` already installed)
 - [ ] Create MongoDB index on `leads` collection (timestamp: -1)
