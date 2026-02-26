@@ -33,10 +33,13 @@ export function HeroSection() {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex flex-col items-center overflow-hidden">
       <HeroParticles />
 
       {playing && <AsteroidsGame onClose={() => setPlaying(false)} />}
+
+      {/* Top spacer — pushes content to vertical center */}
+      <div className="flex-1" />
 
       <div className="relative z-10 section-wide text-center px-4">
         {/* GAME OVER headline */}
@@ -124,12 +127,13 @@ export function HeroSection() {
         </motion.p>
       </div>
 
-      {/* Arcade easter egg trigger — replaces scroll indicator at bottom of hero */}
+      {/* Bottom spacer — button centered between content and section edge */}
       {!playing && (
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
+        <div className="flex-1 flex items-center justify-center z-10">
           <ArcadeButton onClick={() => setPlaying(true)} delay={2.8} />
         </div>
       )}
+      {playing && <div className="flex-1" />}
 
       {/* Bottom fade — dissolves starfield into background */}
       <div
