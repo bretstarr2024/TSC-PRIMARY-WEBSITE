@@ -4,12 +4,6 @@ import "./globals.css";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { NoiseOverlay } from "@/components/GradientBackground";
 import { TrackingProvider } from "@/components/TrackingProvider";
-import dynamic from "next/dynamic";
-
-const CustomCursor = dynamic(
-  () => import("@/components/CustomCursor").then((mod) => ({ default: mod.CustomCursor })),
-  { ssr: false }
-);
 
 const inter = Inter({
   subsets: ["latin"],
@@ -74,7 +68,6 @@ export default function RootLayout({
     <html lang="en" className={`dark ${inter.variable} ${pressStart.variable}`}>
       <body className="bg-heart-of-darkness text-white antialiased font-sans">
         <SmoothScroll>
-          <CustomCursor />
           <NoiseOverlay />
           <TrackingProvider />
           {children}

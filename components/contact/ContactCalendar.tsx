@@ -9,6 +9,7 @@ interface ContactCalendarProps {
 
 export function ContactCalendar({ service, ctaSource }: ContactCalendarProps) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const maxHeight = useRef(700);
 
   // Build Cal.com URL with optional service + CTA attribution in notes
   const calBaseUrl = 'https://cal.com/team/tsc/25-50?embed=true&theme=dark&layout=month_view';
@@ -17,7 +18,8 @@ export function ContactCalendar({ service, ctaSource }: ContactCalendarProps) {
   notesParts.push(`Source: ${ctaSource || 'contact-calendar'}`);
   const calUrl = `${calBaseUrl}&notes=${encodeURIComponent(notesParts.join(' | '))}`;
 
-  // Listen for Cal.com embed resize messages
+  // Listen for Cal.com embed resize messages — only grow, never shrink
+  // (prevents page jumping when switching between month/time views)
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
       if (iframeRef.current) {
@@ -28,7 +30,11 @@ export function ContactCalendar({ service, ctaSource }: ContactCalendarProps) {
             data?.data?.iframeHeight ||
             (data.type === 'CAL:iframe:resize' && data.data?.height);
           if (height && typeof height === 'number' && height > 300) {
-            iframeRef.current.style.height = `${height + 40}px`;
+            const newHeight = height + 40;
+            if (newHeight > maxHeight.current) {
+              maxHeight.current = newHeight;
+              iframeRef.current.style.height = `${newHeight}px`;
+            }
           }
         }
       }
