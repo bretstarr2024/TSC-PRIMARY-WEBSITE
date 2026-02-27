@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION LXII** | Last Updated: February 27, 2026
+**Status: SESSION LXIII** | Last Updated: February 27, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -1351,6 +1351,78 @@ Build: 131 pages (up from 127), 0 type errors.
 - [ ] Work page — last remaining stub
 - [ ] Domain configuration
 - [x] OG images / social cards (Session LXII)
+- [x] Polish & detail flourishes (Session LXIII)
+
+---
+
+#### Session LXIII: Polish & Detail Flourishes ✅ COMPLETE (Feb 27, 2026)
+
+**Focus:** Research and implement 22 "little things" that distinguish an elite website from an average one — browser chrome, SEO, accessibility, performance, security, print, easter eggs, legal compliance, and error handling.
+
+**What was done:**
+
+1. **Browser Chrome & PWA (4 items):**
+   - `theme-color` meta tag: `#141213` (Heart of Darkness) — mobile Safari/Chrome toolbar tinting
+   - `msapplication-TileColor`: `#FF5910` (Atomic Tangerine) — Windows tile color
+   - `color-scheme: dark` meta tag
+   - `app/manifest.ts` — web manifest with TSC name, Ocho icons (192/512px), maskable
+   - `app/apple-icon.png` (180×180), `public/icon-192.png`, `public/icon-512.png` — PWA icons
+
+2. **SEO & Social (6 items):**
+   - Canonical URLs on ALL 23+ pages via `alternates.canonical`
+   - `og:type: article` on all 11 content detail pages (was `website`)
+   - `article:published_time` in openGraph on blog + news pages
+   - Slack `twitter:label1/data1` + `twitter:label2/data2` on blog (author+date), expert-qa (expert), news (date), case-study (client+industry)
+   - RSS feed at `/feed.xml` — blog, expert-qa, news (uses `feed` npm package, `force-dynamic`)
+   - RSS autodiscovery link in layout.tsx `alternates.types`
+   - `dateModified` added to `getArticleSchema` function and callers
+
+3. **Accessibility (2 items):**
+   - `aria-live="polite"` region on ContactForm for success/error announcements
+   - `tabIndex={-1}` on `#main-content` for skip-to-content focus target
+
+4. **Performance & UX (3 items):**
+   - `scroll-padding-top: 5rem` on html — anchor links clear sticky nav
+   - Scroll progress indicator (CSS `animation-timeline: scroll()`) on all 11 content detail pages
+   - `ScrollProgress` component in `components/ScrollProgress.tsx`
+
+5. **Print (1 item):**
+   - `@media print` stylesheet — hides nav/footer/decorations, black-on-white, shows link URLs, site URL footer
+
+6. **Security (3 items):**
+   - Removed `unsafe-eval` from CSP script-src
+   - Expanded `Permissions-Policy` to 9 restricted APIs
+   - Added `Cross-Origin-Opener-Policy: same-origin`
+   - `/.well-known/security.txt` route with disclosure contact
+
+7. **Easter Eggs & Delight (2 items):**
+   - Console ASCII art + recruitment message (`components/ConsoleGreeting.tsx`)
+   - Konami Code (`components/KonamiCode.tsx`) — ↑↑↓↓←→←→BA activates "Boss Mode" (Ocho follows cursor)
+   - `public/humans.txt` — team credits, tech stack
+
+8. **Legal / Compliance (1 item):**
+   - Cookie consent banner (`components/CookieConsent.tsx`) — glass card, "Cool"/"Nope" buttons, localStorage persistence
+   - Privacy policy page at `/privacy` — data collection, retention, third-party services, user rights
+   - Privacy link in footer bottom bar
+
+9. **Error Handling (1 item):**
+   - `app/global-error.tsx` — layout-level crash fallback with inline styles (no Tailwind dependency)
+
+10. **Reduced Motion (1 item):**
+    - `@media (prefers-reduced-motion: reduce)` CSS fallback — kills ALL CSS animations/transitions
+
+**Already existed (verified, not re-implemented):**
+- `CustomCursor` — dual-layer cursor with mix-blend-difference, auto-disabled on touch
+- `PageTransition` — fade-in entrance animation
+
+**Build:** 407 routes (up from 403), PASS
+
+**Still needed (next sessions):**
+- [ ] Monitor production cron runs — verify pipeline fixes work in prod
+- [ ] Work page — last remaining stub
+- [ ] Domain configuration
+- [ ] Full nonce-based CSP (removing `unsafe-inline` from script-src) — needs middleware + careful testing
+- [ ] `unsafe-inline` still in style-src — required by Framer Motion, styled-jsx, Tailwind
 
 ---
 
