@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION LXI** | Last Updated: February 27, 2026
+**Status: SESSION LXII** | Last Updated: February 27, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -1350,11 +1350,52 @@ Build: 131 pages (up from 127), 0 type errors.
 - [ ] Monitor production cron runs — verify pipeline fixes work in prod
 - [ ] Work page — last remaining stub
 - [ ] Domain configuration
-- [ ] OG images / social cards
+- [x] OG images / social cards (Session LXII)
 
 ---
 
-#### Session LIX: Vercel Deploy Fix + Code Review Round 2 ✅ COMPLETE (Feb 26, 2026)
+#### Session LXII: Dynamic OG Images + /audit Skill ✅ COMPLETE (Feb 27, 2026)
+
+**Focus:** Add dynamic OG images (social cards) to all pages + create `/audit` skill that runs all 8 review commands.
+
+**What was done:**
+
+1. **Dynamic OG image generation for every page (68 new files):**
+   - Created shared renderer `lib/og/render-og-image.tsx` — arcade-themed 1200×630 PNG with Press Start 2P title, neon glow effect, colored content-type badge, Ocho mascot, gradient top border
+   - Created `lib/og/og-constants.ts` — badge config (16 content types), color map, auto-scaling font sizes, title truncation
+   - Downloaded Press Start 2P TTF + Inter SemiBold TTF for Satori font rendering
+   - Added `metadataBase` to `app/layout.tsx` for absolute OG URL resolution
+   - Created 34 `opengraph-image.tsx` + 34 `twitter-image.tsx` route files covering:
+     - 7 static pages (homepage "GAME OVER", about, pricing, contact "CONTINUE?", careers, book, work)
+     - 3 hub pages (services, verticals, insights)
+     - 2 dynamic param routes (services/[slug], verticals/[slug])
+     - 11 content type listing hubs
+     - 11 DB-backed content detail routes (blog/[slug], faq/[faqId], etc.)
+   - Homepage + contact get special centered "hero" layout treatment
+   - DB-backed pages use nodejs runtime; static pages also use nodejs (fs.readFileSync for fonts)
+   - All DB-backed pages have try/catch with generic badge fallback on error
+
+2. **Created `/audit` skill:**
+   - `.claude/skills/audit/SKILL.md` — launches all 8 review commands in parallel as Task agents
+   - Consolidates findings into a single report (Critical/Warning/Info) with deduplication
+   - Cross-references HANDOFF.md to filter out already-resolved items
+
+**Build:** 403 routes (up from 143), PASS
+
+**Satori limitations discovered and handled:**
+- Variable fonts (.woff) not supported → switched to static Inter TTF
+- `repeating-linear-gradient` not supported → removed CRT scanline overlay (gradient border + glow provide enough arcade feel)
+- `text-shadow` not supported → used layered offset text with opacity for glow effect
+- `filter: blur()` not supported → glow approximated with colored text at 40% opacity behind white title
+
+**Still needed (next sessions):**
+- [ ] Monitor production cron runs — verify pipeline fixes work in prod
+- [ ] Work page — last remaining stub
+- [ ] Domain configuration
+
+---
+
+#### Session LXI: Vercel Deploy Fix + Code Review Round 2 ✅ COMPLETE (Feb 26, 2026)
 
 **Focus:** Fix broken Vercel deployments (CRON_SECRET whitespace) + re-run all 8 code review commands for fresh findings.
 

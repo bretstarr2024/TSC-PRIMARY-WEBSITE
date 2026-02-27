@@ -1,16 +1,62 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 27, 2026 (Session LXI)
+**Last Updated:** February 27, 2026 (Session LXII)
 
 ---
 
-## Current Phase: Phase 2 — Pipeline Hardened, Code Review Complete
+## Current Phase: Phase 2 — Pipeline Hardened, Code Review Complete, OG Images Live
 
-The site is live with **143 pages** across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, Vercel Analytics + Speed Insights, and a **fully activated autonomous content pipeline**. Two rounds of comprehensive code review (8 commands each) have been completed. **All 75 findings across both rounds are now resolved** (47 Round 1 in Sessions LVII-LVIII, 28 Round 2 in Sessions LX-LXI).
+The site is live with **143 pages** (403 routes including OG/Twitter images) across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, Vercel Analytics + Speed Insights, **dynamic OG images on every page**, and a **fully activated autonomous content pipeline**. Two rounds of comprehensive code review (8 commands each) have been completed with all 75 findings resolved.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database), Resend email, 3 Vercel cron jobs (ACTIVE — CRON_SECRET set), Vercel Analytics + Speed Insights
-- **Next actions:** Monitor production cron runs, build Work page, domain configuration
-- **Roadmap:** See `docs/roadmap.md` Session LXI
+- **Next actions:** Verify OG images on Vercel, monitor production cron runs, build Work page, domain configuration
+- **Roadmap:** See `docs/roadmap.md` Session LXII
+
+### Session LXII Summary (February 27, 2026)
+
+**Focus:** Add dynamic OG images (social preview cards) to all pages + create `/audit` skill.
+
+**What was done:**
+
+1. **Dynamic OG image generation for every page (68 new files):**
+   - Created shared renderer `lib/og/render-og-image.tsx` — arcade-themed 1200×630 PNG using Satori (JSX→SVG→PNG)
+   - Visual design: Heart of Darkness background, Press Start 2P title with neon glow, colored content-type badge pill, Ocho mascot (top-right), gradient top border (Atomic Tangerine→Neon Cactus→Tidal Wave), Inter body text, "THE STARR CONSPIRACY" footer
+   - Homepage gets centered "GAME OVER" hero layout; contact gets centered "CONTINUE?" hero layout
+   - Created `lib/og/og-constants.ts` — 16 badge types with distinct colors, auto-scaling font sizes (36→28→22→18px based on title length), title truncation at 120 chars
+   - Downloaded Press Start 2P TTF + Inter SemiBold TTF for Satori font rendering (Satori can't use variable fonts)
+   - Added `metadataBase: new URL('https://tsc-primary-website.vercel.app')` to `app/layout.tsx`
+   - Created 34 `opengraph-image.tsx` + 34 `twitter-image.tsx` covering all routes:
+     - 7 static pages, 3 hub pages, 2 dynamic param routes, 11 content hubs, 11 DB-backed content detail routes
+   - DB-backed pages fetch title from MongoDB with try/catch fallback to generic badge
+
+2. **Created `/audit` skill (.claude/skills/audit/SKILL.md):**
+   - Runs all 8 review commands in parallel as Task agents
+   - Consolidates findings into single report (Critical/Warning/Info) with deduplication
+   - Invoke with `/audit` in any session
+
+**Commits this session:**
+- `2d2e8cb` — feat: Dynamic OG images for all 143 pages + /audit skill
+
+**Results:**
+- Build: 403 routes (up from 143), PASS
+- Every page now has unique branded OG + Twitter images for social sharing
+- `metadataBase` set so OG URLs resolve correctly on current Vercel domain and will auto-switch when real domain is assigned
+
+**Key decisions (do not re-debate):**
+- All OG routes use nodejs runtime (not edge) — fs.readFileSync needed for font loading
+- CRT scanlines removed — Satori doesn't support repeating-linear-gradient; gradient border + glow is enough
+- Glow effect via layered text at 40% opacity (Satori has no text-shadow or filter:blur)
+- Twitter images duplicate OG handler code (not re-export) — Next.js sibling route re-exports are unreliable
+- Static Inter TTF used instead of Geist variable font — Satori crashes on variable fonts
+
+**What must happen next:**
+1. Verify OG images render on Vercel — visit `/opengraph-image` and spot-check dynamic pages
+2. Test with Facebook Sharing Debugger or opengraph.xyz
+3. Monitor production cron runs — verify pipeline fixes from LX work in prod
+4. Build Work page (needs user content direction)
+5. Domain configuration when ready to go live
+
+---
 
 ### Session LXI Summary (February 27, 2026)
 

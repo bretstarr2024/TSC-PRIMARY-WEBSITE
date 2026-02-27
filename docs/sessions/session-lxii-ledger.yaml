@@ -1,0 +1,83 @@
+session_id: "LXII"
+date: "2026-02-27"
+branch: main
+version: "0.39.0"  # MINOR: Dynamic OG images for all pages + /audit skill
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "pending"
+  status: triggered
+
+build_verification:
+  next_build: PASS  # 403 routes (up from 143 — 260 new OG/Twitter image routes)
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "No MongoDB document creation paths were changed. OG image routes are read-only."
+
+commits:
+  - hash: "2d2e8cb"
+    message: "feat: Dynamic OG images for all 143 pages + /audit skill"
+
+artifacts_updated:
+  - "lib/og/render-og-image.tsx — shared OG image renderer (Press Start 2P, neon glow, badge, Ocho mascot)"
+  - "lib/og/og-constants.ts — badge config (16 types), color map, font size auto-scaling, title truncation"
+  - "app/fonts/PressStart2P-Regular.ttf — arcade font for Satori rendering"
+  - "app/fonts/Inter-SemiBold.ttf — body font for Satori rendering"
+  - "app/layout.tsx — added metadataBase for absolute OG URL resolution"
+  - "34 opengraph-image.tsx files — one per route group (homepage, about, pricing, contact, careers, book, work, services hub/sub, verticals hub/sub, insights hub, 11 content hubs, 11 content detail routes)"
+  - "34 twitter-image.tsx files — matching set for Twitter card support"
+  - ".claude/skills/audit/SKILL.md — /audit skill that runs all 8 review commands in parallel"
+  - "docs/roadmap.md — Session LXII section, OG images marked complete"
+
+decisions_made:
+  - decision: "Use nodejs runtime for all OG image routes (not edge)"
+    rationale: "fs.readFileSync needed for font/asset loading. DB-backed pages also need Node for MongoDB driver. Consistent runtime simplifies maintenance."
+    reversible: true
+  - decision: "Remove CRT scanline overlay from OG images"
+    rationale: "Satori doesn't support repeating-linear-gradient. Gradient top border + neon glow provide sufficient arcade aesthetic without it."
+    reversible: true
+  - decision: "Duplicate OG handler code in twitter-image.tsx (not re-export)"
+    rationale: "Next.js route file re-exports from sibling route files are unreliable. Duplicating the thin wrapper (10-15 lines) is safer than debugging build failures."
+    reversible: true
+  - decision: "Use layered text opacity for glow (not text-shadow or filter:blur)"
+    rationale: "Satori doesn't support text-shadow or filter:blur. A second text element with accent color at 40% opacity behind the white title creates a convincing glow."
+    reversible: true
+  - decision: "Download static Inter TTF instead of using Geist variable font"
+    rationale: "Satori's opentype.js parser crashes on variable fonts (woff with fvar table). Static TTF works reliably."
+    reversible: false
+
+known_risks:
+  - risk: "OG images use metadataBase pointing to Vercel preview URL, not final domain"
+    mitigation: "Change metadataBase URL in app/layout.tsx when domain is configured. OG images will auto-resolve to new domain."
+    severity: low
+  - risk: "arcade_bosses collection has schema divergence (timestamp vs createdAt/updatedAt)"
+    mitigation: "Very small collection (<10 records). Can backfill with one-time script if needed."
+    severity: low
+
+explicitly_deferred:
+  - "Work page — needs content direction from user"
+  - "Domain configuration — not yet ready to go live"
+  - "Production cron monitoring — verify pipeline fixes from LX work in prod"
+
+next_actions:
+  - "Verify OG images render correctly on Vercel — visit /opengraph-image, /services/brand-strategy/opengraph-image, etc."
+  - "Test with Facebook Sharing Debugger or opengraph.xyz to confirm social platforms read the images"
+  - "Monitor production cron runs — verify DB-backed spend tracking, retry ceiling, and pre-flight rejection work in prod"
+  - "Build Work page (needs user content direction — real or fabricated case studies)"
+  - "Domain configuration when ready to go live"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All API clients use pure fetch (no SDK dependencies)"
+  - "All public API routes have rate limiting"
+  - "All OG image routes use nodejs runtime (not edge) for fs.readFileSync font loading"
+  - "OG image shared renderer: lib/og/render-og-image.tsx — single source of truth for visual template"
+  - "Satori limitations: no variable fonts, no repeating-linear-gradient, no text-shadow, no filter:blur"
+  - "metadataBase in app/layout.tsx must be updated when final domain is assigned"
