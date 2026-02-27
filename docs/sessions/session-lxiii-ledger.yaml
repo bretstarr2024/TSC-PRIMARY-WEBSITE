@@ -1,0 +1,105 @@
+session_id: "LXIII"
+date: "2026-02-27"
+branch: main
+version: "0.40.0"  # MINOR: 22 polish & detail flourishes across browser chrome, SEO, a11y, security, print, delight, legal
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "TBD"
+  status: triggered
+
+build_verification:
+  next_build: PASS  # 407 routes (unchanged from pre-commit verification)
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "No MongoDB document creation paths changed. All changes are metadata, CSS, client components, and static files."
+
+commits:
+  - hash: "5698fec"
+    message: "feat: Polish & detail flourishes — 22 items across browser chrome, SEO, a11y, security, print, delight, legal"
+  - hash: "5c09664"
+    message: "docs: Update roadmap with Session LXIII polish & detail flourishes"
+
+artifacts_updated:
+  - "app/layout.tsx — theme-color meta, msapplication-TileColor, color-scheme, RSS autodiscovery, mounted ConsoleGreeting, KonamiCode, CookieConsent"
+  - "app/globals.css — scroll-padding-top, print stylesheet, prefers-reduced-motion fallback, scroll-progress animation"
+  - "next.config.mjs — removed unsafe-eval from CSP, expanded Permissions-Policy to 9 APIs, added COOP header"
+  - "components/ConsoleGreeting.tsx — NEW: console ASCII art + recruitment message"
+  - "components/KonamiCode.tsx — NEW: ↑↑↓↓←→←→BA triggers Ocho following cursor"
+  - "components/ScrollProgress.tsx — NEW: CSS scroll progress indicator"
+  - "components/CookieConsent.tsx — NEW: glass card cookie consent with Cool/Nope buttons"
+  - "app/feed.xml/route.ts — NEW: RSS feed (blog, expert-qa, news) with force-dynamic"
+  - "app/manifest.ts — NEW: web app manifest with Ocho icons"
+  - "app/global-error.tsx — NEW: layout-level crash fallback with inline styles"
+  - "app/privacy/page.tsx — NEW: comprehensive privacy policy page"
+  - "app/.well-known/security.txt/route.ts — NEW: responsible disclosure contact"
+  - "app/apple-icon.png — NEW: 180×180 Ocho icon for iOS"
+  - "public/icon-192.png, public/icon-512.png — NEW: PWA icons"
+  - "public/humans.txt — NEW: team credits and tech stack"
+  - "23+ page files — canonical URLs via alternates.canonical"
+  - "11 content detail pages — og:type article, article:published_time, Slack metadata, ScrollProgress"
+  - "components/contact/ContactForm.tsx — aria-live region for screen reader announcements"
+  - "components/Footer.tsx — Privacy link in bottom bar"
+  - "lib/schema/breadcrumbs.ts — privacyBreadcrumb() function"
+  - "lib/schema/people.ts — dateModified parameter in getArticleSchema"
+  - "docs/roadmap.md — Session LXIII entry with all 22 items"
+
+decisions_made:
+  - decision: "Use CSS animation-timeline: scroll() for scroll progress indicator"
+    rationale: "Zero JavaScript, pure CSS, progressive enhancement — browsers that don't support it simply don't show the bar."
+    reversible: true
+  - decision: "Cookie consent stores preference in localStorage, not cookies"
+    rationale: "Simpler, no server round-trip. The consent is UI-only since we don't set tracking cookies (Vercel Analytics is cookieless)."
+    reversible: true
+  - decision: "RSS feed uses force-dynamic (not ISR)"
+    rationale: "DB-backed content can't be prerendered without MONGODB_URI. force-dynamic ensures fresh content on each request."
+    reversible: true
+  - decision: "Deferred full nonce-based CSP (removing unsafe-inline from script-src)"
+    rationale: "Requires middleware + careful page-by-page testing. unsafe-inline still needed for Framer Motion, styled-jsx, Tailwind."
+    reversible: true
+  - decision: "Privacy policy is a static page, not dynamically generated"
+    rationale: "Privacy policies need careful human review and shouldn't change automatically. Static ensures stability and auditability."
+    reversible: true
+
+known_risks:
+  - risk: "unsafe-inline still in CSP script-src and style-src"
+    mitigation: "Deferred to future session. Removing requires nonce-based CSP middleware and page-by-page testing."
+    severity: medium
+  - risk: "Cookie consent is cosmetic — site doesn't actually set tracking cookies"
+    mitigation: "If third-party tracking is added later, consent logic must be wired to actually gate cookie creation."
+    severity: low
+  - risk: "RSS feed serves from MongoDB — if DB is down, feed returns empty"
+    mitigation: "Each content type wrapped in .catch(() => []) so partial failures don't crash the entire feed."
+    severity: low
+
+explicitly_deferred:
+  - "Full nonce-based CSP — needs middleware + careful page-by-page testing"
+  - "unsafe-inline in style-src — required by Framer Motion, styled-jsx, Tailwind"
+  - "Work page — needs content direction from user"
+  - "Domain configuration — not yet ready to go live"
+  - "Production cron monitoring — verify pipeline fixes from LX work in prod"
+
+next_actions:
+  - "Verify OG images render correctly on Vercel (carried from LXII)"
+  - "Monitor production cron runs"
+  - "Build Work page (needs user content direction)"
+  - "Domain configuration when ready to go live"
+  - "Consider nonce-based CSP when unsafe-inline becomes a priority"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All API clients use pure fetch (no SDK dependencies)"
+  - "All OG image routes use nodejs runtime (not edge)"
+  - "metadataBase in app/layout.tsx must be updated when final domain is assigned"
+  - "Cookie consent localStorage key: tsc-cookie-consent"
+  - "RSS feed at /feed.xml — force-dynamic, DB-backed"
+  - "Konami Code easter egg: ↑↑↓↓←→←→BA (don't document in user-facing docs)"
+  - "Privacy policy at /privacy — update if data practices change"
+  - "security.txt at /.well-known/security.txt — update contact/expires annually"
