@@ -1,0 +1,95 @@
+session_id: "LXIV"
+date: "2026-02-27"
+branch: main
+version: "0.41.0"  # MINOR: Lighthouse audit integration + 11 performance/security/architecture fixes
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "TBD"
+  status: triggered
+
+build_verification:
+  next_build: PASS  # 473 routes (up from 407)
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "enqueueContent changed from insertOne to updateOne/upsert but document shape is identical. No new fields added to any collection."
+
+commits:
+  - hash: "c9bee70"
+    message: "feat: Audit Round 3 — Lighthouse integration + 11 perf/security/arch fixes"
+  - hash: "4fa3844"
+    message: "docs: Update roadmap with Session LXIV audit round 3"
+
+artifacts_updated:
+  - ".claude/commands/review-performance.md — Added Lighthouse audit section (item 9)"
+  - "components/contact/ContactCalendar.tsx — Lazy-load Cal.com iframe via IntersectionObserver"
+  - "components/home/HeroParticles.tsx — Deferred mount via requestIdleCallback + mobile particle reduction"
+  - "app/api/arcade-boss/route.ts — Score type validation (NoSQL injection prevention)"
+  - "components/ArcadeButton.tsx — Restored focus-visible ring indicators"
+  - "lib/pipeline/openai-client.ts — Rate-limit retry with exponential backoff"
+  - "lib/pipeline/error-classifier.ts — RATE_LIMIT retryable: true"
+  - "scripts/seed-content.ts — ensurePipelineLogIndexes call added"
+  - "lib/content-db.ts — enqueueContent idempotent upsert"
+  - "components/insights/ContentError.tsx — NEW: shared error boundary component"
+  - "11 error.tsx files — NEW: all DB-backed insight routes"
+  - "components/insights/ChecklistRenderer.tsx — import type"
+  - "components/insights/AssessmentRenderer.tsx — import type"
+  - "components/PageTransition.tsx — initial={false}"
+  - "components/contact/ContactHero.tsx — reducedMotion guard"
+  - "docs/roadmap.md — Session LXIV entry"
+
+decisions_made:
+  - decision: "IntersectionObserver with 200px rootMargin for Cal.com iframe lazy-loading"
+    rationale: "200px lookahead starts loading before user scrolls to it, avoiding perceived delay while still deferring the 1.5MB iframe."
+    reversible: true
+  - decision: "requestIdleCallback for Three.js deferred mount (2s timeout fallback)"
+    rationale: "Lets GAME OVER headline and subtext render first, then sphere fades in when browser is idle. 2s timeout ensures it always appears."
+    reversible: true
+  - decision: "Rate limit retries happen inside callOpenAI, before circuit breaker"
+    rationale: "Circuit breaker should only trip on genuine API failures, not transient rate limits. 2 retries with exponential backoff handles burst 429s gracefully."
+    reversible: true
+  - decision: "enqueueContent uses updateOne with upsert keyed on clientId+contentType+title+status:pending"
+    rationale: "Prevents duplicate queue entries when cron retries seed the same content. $setOnInsert means existing entries are never overwritten."
+    reversible: true
+  - decision: "PageTransition initial={false} removes opacity:0 flash"
+    rationale: "Every page was invisible for 0.3s on first paint. initial={false} skips the entrance animation entirely, improving LCP site-wide."
+    reversible: true
+  - decision: "Mobile particle count reduced to 1500 (from 3000)"
+    rationale: "3000 particles on mobile devices cause jank. 1500 is visually similar but significantly lighter."
+    reversible: true
+
+known_risks:
+  - risk: "unsafe-inline still in CSP script-src and style-src"
+    mitigation: "Deferred to future session. Removing requires nonce-based CSP middleware and page-by-page testing."
+    severity: medium
+  - risk: "In-memory rate limiter resets per serverless invocation"
+    mitigation: "Acceptable for now. Persistent rate limiting would require Redis or similar external store."
+    severity: low
+
+explicitly_deferred:
+  - "Full nonce-based CSP — needs middleware + careful page-by-page testing"
+  - "Work page — needs content direction from user"
+  - "Domain configuration — not yet ready to go live"
+  - "Production cron monitoring — verify pipeline fixes from LX work in prod"
+
+next_actions:
+  - "Monitor production cron runs — verify rate-limit retry and idempotent seeding work"
+  - "Verify OG images render correctly on Vercel (carried from LXII)"
+  - "Build Work page (needs user content direction)"
+  - "Domain configuration when ready to go live"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All API clients use pure fetch (no SDK dependencies)"
+  - "All OG image routes use nodejs runtime (not edge)"
+  - "metadataBase in app/layout.tsx must be updated when final domain is assigned"
+  - "OpenAI 429 retries (2 max) happen before circuit breaker — don't move them outside"
+  - "enqueueContent is now idempotent — duplicate pending items silently skipped"
+  - "ArcadeButton uses focus-visible (not focus) for ring — preserves mouse UX while showing keyboard focus"

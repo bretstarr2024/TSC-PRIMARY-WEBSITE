@@ -1,16 +1,73 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 27, 2026 (Session LXIII)
+**Last Updated:** February 27, 2026 (Session LXIV)
 
 ---
 
-## Current Phase: Phase 2 — Pipeline Hardened, Code Review Complete, Fully Polished
+## Current Phase: Phase 2 — Pipeline Hardened, 3 Rounds of Code Review Complete, Performance Optimized
 
-The site is live with **143 pages** (407 routes including OG/Twitter images, RSS, manifest, privacy) across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, Vercel Analytics + Speed Insights, **dynamic OG images on every page**, RSS feed, cookie consent, privacy policy, print stylesheet, and a **fully activated autonomous content pipeline**. Two rounds of comprehensive code review (8 commands each) have been completed with all 75 findings resolved. Session LXIII added 22 polish & detail flourishes.
+The site is live with **143 pages** (473 routes including OG/Twitter images, error boundaries, RSS, manifest, privacy) across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, Vercel Analytics + Speed Insights, **dynamic OG images on every page**, RSS feed, cookie consent, privacy policy, print stylesheet, and a **fully activated autonomous content pipeline**. Three rounds of comprehensive code review have been completed with all findings resolved. Session LXIV addressed 2 critical performance issues (Contact LCP 11.9s, Homepage TBT 2,100ms) plus 9 security/architecture/pipeline fixes.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database), Resend email, 3 Vercel cron jobs (ACTIVE — CRON_SECRET set), Vercel Analytics + Speed Insights
-- **Next actions:** Verify OG images on Vercel, monitor production cron runs, build Work page, domain configuration
-- **Roadmap:** See `docs/roadmap.md` Session LXIII
+- **Next actions:** Monitor production cron runs (verify rate-limit retry + idempotent seeding), build Work page, domain configuration
+- **Roadmap:** See `docs/roadmap.md` Session LXIV
+
+### Session LXIV Summary (February 27, 2026)
+
+**Focus:** Audit Round 3 with Lighthouse — ran 8-domain code review + Lighthouse performance audit, then implemented all 10 recommended fixes plus 1 bonus.
+
+**What was done:**
+
+1. **Lighthouse integration:** Added Lighthouse audit section to `.claude/commands/review-performance.md` — instructions to run `npx lighthouse` against 3 live pages, parse JSON, rate metrics as CRITICAL/WARNING/INFO.
+
+2. **Performance fixes (2 critical):**
+   - `components/contact/ContactCalendar.tsx` — Lazy-load Cal.com iframe via IntersectionObserver (200px rootMargin). Shows spinner placeholder until in view. Fixes LCP 11.9s.
+   - `components/home/HeroParticles.tsx` — Deferred mount via `requestIdleCallback` (2s timeout fallback). Reduced mobile particles 3000→1500. Fixes TBT 2,100ms.
+
+3. **Security:** `app/api/arcade-boss/route.ts` — Score type validation (`typeof number`, `isFinite`, `>= 0`, `Math.floor`). Prevents NoSQL injection via `$max` operator.
+
+4. **Accessibility:** `components/ArcadeButton.tsx` — Restored `focus-visible:ring-2` with Atomic Tangerine ring. Removed inline `outline: none`.
+
+5. **Pipeline reliability:**
+   - `lib/pipeline/openai-client.ts` — Rate-limit-specific retry (2 retries, exponential backoff, Retry-After header) before circuit breaker.
+   - `lib/pipeline/error-classifier.ts` — RATE_LIMIT changed to `retryable: true`.
+
+6. **Data integrity:**
+   - `scripts/seed-content.ts` — Added `ensurePipelineLogIndexes()` call.
+   - `lib/content-db.ts` — `enqueueContent` changed to idempotent `updateOne` with `upsert: true`.
+
+7. **Architecture:** Created `components/insights/ContentError.tsx` + 11 `error.tsx` files for all DB-backed insight routes.
+
+8. **Client bundle:** `ChecklistRenderer.tsx` + `AssessmentRenderer.tsx` — `import type` for resources-db types.
+
+9. **LCP:** `components/PageTransition.tsx` — `initial={false}` removes 0.3s invisible flash.
+
+10. **Bonus:** `components/contact/ContactHero.tsx` — `useReducedMotion` guard on glow animation.
+
+**Commits this session:**
+- `c9bee70` — feat: Audit Round 3 — Lighthouse integration + 11 perf/security/arch fixes
+- `4fa3844` — docs: Update roadmap with Session LXIV audit round 3
+
+**Results:**
+- Build: 473 routes (up from 407), PASS
+- 12 new files, 14 modified files
+- 2 critical performance bottlenecks resolved, 9 security/architecture/pipeline hardening fixes
+
+**Key decisions (do not re-debate):**
+- IntersectionObserver 200px rootMargin for Cal.com iframe — starts loading before user scrolls to it
+- requestIdleCallback for Three.js deferral — GAME OVER renders first, sphere fades in when idle
+- Rate limit retries happen INSIDE callOpenAI, BEFORE circuit breaker — breaker only trips on genuine failures
+- enqueueContent is now idempotent via updateOne+upsert — duplicate pending items silently skipped
+- PageTransition initial={false} — no entrance animation delay; content renders immediately
+- Mobile Three.js particles reduced to 1500 (from 3000) — visually similar, significantly lighter
+
+**What must happen next:**
+1. Monitor production cron runs (verify rate-limit retry + idempotent seeding)
+2. Verify OG images render on Vercel (carried from LXII)
+3. Build Work page (needs user content direction)
+4. Domain configuration when ready to go live
+
+---
 
 ### Session LXIII Summary (February 27, 2026)
 
@@ -43,12 +100,6 @@ The site is live with **143 pages** (407 routes including OG/Twitter images, RSS
 - RSS feed is `force-dynamic` — DB-backed content can't be prerendered without MONGODB_URI
 - Full nonce-based CSP deferred — requires middleware + per-page testing; `unsafe-inline` still needed by Framer Motion/styled-jsx/Tailwind
 - Privacy policy is a static page (not generated) — needs human review, shouldn't auto-change
-
-**What must happen next:**
-1. Verify OG images render on Vercel (carried from LXII)
-2. Monitor production cron runs
-3. Build Work page (needs user content direction)
-4. Domain configuration when ready to go live
 
 ---
 
