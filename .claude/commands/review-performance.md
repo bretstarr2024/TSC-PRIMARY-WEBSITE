@@ -1,4 +1,4 @@
-Review performance across frontend bundle size, MongoDB queries, rendering, and pipeline efficiency.
+Review performance across frontend bundle size, MongoDB queries, rendering, pipeline efficiency, and live Lighthouse metrics.
 
 ## Context
 Read these files first to understand the project conventions:
@@ -62,6 +62,29 @@ Read these files first to understand the project conventions:
    - Are fonts using `display: "swap"` for FOUT prevention?
    - Is Press Start 2P (arcade font) only loaded on pages that need it, or globally?
    - Could the arcade font be loaded with `next/dynamic` or font subsetting?
+
+9. **Lighthouse audit (live site)** — Run `npx lighthouse` against the live Vercel URL (`https://tsc-primary-website.vercel.app`) to measure real-world performance. Test these pages:
+   - Homepage (`/`) — heaviest page (Three.js sphere, Framer Motion, hero animations)
+   - A content detail page (e.g., `/insights/blog/[any-slug]`) — typical reading page
+   - `/contact` — form + Cal.com iframe + Three.js stars
+
+   For each page, capture:
+   - **Performance score** (0-100)
+   - **Largest Contentful Paint (LCP)** — should be < 2.5s
+   - **Total Blocking Time (TBT)** — should be < 200ms
+   - **Cumulative Layout Shift (CLS)** — should be < 0.1
+   - **Speed Index** — should be < 3.4s
+   - **Total page weight** (transferred bytes)
+   - **Number of requests**
+   - Any specific opportunities Lighthouse flags (unused JS, render-blocking resources, image optimization, etc.)
+
+   Run with: `npx lighthouse <URL> --output=json --chrome-flags="--headless --no-sandbox" --only-categories=performance`
+   Parse the JSON output for the metrics above.
+
+   Rate each metric:
+   - **CRITICAL** if Performance score < 50 or LCP > 4s or TBT > 600ms
+   - **WARNING** if Performance score 50-89 or LCP 2.5-4s or TBT 200-600ms or CLS > 0.1
+   - **INFO** if all metrics are green (Performance >= 90, LCP < 2.5s, TBT < 200ms, CLS < 0.1)
 
 ## Anti-Patterns to Flag
 - Game components imported with regular `import` instead of `next/dynamic`

@@ -34,11 +34,11 @@ export function ContactHero() {
         style={{
           background: 'radial-gradient(circle, #FF5910 0%, transparent 60%)',
         }}
-        animate={{
+        animate={reducedMotion ? {} : {
           scale: [1, 1.08, 1],
           opacity: [0.1, 0.18, 0.1],
         }}
-        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+        transition={reducedMotion ? {} : { duration: 8, repeat: Infinity, ease: 'easeInOut' }}
       />
 
       <div className="relative z-10 section-wide text-center px-4">

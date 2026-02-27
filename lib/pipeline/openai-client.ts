@@ -57,44 +57,59 @@ export async function callOpenAI(params: OpenAICallParams): Promise<OpenAICallRe
 
   const startTime = Date.now();
 
-  // Wrap in circuit breaker + timeout
+  // Wrap in circuit breaker + timeout, with rate-limit retry
+  const MAX_RATE_LIMIT_RETRIES = 2;
   const result = await withCircuitBreaker('openai', () =>
     withContentGenerationTimeout(async () => {
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${apiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'gpt-4o',
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: userPrompt },
-          ],
-          temperature,
-          max_tokens: maxTokens,
-          response_format: { type: 'json_object' },
-        }),
-      });
+      let lastError: Error | undefined;
+      for (let attempt = 0; attempt <= MAX_RATE_LIMIT_RETRIES; attempt++) {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: 'gpt-4o',
+            messages: [
+              { role: 'system', content: systemPrompt },
+              { role: 'user', content: userPrompt },
+            ],
+            temperature,
+            max_tokens: maxTokens,
+            response_format: { type: 'json_object' },
+          }),
+        });
 
-      if (!response.ok) {
-        const text = await response.text();
-        throw new Error(`OpenAI API error ${response.status}: ${text}`);
+        // Retry on rate limit (429) with exponential backoff before propagating to circuit breaker
+        if (response.status === 429 && attempt < MAX_RATE_LIMIT_RETRIES) {
+          const retryAfter = parseInt(response.headers.get('retry-after') || '', 10);
+          const waitMs = (retryAfter && retryAfter > 0) ? retryAfter * 1000 : Math.min(1000 * Math.pow(2, attempt), 30000);
+          console.log(`[OpenAI] Rate limited (429), retrying in ${waitMs}ms (attempt ${attempt + 1}/${MAX_RATE_LIMIT_RETRIES})...`);
+          await new Promise(resolve => setTimeout(resolve, waitMs));
+          continue;
+        }
+
+        if (!response.ok) {
+          const text = await response.text();
+          throw new Error(`OpenAI API error ${response.status}: ${text}`);
+        }
+
+        const data = await response.json();
+        const content = data.choices[0]?.message?.content || '';
+        const usage = data.usage || { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 };
+
+        return {
+          content,
+          usage: {
+            promptTokens: usage.prompt_tokens,
+            completionTokens: usage.completion_tokens,
+            totalTokens: usage.total_tokens,
+          },
+        };
       }
-
-      const data = await response.json();
-      const content = data.choices[0]?.message?.content || '';
-      const usage = data.usage || { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 };
-
-      return {
-        content,
-        usage: {
-          promptTokens: usage.prompt_tokens,
-          completionTokens: usage.completion_tokens,
-          totalTokens: usage.total_tokens,
-        },
-      };
+      // If we exhausted rate-limit retries, throw
+      throw lastError || new Error('OpenAI API error 429: rate limit exceeded after retries');
     })
   );
 

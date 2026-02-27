@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ChecklistItem } from '@/lib/resources-db';
+import type { ChecklistItem } from '@/lib/resources-db';
 
 interface ChecklistRendererProps {
   items: ChecklistItem[];

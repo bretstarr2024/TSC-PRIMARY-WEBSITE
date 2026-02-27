@@ -96,7 +96,7 @@ export function classifyError(error: unknown, phase: string): ClassifiedError {
 
   // Rate limit / quota
   if (msg.includes('429') || msg.toLowerCase().includes('rate limit') || msg.toLowerCase().includes('quota')) {
-    return { category: 'RATE_LIMIT', service: 'openai', message: msg, retryable: false, phase };
+    return { category: 'RATE_LIMIT', service: 'openai', message: msg, retryable: true, phase };
   }
 
   // API errors

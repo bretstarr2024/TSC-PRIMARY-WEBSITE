@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { AssessmentQuestion, AssessmentResult } from '@/lib/resources-db';
+import type { AssessmentQuestion, AssessmentResult } from '@/lib/resources-db';
 
 interface AssessmentRendererProps {
   questions: AssessmentQuestion[];

@@ -19,11 +19,13 @@ import {
   ensureResourcesIndexes,
 } from '../lib/resources-db';
 import { closeConnection } from '../lib/mongodb';
+import { ensurePipelineLogIndexes } from '../lib/pipeline/logger';
 
 async function seed() {
   console.log('[seed] Creating indexes...');
   await ensureContentIndexes();
   await ensureResourcesIndexes();
+  await ensurePipelineLogIndexes();
   console.log('[seed] Indexes created.');
 
   // =========================================

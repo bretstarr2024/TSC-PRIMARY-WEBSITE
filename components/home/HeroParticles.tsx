@@ -21,7 +21,7 @@ function CursorReactiveParticles() {
   }, []);
 
   const { positions, basePositions, colors } = useMemo(() => {
-    const count = 3000;
+    const count = typeof window !== 'undefined' && window.innerWidth < 768 ? 1500 : 3000;
     const positions = new Float32Array(count * 3);
     const basePositions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
@@ -172,8 +172,16 @@ export function HeroParticles() {
   const [visible, setVisible] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Defer mount until browser is idle to avoid blocking main thread (TBT reduction)
   useEffect(() => {
-    setMounted(true);
+    const cb = () => setMounted(true);
+    if ('requestIdleCallback' in window) {
+      const id = requestIdleCallback(cb, { timeout: 2000 });
+      return () => cancelIdleCallback(id);
+    } else {
+      const id = setTimeout(cb, 100);
+      return () => clearTimeout(id);
+    }
   }, []);
 
   // Pause rendering when off-screen to save GPU cycles

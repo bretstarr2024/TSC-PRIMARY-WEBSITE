@@ -54,10 +54,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid initials' }, { status: 400 });
     }
 
+    // Validate score is a finite non-negative number (prevents NoSQL injection via $max)
+    const validScore = (typeof score === 'number' && Number.isFinite(score) && score >= 0)
+      ? Math.floor(score)
+      : 0;
+
     const timestamp = new Date();
     const timestampCT = timestamp.toLocaleString('en-US', { timeZone: 'America/Chicago' });
     const rawGameName = GAME_NAMES[game] || game;
-    const scoreStr = String(score || 0).padStart(6, '0');
+    const scoreStr = String(validScore).padStart(6, '0');
     const rawInitials = initials || '???';
 
     // Escape user input before interpolation into HTML
@@ -72,7 +77,7 @@ export async function POST(request: Request) {
       await db.collection('arcade_bosses').updateOne(
         { email, game },
         {
-          $max: { score: score || 0 },
+          $max: { score: validScore },
           $set: { initials: playerInitials, updatedAt: timestamp },
           $setOnInsert: { email, game, createdAt: timestamp },
         },

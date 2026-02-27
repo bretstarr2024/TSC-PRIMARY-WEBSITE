@@ -167,16 +167,22 @@ export async function enqueueContent(
   const collection = await getContentQueueCollection();
   const clientId = getClientId();
 
-  const doc: Omit<ContentQueueItem, '_id'> = {
-    ...item,
-    clientId,
-    statusHistory: [{ status: item.status, timestamp: new Date() }],
-    createdAt: new Date(),
-    retryCount: 0,
-  };
+  // Idempotent upsert: skip if a pending item with same title+type already exists
+  const result = await collection.updateOne(
+    { clientId, contentType: item.contentType, title: item.title, status: 'pending' },
+    {
+      $setOnInsert: {
+        ...item,
+        clientId,
+        statusHistory: [{ status: item.status, timestamp: new Date() }],
+        createdAt: new Date(),
+        retryCount: 0,
+      },
+    },
+    { upsert: true }
+  );
 
-  const result = await collection.insertOne(doc);
-  return result.insertedId.toString();
+  return result.upsertedId?.toString() || 'existing';
 }
 
 export async function getNextPendingItems(
