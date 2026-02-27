@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import Link from 'next/link';
 import type { Industry } from '@/lib/industries-data';
 
@@ -9,6 +9,7 @@ interface IndustryHeroProps {
 }
 
 export function IndustryHero({ industry }: IndustryHeroProps) {
+  const reducedMotion = useReducedMotion();
   return (
     <section className="relative pt-40 pb-24 md:pt-48 md:pb-32">
       {/* Color glow */}
@@ -17,7 +18,7 @@ export function IndustryHero({ industry }: IndustryHeroProps) {
         style={{
           background: `radial-gradient(circle, ${industry.color} 0%, transparent 70%)`,
         }}
-        animate={{
+        animate={reducedMotion ? {} : {
           scale: [1, 1.1, 1],
           opacity: [0.1, 0.15, 0.1],
         }}

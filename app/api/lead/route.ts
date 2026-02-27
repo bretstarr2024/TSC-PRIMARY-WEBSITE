@@ -93,6 +93,17 @@ export async function POST(request: Request) {
     // Store lead in MongoDB
     try {
       const db = await getDatabase();
+
+      // Dedup: skip if same email submitted in last 5 minutes
+      const fiveMinAgo = new Date(Date.now() - 5 * 60_000);
+      const recent = await db.collection('leads').findOne({
+        email: data.email,
+        timestamp: { $gte: fiveMinAgo },
+      });
+      if (recent) {
+        return NextResponse.json({ ok: true });
+      }
+
       await db.collection('leads').insertOne({
         name: data.name,
         email: data.email,
@@ -197,7 +208,7 @@ export async function POST(request: Request) {
       }
     });
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ ok: true });
   } catch (error) {
     console.error('Lead submission error:', error);
     return NextResponse.json(

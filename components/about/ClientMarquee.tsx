@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { AnimatedSection } from '@/components/AnimatedSection';
 import { ArcadeButton } from '@/components/ArcadeButton';
 
@@ -112,6 +112,7 @@ function MarqueeRow({
   duration?: number;
   color?: 'tangerine' | 'tidal';
 }) {
+  const reducedMotion = useReducedMotion();
   // Double the array for seamless loop
   const doubled = [...clients, ...clients];
   const facingRight = direction === 'right';
@@ -124,7 +125,7 @@ function MarqueeRow({
 
       <motion.div
         className="flex gap-4 whitespace-nowrap"
-        animate={{
+        animate={reducedMotion ? {} : {
           x: direction === 'left'
             ? ['0%', '-50%']
             : ['-50%', '0%'],

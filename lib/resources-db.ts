@@ -413,7 +413,7 @@ export async function getAllPublishedFaqs(limit: number = 500): Promise<FaqItem[
 
 export async function getAllFaqIds(): Promise<string[]> {
   const collection = await getFaqCollection();
-  const items = await collection.find({ clientId: getClientId(), status: 'published' }).project({ faqId: 1 }).toArray();
+  const items = await collection.find({ clientId: getClientId(), status: 'published' }).project({ faqId: 1 }).limit(1000).toArray();
   return items.map((i) => i.faqId);
 }
 
@@ -440,12 +440,12 @@ export async function getPublishedGlossaryTermById(termId: string): Promise<Glos
 
 export async function getAllPublishedGlossaryTerms(limit: number = 1000): Promise<GlossaryTerm[]> {
   const collection = await getGlossaryCollection();
-  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ term: 1 }).limit(limit).toArray();
+  return collection.find({ clientId: getClientId(), status: 'published' }).project({ fullDefinition: 0, examples: 0, synonyms: 0, relatedTerms: 0 }).sort({ term: 1 }).limit(limit).toArray() as unknown as Promise<GlossaryTerm[]>;
 }
 
 export async function getAllGlossaryTermIds(): Promise<string[]> {
   const collection = await getGlossaryCollection();
-  const items = await collection.find({ clientId: getClientId(), status: 'published' }).project({ termId: 1 }).toArray();
+  const items = await collection.find({ clientId: getClientId(), status: 'published' }).project({ termId: 1 }).limit(1000).toArray();
   return items.map((i) => i.termId);
 }
 
@@ -472,12 +472,12 @@ export async function getPublishedComparisonById(comparisonId: string): Promise<
 
 export async function getAllPublishedComparisons(limit: number = 200): Promise<Comparison[]> {
   const collection = await getComparisonCollection();
-  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ createdAt: -1 }).limit(limit).toArray();
+  return collection.find({ clientId: getClientId(), status: 'published' }).project({ items: 0, criteria: 0 }).sort({ createdAt: -1 }).limit(limit).toArray() as unknown as Promise<Comparison[]>;
 }
 
 export async function getAllComparisonIds(): Promise<string[]> {
   const collection = await getComparisonCollection();
-  const items = await collection.find({ clientId: getClientId(), status: 'published' }).project({ comparisonId: 1 }).toArray();
+  const items = await collection.find({ clientId: getClientId(), status: 'published' }).project({ comparisonId: 1 }).limit(1000).toArray();
   return items.map((i) => i.comparisonId);
 }
 
@@ -504,12 +504,12 @@ export async function getPublishedExpertQaById(qaId: string): Promise<ExpertQaIt
 
 export async function getAllPublishedExpertQa(limit: number = 200): Promise<ExpertQaItem[]> {
   const collection = await getExpertQaCollection();
-  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ createdAt: -1 }).limit(limit).toArray();
+  return collection.find({ clientId: getClientId(), status: 'published' }).project({ quotableSnippets: 0 }).sort({ createdAt: -1 }).limit(limit).toArray() as unknown as Promise<ExpertQaItem[]>;
 }
 
 export async function getAllExpertQaIds(): Promise<string[]> {
   const collection = await getExpertQaCollection();
-  const items = await collection.find({ clientId: getClientId(), status: 'published' }).project({ qaId: 1 }).toArray();
+  const items = await collection.find({ clientId: getClientId(), status: 'published' }).project({ qaId: 1 }).limit(1000).toArray();
   return items.map((i) => i.qaId);
 }
 
@@ -536,12 +536,12 @@ export async function getPublishedNewsItemById(newsId: string): Promise<NewsItem
 
 export async function getAllPublishedNews(limit: number = 200): Promise<NewsItem[]> {
   const collection = await getNewsCollection();
-  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ 'source.publishedAt': -1 }).limit(limit).toArray();
+  return collection.find({ clientId: getClientId(), status: 'published' }).project({ commentary: 0 }).sort({ 'source.publishedAt': -1 }).limit(limit).toArray() as unknown as Promise<NewsItem[]>;
 }
 
 export async function getAllNewsIds(): Promise<string[]> {
   const collection = await getNewsCollection();
-  const items = await collection.find({ clientId: getClientId(), status: 'published' }).project({ newsId: 1 }).toArray();
+  const items = await collection.find({ clientId: getClientId(), status: 'published' }).project({ newsId: 1 }).limit(1000).toArray();
   return items.map((i) => i.newsId);
 }
 
@@ -568,12 +568,12 @@ export async function getPublishedCaseStudyById(caseStudyId: string): Promise<Ca
 
 export async function getAllPublishedCaseStudies(limit: number = 200): Promise<CaseStudy[]> {
   const collection = await getCaseStudyCollection();
-  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ createdAt: -1 }).limit(limit).toArray();
+  return collection.find({ clientId: getClientId(), status: 'published' }).project({ approach: 0, results: 0, testimonial: 0 }).sort({ createdAt: -1 }).limit(limit).toArray() as unknown as Promise<CaseStudy[]>;
 }
 
 export async function getAllCaseStudyIds(): Promise<string[]> {
   const collection = await getCaseStudyCollection();
-  const items = await collection.find({ clientId: getClientId(), status: 'published' }).project({ caseStudyId: 1 }).toArray();
+  const items = await collection.find({ clientId: getClientId(), status: 'published' }).project({ caseStudyId: 1 }).limit(1000).toArray();
   return items.map((i) => i.caseStudyId);
 }
 
@@ -600,12 +600,12 @@ export async function getPublishedIndustryBriefById(briefId: string): Promise<In
 
 export async function getAllPublishedIndustryBriefs(limit: number = 200): Promise<IndustryBrief[]> {
   const collection = await getIndustryBriefCollection();
-  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ createdAt: -1 }).limit(limit).toArray();
+  return collection.find({ clientId: getClientId(), status: 'published' }).project({ content: 0, keyFindings: 0, recommendations: 0 }).sort({ createdAt: -1 }).limit(limit).toArray() as unknown as Promise<IndustryBrief[]>;
 }
 
 export async function getAllIndustryBriefIds(): Promise<string[]> {
   const collection = await getIndustryBriefCollection();
-  const items = await collection.find({ clientId: getClientId(), status: 'published' }).project({ briefId: 1 }).toArray();
+  const items = await collection.find({ clientId: getClientId(), status: 'published' }).project({ briefId: 1 }).limit(1000).toArray();
   return items.map((i) => i.briefId);
 }
 
@@ -632,12 +632,12 @@ export async function getPublishedVideoById(videoId: string): Promise<Video | nu
 
 export async function getAllPublishedVideos(limit: number = 200): Promise<Video[]> {
   const collection = await getVideoCollection();
-  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ createdAt: -1 }).limit(limit).toArray();
+  return collection.find({ clientId: getClientId(), status: 'published' }).project({ transcript: 0 }).sort({ createdAt: -1 }).limit(limit).toArray() as unknown as Promise<Video[]>;
 }
 
 export async function getAllVideoIds(): Promise<string[]> {
   const collection = await getVideoCollection();
-  const items = await collection.find({ clientId: getClientId(), status: 'published' }).project({ videoId: 1 }).toArray();
+  const items = await collection.find({ clientId: getClientId(), status: 'published' }).project({ videoId: 1 }).limit(1000).toArray();
   return items.map((i) => i.videoId);
 }
 
@@ -664,12 +664,12 @@ export async function getPublishedToolById(toolId: string): Promise<Tool | null>
 
 export async function getAllPublishedTools(limit: number = 200): Promise<Tool[]> {
   const collection = await getToolCollection();
-  return collection.find({ clientId: getClientId(), status: 'published' }).sort({ createdAt: -1 }).limit(limit).toArray();
+  return collection.find({ clientId: getClientId(), status: 'published' }).project({ checklistItems: 0, assessmentQuestions: 0, assessmentResults: 0, calculatorConfig: 0 }).sort({ createdAt: -1 }).limit(limit).toArray() as unknown as Promise<Tool[]>;
 }
 
 export async function getAllToolIds(): Promise<string[]> {
   const collection = await getToolCollection();
-  const items = await collection.find({ clientId: getClientId(), status: 'published' }).project({ toolId: 1 }).toArray();
+  const items = await collection.find({ clientId: getClientId(), status: 'published' }).project({ toolId: 1 }).limit(1000).toArray();
   return items.map((i) => i.toolId);
 }
 
@@ -706,7 +706,7 @@ export async function getAllPublishedInfographics(limit: number = 200): Promise<
 
 export async function getAllInfographicIds(): Promise<string[]> {
   const collection = await getInfographicCollection();
-  const items = await collection.find({ clientId: getClientId(), status: 'published' }).project({ infographicId: 1 }).toArray();
+  const items = await collection.find({ clientId: getClientId(), status: 'published' }).project({ infographicId: 1 }).limit(1000).toArray();
   return items.map((i) => i.infographicId);
 }
 

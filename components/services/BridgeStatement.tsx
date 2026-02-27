@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import { AnimatedSection } from '@/components/AnimatedSection';
 import { ArcadeButton } from '@/components/ArcadeButton';
@@ -13,6 +13,7 @@ const BreakoutGame = dynamic(
 
 export function BridgeStatement() {
   const [playing, setPlaying] = useState(false);
+  const reducedMotion = useReducedMotion();
 
   return (
     <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
@@ -23,7 +24,7 @@ export function BridgeStatement() {
         <motion.div
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-3xl opacity-10"
           style={{ background: 'radial-gradient(circle, #FF5910 0%, transparent 70%)' }}
-          animate={{
+          animate={reducedMotion ? {} : {
             scale: [1, 1.15, 1],
             opacity: [0.1, 0.2, 0.1],
           }}

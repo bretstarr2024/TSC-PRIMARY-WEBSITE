@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { AnimatedSection } from '@/components/AnimatedSection';
 import { GradientText } from '@/components/AnimatedText';
 import type { ServiceCategory } from '@/lib/services-data';
@@ -12,6 +12,7 @@ interface AiCascadeProps {
 }
 
 export function AiCascade({ aiCategory }: AiCascadeProps) {
+  const reducedMotion = useReducedMotion();
   if (!aiCategory) return null;
 
   return (
@@ -24,7 +25,7 @@ export function AiCascade({ aiCategory }: AiCascadeProps) {
             background: 'linear-gradient(90deg, transparent, #088BA0, #73F5FF, #088BA0, transparent)',
             backgroundSize: '200% 100%',
           }}
-          animate={{ backgroundPosition: ['0% 0%', '200% 0%'] }}
+          animate={reducedMotion ? {} : { backgroundPosition: ['0% 0%', '200% 0%'] }}
           transition={{ duration: 5, repeat: Infinity, ease: 'linear' }}
         />
       </div>

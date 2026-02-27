@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 
@@ -15,6 +15,8 @@ export default function NotFound() {
     { color: '#ED0AD2', size: 460, delay: 0.3 },   // Sprinkles (outer)
   ];
 
+  const reducedMotion = useReducedMotion();
+
   return (
     <>
       <Header />
@@ -25,12 +27,12 @@ export default function NotFound() {
           style={{
             background: 'radial-gradient(circle, #FF5910 0%, #ED0AD2 30%, #73F5FF 60%, transparent 70%)',
           }}
-          animate={{
+          animate={reducedMotion ? {} : {
             scale: [1, 1.1, 1],
             opacity: [0.15, 0.25, 0.15],
             rotate: [0, 180, 360],
           }}
-          transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+          transition={{ duration: 20, repeat: reducedMotion ? 0 : Infinity, ease: 'linear' }}
         />
 
         <div className="relative z-10 text-center px-4">
@@ -52,15 +54,15 @@ export default function NotFound() {
                   boxShadow: `0 0 30px ${ring.color}40, inset 0 0 30px ${ring.color}20, 0 0 60px ${ring.color}20`,
                 }}
                 initial={{ opacity: 0, scale: 0.8 }}
-                animate={{
+                animate={reducedMotion ? {} : {
                   opacity: [0.4, 0.8, 0.4],
                   scale: [0.98, 1.02, 0.98],
                   rotate: [0, i % 2 === 0 ? 360 : -360],
                 }}
                 transition={{
-                  opacity: { duration: 3, repeat: Infinity, delay: ring.delay, ease: 'easeInOut' },
-                  scale: { duration: 4, repeat: Infinity, delay: ring.delay, ease: 'easeInOut' },
-                  rotate: { duration: 30 + i * 10, repeat: Infinity, ease: 'linear' },
+                  opacity: { duration: 3, repeat: reducedMotion ? 0 : Infinity, delay: ring.delay, ease: 'easeInOut' },
+                  scale: { duration: 4, repeat: reducedMotion ? 0 : Infinity, delay: ring.delay, ease: 'easeInOut' },
+                  rotate: { duration: 30 + i * 10, repeat: reducedMotion ? 0 : Infinity, ease: 'linear' },
                 }}
               />
             ))}
@@ -78,11 +80,11 @@ export default function NotFound() {
                 background: 'radial-gradient(circle, #FF5910 0%, #ED0AD2 50%, transparent 70%)',
                 filter: 'blur(40px)',
               }}
-              animate={{
+              animate={reducedMotion ? {} : {
                 opacity: [0.5, 0.8, 0.5],
                 scale: [1, 1.15, 1],
               }}
-              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+              transition={{ duration: 4, repeat: reducedMotion ? 0 : Infinity, ease: 'easeInOut' }}
             />
 
             {/* The photo — circular, 70s treatment */}
@@ -143,13 +145,13 @@ export default function NotFound() {
                   backgroundColor: spark.color,
                   boxShadow: `0 0 10px ${spark.color}, 0 0 20px ${spark.color}80`,
                 }}
-                animate={{
+                animate={reducedMotion ? {} : {
                   opacity: [0, 1, 0],
                   scale: [0.5, 1.5, 0.5],
                 }}
                 transition={{
                   duration: 2,
-                  repeat: Infinity,
+                  repeat: reducedMotion ? 0 : Infinity,
                   delay: spark.delay,
                   ease: 'easeInOut',
                 }}

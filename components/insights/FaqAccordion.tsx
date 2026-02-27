@@ -36,6 +36,7 @@ export function FaqAccordion({ items, schemaId }: FaqAccordionProps) {
             <button
               onClick={() => setOpenIndex(openIndex === index ? null : index)}
               className="w-full flex items-center justify-between text-left gap-4"
+              aria-expanded={openIndex === index}
             >
               <span className="text-white font-medium text-lg">{item.question}</span>
               <svg

@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import Link from 'next/link';
 import type { ServiceCategory } from '@/lib/services-data';
 
@@ -9,6 +9,7 @@ interface ServiceSubpageHeroProps {
 }
 
 export function ServiceSubpageHero({ category }: ServiceSubpageHeroProps) {
+  const reducedMotion = useReducedMotion();
   const universeLabel =
     category.universe === 'ai-native'
       ? 'AI-Native Solutions'
@@ -22,7 +23,7 @@ export function ServiceSubpageHero({ category }: ServiceSubpageHeroProps) {
         style={{
           background: `radial-gradient(circle, ${category.color} 0%, transparent 70%)`,
         }}
-        animate={{
+        animate={reducedMotion ? {} : {
           scale: [1, 1.1, 1],
           opacity: [0.1, 0.15, 0.1],
         }}

@@ -244,6 +244,7 @@ export async function getRecentPublishedTitles(
       { clientId, contentType, status: 'published', publishedAt: { $gte: cutoff } },
       { projection: { title: 1 } }
     )
+    .limit(1000)
     .toArray();
 
   return items.map((i) => i.title).filter((t): t is string => !!t);
@@ -413,7 +414,7 @@ export async function getPublishedBlogPostBySlug(slug: string): Promise<BlogPost
 export async function getAllPublishedBlogPosts(limit: number = 500): Promise<BlogPost[]> {
   const collection = await getBlogPostsCollection();
   const clientId = getClientId();
-  return collection.find({ clientId, status: 'published' }).sort({ date: -1 }).limit(limit).toArray();
+  return collection.find({ clientId, status: 'published' }).project({ content: 0, sourceClaims: 0 }).sort({ date: -1 }).limit(limit).toArray() as unknown as Promise<BlogPost[]>;
 }
 
 export async function getAllBlogPostSlugs(): Promise<string[]> {
@@ -422,6 +423,7 @@ export async function getAllBlogPostSlugs(): Promise<string[]> {
   const posts = await collection
     .find({ clientId, status: 'published' })
     .project({ slug: 1 })
+    .limit(1000)
     .toArray();
   return posts.map((p) => p.slug);
 }

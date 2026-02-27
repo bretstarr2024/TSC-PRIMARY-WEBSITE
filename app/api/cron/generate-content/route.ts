@@ -194,8 +194,13 @@ async function writeContentToDb(
         headline: (data.headline as string) || '',
         summary: (data.summary as string) || '',
         commentary: (data.commentary as string) || '',
-        source: (data.source as { name: string; url: string; publishedAt: Date }) ||
-          { name: 'TSC Analysis', url: '', publishedAt: new Date() },
+        source: data.source
+          ? {
+              name: String((data.source as Record<string, unknown>).name || 'TSC Analysis'),
+              url: String((data.source as Record<string, unknown>).url || ''),
+              publishedAt: new Date(String((data.source as Record<string, unknown>).publishedAt) || Date.now()),
+            }
+          : { name: 'TSC Analysis', url: '', publishedAt: new Date() },
         category: ((data.category as string) || 'marketing') as 'marketing' | 'ai' | 'industry' | 'research',
         sentiment: ((data.sentiment as string) || 'neutral') as 'positive' | 'neutral' | 'negative',
         impact: ((data.impact as string) || 'medium') as 'high' | 'medium' | 'low',

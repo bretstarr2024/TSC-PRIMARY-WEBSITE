@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { ReactNode } from 'react';
 
 interface AnimatedTextProps {
@@ -93,6 +93,8 @@ export function TypewriterText({
   delay = 0,
   speed = 0.05,
 }: TypewriterTextProps) {
+  const reducedMotion = useReducedMotion();
+
   return (
     <motion.span className={className}>
       {children.split('').map((char, index) => (
@@ -111,11 +113,11 @@ export function TypewriterText({
       ))}
       <motion.span
         initial={{ opacity: 0 }}
-        animate={{ opacity: [0, 1, 0] }}
+        animate={reducedMotion ? { opacity: 1 } : { opacity: [0, 1, 0] }}
         transition={{
           duration: 0.8,
           delay: delay + children.length * speed,
-          repeat: Infinity,
+          repeat: reducedMotion ? 0 : Infinity,
         }}
         className="inline-block w-[2px] h-[1em] bg-current ml-1 align-middle"
       />
@@ -138,10 +140,12 @@ export function GradientText({
   via = 'via-neon-cactus',
   to = 'to-tidal-wave',
 }: GradientTextProps) {
+  const reducedMotion = useReducedMotion();
+
   return (
     <motion.span
       className={`bg-gradient-to-r ${from} ${via} ${to} bg-clip-text text-transparent bg-[length:200%_auto] ${className}`}
-      animate={{
+      animate={reducedMotion ? {} : {
         backgroundPosition: ['0% center', '100% center', '0% center'],
       }}
       transition={{

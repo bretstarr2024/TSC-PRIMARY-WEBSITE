@@ -34,6 +34,7 @@ export function AboutFaq() {
                     <button
                       className="w-full text-left px-6 py-5 flex items-center justify-between gap-4"
                       onClick={() => setOpenIndex(openIndex === i ? null : i)}
+                      aria-expanded={openIndex === i}
                     >
                       <span className="text-white font-medium text-sm md:text-base">
                         {faq.question}

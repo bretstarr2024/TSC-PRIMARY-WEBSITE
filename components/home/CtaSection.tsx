@@ -1,10 +1,11 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { AnimatedSection } from '@/components/AnimatedSection';
 import { CoinSlotCTA } from '@/components/CoinSlotCTA';
 
 export function CtaSection() {
+  const reducedMotion = useReducedMotion();
   return (
     <section className="relative py-32 md:py-40 overflow-hidden">
       {/* Background gradient */}
@@ -13,7 +14,7 @@ export function CtaSection() {
         <motion.div
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-3xl opacity-15"
           style={{ background: 'radial-gradient(circle, #FF5910 0%, transparent 70%)' }}
-          animate={{
+          animate={reducedMotion ? {} : {
             scale: [1, 1.2, 1],
             opacity: [0.15, 0.25, 0.15],
           }}

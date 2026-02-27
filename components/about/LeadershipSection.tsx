@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { AnimatedSection } from '@/components/AnimatedSection';
 
 // --- Generative Avatar ---
@@ -37,7 +37,7 @@ const avatarPalette: [string, string][] = [
   ['#E1FF00', '#ED0AD2'],
 ];
 
-function GenerativeAvatar({ name, index, size }: { name: string; index: number; size?: number }) {
+function GenerativeAvatar({ name, index, size, reducedMotion }: { name: string; index: number; size?: number; reducedMotion?: boolean }) {
   const px = size ?? 56;
   const hash = nameHash(name);
   const rand = prng(hash);
@@ -72,12 +72,14 @@ function GenerativeAvatar({ name, index, size }: { name: string; index: number; 
       <circle cx="28" cy="28" r="26" fill={`url(#av${index}g)`} />
 
       {/* Ring 1 */}
-      <g>
-        <animateTransform
-          attributeName="transform" type="rotate"
-          from={`${r1Start} 28 28`} to={`${r1Start + 360} 28 28`}
-          dur={`${r1Dur}s`} repeatCount="indefinite"
-        />
+      <g transform={reducedMotion ? `rotate(${r1Start} 28 28)` : undefined}>
+        {!reducedMotion && (
+          <animateTransform
+            attributeName="transform" type="rotate"
+            from={`${r1Start} 28 28`} to={`${r1Start + 360} 28 28`}
+            dur={`${r1Dur}s`} repeatCount="indefinite"
+          />
+        )}
         <ellipse cx="28" cy="28" rx={r1Rx} ry={r1Ry}
           fill="none" stroke={c1} strokeWidth="0.75" opacity="0.3" />
         <circle
@@ -88,12 +90,14 @@ function GenerativeAvatar({ name, index, size }: { name: string; index: number; 
       </g>
 
       {/* Ring 2 - counter-rotate */}
-      <g>
-        <animateTransform
-          attributeName="transform" type="rotate"
-          from={`${r2Start + 360} 28 28`} to={`${r2Start} 28 28`}
-          dur={`${r2Dur}s`} repeatCount="indefinite"
-        />
+      <g transform={reducedMotion ? `rotate(${r2Start} 28 28)` : undefined}>
+        {!reducedMotion && (
+          <animateTransform
+            attributeName="transform" type="rotate"
+            from={`${r2Start + 360} 28 28`} to={`${r2Start} 28 28`}
+            dur={`${r2Dur}s`} repeatCount="indefinite"
+          />
+        )}
         <ellipse cx="28" cy="28" rx={r2Rx} ry={r2Ry}
           fill="none" stroke={c2} strokeWidth="0.75" opacity="0.3" />
         <circle
@@ -104,22 +108,30 @@ function GenerativeAvatar({ name, index, size }: { name: string; index: number; 
       </g>
 
       {/* Ambient spark */}
-      <circle cx="28" cy="6" r="1" fill={c2}>
-        <animateTransform
-          attributeName="transform" type="rotate"
-          from="0 28 28" to="360 28 28"
-          dur={`${sparkDur}s`} repeatCount="indefinite"
-        />
-        <animate
-          attributeName="opacity" values="0;0.5;0"
-          dur="3.5s" begin={`${sparkPhase}s`} repeatCount="indefinite"
-        />
+      <circle cx="28" cy="6" r="1" fill={c2} opacity={reducedMotion ? 0.5 : undefined}>
+        {!reducedMotion && (
+          <>
+            <animateTransform
+              attributeName="transform" type="rotate"
+              from="0 28 28" to="360 28 28"
+              dur={`${sparkDur}s`} repeatCount="indefinite"
+            />
+            <animate
+              attributeName="opacity" values="0;0.5;0"
+              dur="3.5s" begin={`${sparkPhase}s`} repeatCount="indefinite"
+            />
+          </>
+        )}
       </circle>
 
       {/* Center core */}
       <circle cx="28" cy="28" r="3.5" fill={c1} opacity="0.8">
-        <animate attributeName="r" values="3;4.5;3" dur={`${pulseDur}s`} repeatCount="indefinite" />
-        <animate attributeName="opacity" values="0.6;1;0.6" dur={`${pulseDur}s`} repeatCount="indefinite" />
+        {!reducedMotion && (
+          <>
+            <animate attributeName="r" values="3;4.5;3" dur={`${pulseDur}s`} repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.6;1;0.6" dur={`${pulseDur}s`} repeatCount="indefinite" />
+          </>
+        )}
       </circle>
       <circle cx="28" cy="28" r="1.5" fill="white" opacity="0.85" />
     </svg>
@@ -199,6 +211,7 @@ const leaders: Leader[] = [
 ];
 
 export function LeadershipSection() {
+  const reducedMotion = useReducedMotion();
   const [selected, setSelected] = useState<number | null>(null);
 
   // Lock body scroll when modal is open
@@ -243,11 +256,20 @@ export function LeadershipSection() {
                 whileHover={{ y: -4 }}
                 transition={{ duration: 0.3 }}
                 onClick={() => setSelected(i)}
+                onKeyDown={(e: React.KeyboardEvent) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setSelected(i);
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+                aria-label={`View ${leader.name}'s bio`}
                 layoutId={`leader-card-${i}`}
               >
                 {/* Generative avatar */}
                 <div className="mb-4">
-                  <GenerativeAvatar name={leader.name} index={i} />
+                  <GenerativeAvatar name={leader.name} index={i} reducedMotion={!!reducedMotion} />
                 </div>
 
                 {/* Info */}
@@ -277,6 +299,9 @@ export function LeadershipSection() {
         {selected !== null && (
           <motion.div
             className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="leader-modal-name"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -324,11 +349,11 @@ export function LeadershipSection() {
                 <div className="flex items-start gap-6 mb-8">
                   <div className="shrink-0">
                     <div className="w-20 h-20">
-                      <GenerativeAvatar name={leaders[selected].name} index={selected} size={80} />
+                      <GenerativeAvatar name={leaders[selected].name} index={selected} size={80} reducedMotion={!!reducedMotion} />
                     </div>
                   </div>
                   <div className="min-w-0">
-                    <h3 className="text-white font-bold text-2xl mb-1">
+                    <h3 id="leader-modal-name" className="text-white font-bold text-2xl mb-1">
                       {leaders[selected].name}
                     </h3>
                     <p className="text-greige text-sm mb-3">{leaders[selected].title}</p>

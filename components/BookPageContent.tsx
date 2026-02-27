@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useRef, useState, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { Header } from '@/components/Header';
@@ -47,6 +47,7 @@ const photoSparkles = [
 ];
 
 function BookPageInner() {
+  const reducedMotion = useReducedMotion();
   const calContainerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const searchParams = useSearchParams();
@@ -103,12 +104,12 @@ function BookPageInner() {
           style={{
             background: 'radial-gradient(circle, #FF5910 0%, #ED0AD2 25%, #73F5FF 50%, transparent 70%)',
           }}
-          animate={{
+          animate={reducedMotion ? {} : {
             scale: [1, 1.08, 1],
             opacity: [0.12, 0.2, 0.12],
             rotate: [0, 180, 360],
           }}
-          transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+          transition={{ duration: 30, repeat: reducedMotion ? 0 : Infinity, ease: 'linear' }}
         />
 
         {/* Glow rings — large, centered behind calendar */}
@@ -127,21 +128,21 @@ function BookPageInner() {
                 border: `1.5px solid ${ring.color}`,
                 boxShadow: `0 0 40px ${ring.color}30, inset 0 0 40px ${ring.color}15, 0 0 80px ${ring.color}15`,
               }}
-              animate={{
+              animate={reducedMotion ? {} : {
                 opacity: [0.3, 0.6, 0.3],
                 scale: [0.99, 1.01, 0.99],
                 rotate: [0, i % 2 === 0 ? 360 : -360],
               }}
               transition={{
-                opacity: { duration: 4, repeat: Infinity, delay: ring.delay, ease: 'easeInOut' },
-                scale: { duration: 5, repeat: Infinity, delay: ring.delay, ease: 'easeInOut' },
-                rotate: { duration: 40 + i * 12, repeat: Infinity, ease: 'linear' },
+                opacity: { duration: 4, repeat: reducedMotion ? 0 : Infinity, delay: ring.delay, ease: 'easeInOut' },
+                scale: { duration: 5, repeat: reducedMotion ? 0 : Infinity, delay: ring.delay, ease: 'easeInOut' },
+                rotate: { duration: 40 + i * 12, repeat: reducedMotion ? 0 : Infinity, ease: 'linear' },
               }}
             />
           ))}
 
           {/* Ambient sparkles around the rings */}
-          {[
+          {!reducedMotion && [
             { x: 100, y: 150, color: '#E1FF00', delay: 0.5 },
             { x: 700, y: 200, color: '#73F5FF', delay: 0.8 },
             { x: 80, y: 600, color: '#ED0AD2', delay: 1.1 },
@@ -190,7 +191,7 @@ function BookPageInner() {
             >
               {/* Sparkle constellation around photo */}
               <div className="relative w-24 h-24 md:w-28 md:h-28">
-                {photoSparkles.map((spark, i) => (
+                {!reducedMotion && photoSparkles.map((spark, i) => (
                   <motion.div
                     key={`m-spark-${i}`}
                     className="absolute rounded-full"
@@ -275,11 +276,11 @@ function BookPageInner() {
                     border: `1.5px solid ${activeMember.color}`,
                     boxShadow: `0 0 20px ${activeMember.color}50, 0 0 40px ${activeMember.color}20`,
                   }}
-                  animate={{
+                  animate={reducedMotion ? {} : {
                     opacity: [0.5, 1, 0.5],
                     scale: [0.98, 1.03, 0.98],
                   }}
-                  transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                  transition={{ duration: 2, repeat: reducedMotion ? 0 : Infinity, ease: 'easeInOut' }}
                 />
 
                 {/* Outer glow ring */}
@@ -289,15 +290,15 @@ function BookPageInner() {
                     border: `1px solid ${activeMember.color}`,
                     boxShadow: `0 0 15px ${activeMember.color}30, 0 0 30px ${activeMember.color}15`,
                   }}
-                  animate={{
+                  animate={reducedMotion ? {} : {
                     opacity: [0.2, 0.6, 0.2],
                     scale: [1.02, 0.97, 1.02],
                     rotate: [0, 360],
                   }}
                   transition={{
-                    opacity: { duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 0.5 },
-                    scale: { duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 0.5 },
-                    rotate: { duration: 20, repeat: Infinity, ease: 'linear' },
+                    opacity: { duration: 3, repeat: reducedMotion ? 0 : Infinity, ease: 'easeInOut', delay: 0.5 },
+                    scale: { duration: 4, repeat: reducedMotion ? 0 : Infinity, ease: 'easeInOut', delay: 0.5 },
+                    rotate: { duration: 20, repeat: reducedMotion ? 0 : Infinity, ease: 'linear' },
                   }}
                 />
 

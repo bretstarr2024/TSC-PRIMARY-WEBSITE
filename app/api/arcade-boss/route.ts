@@ -69,13 +69,15 @@ export async function POST(request: Request) {
     try {
       const { getDatabase } = await import('@/lib/mongodb');
       const db = await getDatabase();
-      await db.collection('arcade_bosses').insertOne({
-        email,
-        game,
-        score: score || 0,
-        initials: playerInitials,
-        createdAt: timestamp,
-      });
+      await db.collection('arcade_bosses').updateOne(
+        { email, game },
+        {
+          $max: { score: score || 0 },
+          $set: { initials: playerInitials, updatedAt: timestamp },
+          $setOnInsert: { email, game, createdAt: timestamp },
+        },
+        { upsert: true }
+      );
     } catch {
       console.warn('arcade-boss: MongoDB unavailable, boss not stored');
     }

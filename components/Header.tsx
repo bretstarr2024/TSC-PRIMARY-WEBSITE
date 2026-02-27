@@ -144,10 +144,10 @@ export function Header() {
                   className="mt-4 inline-flex items-center px-8 py-4 text-lg font-medium text-white bg-atomic-tangerine rounded-lg hover:bg-hot-sauce transition-colors hover:no-underline"
                   data-track-cta="header-mobile"
                   data-track-component="Header"
-                  data-track-label="Let's Talk!"
+                  data-track-label="New Game"
                   data-track-destination="/contact"
                 >
-                  Let&apos;s Talk!
+                  New Game
                 </Link>
               </motion.div>
             </nav>
