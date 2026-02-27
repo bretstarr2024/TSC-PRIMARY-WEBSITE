@@ -22,6 +22,7 @@ const pressStart = Press_Start_2P({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://tsc-primary-website.vercel.app'),
   title: {
     default: "The Starr Conspiracy | B2B Marketing Agency",
     template: "%s | The Starr Conspiracy",
