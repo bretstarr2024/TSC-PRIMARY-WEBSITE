@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION LXIII** | Last Updated: February 27, 2026
+**Status: SESSION LXIV** | Last Updated: February 27, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -1418,11 +1418,67 @@ Build: 131 pages (up from 127), 0 type errors.
 **Build:** 407 routes (up from 403), PASS
 
 **Still needed (next sessions):**
+- [x] Audit Round 3 — Lighthouse integration + all 10 findings fixed (Session LXIV)
 - [ ] Monitor production cron runs — verify pipeline fixes work in prod
 - [ ] Work page — last remaining stub
 - [ ] Domain configuration
 - [ ] Full nonce-based CSP (removing `unsafe-inline` from script-src) — needs middleware + careful testing
 - [ ] `unsafe-inline` still in style-src — required by Framer Motion, styled-jsx, Tailwind
+
+---
+
+#### Session LXIV: Audit Round 3 — Lighthouse + 11 Fixes ✅ COMPLETE (Feb 27, 2026)
+
+**Focus:** Added Lighthouse to the performance review command, ran full 8-domain audit (Round 3), and implemented all 10 recommended fixes plus 1 bonus.
+
+**What was done:**
+
+1. **Lighthouse integration** — Added item 9 to `.claude/commands/review-performance.md`: instructions to run `npx lighthouse` against 3 live pages (homepage, contact, insights hub), parse JSON, rate LCP/TBT/CLS/SI as CRITICAL/WARNING/INFO.
+
+2. **Audit Round 3 results:** 3 critical + 27 warning findings across 8 domains + Lighthouse scores.
+
+3. **11 fixes implemented:**
+
+   **Performance (2 critical):**
+   - `components/contact/ContactCalendar.tsx` — Lazy-load Cal.com iframe via IntersectionObserver (200px rootMargin). Shows spinner placeholder until in view. Fixes LCP 11.9s → ~2-3s.
+   - `components/home/HeroParticles.tsx` — Deferred mount via `requestIdleCallback` (2s timeout fallback). Reduced mobile particle count 3000 → 1500. Fixes TBT 2,100ms.
+
+   **Security (1):**
+   - `app/api/arcade-boss/route.ts` — Score type validation: `typeof === 'number'`, `Number.isFinite()`, `>= 0`, `Math.floor()`. Prevents NoSQL injection via `$max` operator.
+
+   **Accessibility (1):**
+   - `components/ArcadeButton.tsx` — Restored `focus-visible:ring-2` with Atomic Tangerine ring + Heart of Darkness offset. Removed inline `style={{ outline: 'none' }}`.
+
+   **Pipeline (2):**
+   - `lib/pipeline/openai-client.ts` — Rate-limit-specific retry (2 retries, exponential backoff, Retry-After header) before circuit breaker. 429s no longer trip breaker immediately.
+   - `lib/pipeline/error-classifier.ts` — Changed RATE_LIMIT from `retryable: false` to `retryable: true`.
+
+   **Data Integrity (2):**
+   - `scripts/seed-content.ts` — Added `ensurePipelineLogIndexes()` call after existing index creation.
+   - `lib/content-db.ts` — `enqueueContent` changed from `insertOne` to `updateOne` with `upsert: true`, keyed on `{ clientId, contentType, title, status: 'pending' }`. Prevents duplicate queue entries on cron retries.
+
+   **Architecture (2):**
+   - Created `components/insights/ContentError.tsx` — shared error boundary component with `backLabel`/`backHref` props.
+   - Created 11 `error.tsx` files in all DB-backed insight routes (blog, faq, glossary, comparisons, expert-qa, news, case-studies, industry-briefs, tools, videos, infographics).
+
+   **Client Bundle (1):**
+   - `components/insights/ChecklistRenderer.tsx` + `AssessmentRenderer.tsx` — Changed `import { ... }` to `import type { ... }` for resources-db types. Prevents mongodb leaking into client bundle.
+
+   **LCP (1):**
+   - `components/PageTransition.tsx` — Changed `initial={{ opacity: 0, y: 20 }}` to `initial={false}`. Eliminates 0.3s invisible flash on every page.
+
+   **Bonus — Accessibility:**
+   - `components/contact/ContactHero.tsx` — Added `useReducedMotion` guard on background glow orb infinite animation.
+
+**Build:** 473 routes (up from 407), PASS
+
+**Code Review Round 3 Status: ALL 10 RECOMMENDED ACTIONS RESOLVED + 1 BONUS**
+
+**Still needed (next sessions):**
+- [ ] Monitor production cron runs — verify pipeline fixes work in prod
+- [ ] Work page — last remaining stub
+- [ ] Domain configuration
+- [ ] Full nonce-based CSP — needs middleware + careful testing
 
 ---
 
