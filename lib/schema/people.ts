@@ -59,6 +59,7 @@ export function getArticleSchema(opts: {
   tags: string[];
   wordCount?: number;
   url?: string;
+  dateModified?: string;
 }) {
   const config = getClientConfig();
   const leader = config.leaders.find((l) => l.name === opts.author);
@@ -85,5 +86,6 @@ export function getArticleSchema(opts: {
     keywords: opts.tags,
     ...(opts.wordCount && { wordCount: opts.wordCount }),
     ...(opts.url && { url: opts.url }),
+    ...(opts.dateModified && { dateModified: opts.dateModified }),
   };
 }

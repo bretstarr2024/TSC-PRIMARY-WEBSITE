@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { ScrollProgress } from '@/components/ScrollProgress';
 import { RelatedContent } from '@/components/insights/RelatedContent';
 import { CtaStrip } from '@/components/insights/CtaStrip';
 import { getPublishedNewsItemById, getAllNewsIds, NewsItem } from '@/lib/resources-db';
@@ -32,6 +33,19 @@ export async function generateMetadata({
     return {
       title: `${item.headline} | News`,
       description: item.summary.slice(0, 160),
+      alternates: { canonical: `/insights/news/${newsId}` },
+      openGraph: {
+        type: 'article',
+        title: item.headline,
+        description: item.summary.slice(0, 160),
+        ...(item.source.publishedAt && { publishedTime: new Date(item.source.publishedAt).toISOString() }),
+      },
+      ...(item.source.publishedAt && {
+        other: {
+          'twitter:label1': 'Published',
+          'twitter:data1': new Date(item.source.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+        },
+      }),
     };
   } catch {
     return { title: 'News' };
@@ -77,6 +91,7 @@ export default async function NewsDetailPage({
 
   return (
     <>
+      <ScrollProgress />
       <Header />
       <main className="min-h-screen pt-32 pb-20">
         <article className="section-wide max-w-4xl">

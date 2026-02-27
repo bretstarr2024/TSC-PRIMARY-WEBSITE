@@ -14,6 +14,7 @@ export const metadata: Metadata = {
   title: 'Contact | The Starr Conspiracy',
   description:
     'Get in touch with The Starr Conspiracy. Drop a line or book a call with a senior strategist. B2B marketing that compounds.',
+  alternates: { canonical: '/contact' },
   keywords: [
     'contact B2B marketing agency',
     'B2B marketing consultation',

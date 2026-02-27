@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { ScrollProgress } from '@/components/ScrollProgress';
 import { ContentRenderer } from '@/components/insights/ContentRenderer';
 import { RelatedContent } from '@/components/insights/RelatedContent';
 import { CtaStrip } from '@/components/insights/CtaStrip';
@@ -33,6 +34,12 @@ export async function generateMetadata({
     return {
       title: `${brief.title} | Industry Briefs`,
       description: brief.summary.slice(0, 160),
+      alternates: { canonical: `/insights/industry-briefs/${briefId}` },
+      openGraph: {
+        type: 'article',
+        title: brief.title,
+        description: brief.summary.slice(0, 160),
+      },
     };
   } catch {
     return { title: 'Industry Brief' };
@@ -59,6 +66,7 @@ export default async function IndustryBriefDetailPage({
 
   return (
     <>
+      <ScrollProgress />
       <Header />
       <main className="min-h-screen pt-32 pb-20">
         <article className="section-wide max-w-4xl">

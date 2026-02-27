@@ -16,6 +16,7 @@ export const metadata: Metadata = {
   title: 'Pricing | The Starr Conspiracy',
   description:
     'Senior B2B marketing talent combined with AI-native execution. Subscriptions from $15K/month, projects from $30K. We sell growth, not hours.',
+  alternates: { canonical: '/pricing' },
   keywords: [
     'B2B marketing agency pricing',
     'AI marketing agency',

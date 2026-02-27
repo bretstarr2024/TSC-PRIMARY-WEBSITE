@@ -15,6 +15,7 @@ export const revalidate = 3600;
 export const metadata: Metadata = {
   title: 'Grist',
   description: 'Strategic insights on B2B marketing, AI transformation, and growth strategy from The Starr Conspiracy.',
+  alternates: { canonical: '/insights' },
 };
 
 const CONTENT_TYPES = [

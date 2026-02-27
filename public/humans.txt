@@ -1,0 +1,19 @@
+/* TEAM */
+Bret Starr — Founder & Chief Strategist
+Racheal Bates — Creative Strategy
+JJ La Pata — Content & Brand
+Dan McCarron — Operations
+
+/* SITE */
+Built with: Next.js 14, TypeScript, Tailwind CSS, Framer Motion, Three.js
+Database: MongoDB Atlas
+Deployed on: Vercel
+Content engine: Autonomous AI pipeline (10 content types, 3 cron jobs)
+Last update: 2026
+
+/* THANKS */
+Ocho the octopus — chief vibes officer
+
+/* NOTE */
+If you found this file, you're our kind of person.
+thestarrconspiracy.com/careers

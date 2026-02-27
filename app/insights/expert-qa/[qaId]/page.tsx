@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { ScrollProgress } from '@/components/ScrollProgress';
 import { RelatedContent } from '@/components/insights/RelatedContent';
 import { AuthorBio } from '@/components/insights/AuthorBio';
 import { CtaStrip } from '@/components/insights/CtaStrip';
@@ -34,6 +35,16 @@ export async function generateMetadata({
     return {
       title: `${qa.question} — ${qa.expert.name} | Expert Q&A`,
       description: qa.answer.slice(0, 160),
+      alternates: { canonical: `/insights/expert-qa/${qaId}` },
+      openGraph: {
+        type: 'article',
+        title: `${qa.question} — ${qa.expert.name}`,
+        description: qa.answer.slice(0, 160),
+      },
+      other: {
+        'twitter:label1': 'Expert',
+        'twitter:data1': `${qa.expert.name}, ${qa.expert.title}`,
+      },
     };
   } catch {
     return { title: 'Expert Q&A' };
@@ -64,6 +75,7 @@ export default async function ExpertQaDetailPage({
     datePublished: qa.createdAt.toISOString(),
     author: qa.expert.name,
     tags: qa.tags,
+    dateModified: qa.updatedAt.toISOString(),
   });
 
   const expertInitials = qa.expert.name
@@ -73,6 +85,7 @@ export default async function ExpertQaDetailPage({
 
   return (
     <>
+      <ScrollProgress />
       <Header />
       <main className="min-h-screen pt-32 pb-20">
         <article className="section-wide max-w-4xl">

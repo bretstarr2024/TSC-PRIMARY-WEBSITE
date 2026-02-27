@@ -126,9 +126,14 @@ export function Footer() {
           <p className="text-xs text-greige">
             © {new Date().getFullYear()} The Starr Conspiracy. All rights reserved.
           </p>
-          <p className="text-xs text-greige/50">
-            Built by an AI content engine. Obviously.
-          </p>
+          <div className="flex items-center gap-4">
+            <Link href="/privacy" className="text-xs text-greige/50 hover:text-greige transition-colors hover:no-underline">
+              Privacy
+            </Link>
+            <p className="text-xs text-greige/50">
+              Built by an AI content engine. Obviously.
+            </p>
+          </div>
         </div>
       </div>
     </footer>

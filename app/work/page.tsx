@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: 'Work | The Starr Conspiracy',
   description:
     'See the work. Real results for B2B companies navigating growth, AI transformation, and market leadership.',
+  alternates: { canonical: '/work' },
   openGraph: {
     title: 'Work | The Starr Conspiracy',
     description:

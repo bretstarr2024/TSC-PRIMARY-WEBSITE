@@ -130,3 +130,6 @@ export const contactBreadcrumb = () =>
 
 export const careersBreadcrumb = () =>
   breadcrumb([{ name: 'Home', url: '/' }, { name: 'Careers', url: '/careers' }]);
+
+export const privacyBreadcrumb = () =>
+  breadcrumb([{ name: 'Home', url: '/' }, { name: 'Privacy Policy', url: '/privacy' }]);

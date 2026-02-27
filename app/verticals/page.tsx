@@ -14,6 +14,7 @@ export const metadata: Metadata = {
   title: 'Verticals | The Starr Conspiracy',
   description:
     'B2B marketing expertise across dozens of verticals — Talent Acquisition, Learning & Development, Employee Engagement, Core HCM, Enterprise SaaS, Cybersecurity, FinTech, and more. Vertical-specific strategies grounded in 25+ years of experience.',
+  alternates: { canonical: '/verticals' },
   openGraph: {
     title: 'Verticals | The Starr Conspiracy',
     description:

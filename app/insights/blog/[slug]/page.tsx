@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { ScrollProgress } from '@/components/ScrollProgress';
 import { ContentRenderer } from '@/components/insights/ContentRenderer';
 import { RelatedContent } from '@/components/insights/RelatedContent';
 import { AuthorBio } from '@/components/insights/AuthorBio';
@@ -35,6 +36,19 @@ export async function generateMetadata({
     return {
       title: `${post.title} | Blog`,
       description: post.description,
+      alternates: { canonical: `/insights/blog/${slug}` },
+      openGraph: {
+        type: 'article',
+        title: post.title,
+        description: post.description,
+        publishedTime: post.date,
+      },
+      other: {
+        'twitter:label1': 'Written by',
+        'twitter:data1': post.author,
+        'twitter:label2': 'Published',
+        'twitter:data2': new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+      },
     };
   } catch {
     return { title: 'Blog Post' };
@@ -64,12 +78,14 @@ export default async function BlogDetailPage({
     author: post.author,
     tags: post.tags,
     wordCount: post.content.split(/\s+/).length,
+    dateModified: post.updatedAt.toISOString(),
   });
 
   const breadcrumbSchema = blogBreadcrumb(post.title);
 
   return (
     <>
+      <ScrollProgress />
       <Header />
       <main className="min-h-screen pt-32 pb-20">
         <article className="section-wide max-w-4xl">

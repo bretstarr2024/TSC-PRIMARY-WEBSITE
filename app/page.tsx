@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { HeroSection } from '@/components/home/HeroSection';
@@ -10,6 +11,10 @@ import { CtaSection } from '@/components/home/CtaSection';
 import { AnswerCapsulesSection } from '@/components/AnswerCapsulesSection';
 import { homepageCapsules } from '@/lib/schema/hub-faqs';
 import { getFaqSchema } from '@/lib/schema/service-faq';
+
+export const metadata: Metadata = {
+  alternates: { canonical: '/' },
+};
 
 export default function Home() {
   return (

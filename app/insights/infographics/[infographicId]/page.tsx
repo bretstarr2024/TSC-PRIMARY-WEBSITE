@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { ScrollProgress } from '@/components/ScrollProgress';
 import { RelatedContent } from '@/components/insights/RelatedContent';
 import { CtaStrip } from '@/components/insights/CtaStrip';
 import { getPublishedInfographicById, getAllInfographicIds, Infographic } from '@/lib/resources-db';
@@ -33,6 +34,12 @@ export async function generateMetadata({
     return {
       title: `${ig.title} | Infographics`,
       description: ig.description.slice(0, 160),
+      alternates: { canonical: `/insights/infographics/${infographicId}` },
+      openGraph: {
+        type: 'article',
+        title: ig.title,
+        description: ig.description.slice(0, 160),
+      },
     };
   } catch {
     return { title: 'Infographic' };
@@ -59,6 +66,7 @@ export default async function InfographicDetailPage({
 
   return (
     <>
+      <ScrollProgress />
       <Header />
       <main className="min-h-screen pt-32 pb-20">
         <article className="section-wide max-w-4xl">

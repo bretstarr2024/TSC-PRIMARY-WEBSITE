@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { ScrollProgress } from '@/components/ScrollProgress';
 import { RelatedContent } from '@/components/insights/RelatedContent';
 import { CtaStrip } from '@/components/insights/CtaStrip';
 import { getPublishedComparisonById, getAllComparisonIds, Comparison } from '@/lib/resources-db';
@@ -32,6 +33,12 @@ export async function generateMetadata({
     return {
       title: `${comp.title} | Comparisons`,
       description: comp.introduction.slice(0, 160),
+      alternates: { canonical: `/insights/comparisons/${comparisonId}` },
+      openGraph: {
+        type: 'article',
+        title: comp.title,
+        description: comp.introduction.slice(0, 160),
+      },
     };
   } catch {
     return { title: 'Comparison' };
@@ -58,6 +65,7 @@ export default async function ComparisonDetailPage({
 
   return (
     <>
+      <ScrollProgress />
       <Header />
       <main className="min-h-screen pt-32 pb-20">
         <article className="section-wide max-w-5xl">

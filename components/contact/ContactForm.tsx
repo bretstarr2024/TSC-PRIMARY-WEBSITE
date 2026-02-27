@@ -49,6 +49,10 @@ export function ContactForm({ source, ctaId }: ContactFormProps) {
 
   return (
     <div className="relative min-h-[280px]">
+      <div aria-live="polite" aria-atomic="true" className="sr-only">
+        {formState === 'success' && 'Message sent successfully. We will be in touch.'}
+        {formState === 'error' && `Error: ${errorMessage}`}
+      </div>
       <AnimatePresence mode="wait">
         {formState === 'success' ? (
           <motion.div

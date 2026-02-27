@@ -16,6 +16,7 @@ export const metadata: Metadata = {
   title: 'Services | The Starr Conspiracy',
   description:
     'Full-stack B2B marketing services: brand strategy, demand generation, digital performance, content & creative, advisory, and AI-native marketing solutions.',
+  alternates: { canonical: '/services' },
   openGraph: {
     title: 'Services | The Starr Conspiracy',
     description:

@@ -16,6 +16,7 @@ export const metadata: Metadata = {
   title: 'About | The Starr Conspiracy',
   description:
     'The Starr Conspiracy is a strategic B2B marketing agency founded in 1999, combining 25+ years of marketing fundamentals with AI-native capabilities to help 3,000+ technology companies grow.',
+  alternates: { canonical: '/about' },
   keywords: [
     'B2B marketing agency',
     'The Starr Conspiracy',

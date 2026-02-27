@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { ScrollProgress } from '@/components/ScrollProgress';
 import { RelatedContent } from '@/components/insights/RelatedContent';
 import { CtaStrip } from '@/components/insights/CtaStrip';
 import { getPublishedGlossaryTermById, getAllGlossaryTermIds, GlossaryTerm } from '@/lib/resources-db';
@@ -32,6 +33,12 @@ export async function generateMetadata({
     return {
       title: `${term.term} — Definition | Glossary`,
       description: term.shortDefinition,
+      alternates: { canonical: `/insights/glossary/${termId}` },
+      openGraph: {
+        type: 'article',
+        title: term.term,
+        description: term.shortDefinition,
+      },
     };
   } catch {
     return { title: 'Glossary Term' };
@@ -66,6 +73,7 @@ export default async function GlossaryDetailPage({
 
   return (
     <>
+      <ScrollProgress />
       <Header />
       <main className="min-h-screen pt-32 pb-20">
         <article className="section-wide max-w-4xl">

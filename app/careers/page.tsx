@@ -15,6 +15,7 @@ export const metadata: Metadata = {
   title: 'Careers | The Starr Conspiracy',
   description:
     'Join The Starr Conspiracy. We are hiring AI Workflow Engineers and Senior B2B Marketing Strategists. Remote-first, senior by default, irreverent on purpose.',
+  alternates: { canonical: '/careers' },
   keywords: [
     'B2B marketing careers',
     'AI workflow engineer jobs',

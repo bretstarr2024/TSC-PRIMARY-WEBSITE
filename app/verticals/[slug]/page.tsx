@@ -32,6 +32,7 @@ export function generateMetadata({ params }: PageProps): Metadata {
   return {
     title: `${industry.name} Marketing | Verticals | The Starr Conspiracy`,
     description: `${industry.tagline} ${industry.description}`,
+    alternates: { canonical: `/verticals/${params.slug}` },
     openGraph: {
       title: `${industry.name} Marketing | The Starr Conspiracy`,
       description: industry.description,

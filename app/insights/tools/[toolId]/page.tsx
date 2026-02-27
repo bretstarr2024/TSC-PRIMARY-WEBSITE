@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { ScrollProgress } from '@/components/ScrollProgress';
 import { ChecklistRenderer } from '@/components/insights/ChecklistRenderer';
 import { AssessmentRenderer } from '@/components/insights/AssessmentRenderer';
 import { RelatedContent } from '@/components/insights/RelatedContent';
@@ -34,6 +35,12 @@ export async function generateMetadata({
     return {
       title: `${tool.title} | Tools`,
       description: tool.description.slice(0, 160),
+      alternates: { canonical: `/insights/tools/${toolId}` },
+      openGraph: {
+        type: 'article',
+        title: tool.title,
+        description: tool.description.slice(0, 160),
+      },
     };
   } catch {
     return { title: 'Tool' };
@@ -66,6 +73,7 @@ export default async function ToolDetailPage({
 
   return (
     <>
+      <ScrollProgress />
       <Header />
       <main className="min-h-screen pt-32 pb-20">
         <article className="section-wide max-w-4xl">

@@ -6,6 +6,11 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { NoiseOverlay } from "@/components/GradientBackground";
 import { TrackingProvider } from "@/components/TrackingProvider";
+import { ConsoleGreeting } from "@/components/ConsoleGreeting";
+import { KonamiCode } from "@/components/KonamiCode";
+import { CustomCursor } from "@/components/CustomCursor";
+import { PageTransition } from "@/components/PageTransition";
+import { CookieConsent } from "@/components/CookieConsent";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -60,6 +65,15 @@ export const metadata: Metadata = {
       follow: true,
     },
   },
+  other: {
+    'msapplication-TileColor': '#FF5910',
+    'color-scheme': 'dark',
+  },
+  alternates: {
+    types: {
+      'application/rss+xml': '/feed.xml',
+    },
+  },
 };
 
 export default function RootLayout({
@@ -69,6 +83,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`dark ${inter.variable} ${pressStart.variable}`}>
+      <head>
+        <meta name="theme-color" content="#141213" />
+      </head>
       <body className="bg-heart-of-darkness text-white antialiased font-sans">
         <a
           href="#main-content"
@@ -79,7 +96,13 @@ export default function RootLayout({
         <SmoothScroll>
           <NoiseOverlay />
           <TrackingProvider />
-          <div id="main-content">{children}</div>
+          <ConsoleGreeting />
+          <KonamiCode />
+          <CustomCursor />
+          <PageTransition>
+            <div id="main-content" tabIndex={-1}>{children}</div>
+          </PageTransition>
+          <CookieConsent />
           <Analytics />
           <SpeedInsights />
         </SmoothScroll>
