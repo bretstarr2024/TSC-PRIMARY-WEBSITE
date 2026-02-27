@@ -1,0 +1,103 @@
+session_id: "LXI"
+date: "2026-02-27"
+branch: main
+version: "0.38.1"  # PATCH: 12 medium-priority code review warnings fixed (W13-W24)
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "pending"
+  status: pending
+
+build_verification:
+  next_build: PASS
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "minor-divergence-preexisting"
+  collections_checked:
+    - arcade_bosses
+  divergent_fields:
+    - collection: arcade_bosses
+      field: "updatedAt/createdAt vs timestamp"
+      notes: "W17 changed insertOne to updateOne with $setOnInsert:{createdAt} and $set:{updatedAt}. Old records have 'timestamp' field. New upserts have createdAt/updatedAt. Very small collection (<10 records), purely metadata — not blocking."
+
+commits:
+  - hash: "c756004"
+    message: "feat: Code review round 2 — 12 medium warnings fixed (accessibility, API dedup, DB perf, reduced motion)"
+  - hash: "f4c1349"
+    message: "docs: Session LXI closeout — all 28 Round 2 findings resolved across 4 sprints"
+
+artifacts_updated:
+  - "components/Header.tsx — W22: Mobile CTA text 'Let's Talk!' → 'New Game'"
+  - "components/AnswerCapsulesSection.tsx — W13: aria-expanded on accordion"
+  - "components/about/AboutFaq.tsx — W13: aria-expanded on accordion"
+  - "components/insights/FaqAccordion.tsx — W13: aria-expanded on accordion"
+  - "components/about/LeadershipSection.tsx — W14: keyboard nav on cards, W15: dialog semantics on modal, W23: SMIL reduced motion"
+  - "app/api/lead/route.ts — W17: email dedup (5min window), W18: response shape {ok:true}"
+  - "app/api/arcade-boss/route.ts — W17: upsert with $max score dedup"
+  - "app/api/cron/generate-content/route.ts — W21: source.publishedAt wrapped in new Date()"
+  - "lib/resources-db.ts — W20: .limit(1000) on 10 ID functions, W19: .project() exclusions on 8 listing functions"
+  - "lib/content-db.ts — W20: .limit(1000) on 2 functions, W19: .project() on blog listing"
+  - "components/GradientBackground.tsx — W23: useReducedMotion on 3 orb animations"
+  - "components/AnimatedText.tsx — W23: useReducedMotion on cursor + gradient"
+  - "components/services/ServiceCTA.tsx — W23: useReducedMotion on glow orb"
+  - "components/services/BridgeStatement.tsx — W23: useReducedMotion on glow orb"
+  - "components/services/ServiceSubpageHero.tsx — W23: useReducedMotion on glow orb"
+  - "components/services/AiCascade.tsx — W23: useReducedMotion on divider gradient"
+  - "components/industries/IndustryHero.tsx — W23: useReducedMotion on glow orb"
+  - "components/home/CtaSection.tsx — W23: useReducedMotion on glow orb"
+  - "components/about/ClientMarquee.tsx — W23: useReducedMotion on marquee scroll"
+  - "app/not-found.tsx — W23: useReducedMotion on 6 animation groups"
+  - "components/BookPageContent.tsx — W24: useReducedMotion on 23 animations, sparkles removed entirely"
+  - "docs/roadmap.md — Session LXI section"
+  - "docs/HANDOFF.md — Session LXI handoff"
+
+decisions_made:
+  - decision: "Case study projection keeps challenge + metrics fields"
+    rationale: "Listing page accesses cs.challenge.slice(0,120) and cs.metrics.length — excluding them crashes the page. Only exclude approach, results, testimonial."
+    reversible: true
+  - decision: "SMIL animations conditionally rendered via prop, not CSS"
+    rationale: "SVG SMIL repeatCount='indefinite' cannot be paused or stopped via CSS animation-play-state. Must conditionally render <animate>/<animateTransform> elements."
+    reversible: true
+  - decision: "Sparkles entirely removed (not paused) when reduced motion preferred"
+    rationale: "Sparkles are purely decorative with no content value. Removing them entirely is cleaner than freezing mid-animation."
+    reversible: true
+  - decision: "Lead dedup silently succeeds for rapid resubmissions"
+    rationale: "User should see success regardless — rejecting for 'already submitted' is confusing UX. Server silently skips the duplicate insert."
+    reversible: true
+
+known_risks:
+  - risk: "arcade_bosses collection has schema divergence (timestamp vs createdAt/updatedAt)"
+    mitigation: "Very small collection (<10 records). Can backfill with one-time script if needed."
+    severity: low
+  - risk: "MongoDB projections use 'as unknown as Type[]' cast to bypass TypeScript narrowing"
+    mitigation: "Standard pattern for MongoDB projection type narrowing. Runtime behavior is correct."
+    severity: low
+
+explicitly_deferred:
+  - "Work page — needs content direction from user"
+  - "Domain configuration — not yet ready to go live"
+  - "OG images / social cards"
+  - "Production cron monitoring — verify pipeline fixes from LX work in prod"
+
+next_actions:
+  - "Monitor production cron runs — verify DB-backed spend tracking, retry ceiling, and pre-flight rejection work in prod"
+  - "Build Work page (needs user content direction — real or fabricated case studies)"
+  - "Domain configuration when ready to go live"
+  - "OG images / social cards"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All API clients use pure fetch (no SDK dependencies)"
+  - "All public API routes have rate limiting"
+  - "All getAllPublished* functions have explicit .limit() and .project() exclusions"
+  - "All infinite Framer Motion animations must use useReducedMotion guard"
+  - "SMIL SVG animations must be conditionally rendered (not CSS-controlled)"
+  - "Lead API dedup: same email within 5 minutes is silently accepted"
+  - "Arcade boss API: upsert with $max — only updates if higher score"
+  - "Code Review Round 2: ALL 28 findings resolved (LX: 16 critical+high, LXI: 12 medium)"

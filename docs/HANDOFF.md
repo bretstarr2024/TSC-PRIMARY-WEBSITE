@@ -1,16 +1,69 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 26, 2026 (Session LX)
+**Last Updated:** February 27, 2026 (Session LXI)
 
 ---
 
-## Current Phase: Phase 2 — Pipeline Hardened, Security + Performance Hardened
+## Current Phase: Phase 2 — Pipeline Hardened, Code Review Complete
 
-The site is live with **143 pages** across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, Vercel Analytics + Speed Insights, and a **fully activated autonomous content pipeline**. Two rounds of comprehensive code review (8 commands each) have been completed. All 47 Round 1 findings resolved (Sessions LVII-LVIII). All 16 Round 2 critical + high-priority findings resolved (Session LX). 12 medium-priority warnings remain (W13-W24).
+The site is live with **143 pages** across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, Vercel Analytics + Speed Insights, and a **fully activated autonomous content pipeline**. Two rounds of comprehensive code review (8 commands each) have been completed. **All 75 findings across both rounds are now resolved** (47 Round 1 in Sessions LVII-LVIII, 28 Round 2 in Sessions LX-LXI).
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database), Resend email, 3 Vercel cron jobs (ACTIVE — CRON_SECRET set), Vercel Analytics + Speed Insights
-- **Next actions:** Sprint-plan Round 2 medium warnings (W13-W24), monitor cron runs, build Work page
-- **Roadmap:** See `docs/roadmap.md` Session LX
+- **Next actions:** Monitor production cron runs, build Work page, domain configuration
+- **Roadmap:** See `docs/roadmap.md` Session LXI
+
+### Session LXI Summary (February 27, 2026)
+
+**Focus:** Execute all 12 remaining medium-priority warnings (W13-W24) from code review round 2.
+
+**What was done (4 sprints, 12 warnings, 20 files):**
+
+**Sprint 1 — Accessibility + Cosmetic (W13, W14, W15, W22):**
+1. W22: Changed mobile CTA text "Let's Talk!" → "New Game" in `components/Header.tsx`
+2. W13: Added `aria-expanded` to accordion buttons in 3 files (`AnswerCapsulesSection`, `AboutFaq`, `FaqAccordion`)
+3. W14: Added keyboard accessibility (`role="button"`, `tabIndex={0}`, `onKeyDown`) to leadership cards
+4. W15: Added dialog semantics (`role="dialog"`, `aria-modal`, `aria-labelledby`) to leadership modal
+
+**Sprint 2 — API Hardening (W17, W18, W21):**
+5. W18: Standardized response shape `{ ok: true }` in `app/api/lead/route.ts`
+6. W17 (lead): 5-minute email deduplication — silently succeeds if same email submitted within window
+7. W17 (arcade-boss): `insertOne` → `updateOne` with `$max` upsert — only updates if higher score for same email+game
+8. W21: Wrapped `source.publishedAt` with `new Date()` in content generation pipeline
+
+**Sprint 3 — Database Performance (W19, W20):**
+9. W20: Added `.limit(1000)` to all 12 ID/title listing functions
+10. W19: Added `.project()` exclusions to 9 `getAllPublished*()` — strips heavy fields from listing queries
+
+**Sprint 4 — Reduced Motion (W23, W24):**
+11. W23: Added `useReducedMotion` guards to all 11 files with infinite Framer Motion animations + SMIL SVG animations in `LeadershipSection`
+12. W24: `BookPageContent.tsx` — 23 concurrent animations guarded, sparkles entirely removed when reduced motion preferred
+
+**Commits this session:**
+- `c756004` — feat: Code review round 2 — 12 medium warnings fixed (W13-W24)
+- `f4c1349` — docs: Session LXI closeout
+
+**Results:**
+- Code Review Round 2: ALL 28 findings resolved (16 critical+high in LX, 12 medium in LXI)
+- Code Review Round 1: ALL 47 findings resolved (Sessions LVII-LVIII)
+- **Total: 75/75 code review findings resolved across both rounds**
+- Full WCAG keyboard + screen reader support for accordions, leadership cards, and modal
+- All public APIs have deduplication protection
+- All database listing queries have projection exclusions + limit caps
+- All infinite animations respect `prefers-reduced-motion`
+
+**Key decisions (do not re-debate):**
+- Case study projection keeps `challenge` + `metrics` (listing page uses them for previews)
+- SMIL SVG animations conditionally rendered via prop (CSS can't control SMIL `repeatCount`)
+- Sparkles entirely removed (not just paused) when reduced motion preferred — cleaner UX
+- Lead dedup silently succeeds (user sees success) — no rejection for rapid resubmission
+
+**What must happen next:**
+1. Monitor production cron runs — verify pipeline fixes from LX work in prod
+2. Build Work page (needs user content direction)
+3. Domain configuration when ready to go live
+4. OG images / social cards
+
+---
 
 ### Session LX Summary (February 26, 2026)
 

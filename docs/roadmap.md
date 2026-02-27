@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION LIX** | Last Updated: February 26, 2026
+**Status: SESSION LXI** | Last Updated: February 27, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -1300,8 +1300,54 @@ Build: 131 pages (up from 127), 0 type errors.
 **Build:** 143 pages, PASS
 
 **Still needed (next sessions):**
-- [ ] Sprint-plan and execute Round 2 medium-priority warnings (W13-W24)
+- [x] Sprint-plan and execute Round 2 medium-priority warnings (W13-W24) → Done in Session LXI
 - [ ] Monitor production cron runs — verify Sprint 2 + 3 fixes work in prod
+- [ ] Work page — last remaining stub
+- [ ] Domain configuration
+- [ ] OG images / social cards
+
+---
+
+#### Session LXI: Code Review Round 2 — All 12 Medium Warnings Fixed (W13-W24) ✅ COMPLETE (Feb 27, 2026)
+
+**Focus:** Sprint-plan and execute all 12 remaining medium-priority warnings from code review round 2.
+
+**What was done (4 sprints, 12 warnings, 20 files):**
+
+**Sprint 1 — Accessibility + Cosmetic (W13, W14, W15, W22):**
+1. W22: Changed mobile CTA text from "Let's Talk!" to "New Game" in `components/Header.tsx`
+2. W13: Added `aria-expanded` to accordion buttons in `AnswerCapsulesSection.tsx`, `AboutFaq.tsx`, `FaqAccordion.tsx`
+3. W14: Added `role="button"`, `tabIndex={0}`, `onKeyDown` (Enter/Space) to leadership cards in `LeadershipSection.tsx`
+4. W15: Added `role="dialog"`, `aria-modal="true"`, `aria-labelledby="leader-modal-name"` to leadership modal
+
+**Sprint 2 — API Hardening (W17, W18, W21):**
+5. W18: Standardized response shape — `{ success: true }` → `{ ok: true }` in `app/api/lead/route.ts`
+6. W17 (lead): Added 5-minute deduplication — query for same email before insert, silently succeed if found
+7. W17 (arcade-boss): Changed `insertOne` to `updateOne` with `$max` upsert — same email+game updates only on higher score
+8. W21: Wrapped `data.source.publishedAt` with `new Date()` in `app/api/cron/generate-content/route.ts`
+
+**Sprint 3 — Database Performance (W19, W20):**
+9. W20: Added `.limit(1000)` to all 12 ID/title listing functions in `lib/resources-db.ts` + `lib/content-db.ts`
+10. W19: Added `.project()` exclusions to 9 `getAllPublished*()` functions — strips heavy fields (content, transcripts, config) from listing queries
+    - Build failure caught: case study projection excluded `challenge` + `metrics` used by listing page → fixed by keeping those fields
+
+**Sprint 4 — Reduced Motion (W23, W24):**
+11. W23: Added `useReducedMotion` guards to all 11 files with `repeat: Infinity` Framer Motion animations
+    - Simple wraps (8 files): `GradientBackground`, `AnimatedText`, `ServiceCTA`, `BridgeStatement`, `ServiceSubpageHero`, `AiCascade`, `IndustryHero`, `CtaSection`
+    - Marquee: `ClientMarquee` — scroll stops when reduced motion preferred
+    - SMIL SVG: `LeadershipSection` — `<animate>`/`<animateTransform>` elements conditionally rendered via `reducedMotion` prop on `GenerativeAvatar`
+    - Complex (1 file): `not-found.tsx` — 6 animation groups (background, 4 rings, inner disc, 4 sparkles)
+12. W24: `BookPageContent.tsx` — 23 concurrent animations: background glow + 4 rings wrapped, 16 sparkles (ambient + photo) entirely removed when reduced motion preferred, inner/outer glow rings wrapped
+
+**Build:** 143 pages, PASS (all 4 sprints verified)
+
+**Code Review Round 2 Status: ALL 28 FINDINGS RESOLVED**
+- 4 critical (C1-C4): Session LX
+- 12 high warnings (W1-W12): Session LX
+- 12 medium warnings (W13-W24): Session LXI
+
+**Still needed (next sessions):**
+- [ ] Monitor production cron runs — verify pipeline fixes work in prod
 - [ ] Work page — last remaining stub
 - [ ] Domain configuration
 - [ ] OG images / social cards
