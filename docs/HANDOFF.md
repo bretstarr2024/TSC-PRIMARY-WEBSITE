@@ -1,16 +1,50 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** March 3, 2026 (Session LXVIII)
+**Last Updated:** March 3, 2026 (Session LXIX)
 
 ---
 
-## Current Phase: Phase 2 — Pipeline Hardened, Cinematic Intro Polished
+## Current Phase: Phase 2 — Homepage DONE, Pipeline Active
 
-The site is live with **143 pages** (407 routes) across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, Vercel Analytics + Speed Insights, **dynamic OG images on every page**, RSS feed, cookie consent, privacy policy, print stylesheet, and a **fully activated autonomous content pipeline**. Three rounds of code review complete. The homepage cinematic intro is **finalized and production-polished** — sound works, layout is stable, hero transition is smooth, and the custom cursor is gone (default system pointer restored).
+The site is live with **143 pages** (407 routes) across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, Vercel Analytics + Speed Insights, **dynamic OG images on every page**, RSS feed, cookie consent, privacy policy, print stylesheet, and a **fully activated autonomous content pipeline**. Three rounds of code review complete. The homepage cinematic intro is **complete and closed** — sound autoplay fallback works, subhead has 6s reading time, layout is stable, and all cinematic work is done.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database), Resend email, 3 Vercel cron jobs (ACTIVE — CRON_SECRET set), Vercel Analytics + Speed Insights
-- **Next actions:** Verify fixes on production, build Work page, domain configuration
-- **Roadmap:** See `docs/roadmap.md` Session LXVIII
+- **Next actions:** Verify on production, build Work page, domain configuration
+- **Roadmap:** See `docs/roadmap.md` Session LXIX
+
+### Session LXIX Summary (March 3, 2026)
+
+**Focus:** Two final homepage cinematic fixes — sound autoplay fallback and doubled subhead reading time. User declared homepage done after this.
+
+**What was done:**
+
+1. **`components/home/IntroSoundEngine.ts`** — Added browser autoplay policy fallback. `enable()` now detects when `AudioContext` stays `suspended` (no user gesture) and registers one-time `click`/`touchstart`/`keydown` listeners on `document`. Sounds already scheduled on the suspended context play immediately when the user first interacts anywhere on the page. Listeners auto-clean up on first fire and on `dispose()`. Added `gestureCleanup` field.
+
+2. **`components/home/HomepageCinematic.tsx`** — Extended subhead phase from 3s to 6s reading time. CRT shutdown moved from 6000ms to 9000ms; all subsequent phases shifted +3000ms. Updated storyboard: Frame 1 (0–3s) → Frame 2 (3–9s) → Frame 3 (9–11.5s) → Frame 4 (11.5–12.5s) → Frame 5 (12.5s+). Total cinematic ~14s.
+
+**Commits this session:**
+- `e7a86e3` — fix: Sound autoplay fallback + double subhead reading time
+- `e219408` — docs: Update roadmap with Session LXIX homepage final
+
+**Results:**
+- Build: 407 routes, PASS
+- Sound now works on first user interaction (browser policy constraint)
+- Subhead readable at 6 seconds
+- Homepage cinematic is CLOSED — user declared it done
+
+**Key decisions (do not re-debate):**
+- Interaction listener fallback is the correct solution for browser autoplay policy — no workaround exists
+- Subhead is 6 seconds — user directive ("double the time")
+- Homepage cinematic is DONE — do not re-open without explicit user directive
+- Browser autoplay will always require first interaction — this is immutable browser behavior
+
+**What must happen next:**
+1. Verify on production — sound plays after first click/tap, subhead readable
+2. Monitor production cron runs (verify rate-limit retry + idempotent seeding)
+3. Build Work page (needs user content direction)
+4. Domain configuration when ready to go live
+
+---
 
 ### Session LXVIII Summary (March 3, 2026)
 

@@ -1,0 +1,82 @@
+session_id: "LXIX"
+date: "2026-03-03"
+branch: main
+version: "0.42.4"  # PATCH: Sound autoplay fallback + double subhead reading time
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "badbe7Wzobx1IGmQ8Y87"
+  status: triggered
+
+build_verification:
+  next_build: PASS  # 407 routes
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "All changes are client-side components. No MongoDB writes affected."
+
+commits:
+  - hash: "e7a86e3"
+    message: "fix: Sound autoplay fallback + double subhead reading time"
+  - hash: "e219408"
+    message: "docs: Update roadmap with Session LXIX homepage final"
+
+artifacts_updated:
+  - "components/home/IntroSoundEngine.ts — Added gestureCleanup field; enable() detects suspended AudioContext and registers one-time click/touchstart/keydown listeners to resume on first user interaction; dispose() cleans up listeners"
+  - "components/home/HomepageCinematic.tsx — Subhead phase extended from 3s to 6s; all subsequent phases shifted +3000ms; total cinematic ~14s; updated storyboard comment"
+  - "docs/roadmap.md — Session LXIX entry"
+
+decisions_made:
+  - decision: "Interaction listener fallback for AudioContext autoplay"
+    rationale: "Browsers universally require a user gesture before allowing AudioContext to produce sound. The enable() method now detects this and registers document-level listeners. Sounds scheduled on the suspended context play when the user first clicks/taps/types anywhere."
+    reversible: true
+  - decision: "Subhead reading time doubled from 3s to 6s"
+    rationale: "User couldn't read the subhead in 3 seconds. Explicit directive: 'double the time.'"
+    reversible: true
+  - decision: "Homepage cinematic declared DONE"
+    rationale: "User stated 'If we could just get those two details correct, we could call the homepage done for good.'"
+    reversible: false
+
+known_risks:
+  - risk: "Browser autoplay still blocks sound until first user interaction"
+    mitigation: "This is an immutable browser policy. The interaction listener fallback is the industry-standard solution. On repeat visits, browsers may allow autoplay via Media Engagement Index."
+    severity: low
+  - risk: "unsafe-inline still in CSP script-src and style-src"
+    mitigation: "Deferred to future session. Removing requires nonce-based CSP middleware and page-by-page testing."
+    severity: medium
+  - risk: "In-memory rate limiter resets per serverless invocation"
+    mitigation: "Acceptable for now. Persistent rate limiting would require Redis or similar external store."
+    severity: low
+
+explicitly_deferred:
+  - "Full nonce-based CSP — needs middleware + careful page-by-page testing"
+  - "Work page — needs content direction from user"
+  - "Domain configuration — not yet ready to go live"
+  - "Production cron monitoring — verify pipeline fixes from LX work in prod"
+
+next_actions:
+  - "Verify fixes on production — sound plays on first interaction, subhead readable, smooth cinematic"
+  - "Monitor production cron runs — verify rate-limit retry and idempotent seeding"
+  - "Build Work page (needs user content direction)"
+  - "Domain configuration when ready to go live"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All API clients use pure fetch (no SDK dependencies)"
+  - "All OG image routes use nodejs runtime (not edge)"
+  - "metadataBase in app/layout.tsx must be updated when final domain is assigned"
+  - "The green retro arcade screen IS the entire cinematic opening — no separate headline"
+  - "Cinematic replays every page load (no sessionStorage gating)"
+  - "Sound auto-plays on mount — browser autoplay policy handled via interaction listener fallback"
+  - "CRT dot persists through blackout as last point of light until rebirth"
+  - "Custom cursor is permanently removed — user directive"
+  - "Hero is always-mounted behind overlay — never conditionally rendered"
+  - "Sound engine uses single merged useEffect — never split into two"
+  - "Subhead reading time is 6 seconds (3s–9s) — user directive"
+  - "Homepage cinematic is DONE — do not re-open without explicit user directive"
