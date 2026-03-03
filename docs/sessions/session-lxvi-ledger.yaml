@@ -1,0 +1,93 @@
+session_id: "LXVI"
+date: "2026-03-03"
+branch: main
+version: "0.42.1"  # PATCH: Cinematic intro rewrite — full-screen green arcade screen
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "ajjHiQ6U5dJKmHbrbM8r"
+  status: triggered
+
+build_verification:
+  next_build: PASS  # 407 routes
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "All changes are client-side components. No MongoDB writes affected."
+
+commits:
+  - hash: "ea0ea08"
+    message: "fix: Rewrite homepage cinematic — full-screen green arcade screen"
+  - hash: "073d479"
+    message: "docs: Update roadmap with Session LXVI cinematic rewrite"
+
+artifacts_updated:
+  - "components/home/RetroGameScreen.tsx — Full viewport (was max-w-2xl box), scaled text, blinking/showSubhead props"
+  - "components/home/CinematicOverlay.tsx — Simplified from 6 phases to 4, deleted gradient GAME OVER headline, uses RetroGameScreen for all phases"
+  - "components/home/HomepageCinematic.tsx — 4-frame storyboard timing, removed sessionStorage gating, visible sound button at bottom-center"
+  - "docs/roadmap.md — Session LXVI entry"
+
+decisions_made:
+  - decision: "The green retro arcade screen IS the entire opening — no separate gradient headline"
+    rationale: "User directive. The Session LXV version had a confusing two-part structure (gradient GAME OVER then tiny green screen). The green screen should be the whole show."
+    reversible: false
+  - decision: "RetroGameScreen fills entire viewport (no max-width constraint)"
+    rationale: "User feedback: the green arcade screen was 'very small' at max-w-2xl (672px). Full viewport creates the immersive CRT-in-your-face experience."
+    reversible: true
+  - decision: "Subhead appears ON the green arcade screen in phosphor green"
+    rationale: "User directive: 'actually on the arcade screen.' Styled in dim phosphor green to match the retro aesthetic."
+    reversible: true
+  - decision: "Nothing fancy for subhead animation"
+    rationale: "User directive: 'Nothing fancy, because fancy wasn't possible in these old arcade games.' Simple quick fade-in only."
+    reversible: true
+  - decision: "No sessionStorage gating — cinematic replays on every page load"
+    rationale: "User couldn't replay on refresh. sessionStorage persists across refreshes within the same tab. Skip button handles repeat visits."
+    reversible: true
+  - decision: "Sound button visible at bottom-center with border"
+    rationale: "Previous button was 10px at 40% opacity in bottom-right corner — invisible. Now centered, larger, bordered, 70% opacity."
+    reversible: true
+  - decision: "CRT shutdown phase extended to ~2.5s"
+    rationale: "User said CRT shutdown looked good but was too fast at 1.5s. Line now 1.0s, dot 1.8s."
+    reversible: true
+
+known_risks:
+  - risk: "unsafe-inline still in CSP script-src and style-src"
+    mitigation: "Deferred to future session. Removing requires nonce-based CSP middleware and page-by-page testing."
+    severity: medium
+  - risk: "In-memory rate limiter resets per serverless invocation"
+    mitigation: "Acceptable for now. Persistent rate limiting would require Redis or similar external store."
+    severity: low
+  - risk: "Cinematic timing may need further visual tuning on production"
+    mitigation: "Phase timings in PHASE_TIMINGS array — easy to adjust. Sound button visibility needs production confirmation."
+    severity: low
+
+explicitly_deferred:
+  - "Further visual tuning of cinematic — test on production, adjust timings if needed"
+  - "Full nonce-based CSP — needs middleware + careful page-by-page testing"
+  - "Work page — needs content direction from user"
+  - "Domain configuration — not yet ready to go live"
+  - "Production cron monitoring — verify pipeline fixes from LX work in prod"
+
+next_actions:
+  - "Test rewritten cinematic on production — verify full-screen green arcade, timing, CRT shutdown, sound button"
+  - "Iterate on visual tuning if needed — durations in PHASE_TIMINGS"
+  - "Monitor production cron runs — verify rate-limit retry and idempotent seeding"
+  - "Build Work page (needs user content direction)"
+  - "Domain configuration when ready to go live"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All API clients use pure fetch (no SDK dependencies)"
+  - "All OG image routes use nodejs runtime (not edge)"
+  - "metadataBase in app/layout.tsx must be updated when final domain is assigned"
+  - "The green retro arcade screen IS the entire cinematic opening — no separate headline"
+  - "Subhead appears ON the arcade screen in phosphor green — 'nothing fancy'"
+  - "Cinematic replays every page load (no sessionStorage gating)"
+  - "Sound is opt-in — IntroSoundEngine requires user gesture to enable AudioContext"
+  - "Phase timings in PHASE_TIMINGS array in HomepageCinematic.tsx — single source of truth"

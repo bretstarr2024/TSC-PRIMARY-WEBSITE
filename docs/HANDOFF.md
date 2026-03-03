@@ -1,67 +1,75 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** March 3, 2026 (Session LXV)
+**Last Updated:** March 3, 2026 (Session LXVI)
 
 ---
 
-## Current Phase: Phase 2 — Pipeline Hardened, Cinematic Homepage Intro Live
+## Current Phase: Phase 2 — Pipeline Hardened, Cinematic Homepage Intro Rewritten
 
-The site is live with **143 pages** (407 routes) across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, Vercel Analytics + Speed Insights, **dynamic OG images on every page**, RSS feed, cookie consent, privacy policy, print stylesheet, and a **fully activated autonomous content pipeline**. Three rounds of code review complete. Session LXV added a **14-second cinematic intro sequence** to the homepage — a death-and-rebirth narrative that transitions from "GAME OVER" through a retro arcade screen to the rebirth headline "See Marketing in a Whole New Light."
+The site is live with **143 pages** (407 routes) across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, Vercel Analytics + Speed Insights, **dynamic OG images on every page**, RSS feed, cookie consent, privacy policy, print stylesheet, and a **fully activated autonomous content pipeline**. Three rounds of code review complete. Session LXVI **rewrote the homepage cinematic intro** — the full-screen green 1970s arcade screen is now the entire opening (no more separate gradient GAME OVER headline), with proper timing, visible sound button, and no sessionStorage gating.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database), Resend email, 3 Vercel cron jobs (ACTIVE — CRON_SECRET set), Vercel Analytics + Speed Insights
-- **Next actions:** Test cinematic on production, visual tuning if needed, build Work page, domain configuration
-- **Roadmap:** See `docs/roadmap.md` Session LXV
+- **Next actions:** Test rewritten cinematic on production, build Work page, domain configuration
+- **Roadmap:** See `docs/roadmap.md` Session LXVI
 
-### Session LXV Summary (March 3, 2026)
+### Session LXVI Summary (March 3, 2026)
 
-**Focus:** Built a 14-second cinematic intro sequence for the homepage — a death-and-rebirth narrative: GAME OVER → retro arcade screen → CRT shutdown → rebirth with "See Marketing in a Whole New Light."
+**Focus:** Complete rewrite of the homepage cinematic intro sequence. Session LXV version had a confusing structure — a separate yellow/gradient GAME OVER headline appeared first, then a tiny green arcade screen appeared briefly. User feedback: "it's a dumpster fire." The green retro arcade screen should BE the entire opening.
 
 **What was done:**
 
-1. **`components/home/HomepageCinematic.tsx`** (NEW) — State machine orchestrator with 7 phases on precise setTimeout timings. sessionStorage gating (replays each new browser session, skips within same tab). Skip button (appears at 2s, bottom-right). Sound toggle (opt-in, browser autoplay safe). useReducedMotion bypass skips straight to rebirth.
+1. **`components/home/RetroGameScreen.tsx`** — Major rewrite. Now fills the entire viewport (removed `max-w-2xl` constraint). All text scaled up (scores: `text-xs`→`text-sm`, GAME OVER: `text-2xl`→`text-6xl`, hearts: `text-lg`→`text-2xl`). Added `blinking` prop (GAME OVER blinks in Frame 1, stays solid in Frame 2) and `showSubhead` prop (marketing copy appears on the green screen in phosphor green).
 
-2. **`components/home/CinematicOverlay.tsx`** (NEW) — Phases 1–6 visual rendering:
-   - Phase 1 (0–3s): GAME OVER in font-arcade with hard retro blink (steps(1) timing), same gradient, heavier CRT scanlines (0.12 opacity)
-   - Phase 2 (3–5.5s): Current subhead fades in with "level up" bold
-   - Phase 3 (5.5–7s): CRT shutdown — vertical compress + brightness flash → horizontal line shrinks → center dot fades
-   - Phase 4 (7–10.5s): RetroGameScreen renders with warm-up fade
-   - Phase 5 (10.5–10.8s): Instant unplug snap with phosphor flash
-   - Phase 6 (10.8–12.8s): Pure black blackout
+2. **`components/home/CinematicOverlay.tsx`** — Simplified from 6 phases to 4. Deleted ALL gradient GAME OVER headline code. Phase types: `game-screen | subhead | crt-shutdown | blackout`. Uses RetroGameScreen with props for Frames 1-2. CRT shutdown given more time (line: 1.0s, dot: 1.8s).
 
-3. **`components/home/RetroGameScreen.tsx`** (NEW) — Authentic 1970s green phosphor arcade game-over screen. 4:3 aspect ratio with CRT bezel, curvature vignette (radial gradient), heavy green scanlines (0.35 opacity), phosphor text glow. Content: 1UP score "002026" (year as game score), HIGH SCORE "010000", 2UP "------", blinking GAME OVER, 3 empty hearts (♡ ♡ ♡), CREDIT 00.
+3. **`components/home/HomepageCinematic.tsx`** — Simplified phase machine. 4-frame storyboard: green screen + blinking GAME OVER (0–3s) → subhead appears on screen (3–6s) → CRT shutdown (6–8.5s) → blackout → rebirth (9.5s+). Removed sessionStorage gating (cinematic plays every page load). Sound button moved to visible bottom-center with border, larger text, 70% opacity.
 
-4. **`components/home/IntroSoundEngine.ts`** (NEW) — Web Audio API class with 9 methods: gameOverMelody (4 descending square-wave notes), startCrtHum/stopCrtHum (detuned 60 Hz pair), crtPowerDown (2kHz→40 Hz whine + thunk), crtWarmUp (80→200 Hz rising tone), startPhosphorHum/stopPhosphorHum (beating 59.5/60.5 Hz), textBlip (1kHz square), unplugClick (bandpass noise burst), rebirthWhoosh (ascending sweep).
-
-5. **`components/home/HeroSection.tsx`** — Added `variant` prop (`'gameover'` | `'rebirth'`). Rebirth variant renders old headline "See marketing in a whole new light" with word-by-word rotateX flip-in animation + GradientText (tangerine→cactus→tidal wave), plus old subhead. Keeps HeroParticles, ArcadeButton, bottom gradient.
-
-6. **`app/page.tsx`** — Swapped `<HeroSection />` for `<HomepageCinematic />`.
-
-7. **`app/globals.css`** — Added 3 CRT shutdown CSS keyframes (crt-shutdown-vertical, crt-shutdown-horizontal, crt-dot-fade).
+**Storyboard (user-directed):**
+- Frame 1 (0–3s): Full-screen green 1970s arcade screen, GAME OVER blinking, all retro details (1UP/HIGH SCORE/2UP, hearts, CREDIT 00)
+- Frame 2 (3–6s): GAME OVER solid, subhead appears on screen in phosphor green ("nothing fancy")
+- Frame 3 (6–8.5s): CRT shutdown — screen collapses, horizontal line, center dot
+- Frame 4 (9.5s+): "See marketing in a whole new light" rebirth hero
 
 **Commits this session:**
-- `b06cec6` — feat: Homepage cinematic intro — 14s death-and-rebirth narrative sequence
-- `ac0ff1d` — docs: Update roadmap with Session LXV cinematic intro
+- `ea0ea08` — fix: Rewrite homepage cinematic — full-screen green arcade screen
+- `073d479` — docs: Update roadmap with Session LXVI cinematic rewrite
 
 **Results:**
 - Build: 407 routes, PASS
-- Homepage bundle: 9.88 kB (up from 6.66 kB — +3.2 kB for cinematic)
-- 4 new files, 3 modified files, 961 lines added
-- Zero GPU cost during 13s cinematic (Three.js deferred to Phase 7)
+- Homepage bundle: 9.65 kB (down from 9.88 kB — smaller due to deleted gradient code)
+- 3 files rewritten, net -144 lines (177 added, 321 deleted)
 
 **Key decisions (do not re-debate):**
-- GAME OVER only exists inside cinematic intro — never as standalone homepage state
-- Cinematic replays every new browser session (sessionStorage key: `tsc-intro-seen`)
-- Sound is opt-in via button click (browser autoplay policy)
-- Score "002026" = the year as a game score (double-meaning Easter egg)
-- CRT shutdown uses 3-stage CSS transforms (scaleY → scaleX → opacity)
-- Phase timings in single PHASE_TIMINGS array — easy to adjust
+- The green retro arcade screen IS the entire opening — no separate gradient headline
+- Full viewport, not a small box
+- Subhead appears ON the arcade screen in phosphor green — "nothing fancy"
+- CRT shutdown gets ~2.5s (was 1.5s — user said it looked good but was too fast)
+- No sessionStorage gating — refresh replays cinematic, skip button handles repeat visits
+- Sound button visible at bottom-center with border (was invisible at 10px/40% opacity in corner)
 
 **What must happen next:**
-1. Test cinematic on production — verify timing, CRT shutdown, retro screen rendering
-2. Visual tuning if needed — durations in PHASE_TIMINGS, easing curves
+1. Test rewritten cinematic on production — verify full-screen green arcade, timing, CRT shutdown
+2. Visual tuning if needed — durations in PHASE_TIMINGS
 3. Monitor production cron runs (verify rate-limit retry + idempotent seeding)
 4. Build Work page (needs user content direction)
 5. Domain configuration when ready to go live
+
+---
+
+### Session LXV Summary (March 3, 2026)
+
+**Focus:** Built the initial 14-second cinematic intro sequence for the homepage — a death-and-rebirth narrative: GAME OVER → retro arcade screen → CRT shutdown → rebirth. (**Note:** This was rewritten in Session LXVI after production testing revealed structural issues.)
+
+**What was done:**
+1. `components/home/HomepageCinematic.tsx` (NEW) — State machine orchestrator, 7-phase setTimeout chain
+2. `components/home/CinematicOverlay.tsx` (NEW) — Phases 1–6 visual rendering
+3. `components/home/RetroGameScreen.tsx` (NEW) — Green phosphor arcade game-over screen
+4. `components/home/IntroSoundEngine.ts` (NEW) — Web Audio API with 9 sound methods
+5. `components/home/HeroSection.tsx` — Added variant prop (gameover | rebirth)
+6. `app/page.tsx` — Swapped HeroSection for HomepageCinematic
+7. `app/globals.css` — CRT shutdown CSS keyframes
+
+**Commits:** `b06cec6`, `ac0ff1d`
 
 ---
 
