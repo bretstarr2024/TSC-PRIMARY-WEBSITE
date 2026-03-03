@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION LXIV** | Last Updated: February 27, 2026
+**Status: SESSION LXV** | Last Updated: March 3, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -1424,6 +1424,36 @@ Build: 131 pages (up from 127), 0 type errors.
 - [ ] Domain configuration
 - [ ] Full nonce-based CSP (removing `unsafe-inline` from script-src) — needs middleware + careful testing
 - [ ] `unsafe-inline` still in style-src — required by Framer Motion, styled-jsx, Tailwind
+
+---
+
+#### Session LXV: Homepage Cinematic Intro Sequence ✅ COMPLETE (Mar 3, 2026)
+
+**Focus:** Built a 14-second cinematic intro sequence for the homepage that tells a death-and-rebirth narrative: GAME OVER → retro arcade screen → CRT shutdown → rebirth with "See Marketing in a Whole New Light."
+
+**What was done:**
+
+1. **4 new components created:**
+   - `components/home/HomepageCinematic.tsx` — State machine orchestrator with 7-phase setTimeout chain, sessionStorage gating (replays each new browser session), skip button, sound toggle, useReducedMotion bypass
+   - `components/home/CinematicOverlay.tsx` — Phases 1–6 visual rendering: GAME OVER retro blink, subhead, 3-stage CRT shutdown (vertical compress → horizontal line → dot → gone), retro game screen, unplug phosphor flash, blackout
+   - `components/home/RetroGameScreen.tsx` — Authentic 1970s green phosphor arcade game-over screen with 1UP/HIGH SCORE/2UP layout, score "002026" (year as game score), 3 empty hearts, "CREDIT 00", CRT curvature vignette, green scanlines, phosphor glow
+   - `components/home/IntroSoundEngine.ts` — Web Audio API class with 9 methods: game-over melody, CRT hum, power-down whine, warm-up tone, phosphor hum, text blip, unplug click, rebirth whoosh, dispose
+
+2. **HeroSection.tsx modified** — Added `variant` prop (`'gameover'` | `'rebirth'`). Rebirth variant renders old headline "See marketing in a whole new light" with word-by-word rotateX flip-in + GradientText, plus old subhead about fundamentals meeting the future.
+
+3. **app/page.tsx** — Swapped `<HeroSection />` for `<HomepageCinematic />`
+
+4. **globals.css** — Added 3 CRT shutdown CSS keyframes
+
+**Phase timeline:** GAME OVER blink (0–3s) → subhead (3–5.5s) → CRT shutdown (5.5–7s) → retro screen (7–10.5s) → unplug (10.5–10.8s) → blackout (10.8–12.8s) → rebirth (12.8–14s)
+
+**Build:** 407 routes, PASS. Homepage 9.88 kB (up from 6.66 kB — +3.2 kB for cinematic)
+
+**Still needed (next sessions):**
+- [ ] Visual tuning — test and iterate on CRT shutdown easing, retro screen styling, timing
+- [ ] Monitor production cron runs — verify pipeline fixes work in prod
+- [ ] Work page — last remaining stub
+- [ ] Domain configuration
 
 ---
 
