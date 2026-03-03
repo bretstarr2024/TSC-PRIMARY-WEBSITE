@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION LXVI** | Last Updated: March 3, 2026
+**Status: SESSION LXVII** | Last Updated: March 3, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -1457,6 +1457,25 @@ Build: 131 pages (up from 127), 0 type errors.
 
 ---
 
+#### Session LXVII: Cinematic Polish — Auto-Sound + Persistent CRT Dot ✅ COMPLETE (Mar 3, 2026)
+
+**Focus:** Two user-directed refinements to the homepage cinematic intro. User loved the rewritten sequence from LXVI — just needed two finishing touches.
+
+**What was done:**
+
+1. **`components/home/HomepageCinematic.tsx`** — Removed sound toggle button entirely. Sound engine now auto-enables on mount (subtle sounds, no user gesture needed — if browser blocks AudioContext, fails silently). Deleted `soundEnabled` state, `handleSoundToggle` callback, "ENABLE SOUND" button, and "SOUND ON" indicator.
+
+2. **`components/home/CinematicOverlay.tsx`** — Separated the CRT center dot from the shutdown `AnimatePresence` block so it persists through both `crt-shutdown` and `blackout` phases. The dot fades in with a soft white glow during CRT shutdown and holds as the last point of light until the overlay unmounts at rebirth. Removed the solid black blackout div — the `#0a0a0a` background is already dark, and the dot is the only light source.
+
+**Key decisions (do not re-debate):**
+- Sound auto-plays — no button, no user gesture required (user directive: "by the time you find the button, the whole thing is over")
+- The CRT dot persists through blackout as the last point of light — screen is never fully black before rebirth
+- These two changes finalize the cinematic intro sequence
+
+**Build:** 407 routes, PASS.
+
+---
+
 #### Session LXVI: Cinematic Intro Rewrite — Full-Screen Green Arcade ✅ COMPLETE (Mar 3, 2026)
 
 **Focus:** Complete rewrite of the homepage cinematic intro. The Session LXV version had a confusing structure: a separate yellow/gradient GAME OVER headline appeared first, then a tiny green arcade screen appeared briefly. User feedback: "it's a dumpster fire." The green retro arcade screen should BE the entire opening, not a small secondary element.
@@ -1484,9 +1503,10 @@ Build: 131 pages (up from 127), 0 type errors.
 - "Nothing fancy" for subhead — just appears, matching old arcade limitations
 - CRT shutdown gets ~2.5s (was 1.5s)
 - No sessionStorage gating — refresh replays the cinematic
-- Sound button visible at bottom-center with border
+- Sound button visible at bottom-center with border (superseded by Session LXVII — sound now auto-plays, button removed)
 
 **Still needed (next sessions):**
+- [x] Polish cinematic — auto-sound + persistent CRT dot (Session LXVII)
 - [ ] Test cinematic on production — verify full-screen green arcade, timing, CRT shutdown
 - [ ] Monitor production cron runs — verify pipeline fixes work in prod
 - [ ] Work page — last remaining stub
