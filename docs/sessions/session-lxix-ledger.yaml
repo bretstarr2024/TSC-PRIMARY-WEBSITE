@@ -7,7 +7,7 @@ deployment:
   platform: vercel
   url: "tsc-primary-website.vercel.app"
   environment: production
-  job_id: "badbe7Wzobx1IGmQ8Y87"
+  job_id: "33QoiUiRgJ1lQIEj7GLf"
   status: triggered
 
 build_verification:
