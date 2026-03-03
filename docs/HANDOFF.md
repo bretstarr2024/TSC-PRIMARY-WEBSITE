@@ -1,16 +1,53 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** March 3, 2026 (Session LXVII)
+**Last Updated:** March 3, 2026 (Session LXVIII)
 
 ---
 
-## Current Phase: Phase 2 — Pipeline Hardened, Cinematic Intro Finalized
+## Current Phase: Phase 2 — Pipeline Hardened, Cinematic Intro Polished
 
-The site is live with **143 pages** (407 routes) across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, Vercel Analytics + Speed Insights, **dynamic OG images on every page**, RSS feed, cookie consent, privacy policy, print stylesheet, and a **fully activated autonomous content pipeline**. Three rounds of code review complete. The homepage cinematic intro is **finalized** — full-screen green 1970s arcade screen → CRT shutdown with persistent dot of light → rebirth. Sound auto-plays (no button). User approved.
+The site is live with **143 pages** (407 routes) across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, Vercel Analytics + Speed Insights, **dynamic OG images on every page**, RSS feed, cookie consent, privacy policy, print stylesheet, and a **fully activated autonomous content pipeline**. Three rounds of code review complete. The homepage cinematic intro is **finalized and production-polished** — sound works, layout is stable, hero transition is smooth, and the custom cursor is gone (default system pointer restored).
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database), Resend email, 3 Vercel cron jobs (ACTIVE — CRON_SECRET set), Vercel Analytics + Speed Insights
-- **Next actions:** Test finalized cinematic on production, build Work page, domain configuration
-- **Roadmap:** See `docs/roadmap.md` Session LXVII
+- **Next actions:** Verify fixes on production, build Work page, domain configuration
+- **Roadmap:** See `docs/roadmap.md` Session LXVIII
+
+### Session LXVIII Summary (March 3, 2026)
+
+**Focus:** Four production-tested fixes for the homepage cinematic intro and site-wide cursor removal.
+
+**What was done:**
+
+1. **`components/home/HomepageCinematic.tsx`** — Fixed sound race condition by merging two `useEffect` hooks into one. The engine was created in effect 1 but read as `null` in effect 2 (both ran after the same render). Now create, enable, and trigger sounds in a single effect. Also fixed hero flash by always-mounting the hero behind the z-50 cinematic overlay instead of conditionally rendering at rebirth — gives HeroParticles 9.5s to fully initialize.
+
+2. **`components/home/IntroSoundEngine.ts`** — Made `enable()` async to properly await `AudioContext.resume()`. Added `console.warn` in `ensure()` catch block for debugging. Kept defensive `resume()` call in `ensure()` for individual sound methods.
+
+3. **`components/home/RetroGameScreen.tsx`** — Wrapped the subhead in a `h-0 overflow-visible` container so it takes zero height in the flex layout. GAME OVER stays vertically centered when the subhead fades in below it.
+
+4. **`app/layout.tsx` + `components/CustomCursor.tsx` (DELETED)** — Removed the custom animated Framer Motion cursor that injected `cursor: none !important` globally. Default system pointer restored site-wide.
+
+**Commits this session:**
+- `27004cc` — fix: Homepage polish — sound, layout, flash, cursor
+- `4b09c76` — docs: Update roadmap with Session LXVIII homepage polish
+
+**Results:**
+- Build: 407 routes, PASS
+- Net -107 lines (73 added, 180 deleted — simpler code, deleted CustomCursor)
+- All 4 user-reported issues fixed
+
+**Key decisions (do not re-debate):**
+- Custom cursor permanently removed — user directive ("drives me nuts")
+- Hero always-mounted behind overlay — never conditionally rendered
+- Sound engine uses single merged useEffect — never split into two
+- Subhead uses h-0 overflow-visible — zero layout impact
+
+**What must happen next:**
+1. Verify all fixes on production — sound, layout stability, smooth rebirth, default cursor
+2. Monitor production cron runs (verify rate-limit retry + idempotent seeding)
+3. Build Work page (needs user content direction)
+4. Domain configuration when ready to go live
+
+---
 
 ### Session LXVII Summary (March 3, 2026)
 
