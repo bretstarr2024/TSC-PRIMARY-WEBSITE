@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { HeroSection } from '@/components/home/HeroSection';
+import { HomepageCinematic } from '@/components/home/HomepageCinematic';
 import { WhoWeAreSection } from '@/components/home/WhoWeAreSection';
 import { ProblemSection } from '@/components/home/ProblemSection';
 import { ApproachSection } from '@/components/home/ApproachSection';
@@ -21,7 +21,7 @@ export default function Home() {
     <>
       <Header />
       <main>
-        <HeroSection />
+        <HomepageCinematic />
         <WhoWeAreSection />
         <ProblemSection />
         <ApproachSection />

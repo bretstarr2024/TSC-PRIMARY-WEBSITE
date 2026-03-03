@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import { ArcadeButton } from '@/components/ArcadeButton';
+import { GradientText } from '@/components/AnimatedText';
 
 const HeroParticles = dynamic(
   () => import('./HeroParticles').then((mod) => ({ default: mod.HeroParticles })),
@@ -17,9 +18,78 @@ const AsteroidsGame = dynamic(
 
 const gradientClasses = 'inline-block bg-gradient-to-r from-atomic-tangerine via-neon-cactus to-tidal-wave bg-clip-text text-transparent bg-[length:200%_auto]';
 
-export function HeroSection() {
+interface HeroSectionProps {
+  variant?: 'gameover' | 'rebirth';
+}
+
+export function HeroSection({ variant = 'gameover' }: HeroSectionProps) {
   const [playing, setPlaying] = useState(false);
   const reducedMotion = useReducedMotion();
+
+  if (variant === 'rebirth') {
+    const rebirthWords = ['See', 'marketing', 'in', 'a'];
+    return (
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <HeroParticles />
+        {playing && <AsteroidsGame onClose={() => setPlaying(false)} />}
+
+        <div className="relative z-10 section-wide text-center px-4">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-tight leading-[0.95]">
+            <span className="block">
+              {rebirthWords.map((word, i) => (
+                <motion.span
+                  key={word}
+                  className="inline-block mr-[0.25em] text-white"
+                  initial={{ opacity: 0, rotateX: -90, y: 20 }}
+                  animate={{ opacity: 1, rotateX: 0, y: 0 }}
+                  transition={{
+                    duration: 0.5,
+                    delay: 0.2 + i * 0.08,
+                    ease: [0.25, 0.4, 0.25, 1],
+                  }}
+                  style={{ transformOrigin: 'bottom center', display: 'inline-block' }}
+                >
+                  {word}
+                </motion.span>
+              ))}
+            </span>
+            <motion.span
+              className="block mt-2"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.7 }}
+            >
+              <GradientText className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold">
+                whole new light.
+              </GradientText>
+            </motion.span>
+          </h1>
+
+          <motion.p
+            className="mt-10 text-lg md:text-xl text-shroomy max-w-2xl mx-auto leading-relaxed"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 1.2 }}
+          >
+            The B2B marketing agency where fundamentals meet the future.
+            We deliver transformational marketing solutions by fusing our
+            award-winning foundational principles with AI expertise.
+          </motion.p>
+        </div>
+
+        {!playing && (
+          <div className="absolute bottom-[13vh] left-1/2 -translate-x-1/2 z-10">
+            <ArcadeButton onClick={() => setPlaying(true)} delay={2.0} />
+          </div>
+        )}
+
+        <div
+          className="absolute bottom-0 left-0 right-0 h-64 pointer-events-none z-[5]"
+          style={{ background: 'linear-gradient(to bottom, transparent 0%, #141213 100%)' }}
+        />
+      </section>
+    );
+  }
 
   const flickerAnimation = reducedMotion
     ? {}

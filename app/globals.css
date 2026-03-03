@@ -164,6 +164,22 @@ p {
   }
 }
 
+/* ===== CRT SHUTDOWN ANIMATION ===== */
+@keyframes crt-shutdown-vertical {
+  from { transform: scaleY(1); filter: brightness(1); }
+  to { transform: scaleY(0); filter: brightness(3); }
+}
+
+@keyframes crt-shutdown-horizontal {
+  from { transform: scaleX(1); opacity: 1; }
+  to { transform: scaleX(0); opacity: 1; }
+}
+
+@keyframes crt-dot-fade {
+  from { opacity: 1; box-shadow: 0 0 20px 8px white; }
+  to { opacity: 0; box-shadow: 0 0 0 0 white; }
+}
+
 /* ===== REDUCED MOTION FALLBACK ===== */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
