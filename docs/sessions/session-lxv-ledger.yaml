@@ -1,0 +1,97 @@
+session_id: "LXV"
+date: "2026-03-03"
+branch: main
+version: "0.42.0"  # MINOR: Homepage cinematic intro sequence — 14s death-and-rebirth narrative
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "xi5MroCDsnBcxc61Ux2v"
+  status: triggered
+
+build_verification:
+  next_build: PASS  # 407 routes
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "All changes are client-side components and CSS. No MongoDB writes affected."
+
+commits:
+  - hash: "b06cec6"
+    message: "feat: Homepage cinematic intro — 14s death-and-rebirth narrative sequence"
+  - hash: "ac0ff1d"
+    message: "docs: Update roadmap with Session LXV cinematic intro"
+
+artifacts_updated:
+  - "components/home/HomepageCinematic.tsx — NEW: State machine orchestrator (7-phase setTimeout chain, sessionStorage gating, skip button, sound toggle, reduced-motion bypass)"
+  - "components/home/CinematicOverlay.tsx — NEW: Phases 1-6 visual rendering (GAME OVER blink, subhead, CRT shutdown, retro screen, unplug flash, blackout)"
+  - "components/home/RetroGameScreen.tsx — NEW: 1970s green phosphor arcade game-over screen (1UP/HIGH SCORE/2UP, score 002026, 3 empty hearts, CREDIT 00)"
+  - "components/home/IntroSoundEngine.ts — NEW: Web Audio API class with 9 sound methods"
+  - "components/home/HeroSection.tsx — Added variant prop (gameover | rebirth) with rebirth rendering path"
+  - "app/page.tsx — Swapped HeroSection for HomepageCinematic"
+  - "app/globals.css — Added 3 CRT shutdown CSS keyframes"
+  - "docs/roadmap.md — Session LXV entry"
+
+decisions_made:
+  - decision: "Cinematic replays every new browser session (sessionStorage, not localStorage)"
+    rationale: "sessionStorage dies with the tab. New tab = fresh cinematic. Same-tab navigation skips replay. Matches existing tsc-sid pattern."
+    reversible: true
+  - decision: "GAME OVER never appears standalone — only inside cinematic intro"
+    rationale: "User directive. The narrative arc requires GAME OVER as the opening act, with 'See Marketing in a Whole New Light' as the permanent homepage state after the cinematic."
+    reversible: true
+  - decision: "Sound is opt-in via button click (not autoplay)"
+    rationale: "Browser autoplay policies block audio without user gesture. Graceful silent fallback preserves the visual experience."
+    reversible: false
+  - decision: "Retro game screen uses CSS/HTML (not canvas)"
+    rationale: "Content is text-based (scores, hearts, GAME OVER). CSS transforms are GPU-accelerated. No animation loop needed."
+    reversible: true
+  - decision: "Three.js particles deferred until Phase 7 rebirth"
+    rationale: "Zero GPU cost during the 13s cinematic. Particles mount via existing requestIdleCallback when HeroSection renders."
+    reversible: false
+  - decision: "CRT shutdown uses 3-stage CSS transforms (scaleY→scaleX→opacity)"
+    rationale: "Physically accurate CRT power-off behavior. CSS transforms are GPU-accelerated and don't require canvas."
+    reversible: true
+  - decision: "Score '002026' on retro screen = the year disguised as a game score"
+    rationale: "Subtle double-meaning Easter egg. Player 'scored' 2026 before dying — the old marketing paradigm ended in the current year."
+    reversible: true
+
+known_risks:
+  - risk: "unsafe-inline still in CSP script-src and style-src"
+    mitigation: "Deferred to future session. Removing requires nonce-based CSP middleware and page-by-page testing."
+    severity: medium
+  - risk: "In-memory rate limiter resets per serverless invocation"
+    mitigation: "Acceptable for now. Persistent rate limiting would require Redis or similar external store."
+    severity: low
+  - risk: "Cinematic timing may need visual tuning after seeing it on production"
+    mitigation: "All timings are in a single PHASE_TIMINGS array in HomepageCinematic.tsx — easy to adjust."
+    severity: low
+
+explicitly_deferred:
+  - "Visual tuning of cinematic — test CRT shutdown easing, retro screen styling, phase durations on production"
+  - "Full nonce-based CSP — needs middleware + careful page-by-page testing"
+  - "Work page — needs content direction from user"
+  - "Domain configuration — not yet ready to go live"
+  - "Production cron monitoring — verify pipeline fixes from LX work in prod"
+
+next_actions:
+  - "Test cinematic on production (Vercel) — verify timing, CRT shutdown, retro screen rendering"
+  - "Iterate on visual tuning if needed — durations in PHASE_TIMINGS, easing curves"
+  - "Monitor production cron runs — verify rate-limit retry and idempotent seeding"
+  - "Build Work page (needs user content direction)"
+  - "Domain configuration when ready to go live"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All API clients use pure fetch (no SDK dependencies)"
+  - "All OG image routes use nodejs runtime (not edge)"
+  - "metadataBase in app/layout.tsx must be updated when final domain is assigned"
+  - "GAME OVER only appears inside cinematic intro — never as standalone homepage state"
+  - "Homepage headline is now 'See marketing in a whole new light' (rebirth variant)"
+  - "Cinematic replays each new browser session (sessionStorage key: tsc-intro-seen)"
+  - "Sound is opt-in — IntroSoundEngine requires user gesture to enable AudioContext"
+  - "Phase timings in PHASE_TIMINGS array in HomepageCinematic.tsx — single source of truth for all durations"

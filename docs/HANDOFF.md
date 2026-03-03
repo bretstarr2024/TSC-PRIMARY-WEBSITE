@@ -1,16 +1,69 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** February 27, 2026 (Session LXIV)
+**Last Updated:** March 3, 2026 (Session LXV)
 
 ---
 
-## Current Phase: Phase 2 — Pipeline Hardened, 3 Rounds of Code Review Complete, Performance Optimized
+## Current Phase: Phase 2 — Pipeline Hardened, Cinematic Homepage Intro Live
 
-The site is live with **143 pages** (473 routes including OG/Twitter images, error boundaries, RSS, manifest, privacy) across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, Vercel Analytics + Speed Insights, **dynamic OG images on every page**, RSS feed, cookie consent, privacy policy, print stylesheet, and a **fully activated autonomous content pipeline**. Three rounds of comprehensive code review have been completed with all findings resolved. Session LXIV addressed 2 critical performance issues (Contact LCP 11.9s, Homepage TBT 2,100ms) plus 9 security/architecture/pipeline fixes.
+The site is live with **143 pages** (407 routes) across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, Vercel Analytics + Speed Insights, **dynamic OG images on every page**, RSS feed, cookie consent, privacy policy, print stylesheet, and a **fully activated autonomous content pipeline**. Three rounds of code review complete. Session LXV added a **14-second cinematic intro sequence** to the homepage — a death-and-rebirth narrative that transitions from "GAME OVER" through a retro arcade screen to the rebirth headline "See Marketing in a Whole New Light."
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database), Resend email, 3 Vercel cron jobs (ACTIVE — CRON_SECRET set), Vercel Analytics + Speed Insights
-- **Next actions:** Monitor production cron runs (verify rate-limit retry + idempotent seeding), build Work page, domain configuration
-- **Roadmap:** See `docs/roadmap.md` Session LXIV
+- **Next actions:** Test cinematic on production, visual tuning if needed, build Work page, domain configuration
+- **Roadmap:** See `docs/roadmap.md` Session LXV
+
+### Session LXV Summary (March 3, 2026)
+
+**Focus:** Built a 14-second cinematic intro sequence for the homepage — a death-and-rebirth narrative: GAME OVER → retro arcade screen → CRT shutdown → rebirth with "See Marketing in a Whole New Light."
+
+**What was done:**
+
+1. **`components/home/HomepageCinematic.tsx`** (NEW) — State machine orchestrator with 7 phases on precise setTimeout timings. sessionStorage gating (replays each new browser session, skips within same tab). Skip button (appears at 2s, bottom-right). Sound toggle (opt-in, browser autoplay safe). useReducedMotion bypass skips straight to rebirth.
+
+2. **`components/home/CinematicOverlay.tsx`** (NEW) — Phases 1–6 visual rendering:
+   - Phase 1 (0–3s): GAME OVER in font-arcade with hard retro blink (steps(1) timing), same gradient, heavier CRT scanlines (0.12 opacity)
+   - Phase 2 (3–5.5s): Current subhead fades in with "level up" bold
+   - Phase 3 (5.5–7s): CRT shutdown — vertical compress + brightness flash → horizontal line shrinks → center dot fades
+   - Phase 4 (7–10.5s): RetroGameScreen renders with warm-up fade
+   - Phase 5 (10.5–10.8s): Instant unplug snap with phosphor flash
+   - Phase 6 (10.8–12.8s): Pure black blackout
+
+3. **`components/home/RetroGameScreen.tsx`** (NEW) — Authentic 1970s green phosphor arcade game-over screen. 4:3 aspect ratio with CRT bezel, curvature vignette (radial gradient), heavy green scanlines (0.35 opacity), phosphor text glow. Content: 1UP score "002026" (year as game score), HIGH SCORE "010000", 2UP "------", blinking GAME OVER, 3 empty hearts (♡ ♡ ♡), CREDIT 00.
+
+4. **`components/home/IntroSoundEngine.ts`** (NEW) — Web Audio API class with 9 methods: gameOverMelody (4 descending square-wave notes), startCrtHum/stopCrtHum (detuned 60 Hz pair), crtPowerDown (2kHz→40 Hz whine + thunk), crtWarmUp (80→200 Hz rising tone), startPhosphorHum/stopPhosphorHum (beating 59.5/60.5 Hz), textBlip (1kHz square), unplugClick (bandpass noise burst), rebirthWhoosh (ascending sweep).
+
+5. **`components/home/HeroSection.tsx`** — Added `variant` prop (`'gameover'` | `'rebirth'`). Rebirth variant renders old headline "See marketing in a whole new light" with word-by-word rotateX flip-in animation + GradientText (tangerine→cactus→tidal wave), plus old subhead. Keeps HeroParticles, ArcadeButton, bottom gradient.
+
+6. **`app/page.tsx`** — Swapped `<HeroSection />` for `<HomepageCinematic />`.
+
+7. **`app/globals.css`** — Added 3 CRT shutdown CSS keyframes (crt-shutdown-vertical, crt-shutdown-horizontal, crt-dot-fade).
+
+**Commits this session:**
+- `b06cec6` — feat: Homepage cinematic intro — 14s death-and-rebirth narrative sequence
+- `ac0ff1d` — docs: Update roadmap with Session LXV cinematic intro
+
+**Results:**
+- Build: 407 routes, PASS
+- Homepage bundle: 9.88 kB (up from 6.66 kB — +3.2 kB for cinematic)
+- 4 new files, 3 modified files, 961 lines added
+- Zero GPU cost during 13s cinematic (Three.js deferred to Phase 7)
+
+**Key decisions (do not re-debate):**
+- GAME OVER only exists inside cinematic intro — never as standalone homepage state
+- Cinematic replays every new browser session (sessionStorage key: `tsc-intro-seen`)
+- Sound is opt-in via button click (browser autoplay policy)
+- Score "002026" = the year as a game score (double-meaning Easter egg)
+- CRT shutdown uses 3-stage CSS transforms (scaleY → scaleX → opacity)
+- Phase timings in single PHASE_TIMINGS array — easy to adjust
+
+**What must happen next:**
+1. Test cinematic on production — verify timing, CRT shutdown, retro screen rendering
+2. Visual tuning if needed — durations in PHASE_TIMINGS, easing curves
+3. Monitor production cron runs (verify rate-limit retry + idempotent seeding)
+4. Build Work page (needs user content direction)
+5. Domain configuration when ready to go live
+
+---
 
 ### Session LXIV Summary (February 27, 2026)
 
