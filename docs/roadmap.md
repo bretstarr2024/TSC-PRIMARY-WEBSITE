@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION LXV** | Last Updated: March 3, 2026
+**Status: SESSION LXVI** | Last Updated: March 3, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -1450,7 +1450,44 @@ Build: 131 pages (up from 127), 0 type errors.
 **Build:** 407 routes, PASS. Homepage 9.88 kB (up from 6.66 kB — +3.2 kB for cinematic)
 
 **Still needed (next sessions):**
-- [ ] Visual tuning — test and iterate on CRT shutdown easing, retro screen styling, timing
+- [x] Visual tuning — cinematic rewrite (Session LXVI)
+- [ ] Monitor production cron runs — verify pipeline fixes work in prod
+- [ ] Work page — last remaining stub
+- [ ] Domain configuration
+
+---
+
+#### Session LXVI: Cinematic Intro Rewrite — Full-Screen Green Arcade ✅ COMPLETE (Mar 3, 2026)
+
+**Focus:** Complete rewrite of the homepage cinematic intro. The Session LXV version had a confusing structure: a separate yellow/gradient GAME OVER headline appeared first, then a tiny green arcade screen appeared briefly. User feedback: "it's a dumpster fire." The green retro arcade screen should BE the entire opening, not a small secondary element.
+
+**What was done:**
+
+1. **`components/home/RetroGameScreen.tsx`** — Major rewrite. Now fills the entire viewport (removed `max-w-2xl` constraint). All text scaled up (scores: `text-xs`→`text-sm`, GAME OVER: `text-2xl`→`text-6xl`, hearts: `text-lg`→`text-2xl`). Added `blinking` prop (GAME OVER blinks in Frame 1, solid in Frame 2) and `showSubhead` prop (marketing copy appears on the green screen in phosphor green).
+
+2. **`components/home/CinematicOverlay.tsx`** — Simplified dramatically. Deleted all gradient GAME OVER headline code. Phase types reduced from 6 to 4: `game-screen | subhead | crt-shutdown | blackout`. CRT shutdown given more time (line: 1.0s, dot: 1.8s). Uses RetroGameScreen with props for Frames 1-2.
+
+3. **`components/home/HomepageCinematic.tsx`** — Simplified phase machine. 4-frame storyboard: green screen + blinking GAME OVER (0–3s) → subhead appears on screen (3–6s) → CRT shutdown (6–8.5s) → blackout → rebirth (9.5s). Removed sessionStorage gating (cinematic plays every page load, skip button handles repeat visits). Sound button moved to bottom-center with border, larger text, 70% opacity (was 10px at 40% opacity in corner — invisible).
+
+**Storyboard (user-directed):**
+- Frame 1 (0–3s): Full-screen green 1970s arcade screen, GAME OVER blinking, all retro details
+- Frame 2 (3–6s): GAME OVER solid, subhead appears on screen ("nothing fancy — wasn't possible in old arcade games")
+- Frame 3 (6–8.5s): CRT shutdown — screen collapses, horizontal line, center dot
+- Frame 4 (9.5s+): "See marketing in a whole new light" rebirth hero
+
+**Build:** 407 routes, PASS. Homepage 9.65 kB (down from 9.88 kB).
+
+**Key decisions (do not re-debate):**
+- The green arcade screen IS the entire opening — no separate gradient headline
+- Full viewport, not a small box — the retro screen fills the screen
+- Subhead appears ON the arcade screen in phosphor green
+- "Nothing fancy" for subhead — just appears, matching old arcade limitations
+- CRT shutdown gets ~2.5s (was 1.5s)
+- No sessionStorage gating — refresh replays the cinematic
+- Sound button visible at bottom-center with border
+
+**Still needed (next sessions):**
+- [ ] Test cinematic on production — verify full-screen green arcade, timing, CRT shutdown
 - [ ] Monitor production cron runs — verify pipeline fixes work in prod
 - [ ] Work page — last remaining stub
 - [ ] Domain configuration
