@@ -23,6 +23,8 @@ commits:
     message: "fix: Auto-enable cinematic sound + persistent CRT dot"
   - hash: "dabdf88"
     message: "docs: Update roadmap with Session LXVII cinematic polish"
+  - hash: "3bef39f"
+    message: "docs: Session LXVII closeout — cinematic polish finalized"
 
 artifacts_updated:
   - "components/home/HomepageCinematic.tsx — Removed sound toggle button, auto-enable sound engine on mount, deleted soundEnabled state and handleSoundToggle callback"
