@@ -1,16 +1,48 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** March 3, 2026 (Session LXVI)
+**Last Updated:** March 3, 2026 (Session LXVII)
 
 ---
 
-## Current Phase: Phase 2 — Pipeline Hardened, Cinematic Homepage Intro Rewritten
+## Current Phase: Phase 2 — Pipeline Hardened, Cinematic Intro Finalized
 
-The site is live with **143 pages** (407 routes) across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, Vercel Analytics + Speed Insights, **dynamic OG images on every page**, RSS feed, cookie consent, privacy policy, print stylesheet, and a **fully activated autonomous content pipeline**. Three rounds of code review complete. Session LXVI **rewrote the homepage cinematic intro** — the full-screen green 1970s arcade screen is now the entire opening (no more separate gradient GAME OVER headline), with proper timing, visible sound button, and no sessionStorage gating.
+The site is live with **143 pages** (407 routes) across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, Vercel Analytics + Speed Insights, **dynamic OG images on every page**, RSS feed, cookie consent, privacy policy, print stylesheet, and a **fully activated autonomous content pipeline**. Three rounds of code review complete. The homepage cinematic intro is **finalized** — full-screen green 1970s arcade screen → CRT shutdown with persistent dot of light → rebirth. Sound auto-plays (no button). User approved.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database), Resend email, 3 Vercel cron jobs (ACTIVE — CRON_SECRET set), Vercel Analytics + Speed Insights
-- **Next actions:** Test rewritten cinematic on production, build Work page, domain configuration
-- **Roadmap:** See `docs/roadmap.md` Session LXVI
+- **Next actions:** Test finalized cinematic on production, build Work page, domain configuration
+- **Roadmap:** See `docs/roadmap.md` Session LXVII
+
+### Session LXVII Summary (March 3, 2026)
+
+**Focus:** Two user-directed polish refinements to finalize the homepage cinematic intro sequence.
+
+**What was done:**
+
+1. **`components/home/HomepageCinematic.tsx`** — Removed the "ENABLE SOUND" button entirely. Sound engine now auto-enables on mount — the sounds are subtle and the button was too slow to find before the intro finished. Deleted `soundEnabled` state, `handleSoundToggle` callback, and both button/indicator elements. If a browser blocks AudioContext autoplay, it fails silently.
+
+2. **`components/home/CinematicOverlay.tsx`** — Separated the CRT center dot from the shutdown `AnimatePresence` so it persists through both `crt-shutdown` and `blackout` phases. The dot fades in with a soft white glow during CRT shutdown and holds as the last point of light until the overlay unmounts at rebirth. Removed the solid black blackout div — the near-black background + persistent dot creates a more evocative transition.
+
+**Commits this session:**
+- `611a0a2` — fix: Auto-enable cinematic sound + persistent CRT dot
+- `dabdf88` — docs: Update roadmap with Session LXVII cinematic polish
+
+**Results:**
+- Build: 407 routes, PASS
+- Net -56 lines (42 added, 98 deleted — simpler code)
+- Cinematic intro sequence finalized per user approval
+
+**Key decisions (do not re-debate):**
+- Sound auto-plays — no button, no user gesture (user directive)
+- CRT dot persists as last point of light through blackout (user directive)
+- The cinematic intro sequence is finalized — user approved the complete experience
+
+**What must happen next:**
+1. Test finalized cinematic on production — verify auto-sound, persistent dot, timing
+2. Monitor production cron runs (verify rate-limit retry + idempotent seeding)
+3. Build Work page (needs user content direction)
+4. Domain configuration when ready to go live
+
+---
 
 ### Session LXVI Summary (March 3, 2026)
 

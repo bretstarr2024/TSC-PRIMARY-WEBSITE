@@ -1,0 +1,80 @@
+session_id: "LXVII"
+date: "2026-03-03"
+branch: main
+version: "0.42.2"  # PATCH: Cinematic polish — auto-sound + persistent CRT dot
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "fFhirsI0Ogc49kqoxDjl"
+  status: triggered
+
+build_verification:
+  next_build: PASS  # 407 routes
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "All changes are client-side components. No MongoDB writes affected."
+
+commits:
+  - hash: "611a0a2"
+    message: "fix: Auto-enable cinematic sound + persistent CRT dot"
+  - hash: "dabdf88"
+    message: "docs: Update roadmap with Session LXVII cinematic polish"
+
+artifacts_updated:
+  - "components/home/HomepageCinematic.tsx — Removed sound toggle button, auto-enable sound engine on mount, deleted soundEnabled state and handleSoundToggle callback"
+  - "components/home/CinematicOverlay.tsx — Separated CRT dot from shutdown AnimatePresence, dot persists through blackout, removed solid black blackout div"
+  - "docs/roadmap.md — Session LXVII entry"
+
+decisions_made:
+  - decision: "Sound auto-plays with no button or user gesture required"
+    rationale: "User directive: 'by the time you find and click the button, the whole thing is already over. The sound is subtle, so just go with it.' If browser blocks AudioContext (autoplay policy), fails silently."
+    reversible: true
+  - decision: "CRT dot persists through blackout as last point of light"
+    rationale: "User directive: 'I don't like the screen completely black. Leave that last little dot of light until the main website loads.' The dot holds with a soft glow until the overlay unmounts at rebirth."
+    reversible: true
+  - decision: "Cinematic intro sequence is finalized"
+    rationale: "User explicitly praised the result: 'you have built an awesome fucking website opening sequence.' Both requested refinements applied."
+    reversible: true
+
+known_risks:
+  - risk: "unsafe-inline still in CSP script-src and style-src"
+    mitigation: "Deferred to future session. Removing requires nonce-based CSP middleware and page-by-page testing."
+    severity: medium
+  - risk: "In-memory rate limiter resets per serverless invocation"
+    mitigation: "Acceptable for now. Persistent rate limiting would require Redis or similar external store."
+    severity: low
+  - risk: "Browser autoplay policies may block sound on first visit"
+    mitigation: "IntroSoundEngine.enable() fails silently if AudioContext is blocked. Sound is enhancement-only — cinematic works visually without it. Most desktop browsers allow autoplay for Web Audio (no media element)."
+    severity: low
+
+explicitly_deferred:
+  - "Full nonce-based CSP — needs middleware + careful page-by-page testing"
+  - "Work page — needs content direction from user"
+  - "Domain configuration — not yet ready to go live"
+  - "Production cron monitoring — verify pipeline fixes from LX work in prod"
+
+next_actions:
+  - "Test finalized cinematic on production — verify auto-sound, persistent dot, timing"
+  - "Monitor production cron runs — verify rate-limit retry and idempotent seeding"
+  - "Build Work page (needs user content direction)"
+  - "Domain configuration when ready to go live"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All API clients use pure fetch (no SDK dependencies)"
+  - "All OG image routes use nodejs runtime (not edge)"
+  - "metadataBase in app/layout.tsx must be updated when final domain is assigned"
+  - "The green retro arcade screen IS the entire cinematic opening — no separate headline"
+  - "Subhead appears ON the arcade screen in phosphor green — 'nothing fancy'"
+  - "Cinematic replays every page load (no sessionStorage gating)"
+  - "Sound auto-plays on mount — no button, no user gesture (subtle sounds, fails silently if blocked)"
+  - "CRT dot persists through blackout as last point of light until rebirth"
+  - "Phase timings in PHASE_TIMINGS array in HomepageCinematic.tsx — single source of truth"
+  - "Cinematic intro sequence is finalized — user approved"
