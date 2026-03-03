@@ -1457,6 +1457,32 @@ Build: 131 pages (up from 127), 0 type errors.
 
 ---
 
+#### Session LXIX: Homepage Final — Sound Autoplay Fallback + Subhead Reading Time ✅ COMPLETE (Mar 3, 2026)
+
+**Focus:** Two final homepage cinematic fixes to close out the homepage for good.
+
+**What was done:**
+
+1. **Sound autoplay fallback** (`IntroSoundEngine.ts`) — Browsers require a user gesture before allowing AudioContext to produce sound. The previous `enable()` method awaited `resume()` but never detected when the context remained `suspended`. Now `enable()` checks `c.state` after resume — if still suspended, registers one-time `click`/`touchstart`/`keydown` listeners on `document` that call `ctx.resume()`. Sounds already scheduled on the suspended context play immediately when the user first interacts. Listeners auto-clean up on first fire and on `dispose()`.
+
+2. **Subhead reading time doubled** (`HomepageCinematic.tsx`) — The subhead phase ran 3s (3000–6000ms). User couldn't read it in time. Extended to 6s by pushing CRT shutdown from 6000ms to 9000ms. All subsequent phases shifted +3000ms. Total cinematic: ~14s (was ~11s).
+
+**Updated storyboard:**
+- Frame 1 (0–3s): Green arcade screen, GAME OVER blinking, music
+- Frame 2 (3–9s): GAME OVER solid, subhead appears (6s reading time)
+- Frame 3 (9–11.5s): CRT shutdown
+- Frame 4 (11.5–12.5s): Blackout
+- Frame 5 (12.5s+): Rebirth
+
+**Key decisions (do not re-debate):**
+- Browser autoplay policy is a hard constraint — interaction listener is the correct fallback
+- 6 seconds is the right reading time for the subhead (user directive: "double it")
+- Homepage cinematic is DONE — user declared it complete pending these two fixes
+
+**Build:** 407 routes, PASS.
+
+---
+
 #### Session LXVIII: Homepage Polish — Sound Fix, Layout Fix, Flash Fix, Cursor Removal ✅ COMPLETE (Mar 3, 2026)
 
 **Focus:** Four production-tested fixes for the homepage cinematic intro and site-wide cursor.
@@ -1532,6 +1558,7 @@ Build: 131 pages (up from 127), 0 type errors.
 **Still needed (next sessions):**
 - [x] Polish cinematic — auto-sound + persistent CRT dot (Session LXVII)
 - [x] Test cinematic on production — fixes applied in Session LXVIII (sound, layout, flash, cursor)
+- [x] Sound autoplay fallback + subhead reading time (Session LXIX) — homepage cinematic DONE
 - [ ] Monitor production cron runs — verify pipeline fixes work in prod
 - [ ] Work page — last remaining stub
 - [ ] Domain configuration
