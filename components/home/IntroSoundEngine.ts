@@ -7,6 +7,7 @@ export class IntroSoundEngine {
   private humNodes: { osc1: OscillatorNode; osc2: OscillatorNode; gain: GainNode } | null = null;
   private phosphorNodes: { osc1: OscillatorNode; osc2: OscillatorNode; gain: GainNode } | null = null;
   private _enabled = false;
+  private gestureCleanup: (() => void) | null = null;
 
   private ensure(): AudioContext | null {
     if (!this.ctx) {
@@ -23,7 +24,9 @@ export class IntroSoundEngine {
     return this.ctx;
   }
 
-  /** Enable audio — awaits AudioContext resume before marking ready */
+  /** Enable audio — awaits AudioContext resume before marking ready.
+   *  If the browser blocks autoplay (no user gesture yet), sets up one-time
+   *  interaction listeners so sounds play as soon as the user clicks/taps/types. */
   async enable(): Promise<boolean> {
     const c = this.ensure();
     if (!c) return false;
@@ -33,6 +36,27 @@ export class IntroSoundEngine {
       // AudioContext.resume() can fail in restricted environments
     }
     this._enabled = true;
+
+    // If context is still suspended (browser requires user gesture),
+    // listen for first interaction to resume it. Sounds already scheduled
+    // on the suspended context will play once currentTime starts advancing.
+    if (c.state === 'suspended') {
+      const resume = () => {
+        c.resume().catch(() => {});
+        cleanup();
+      };
+      const cleanup = () => {
+        document.removeEventListener('click', resume);
+        document.removeEventListener('touchstart', resume);
+        document.removeEventListener('keydown', resume);
+        this.gestureCleanup = null;
+      };
+      document.addEventListener('click', resume);
+      document.addEventListener('touchstart', resume, { passive: true });
+      document.addEventListener('keydown', resume);
+      this.gestureCleanup = cleanup;
+    }
+
     return true;
   }
 
@@ -282,6 +306,7 @@ export class IntroSoundEngine {
 
   /** Cleanup everything */
   dispose() {
+    this.gestureCleanup?.();
     this.stopCrtHum();
     this.stopPhosphorHum();
     this._enabled = false;

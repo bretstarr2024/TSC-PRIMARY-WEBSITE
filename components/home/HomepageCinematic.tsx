@@ -10,18 +10,18 @@ type Phase = CinematicPhase | 'rebirth' | 'complete';
 
 /**
  * Storyboard:
- * Frame 1 (0–3s):    Full-screen green arcade screen, GAME OVER blinking, music
- * Frame 2 (3–6s):    GAME OVER solid, subhead appears on screen
- * Frame 3 (6–8.5s):  CRT shutdown — screen collapses, line, dot
- * Frame 4 (8.5–9.5s): Blackout
- * Frame 5 (9.5s+):   Rebirth — "See marketing in a whole new light"
+ * Frame 1 (0–3s):      Full-screen green arcade screen, GAME OVER blinking, music
+ * Frame 2 (3–9s):      GAME OVER solid, subhead appears on screen (6s reading time)
+ * Frame 3 (9–11.5s):   CRT shutdown — screen collapses, line, dot
+ * Frame 4 (11.5–12.5s): Blackout
+ * Frame 5 (12.5s+):    Rebirth — "See marketing in a whole new light"
  */
 const PHASE_TIMINGS: Array<{ phase: Phase; at: number }> = [
   { phase: 'subhead', at: 3000 },
-  { phase: 'crt-shutdown', at: 6000 },
-  { phase: 'blackout', at: 8500 },
-  { phase: 'rebirth', at: 9500 },
-  { phase: 'complete', at: 11000 },
+  { phase: 'crt-shutdown', at: 9000 },
+  { phase: 'blackout', at: 11500 },
+  { phase: 'rebirth', at: 12500 },
+  { phase: 'complete', at: 14000 },
 ];
 
 export function HomepageCinematic() {
