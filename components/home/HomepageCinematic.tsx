@@ -34,58 +34,53 @@ export function HomepageCinematic() {
 
   const [phase, setPhase] = useState<Phase>(shouldSkip ? 'complete' : 'game-screen');
 
-  // Initialize sound engine — auto-enable (subtle sounds, no user gesture needed)
+  // Initialize sound engine AND drive phase transitions (single effect to avoid race condition)
   useEffect(() => {
     const engine = new IntroSoundEngine();
-    engine.enable();
     soundRef.current = engine;
-    return () => {
-      soundRef.current?.dispose();
-      soundRef.current = null;
-    };
-  }, []);
 
-  // Drive phase transitions and trigger sounds
-  useEffect(() => {
-    if (shouldSkip) return;
-
-    const sfx = soundRef.current;
-
-    // Schedule all phase transitions
-    PHASE_TIMINGS.forEach(({ phase: nextPhase, at }) => {
-      const timer = setTimeout(() => {
-        setPhase(nextPhase);
-
-        // Trigger sounds for each phase
-        if (sfx && sfx.enabled) {
-          switch (nextPhase) {
-            case 'subhead':
-              sfx.textBlip();
-              break;
-            case 'crt-shutdown':
-              sfx.stopCrtHum();
-              sfx.crtPowerDown();
-              break;
-            case 'rebirth':
-              sfx.rebirthWhoosh();
-              break;
-          }
+    if (!shouldSkip) {
+      // Enable sound, then trigger initial sounds after AudioContext is ready
+      engine.enable().then(() => {
+        if (engine.enabled) {
+          engine.gameOverMelody();
+          engine.startCrtHum();
         }
-      }, at);
-      timersRef.current.push(timer);
-    });
+      });
 
-    // Trigger initial sounds
-    if (sfx && sfx.enabled) {
-      sfx.gameOverMelody();
-      sfx.startCrtHum();
+      // Schedule all phase transitions
+      PHASE_TIMINGS.forEach(({ phase: nextPhase, at }) => {
+        const timer = setTimeout(() => {
+          setPhase(nextPhase);
+
+          // Read ref at execution time (not stale closure)
+          const sfx = soundRef.current;
+          if (sfx && sfx.enabled) {
+            switch (nextPhase) {
+              case 'subhead':
+                sfx.textBlip();
+                break;
+              case 'crt-shutdown':
+                sfx.stopCrtHum();
+                sfx.crtPowerDown();
+                break;
+              case 'rebirth':
+                sfx.rebirthWhoosh();
+                break;
+            }
+          }
+        }, at);
+        timersRef.current.push(timer);
+      });
     }
 
     return () => {
       timersRef.current.forEach(clearTimeout);
       timersRef.current = [];
+      soundRef.current?.dispose();
+      soundRef.current = null;
     };
-  }, [shouldSkip]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [shouldSkip]);
 
   // Skip handler
   const handleSkip = useCallback(() => {
@@ -100,17 +95,14 @@ export function HomepageCinematic() {
 
   return (
     <div className="relative">
-      {/* Hero section — becomes visible on rebirth */}
-      {showHero && (
-        <motion.div
-          initial={phase === 'rebirth' ? { opacity: 0 } : false}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          style={phase === 'rebirth' ? { backgroundColor: '#141213' } : undefined}
-        >
-          <HeroSection variant="rebirth" />
-        </motion.div>
-      )}
+      {/* Hero section — always mounted, hidden behind overlay during cinematic */}
+      <motion.div
+        animate={{ opacity: showHero ? 1 : 0 }}
+        transition={{ duration: showHero ? 0.5 : 0 }}
+        style={{ pointerEvents: showHero ? 'auto' : 'none' }}
+      >
+        <HeroSection variant="rebirth" />
+      </motion.div>
 
       {/* Cinematic overlay — Frames 1-4 */}
       {showOverlay && (

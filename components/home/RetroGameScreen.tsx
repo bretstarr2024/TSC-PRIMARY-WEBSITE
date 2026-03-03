@@ -127,20 +127,22 @@ export function RetroGameScreen({ blinking = true, showSubhead = false }: RetroG
             </motion.span>
           </div>
 
-          {/* Subhead — appears in Frame 2, on the arcade screen */}
-          {showSubhead && (
-            <motion.p
-              className="text-[9px] sm:text-[10px] md:text-xs lg:text-sm max-w-lg mx-auto leading-relaxed tracking-wider"
-              style={{ color: DIM, textShadow: DIM_GLOW }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3 }}
-            >
-              The SaaS marketing era is over. AI-native marketing is a
-              whole new game. TSC is the B2B agency you can trust to help
-              you level up.
-            </motion.p>
-          )}
+          {/* Subhead — appears in Frame 2, wrapped in h-0 so it doesn't push GAME OVER up */}
+          <div className="h-0 overflow-visible">
+            {showSubhead && (
+              <motion.p
+                className="mt-6 text-[9px] sm:text-[10px] md:text-xs lg:text-sm max-w-lg mx-auto leading-relaxed tracking-wider text-center"
+                style={{ color: DIM, textShadow: DIM_GLOW }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                The SaaS marketing era is over. AI-native marketing is a
+                whole new game. TSC is the B2B agency you can trust to help
+                you level up.
+              </motion.p>
+            )}
+          </div>
         </div>
 
         {/* Bottom: CREDIT */}

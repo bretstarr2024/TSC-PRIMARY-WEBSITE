@@ -8,7 +8,6 @@ import { NoiseOverlay } from "@/components/GradientBackground";
 import { TrackingProvider } from "@/components/TrackingProvider";
 import { ConsoleGreeting } from "@/components/ConsoleGreeting";
 import { KonamiCode } from "@/components/KonamiCode";
-import { CustomCursor } from "@/components/CustomCursor";
 import { PageTransition } from "@/components/PageTransition";
 import { CookieConsent } from "@/components/CookieConsent";
 
@@ -98,7 +97,6 @@ export default function RootLayout({
           <TrackingProvider />
           <ConsoleGreeting />
           <KonamiCode />
-          <CustomCursor />
           <PageTransition>
             <div id="main-content" tabIndex={-1}>{children}</div>
           </PageTransition>

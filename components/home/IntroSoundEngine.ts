@@ -12,18 +12,26 @@ export class IntroSoundEngine {
     if (!this.ctx) {
       try {
         this.ctx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
-      } catch {
+      } catch (e) {
+        console.warn('[IntroSoundEngine] Failed to create AudioContext:', e);
         return null;
       }
     }
-    if (this.ctx.state === 'suspended') this.ctx.resume();
+    if (this.ctx.state === 'suspended') {
+      this.ctx.resume().catch(() => {});
+    }
     return this.ctx;
   }
 
-  /** Call on user gesture to enable audio */
-  enable(): boolean {
+  /** Enable audio — awaits AudioContext resume before marking ready */
+  async enable(): Promise<boolean> {
     const c = this.ensure();
     if (!c) return false;
+    try {
+      await c.resume();
+    } catch {
+      // AudioContext.resume() can fail in restricted environments
+    }
     this._enabled = true;
     return true;
   }
