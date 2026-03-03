@@ -1457,6 +1457,30 @@ Build: 131 pages (up from 127), 0 type errors.
 
 ---
 
+#### Session LXVIII: Homepage Polish — Sound Fix, Layout Fix, Flash Fix, Cursor Removal ✅ COMPLETE (Mar 3, 2026)
+
+**Focus:** Four production-tested fixes for the homepage cinematic intro and site-wide cursor.
+
+**What was done:**
+
+1. **Sound race condition fixed** (`HomepageCinematic.tsx`, `IntroSoundEngine.ts`) — Two separate `useEffect` hooks raced: the engine was created in effect 1 but read as `null` in effect 2 (both ran after the same render). Merged into a single effect. Made `enable()` async to properly await `AudioContext.resume()`. Added `console.warn` for debugging AudioContext failures.
+
+2. **Subhead no longer pushes GAME OVER** (`RetroGameScreen.tsx`) — Wrapped the subhead in a `h-0 overflow-visible` container so it takes zero height in the flex layout. GAME OVER stays vertically centered when the subhead fades in below it.
+
+3. **Hero flash on rebirth eliminated** (`HomepageCinematic.tsx`) — The hero (`HeroSection` + `HeroParticles`) was conditionally mounted only at rebirth (9.5s), causing dynamic import + `requestIdleCallback` + IntersectionObserver delays that produced a visible flash. Now always-mounted behind the z-50 cinematic overlay with opacity-controlled visibility. By rebirth, particles are fully initialized.
+
+4. **Custom cursor removed** (`app/layout.tsx`, `CustomCursor.tsx` deleted) — Removed the animated Framer Motion cursor that injected `cursor: none !important` globally. Default system pointer restored site-wide. User directive: "that animated pointer cursor thing drives me nuts."
+
+**Key decisions (do not re-debate):**
+- Custom cursor is gone permanently — user hates it
+- Hero is always-mounted (pre-rendered behind overlay) — prevents any future flash issues
+- Sound uses merged single-effect pattern — eliminates race condition class entirely
+- Subhead uses h-0 overflow-visible trick — zero-impact on existing layout
+
+**Build:** 407 routes, PASS.
+
+---
+
 #### Session LXVII: Cinematic Polish — Auto-Sound + Persistent CRT Dot ✅ COMPLETE (Mar 3, 2026)
 
 **Focus:** Two user-directed refinements to the homepage cinematic intro. User loved the rewritten sequence from LXVI — just needed two finishing touches.
@@ -1507,7 +1531,7 @@ Build: 131 pages (up from 127), 0 type errors.
 
 **Still needed (next sessions):**
 - [x] Polish cinematic — auto-sound + persistent CRT dot (Session LXVII)
-- [ ] Test cinematic on production — verify full-screen green arcade, timing, CRT shutdown
+- [x] Test cinematic on production — fixes applied in Session LXVIII (sound, layout, flash, cursor)
 - [ ] Monitor production cron runs — verify pipeline fixes work in prod
 - [ ] Work page — last remaining stub
 - [ ] Domain configuration
