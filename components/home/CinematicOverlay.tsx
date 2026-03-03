@@ -16,7 +16,7 @@ interface CinematicOverlayProps {
 export function CinematicOverlay({ phase }: CinematicOverlayProps) {
   const showScreen = phase === 'game-screen' || phase === 'subhead';
   const showShutdown = phase === 'crt-shutdown';
-  const showBlackout = phase === 'blackout';
+  const showDot = phase === 'crt-shutdown' || phase === 'blackout';
 
   return (
     <div className="fixed inset-0 z-50" style={{ backgroundColor: '#0a0a0a' }}>
@@ -44,66 +44,47 @@ export function CinematicOverlay({ phase }: CinematicOverlayProps) {
         )}
       </AnimatePresence>
 
-      {/* ── Frame 3: CRT shutdown — horizontal line + center dot ── */}
+      {/* ── Frame 3: CRT shutdown — horizontal line ── */}
       <AnimatePresence>
         {showShutdown && (
-          <>
-            {/* Bright horizontal line */}
-            <motion.div
-              key="crt-line"
-              className="absolute top-1/2 left-0 right-0 -translate-y-1/2"
-              style={{
-                height: '2px',
-                background: 'white',
-                transformOrigin: 'center center',
-                boxShadow: '0 0 30px 10px rgba(255,255,255,0.8)',
-              }}
-              initial={{ scaleX: 1, opacity: 1 }}
-              animate={{ scaleX: 0, opacity: 1 }}
-              transition={{
-                duration: 1.0,
-                delay: 0.2,
-                ease: [0.7, 0, 1, 1],
-              }}
-            />
-
-            {/* Center dot — lingers after line shrinks */}
-            <motion.div
-              key="crt-dot"
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-              style={{
-                width: '4px',
-                height: '4px',
-                borderRadius: '50%',
-                background: 'white',
-              }}
-              initial={{
-                opacity: 0,
-                boxShadow: '0 0 0 0 white',
-              }}
-              animate={{
-                opacity: [0, 1, 1, 0],
-                boxShadow: [
-                  '0 0 0 0 white',
-                  '0 0 20px 8px white',
-                  '0 0 20px 8px white',
-                  '0 0 0 0 white',
-                ],
-              }}
-              transition={{
-                duration: 1.8,
-                delay: 0.5,
-                times: [0, 0.1, 0.6, 1],
-                ease: 'easeOut',
-              }}
-            />
-          </>
+          <motion.div
+            key="crt-line"
+            className="absolute top-1/2 left-0 right-0 -translate-y-1/2"
+            style={{
+              height: '2px',
+              background: 'white',
+              transformOrigin: 'center center',
+              boxShadow: '0 0 30px 10px rgba(255,255,255,0.8)',
+            }}
+            initial={{ scaleX: 1, opacity: 1 }}
+            animate={{ scaleX: 0, opacity: 1 }}
+            transition={{
+              duration: 1.0,
+              delay: 0.2,
+              ease: [0.7, 0, 1, 1],
+            }}
+          />
         )}
       </AnimatePresence>
 
-      {/* ── Blackout — pure black before rebirth ── */}
-      {showBlackout && (
-        <div className="absolute inset-0" style={{ backgroundColor: '#000000' }} />
+      {/* ── Center dot — fades in during shutdown, persists through blackout ── */}
+      {showDot && (
+        <motion.div
+          key="crt-dot"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+          style={{
+            width: '4px',
+            height: '4px',
+            borderRadius: '50%',
+            background: 'white',
+          }}
+          initial={{ opacity: 0, boxShadow: '0 0 0 0 white' }}
+          animate={{
+            opacity: 1,
+            boxShadow: '0 0 15px 5px rgba(255,255,255,0.6)',
+          }}
+          transition={{ duration: 0.5, delay: 0.5, ease: 'easeOut' }}
+        />
       )}
     </div>
   );

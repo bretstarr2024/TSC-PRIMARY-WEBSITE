@@ -33,31 +33,17 @@ export function HomepageCinematic() {
   const shouldSkip = !!reducedMotion;
 
   const [phase, setPhase] = useState<Phase>(shouldSkip ? 'complete' : 'game-screen');
-  const [soundEnabled, setSoundEnabled] = useState(false);
 
-  // Initialize sound engine
+  // Initialize sound engine — auto-enable (subtle sounds, no user gesture needed)
   useEffect(() => {
-    soundRef.current = new IntroSoundEngine();
+    const engine = new IntroSoundEngine();
+    engine.enable();
+    soundRef.current = engine;
     return () => {
       soundRef.current?.dispose();
       soundRef.current = null;
     };
   }, []);
-
-  // Sound toggle handler
-  const handleSoundToggle = useCallback(() => {
-    if (!soundRef.current) return;
-    const ok = soundRef.current.enable();
-    if (ok) {
-      setSoundEnabled(true);
-      // Start CRT hum immediately
-      soundRef.current.startCrtHum();
-      // Play game-over melody if still in early phases
-      if (phase === 'game-screen' || phase === 'subhead') {
-        soundRef.current.gameOverMelody();
-      }
-    }
-  }, [phase]);
 
   // Drive phase transitions and trigger sounds
   useEffect(() => {
@@ -145,29 +131,6 @@ export function HomepageCinematic() {
         </motion.button>
       )}
 
-      {/* Sound toggle — visible, bottom-center */}
-      {showOverlay && !soundEnabled && (
-        <motion.button
-          className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] font-arcade text-xs sm:text-sm text-white/70 hover:text-white transition-colors cursor-pointer px-4 py-2 border border-white/20 rounded hover:border-white/50"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          onClick={handleSoundToggle}
-          aria-label="Enable sound"
-        >
-          🔈 ENABLE SOUND
-        </motion.button>
-      )}
-
-      {showOverlay && soundEnabled && (
-        <motion.div
-          className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] font-arcade text-xs text-white/30"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-          🔊 SOUND ON
-        </motion.div>
-      )}
     </div>
   );
 }
