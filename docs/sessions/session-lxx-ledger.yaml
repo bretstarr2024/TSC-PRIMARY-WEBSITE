@@ -7,7 +7,7 @@ deployment:
   platform: vercel
   url: "tsc-primary-website.vercel.app"
   environment: production
-  job_id: "rzYKj35nS9j5CjXfpvQ5"
+  job_id: "rzYKj35nS9j5CjXfpvQ5"  # Note: deploy triggered before closeout docs commit; latest code pushed after
   status: triggered
 
 build_verification:
