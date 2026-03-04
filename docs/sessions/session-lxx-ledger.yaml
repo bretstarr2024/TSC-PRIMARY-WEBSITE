@@ -1,0 +1,89 @@
+session_id: "LXX"
+date: "2026-03-04"
+branch: main
+version: "0.43.0"  # MINOR: Start screen + sound fix + loading bar
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "rzYKj35nS9j5CjXfpvQ5"
+  status: triggered
+
+build_verification:
+  next_build: PASS  # 407 routes
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "All changes are client-side components. No MongoDB writes affected."
+
+commits:
+  - hash: "7cd2b80"
+    message: "feat: Add start screen with 1_player button before GAME OVER cinematic"
+  - hash: "5a6dbd8"
+    message: "docs: Update roadmap with Session LXX start screen"
+
+artifacts_updated:
+  - "components/home/StartScreen.tsx — NEW: Full-screen CRT title card with 'THE STARR CONSPIRACY' in phosphor green, blinking 'PRESS START', ArcadeButton, CREDIT 00"
+  - "components/home/IntroSoundEngine.ts — Added coinInsert() method: ascending 2-note square-wave chime (880→1320 Hz)"
+  - "components/home/CinematicOverlay.tsx — Added 'start-screen' to CinematicPhase type, onStart callback prop, renders StartScreen with fade-out exit"
+  - "components/home/HomepageCinematic.tsx — Initial phase changed to 'start-screen'; sound engine created on mount but enable()+sounds deferred to handleStart click handler; skip button 3s/1.5s delay via key remount"
+  - "components/home/RetroGameScreen.tsx — New subhead copy + phosphor green loading bar (5.5s linear fill)"
+  - "docs/roadmap.md — Session LXX entry"
+
+decisions_made:
+  - decision: "Start screen with 1_player button as cinematic gate"
+    rationale: "Browser autoplay policy universally blocks AudioContext until a user gesture. The button click IS the gesture — sound is now guaranteed to work. Also strengthens the narrative: arrive at title card, press start, get GAME OVER (irony)."
+    reversible: true
+  - decision: "Subheadline: 'Sorry. The SaaS-era agency game is out of order. New game loading now.'"
+    rationale: "User-authored copy. Ties into the irony of hitting START and seeing GAME OVER. 'New game loading now.' directly connects to the loading bar and the rebirth hero."
+    reversible: true
+  - decision: "Loading bar fills 0→100% over 5.5s during subhead phase"
+    rationale: "Visual payoff for 'New game loading now.' copy. Linear easing for steady retro feel. Finishes just before CRT shutdown — the metaphor lands when bar hits 100% and the 'new game' loads."
+    reversible: true
+  - decision: "Homepage cinematic reopened (was declared DONE in LXIX)"
+    rationale: "User-initiated — sound wasn't actually working due to autoplay policy. Start screen is the proper fix."
+    reversible: false
+
+known_risks:
+  - risk: "Start screen adds friction (one extra click before content)"
+    mitigation: "Skip button appears after 3s. Reduced motion preference bypasses entirely. The click is thematically motivated (arcade start button), not a generic gate."
+    severity: low
+  - risk: "unsafe-inline still in CSP script-src and style-src"
+    mitigation: "Deferred to future session. Removing requires nonce-based CSP middleware and page-by-page testing."
+    severity: medium
+  - risk: "In-memory rate limiter resets per serverless invocation"
+    mitigation: "Acceptable for now. Persistent rate limiting would require Redis or similar external store."
+    severity: low
+
+explicitly_deferred:
+  - "Full nonce-based CSP — needs middleware + careful page-by-page testing"
+  - "Work page — needs content direction from user"
+  - "Domain configuration — not yet ready to go live"
+  - "Production cron monitoring — verify pipeline fixes from LX work in prod"
+
+next_actions:
+  - "Verify on production — start screen renders, button click triggers cinematic with sound, loading bar fills, full sequence plays"
+  - "Monitor production cron runs — verify rate-limit retry and idempotent seeding"
+  - "Build Work page (needs user content direction)"
+  - "Domain configuration when ready to go live"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All API clients use pure fetch (no SDK dependencies)"
+  - "All OG image routes use nodejs runtime (not edge)"
+  - "metadataBase in app/layout.tsx must be updated when final domain is assigned"
+  - "Start screen is Frame 0 — indefinite wait for user click before cinematic begins"
+  - "Button click in start screen IS the AudioContext user gesture — sound guaranteed after click"
+  - "Subhead copy is user-authored: 'Sorry. The SaaS-era agency game is out of order. New game loading now.'"
+  - "Loading bar fills linearly over 5.5s — no easing"
+  - "CRT dot persists through blackout as last point of light until rebirth"
+  - "Hero is always-mounted behind overlay — never conditionally rendered"
+  - "Sound engine uses deferred enable pattern — created on mount, enabled on button click"
+  - "Subhead reading time is 6 seconds (3s–9s) — user directive"
+  - "Cinematic replays every page load (no sessionStorage gating)"
+  - "Reduced motion skips everything including start screen"

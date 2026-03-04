@@ -1,16 +1,56 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** March 3, 2026 (Session LXIX)
+**Last Updated:** March 4, 2026 (Session LXX)
 
 ---
 
-## Current Phase: Phase 2 — Homepage DONE, Pipeline Active
+## Current Phase: Phase 2 — Homepage Complete, Pipeline Active
 
-The site is live with **143 pages** (407 routes) across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, Vercel Analytics + Speed Insights, **dynamic OG images on every page**, RSS feed, cookie consent, privacy policy, print stylesheet, and a **fully activated autonomous content pipeline**. Three rounds of code review complete. The homepage cinematic intro is **complete and closed** — sound autoplay fallback works, subhead has 6s reading time, layout is stable, and all cinematic work is done.
+The site is live with **143 pages** (407 routes) across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, Vercel Analytics + Speed Insights, **dynamic OG images on every page**, RSS feed, cookie consent, privacy policy, print stylesheet, and a **fully activated autonomous content pipeline**. Three rounds of code review complete. The homepage now opens with a **start screen** ("THE STARR CONSPIRACY" title card + 1_player button) that gates the GAME OVER cinematic — solving the browser audio autoplay issue and strengthening the narrative arc.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database), Resend email, 3 Vercel cron jobs (ACTIVE — CRON_SECRET set), Vercel Analytics + Speed Insights
-- **Next actions:** Verify on production, build Work page, domain configuration
-- **Roadmap:** See `docs/roadmap.md` Session LXIX
+- **Next actions:** Verify start screen on production, build Work page, domain configuration
+- **Roadmap:** See `docs/roadmap.md` Session LXX
+
+### Session LXX Summary (March 4, 2026)
+
+**Focus:** Added a start screen before the GAME OVER cinematic to solve browser audio autoplay and strengthen the narrative arc. Updated subheadline copy and added a loading progress bar.
+
+**What was done:**
+
+1. **`components/home/StartScreen.tsx`** (NEW) — Full-screen CRT-styled title card: "THE STARR CONSPIRACY" in phosphor green (#33ff33), blinking "PRESS START" text, ArcadeButton (1_player.png), and "CREDIT 00" at bottom. CRT vignette + scanlines match RetroGameScreen.
+
+2. **`components/home/IntroSoundEngine.ts`** — Added `coinInsert()` method: ascending 2-note square-wave chime (880→1320 Hz). Plays on button click with 300ms gap before GAME OVER melody starts.
+
+3. **`components/home/CinematicOverlay.tsx`** — Added `'start-screen'` to `CinematicPhase` type union. Added `onStart` callback prop. Renders StartScreen with fade-out exit animation (0.4s).
+
+4. **`components/home/HomepageCinematic.tsx`** — Initial phase changed to `'start-screen'`. Sound engine created on mount but `enable()` + sounds + phase timers deferred to `handleStart` click handler. Skip button uses key prop for remount (3s delay on start screen, 1.5s during cinematic). Storyboard updated with Frame 0.
+
+5. **`components/home/RetroGameScreen.tsx`** — Subhead rewritten: "Sorry. The SaaS-era agency game is out of order. New game loading now." Added phosphor green loading bar below subhead that fills 0→100% over 5.5s (linear) during the 6s subhead window.
+
+**Commits this session:**
+- `7cd2b80` — feat: Add start screen with 1_player button before GAME OVER cinematic
+- `5a6dbd8` — docs: Update roadmap with Session LXX start screen
+
+**Results:**
+- Build: 407 routes, PASS
+- Sound now guaranteed — button click IS the AudioContext user gesture
+- Narrative arc: title card → press start → GAME OVER (irony) → "out of order" + loading bar → CRT shutdown → rebirth
+
+**Key decisions (do not re-debate):**
+- Start screen is the correct solution for browser audio — click IS the user gesture, no workaround needed
+- Subhead copy is user-authored: "Sorry. The SaaS-era agency game is out of order. New game loading now."
+- Loading bar fills linearly (5.5s, no easing) — steady retro feel
+- Reduced motion skips everything including start screen
+- Homepage cinematic was reopened from LXIX "DONE" status at user's request (sound wasn't actually working)
+
+**What must happen next:**
+1. Verify on production — start screen renders, button triggers cinematic with sound, loading bar fills, full sequence plays
+2. Monitor production cron runs (verify rate-limit retry + idempotent seeding)
+3. Build Work page (needs user content direction)
+4. Domain configuration when ready to go live
+
+---
 
 ### Session LXIX Summary (March 3, 2026)
 
@@ -35,7 +75,6 @@ The site is live with **143 pages** (407 routes) across **11 content types**, **
 **Key decisions (do not re-debate):**
 - Interaction listener fallback is the correct solution for browser autoplay policy — no workaround exists
 - Subhead is 6 seconds — user directive ("double the time")
-- Homepage cinematic is DONE — do not re-open without explicit user directive
 - Browser autoplay will always require first interaction — this is immutable browser behavior
 
 **What must happen next:**
