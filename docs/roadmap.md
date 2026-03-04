@@ -1457,6 +1457,42 @@ Build: 131 pages (up from 127), 0 type errors.
 
 ---
 
+#### Session LXX: Start Screen + Sound Fix + Loading Bar ✅ COMPLETE (Mar 4, 2026)
+
+**Focus:** Added a start screen before the GAME OVER cinematic to solve the browser audio autoplay issue and strengthen the narrative arc.
+
+**What was done:**
+
+1. **Start screen** (`components/home/StartScreen.tsx` — NEW) — Full-screen CRT-styled title card: "THE STARR CONSPIRACY" in phosphor green (#33ff33) with blinking "PRESS START" text and the 1_player arcade button. CRT vignette + scanlines match RetroGameScreen. Clicking the button is the user gesture that unlocks AudioContext.
+
+2. **Coin-insert SFX** (`IntroSoundEngine.ts`) — Added `coinInsert()` method: ascending 2-note square-wave chime (880→1320 Hz) that plays on button click, with a 300ms gap before the GAME OVER melody starts.
+
+3. **CinematicOverlay updated** (`CinematicOverlay.tsx`) — Added `'start-screen'` to `CinematicPhase` type union, `onStart` callback prop, renders StartScreen with fade-out exit animation.
+
+4. **Orchestrator restructured** (`HomepageCinematic.tsx`) — Initial phase changed from `'game-screen'` to `'start-screen'`. Sound engine created on mount but `enable()` + sounds + phase timers deferred to button click handler (`handleStart`). Skip button: 3s delay on start screen, 1.5s during cinematic (key prop forces remount). Storyboard comment updated with Frame 0.
+
+5. **Subheadline rewritten** (`RetroGameScreen.tsx`) — New copy: "Sorry. The SaaS-era agency game is out of order. New game loading now." Plays on the irony of hitting START and getting GAME OVER.
+
+6. **Loading progress bar** (`RetroGameScreen.tsx`) — Phosphor green bar below subhead fills 0→100% over 5.5s (linear easing) during the 6s subhead window. When bar hits 100%, CRT shuts down and the "new game" (rebirth hero) loads.
+
+**Updated storyboard:**
+- Frame 0 (indefinite): Start screen — "THE STARR CONSPIRACY", 1_player button, awaits click
+- Frame 1 (0–3s): GAME OVER blinking, coin-insert chime → melody → CRT hum
+- Frame 2 (3–9s): GAME OVER solid, subhead + loading bar fills 0→100%
+- Frame 3 (9–11.5s): CRT shutdown (bar hit 100%)
+- Frame 4 (11.5–12.5s): Blackout
+- Frame 5 (12.5s+): Rebirth — "See marketing in a whole new light"
+
+**Key decisions (do not re-debate):**
+- Start screen is the correct solution for browser audio — click IS the user gesture
+- Subhead copy is user-approved: "Sorry. The SaaS-era agency game is out of order. New game loading now."
+- Loading bar fills linearly over 5.5s — no easing, steady retro feel
+- Reduced motion still skips everything including start screen
+
+**Build:** 407 routes, PASS.
+
+---
+
 #### Session LXIX: Homepage Final — Sound Autoplay Fallback + Subhead Reading Time ✅ COMPLETE (Mar 3, 2026)
 
 **Focus:** Two final homepage cinematic fixes to close out the homepage for good.
