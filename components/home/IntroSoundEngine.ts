@@ -64,6 +64,27 @@ export class IntroSoundEngine {
     return this._enabled;
   }
 
+  /** Start screen: coin-insert chirp — ascending 2-note chime */
+  coinInsert() {
+    const c = this.ensure();
+    if (!c || !this._enabled) return;
+
+    const now = c.currentTime;
+    const freqs = [880, 1320];
+    freqs.forEach((freq, i) => {
+      const osc = c.createOscillator();
+      const gain = c.createGain();
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(freq, now + i * 0.08);
+      gain.gain.setValueAtTime(0.1, now + i * 0.08);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.12);
+      osc.connect(gain);
+      gain.connect(c.destination);
+      osc.start(now + i * 0.08);
+      osc.stop(now + i * 0.08 + 0.15);
+    });
+  }
+
   /** Phase 1: Slow, dramatic game-over melody — 4 descending square-wave notes */
   gameOverMelody() {
     const c = this.ensure();

@@ -2,8 +2,10 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { RetroGameScreen } from './RetroGameScreen';
+import { StartScreen } from './StartScreen';
 
 export type CinematicPhase =
+  | 'start-screen'
   | 'game-screen'
   | 'subhead'
   | 'crt-shutdown'
@@ -11,15 +13,31 @@ export type CinematicPhase =
 
 interface CinematicOverlayProps {
   phase: CinematicPhase;
+  onStart?: () => void;
 }
 
-export function CinematicOverlay({ phase }: CinematicOverlayProps) {
+export function CinematicOverlay({ phase, onStart }: CinematicOverlayProps) {
+  const showStart = phase === 'start-screen';
   const showScreen = phase === 'game-screen' || phase === 'subhead';
   const showShutdown = phase === 'crt-shutdown';
   const showDot = phase === 'crt-shutdown' || phase === 'blackout';
 
   return (
     <div className="fixed inset-0 z-50" style={{ backgroundColor: '#0a0a0a' }}>
+      {/* ── Frame 0: Start screen — title + 1_player button ── */}
+      <AnimatePresence>
+        {showStart && (
+          <motion.div
+            key="start-screen"
+            className="absolute inset-0"
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            <StartScreen onStart={onStart!} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* ── Frames 1-2: Full-screen retro arcade screen ── */}
       <AnimatePresence>
         {showScreen && (

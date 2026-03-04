@@ -127,20 +127,44 @@ export function RetroGameScreen({ blinking = true, showSubhead = false }: RetroG
             </motion.span>
           </div>
 
-          {/* Subhead — appears in Frame 2, wrapped in h-0 so it doesn't push GAME OVER up */}
+          {/* Subhead + loading bar — appears in Frame 2, wrapped in h-0 so it doesn't push GAME OVER up */}
           <div className="h-0 overflow-visible">
             {showSubhead && (
-              <motion.p
-                className="mt-6 text-[9px] sm:text-[10px] md:text-xs lg:text-sm max-w-lg mx-auto leading-relaxed tracking-wider text-center"
-                style={{ color: DIM, textShadow: DIM_GLOW }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
-              >
-                The SaaS marketing era is over. AI-native marketing is a
-                whole new game. TSC is the B2B agency you can trust to help
-                you level up.
-              </motion.p>
+              <>
+                <motion.p
+                  className="mt-6 text-[9px] sm:text-[10px] md:text-xs lg:text-sm max-w-lg mx-auto leading-relaxed tracking-wider text-center"
+                  style={{ color: DIM, textShadow: DIM_GLOW }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  Sorry. The SaaS-era agency game is out of order. New game loading now.
+                </motion.p>
+
+                {/* Loading progress bar — fills over the 6s subhead window */}
+                <motion.div
+                  className="mt-6 mx-auto max-w-xs"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3, delay: 0.2 }}
+                >
+                  <div
+                    className="h-2.5 sm:h-3 rounded-sm overflow-hidden"
+                    style={{ border: `2px solid ${DIM}`, boxShadow: DIM_GLOW }}
+                  >
+                    <motion.div
+                      className="h-full rounded-sm"
+                      style={{
+                        backgroundColor: PHOSPHOR,
+                        boxShadow: `0 0 6px ${PHOSPHOR}`,
+                      }}
+                      initial={{ width: '0%' }}
+                      animate={{ width: '100%' }}
+                      transition={{ duration: 5.5, delay: 0.3, ease: 'linear' }}
+                    />
+                  </div>
+                </motion.div>
+              </>
             )}
           </div>
         </div>
