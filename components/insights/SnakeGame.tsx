@@ -386,7 +386,7 @@ export function SnakeGame({ onClose }: { onClose: () => void }) {
       const scores = [...g.highScores, entry].sort((a, b) => b.score - a.score).slice(0, HS_MAX);
       saveHighScores(scores); g.highScores = scores; g.scoreIndex = scores.indexOf(entry);
       g.enteringInitials = false; g.scoreSubmitted = true;
-      if (g.scoreIndex === 0) { bossActive.current = true; setBossData({ game: 'snake', score: g.score, initials }); }
+      if (g.scoreIndex === 0 && !localStorage.getItem('tsc-snake-boss')) { localStorage.setItem('tsc-snake-boss', '1'); bossActive.current = true; setBossData({ game: 'snake', score: g.score, initials }); }
     }
 
     function startWave(g: Game) {
@@ -903,6 +903,7 @@ export function SnakeGame({ onClose }: { onClose: () => void }) {
       {createPortal(
         <div data-snake-game style={{ position: 'fixed', inset: 0, zIndex: 99999, background: C.bg, touchAction: 'none', cursor: isOver ? 'default' : 'none' }}>
           {isOver && <style>{`[data-snake-game], [data-snake-game] * { cursor: default !important; }`}</style>}
+          <button onClick={onClose} style={{ position: 'absolute', top: 16, left: 16, zIndex: 10, background: 'rgba(20,18,19,0.75)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 8, color: '#d1d1c6', fontFamily: 'monospace', fontSize: 13, fontWeight: 'bold', padding: '8px 14px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}>✕ EXIT</button>
           <canvas ref={cvs} style={{ display: 'block', width: '100%', height: '100%', touchAction: 'none' }} />
         </div>,
         document.body,

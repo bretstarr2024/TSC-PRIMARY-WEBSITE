@@ -37,14 +37,14 @@ export function ApproachSection() {
 
       <div className="relative z-10 section-wide">
         <AnimatedSection>
-          <p className="text-xs font-semibold text-greige uppercase tracking-[0.3em] mb-6">
+          <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-6">
             How we work
           </p>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight max-w-3xl mb-6">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal text-white leading-tight max-w-3xl mb-6">
             Strategy and execution. Fundamentals and AI.{' '}
-            <span className="text-atomic-tangerine">No false choices.</span>
+            <span className="text-white font-extrabold">No false choices.</span>
           </h2>
-          <p className="text-lg text-shroomy leading-relaxed max-w-2xl mb-16">
+          <p className="text-lg leading-relaxed max-w-2xl mb-16">
             Most agencies make you choose: strategic thinking or hands-on execution.
             Legacy expertise or AI capability. We built TSC so you never have to pick.
             The same senior team that develops your strategy is the one that executes it.
@@ -66,10 +66,10 @@ export function ApproachSection() {
                 >
                   {value.number}
                 </span>
-                <h3 className="text-xl font-bold text-white mt-4 mb-3">
+                <h3 className="text-xl font-normal text-white mt-4 mb-3">
                   {value.title}
                 </h3>
-                <p className="text-shroomy text-sm leading-relaxed">
+                <p className="text-sm leading-relaxed">
                   {value.description}
                 </p>
               </motion.div>

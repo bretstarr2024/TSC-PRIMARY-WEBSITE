@@ -1,7 +1,6 @@
 'use client';
 
 import { AnimatedSection } from '@/components/AnimatedSection';
-import { GradientText } from '@/components/AnimatedText';
 
 export function IndustriesHero() {
   return (
@@ -9,11 +8,14 @@ export function IndustriesHero() {
       <div className="section-wide">
         <AnimatedSection>
           <div className="max-w-4xl">
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-              <GradientText>Verticals</GradientText>
+            <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-6">
+              Verticals
+            </p>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-normal text-white leading-[1.1] mb-6">
+              Thousands of B2B tech companies.{' '}
+              <span className="text-white font-extrabold">Dozens of verticals.</span>
             </h1>
             <p className="text-xl md:text-2xl text-shroomy leading-relaxed max-w-2xl">
-              Thousands of B2B technology companies across dozens of verticals.
               If you sell software or services to businesses, we get you.
             </p>
           </div>

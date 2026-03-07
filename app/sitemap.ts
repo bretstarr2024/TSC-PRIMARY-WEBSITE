@@ -8,7 +8,6 @@ import {
   getAllPublishedComparisons,
   getAllPublishedExpertQa,
   getAllPublishedNews,
-  getAllPublishedCaseStudies,
   getAllPublishedIndustryBriefs,
   getAllPublishedVideos,
   getAllPublishedTools,
@@ -46,22 +45,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/insights/comparisons`, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${BASE_URL}/insights/expert-qa`, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${BASE_URL}/insights/news`, changeFrequency: 'daily', priority: 0.8 },
-    { url: `${BASE_URL}/insights/case-studies`, changeFrequency: 'weekly', priority: 0.7 },
-    { url: `${BASE_URL}/insights/industry-briefs`, changeFrequency: 'weekly', priority: 0.7 },
+{ url: `${BASE_URL}/insights/industry-briefs`, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${BASE_URL}/insights/videos`, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${BASE_URL}/insights/tools`, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${BASE_URL}/insights/infographics`, changeFrequency: 'weekly', priority: 0.7 },
   ];
 
   // Dynamic content pages — query all 11 collections in parallel
-  const [blogs, faqs, glossary, comparisons, expertQa, news, caseStudies, briefs, videos, tools, infographics] = await Promise.all([
+  const [blogs, faqs, glossary, comparisons, expertQa, news, briefs, videos, tools, infographics] = await Promise.all([
     getAllPublishedBlogPosts().catch(() => []),
     getAllPublishedFaqs().catch(() => []),
     getAllPublishedGlossaryTerms().catch(() => []),
     getAllPublishedComparisons().catch(() => []),
     getAllPublishedExpertQa().catch(() => []),
     getAllPublishedNews().catch(() => []),
-    getAllPublishedCaseStudies().catch(() => []),
     getAllPublishedIndustryBriefs().catch(() => []),
     getAllPublishedVideos().catch(() => []),
     getAllPublishedTools().catch(() => []),
@@ -104,12 +101,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: n.publishedAt || n.createdAt,
       changeFrequency: 'weekly' as const,
       priority: 0.6,
-    })),
-    ...caseStudies.map((cs) => ({
-      url: `${BASE_URL}/insights/case-studies/${cs.caseStudyId}`,
-      lastModified: cs.publishedAt || cs.createdAt,
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
     })),
     ...briefs.map((b) => ({
       url: `${BASE_URL}/insights/industry-briefs/${b.briefId}`,

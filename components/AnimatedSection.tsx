@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { ReactNode } from 'react';
 
 interface AnimatedSectionProps {
@@ -25,10 +25,15 @@ export function AnimatedSection({
   direction = 'up',
 }: AnimatedSectionProps) {
   const offset = directionOffsets[direction];
+  const reducedMotion = useReducedMotion();
+
+  if (reducedMotion) {
+    return <div className={className}>{children}</div>;
+  }
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: offset.y, x: offset.x }}
+      initial={{ opacity: 0.5, y: offset.y, x: offset.x }}
       whileInView={{ opacity: 1, y: 0, x: 0 }}
       viewport={{ once: true, margin: '-100px' }}
       transition={{
@@ -54,6 +59,12 @@ export function StaggerContainer({
   className = '',
   staggerDelay = 0.1,
 }: StaggerContainerProps) {
+  const reducedMotion = useReducedMotion();
+
+  if (reducedMotion) {
+    return <div className={className}>{children}</div>;
+  }
+
   return (
     <motion.div
       initial="hidden"
@@ -83,7 +94,7 @@ export function StaggerItem({ children, className = '' }: StaggerItemProps) {
   return (
     <motion.div
       variants={{
-        hidden: { opacity: 0, y: 40 },
+        hidden: { opacity: 0.5, y: 40 },
         visible: {
           opacity: 1,
           y: 0,

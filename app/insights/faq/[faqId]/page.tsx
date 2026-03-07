@@ -94,11 +94,11 @@ export default async function FaqDetailPage({
           />
 
           <nav className="flex items-center gap-2 text-sm text-greige mb-8">
-            <Link href="/" className="hover:text-atomic-tangerine">Home</Link>
+            <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
-            <Link href="/insights" className="hover:text-atomic-tangerine">Grist</Link>
+            <Link href="/insights" className="hover:text-white/80">Insights</Link>
             <span>/</span>
-            <Link href="/insights/faq" className="hover:text-atomic-tangerine">FAQ</Link>
+            <Link href="/insights/faq" className="hover:text-white/80">FAQ</Link>
             <span>/</span>
             <span className="text-shroomy">{faq.question}</span>
           </nav>
@@ -110,12 +110,12 @@ export default async function FaqDetailPage({
             {faq.category}
           </span>
 
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-8">
+          <h1 className="text-3xl md:text-5xl font-normal text-white mb-8">
             {faq.question}
           </h1>
 
           <div className="glass rounded-xl p-8 mb-10">
-            <p className="text-shroomy text-lg leading-relaxed whitespace-pre-line">
+            <p className="text-lg leading-relaxed whitespace-pre-line">
               {faq.answer}
             </p>
           </div>

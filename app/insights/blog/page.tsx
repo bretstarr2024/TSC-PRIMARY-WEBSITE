@@ -8,7 +8,7 @@ import { getAllPublishedBlogPosts, BlogPost } from '@/lib/content-db';
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: 'Blog | Grist',
+  title: 'Blog | Insights',
   description: 'Strategic perspectives on B2B marketing, AI transformation, and growth from The Starr Conspiracy.',
 };
 
@@ -26,15 +26,15 @@ export default async function BlogListingPage() {
       <main className="min-h-screen pt-32 pb-20">
         <section className="section-wide mb-12">
           <nav className="flex items-center gap-2 text-sm text-greige mb-8">
-            <Link href="/" className="hover:text-atomic-tangerine">Home</Link>
+            <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
-            <Link href="/insights" className="hover:text-atomic-tangerine">Grist</Link>
+            <Link href="/insights" className="hover:text-white/80">Insights</Link>
             <span>/</span>
             <span className="text-shroomy">Blog</span>
           </nav>
 
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">Blog</h1>
-          <p className="text-xl text-shroomy max-w-2xl">
+          <h1 className="text-4xl md:text-6xl font-normal text-white mb-4">Blog</h1>
+          <p className="text-xl max-w-2xl">
             Strategic perspectives on B2B marketing, AI, and growth.
           </p>
         </section>

@@ -76,20 +76,20 @@ export default async function InfographicDetailPage({
           />
 
           <nav className="flex items-center gap-2 text-sm text-greige mb-8">
-            <Link href="/" className="hover:text-atomic-tangerine">Home</Link>
+            <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
-            <Link href="/insights" className="hover:text-atomic-tangerine">Grist</Link>
+            <Link href="/insights" className="hover:text-white/80">Insights</Link>
             <span>/</span>
-            <Link href="/insights/infographics" className="hover:text-atomic-tangerine">Infographics</Link>
+            <Link href="/insights/infographics" className="hover:text-white/80">Infographics</Link>
             <span>/</span>
             <span className="text-shroomy">{ig.title}</span>
           </nav>
 
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-6">
+          <h1 className="text-3xl md:text-5xl font-normal text-white mb-6">
             {ig.title}
           </h1>
 
-          <p className="text-xl text-shroomy leading-relaxed mb-8">
+          <p className="text-xl leading-relaxed mb-8">
             {ig.description}
           </p>
 

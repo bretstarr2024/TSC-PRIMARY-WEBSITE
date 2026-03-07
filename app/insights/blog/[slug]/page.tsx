@@ -99,11 +99,11 @@ export default async function BlogDetailPage({
           />
 
           <nav className="flex items-center gap-2 text-sm text-greige mb-8">
-            <Link href="/" className="hover:text-atomic-tangerine">Home</Link>
+            <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
-            <Link href="/insights" className="hover:text-atomic-tangerine">Grist</Link>
+            <Link href="/insights" className="hover:text-white/80">Insights</Link>
             <span>/</span>
-            <Link href="/insights/blog" className="hover:text-atomic-tangerine">Blog</Link>
+            <Link href="/insights/blog" className="hover:text-white/80">Blog</Link>
             <span>/</span>
             <span className="text-shroomy">{post.title}</span>
           </nav>
@@ -121,7 +121,7 @@ export default async function BlogDetailPage({
             </div>
           )}
 
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
+          <h1 className="text-3xl md:text-5xl font-normal text-white mb-4">
             {post.title}
           </h1>
 

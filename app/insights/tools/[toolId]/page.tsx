@@ -83,11 +83,11 @@ export default async function ToolDetailPage({
           />
 
           <nav className="flex items-center gap-2 text-sm text-greige mb-8">
-            <Link href="/" className="hover:text-atomic-tangerine">Home</Link>
+            <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
-            <Link href="/insights" className="hover:text-atomic-tangerine">Grist</Link>
+            <Link href="/insights" className="hover:text-white/80">Insights</Link>
             <span>/</span>
-            <Link href="/insights/tools" className="hover:text-atomic-tangerine">Tools</Link>
+            <Link href="/insights/tools" className="hover:text-white/80">Tools</Link>
             <span>/</span>
             <span className="text-shroomy">{tool.title}</span>
           </nav>
@@ -100,10 +100,10 @@ export default async function ToolDetailPage({
             >
               {TOOL_TYPE_LABELS[tool.toolType] || tool.toolType}
             </span>
-            <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
+            <h1 className="text-3xl md:text-5xl font-normal text-white mb-4">
               {tool.title}
             </h1>
-            <p className="text-xl text-shroomy leading-relaxed">
+            <p className="text-xl leading-relaxed">
               {tool.description}
             </p>
           </div>

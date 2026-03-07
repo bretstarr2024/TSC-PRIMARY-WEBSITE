@@ -5,7 +5,7 @@ import { ArcadeBossOverlay } from '@/components/ArcadeBossOverlay';
 
 /* ── Client data for obstacles ── */
 const allClients = [
-  'ADP', 'Oracle', 'SAP', 'ServiceNow', 'Thomson Reuters',
+  'ADP', 'Oracle', 'ServiceNow', 'Thomson Reuters',
   'Bank of America', 'Equifax', 'Korn Ferry', 'Willis Towers Watson',
   'Aon', 'Randstad', 'Lyft', 'Zendesk', 'John Wiley & Sons',
   'Infor', 'Ceridian', 'Kronos', 'Ultimate Software', 'Paychex',
@@ -601,7 +601,8 @@ export function FroggerGame({ onClose }: { onClose: () => void }) {
             g.scoreIndex = scores.indexOf(entry);
             g.enteringInitials = false;
             g.scoreSubmitted = true;
-            if (g.scoreIndex === 0) {
+            if (g.scoreIndex === 0 && !localStorage.getItem('tsc-frogger-boss')) {
+              localStorage.setItem('tsc-frogger-boss', '1');
               bossActive.current = true;
               setBossData({ game: 'frogger', score: g.score, initials });
             }
@@ -688,7 +689,8 @@ export function FroggerGame({ onClose }: { onClose: () => void }) {
             g.scoreIndex = scores.indexOf(entry);
             g.enteringInitials = false;
             g.scoreSubmitted = true;
-            if (g.scoreIndex === 0) {
+            if (g.scoreIndex === 0 && !localStorage.getItem('tsc-frogger-boss')) {
+              localStorage.setItem('tsc-frogger-boss', '1');
               bossActive.current = true;
               setBossData({ game: 'frogger', score: g.score, initials });
             }
@@ -1053,6 +1055,7 @@ export function FroggerGame({ onClose }: { onClose: () => void }) {
 
   return (
     <>
+      <button onClick={onClose} style={{ position: 'absolute', top: 16, left: 16, zIndex: 40, background: 'rgba(20,18,19,0.75)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 8, color: '#d1d1c6', fontFamily: 'monospace', fontSize: 13, fontWeight: 'bold', padding: '8px 14px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}>✕ EXIT</button>
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full z-30"

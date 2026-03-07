@@ -40,7 +40,7 @@ export function CookieConsent() {
           role="dialog"
           aria-label="Cookie consent"
         >
-          <p className="text-sm text-shroomy mb-4 leading-relaxed">
+          <p className="text-sm mb-4 leading-relaxed">
             We track clicks to make this site better. Nothing creepy.{' '}
             <a href="/privacy" className="text-tidal-wave hover:text-white transition-colors underline">
               Privacy policy
@@ -49,7 +49,7 @@ export function CookieConsent() {
           <div className="flex gap-3">
             <button
               onClick={accept}
-              className="flex-1 px-4 py-2 bg-atomic-tangerine text-white text-sm font-medium rounded-lg hover:bg-hot-sauce transition-colors"
+              className="flex-1 px-4 py-2 bg-heart-of-darkness text-white border-2 border-white text-sm font-medium rounded-lg hover:bg-white hover:text-heart-of-darkness transition-colors"
             >
               Cool
             </button>

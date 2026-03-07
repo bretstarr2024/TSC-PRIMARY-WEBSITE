@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { AnimatedSection, StaggerContainer, StaggerItem } from '@/components/AnimatedSection';
 
 const archetypes = [
@@ -33,15 +34,28 @@ export function ProblemSection() {
       <div className="absolute inset-0 bg-gradient-to-b from-heart-of-darkness via-[#1a1018] to-heart-of-darkness" />
 
       <div className="relative z-10 section-wide">
-        <AnimatedSection className="mb-20">
-          <p className="text-xs font-semibold text-greige uppercase tracking-[0.3em] mb-6">
-            The Problem
-          </p>
-          <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1]">
-            Most agencies<br />
-            <span className="text-atomic-tangerine">are trapped.</span>
-          </h2>
-        </AnimatedSection>
+        <div className="relative">
+          <AnimatedSection className="mb-20">
+            <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-6">
+              The Problem
+            </p>
+            <h2 className="text-5xl md:text-6xl lg:text-7xl font-normal tracking-tight text-white leading-[1]">
+              Most agencies<br />
+              <span className="text-white font-extrabold">are trapped.</span>
+            </h2>
+          </AnimatedSection>
+
+          <div className="hidden md:block absolute -top-8 right-0 w-[340px] lg:w-[420px] xl:w-[480px] pointer-events-none">
+            <Image
+              src="/images/atlas-in-repose.png"
+              alt="Atlas in repose"
+              width={960}
+              height={640}
+              className="w-full h-auto mix-blend-lighten"
+              priority={false}
+            />
+          </div>
+        </div>
 
         <StaggerContainer className="grid md:grid-cols-3 gap-6 mb-20" staggerDelay={0.15}>
           {archetypes.map((archetype) => (
@@ -50,7 +64,7 @@ export function ProblemSection() {
                 <h3 className={`text-2xl font-bold mb-4 ${archetype.accent}`}>
                   {archetype.name}
                 </h3>
-                <p className="text-shroomy leading-relaxed">
+                <p className="leading-relaxed">
                   {archetype.description}
                 </p>
               </div>
@@ -61,7 +75,7 @@ export function ProblemSection() {
         <AnimatedSection delay={0.3}>
           <p className="text-2xl md:text-3xl text-shroomy max-w-3xl leading-snug">
             All three represent the same risk: partners who{' '}
-            <span className="text-white font-semibold">can&apos;t lead transformation</span>.
+            <span className="text-white font-extrabold">can&apos;t lead transformation</span>.
             They either fake AI adaptation or force a choice between fundamentals and innovation.
           </p>
         </AnimatedSection>

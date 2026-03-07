@@ -32,7 +32,7 @@ export default function VerticalsPage() {
         <section className="pb-24 md:pb-32">
           <div className="section-wide">
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {INDUSTRIES.map((industry, index) => (
+              {[...INDUSTRIES].sort((a, b) => a.name.localeCompare(b.name)).map((industry, index) => (
                 <IndustryCard
                   key={industry.slug}
                   industry={industry}

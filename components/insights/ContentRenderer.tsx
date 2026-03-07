@@ -20,19 +20,19 @@ export function ContentRenderer({ content }: ContentRendererProps) {
   function flushList() {
     if (listItems.length === 0) return;
     const items = listItems.map((item, i) => (
-      <li key={i} className="text-shroomy leading-relaxed">
+      <li key={i} className="leading-relaxed">
         {renderInline(item)}
       </li>
     ));
     if (listType === 'ol') {
       elements.push(
-        <ol key={key++} className="list-decimal list-inside space-y-2 mb-6 text-shroomy">
+        <ol key={key++} className="list-decimal list-inside space-y-2 mb-6">
           {items}
         </ol>
       );
     } else {
       elements.push(
-        <ul key={key++} className="list-disc list-inside space-y-2 mb-6 text-shroomy">
+        <ul key={key++} className="list-disc list-inside space-y-2 mb-6">
           {items}
         </ul>
       );
@@ -58,7 +58,7 @@ export function ContentRenderer({ content }: ContentRendererProps) {
         const linkMatch = lp.match(/\[([^\]]+)\]\(([^)]+)\)/);
         if (linkMatch) {
           return (
-            <a key={`${i}-${j}`} href={linkMatch[2]} className="text-atomic-tangerine hover:text-hot-sauce underline">
+            <a key={`${i}-${j}`} href={linkMatch[2]} className="text-atomic-tangerine hover:text-white/80 underline">
               {linkMatch[1]}
             </a>
           );
@@ -105,7 +105,7 @@ export function ContentRenderer({ content }: ContentRendererProps) {
       elements.push(
         <blockquote
           key={key++}
-          className="border-l-4 border-atomic-tangerine pl-4 py-2 my-6 italic text-shroomy"
+          className="border-l-4 border-atomic-tangerine pl-4 py-2 my-6 italic"
         >
           {renderInline(trimmed.slice(2))}
         </blockquote>
@@ -133,7 +133,7 @@ export function ContentRenderer({ content }: ContentRendererProps) {
     // Paragraph
     flushList();
     elements.push(
-      <p key={key++} className="text-shroomy leading-relaxed mb-4">
+      <p key={key++} className="leading-relaxed mb-4">
         {renderInline(trimmed)}
       </p>
     );

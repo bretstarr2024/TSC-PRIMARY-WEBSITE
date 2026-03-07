@@ -1,7 +1,6 @@
 'use client';
 
 import { AnimatedSection } from '@/components/AnimatedSection';
-import { GradientText } from '@/components/AnimatedText';
 
 export function ServicesHero() {
   return (
@@ -9,12 +8,15 @@ export function ServicesHero() {
       <div className="section-wide">
         <AnimatedSection>
           <div className="max-w-4xl">
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-              <GradientText>Services</GradientText>
+            <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-6">
+              Services
+            </p>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-normal text-white leading-[1.1] mb-6">
+              Everything your marketing needs.{' '}
+              <span className="text-white font-extrabold">Nothing it doesn&apos;t.</span>
             </h1>
             <p className="text-xl md:text-2xl text-shroomy leading-relaxed max-w-2xl">
-              Everything your marketing needs. Nothing it doesn&apos;t. Strategic B2B
-              fundamentals and AI-native solutions from a team that refuses to choose.
+              Strategic B2B fundamentals and AI-native solutions from a team that refuses to choose between the two.
             </p>
           </div>
         </AnimatedSection>

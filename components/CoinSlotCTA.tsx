@@ -59,7 +59,7 @@ export function CoinSlotCTA({
     return (
       <Link
         href={href}
-        className="inline-block hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-atomic-tangerine focus-visible:ring-offset-2 focus-visible:ring-offset-heart-of-darkness rounded-lg"
+        className="inline-block hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-heart-of-darkness rounded-lg"
         data-track-cta={ctaId || 'coin-slot'}
         data-track-component="CoinSlotCTA"
         data-track-label="25¢ PUSH"
@@ -74,7 +74,7 @@ export function CoinSlotCTA({
     <button
       onClick={onClick}
       type="button"
-      className="appearance-none bg-transparent border-none p-0 m-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-atomic-tangerine focus-visible:ring-offset-2 focus-visible:ring-offset-heart-of-darkness rounded-lg"
+      className="appearance-none bg-transparent border-none p-0 m-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-heart-of-darkness rounded-lg"
     >
       {content}
     </button>

@@ -8,7 +8,7 @@ import { getAllPublishedInfographics, Infographic } from '@/lib/resources-db';
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: 'Infographics | Grist',
+  title: 'Infographics | Insights',
   description: 'Visual breakdowns of data, frameworks, and strategies worth sharing. From The Starr Conspiracy.',
 };
 
@@ -26,15 +26,15 @@ export default async function InfographicsListingPage() {
       <main className="min-h-screen pt-32 pb-20">
         <section className="section-wide mb-12">
           <nav className="flex items-center gap-2 text-sm text-greige mb-8">
-            <Link href="/" className="hover:text-atomic-tangerine">Home</Link>
+            <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
-            <Link href="/insights" className="hover:text-atomic-tangerine">Grist</Link>
+            <Link href="/insights" className="hover:text-white/80">Insights</Link>
             <span>/</span>
             <span className="text-shroomy">Infographics</span>
           </nav>
 
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">Infographics</h1>
-          <p className="text-xl text-shroomy max-w-2xl">
+          <h1 className="text-4xl md:text-6xl font-normal text-white mb-4">Infographics</h1>
+          <p className="text-xl max-w-2xl">
             Visual breakdowns of data, frameworks, and strategies worth sharing.
           </p>
         </section>
@@ -60,7 +60,7 @@ export default async function InfographicsListingPage() {
                     </div>
                   )}
                   <div className="p-5">
-                    <h2 className="text-white font-semibold text-lg group-hover:text-atomic-tangerine transition-colors line-clamp-2">
+                    <h2 className="text-white font-semibold text-lg group-hover:text-white/80 transition-colors line-clamp-2">
                       {ig.title}
                     </h2>
                     <p className="text-greige text-sm mt-2 line-clamp-2">

@@ -20,17 +20,17 @@ export function ServiceDetailSection({ service, accentColor, index }: ServiceDet
       <div className={`grid md:grid-cols-5 gap-12 ${isReversed ? '' : ''}`}>
         {/* Info side — 3 cols */}
         <div className={`md:col-span-3 ${isReversed ? 'md:order-2' : 'md:order-1'}`}>
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">
+          <h2 className="text-3xl md:text-4xl font-normal text-white mb-2">
             {service.name}
           </h2>
           <p className="text-lg font-medium mb-6" style={{ color: accentColor }}>
             {service.tagline}
           </p>
-          <p className="text-shroomy leading-relaxed mb-8 text-lg">
+          <p className="leading-relaxed mb-8 text-lg">
             {service.description}
           </p>
-          <p className="text-sm text-shroomy/80 italic">
-            {service.whoItsFor}
+          <p className="text-sm text-shroomy italic">
+            <span className="font-bold not-italic">Best for:</span> {service.whoItsFor}
           </p>
         </div>
 
@@ -42,7 +42,7 @@ export function ServiceDetailSection({ service, accentColor, index }: ServiceDet
             </p>
             <ul className="space-y-3">
               {service.outcomes.map((outcome) => (
-                <li key={outcome} className="flex items-start gap-3 text-sm text-shroomy">
+                <li key={outcome} className="flex items-start gap-3 text-sm">
                   <svg
                     className="mt-0.5 w-4 h-4 flex-shrink-0"
                     viewBox="0 0 16 16"

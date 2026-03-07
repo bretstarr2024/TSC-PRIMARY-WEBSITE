@@ -57,7 +57,7 @@ export default function PricingPage() {
         <AnswerCapsulesSection
           capsules={pricingCapsules}
           accentColor="#FF5910"
-          heading={<>Common questions about{' '}<span className="text-atomic-tangerine">working with us.</span></>}
+          heading={<>Common questions about{' '}<span className="text-white font-extrabold">working with us.</span></>}
           subheading="Straight answers about pricing, engagement models, and what you actually get."
         />
 

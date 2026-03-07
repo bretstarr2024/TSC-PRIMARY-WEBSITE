@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { AnimatedSection, StaggerContainer, StaggerItem } from '@/components/AnimatedSection';
-import { GradientText } from '@/components/AnimatedText';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { AnswerCapsulesSection } from '@/components/AnswerCapsulesSection';
@@ -13,7 +12,7 @@ import { SnakeGameTrigger } from '@/components/insights/SnakeGameTrigger';
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: 'Grist',
+  title: 'Insights | The Starr Conspiracy',
   description: 'Strategic insights on B2B marketing, AI transformation, and growth strategy from The Starr Conspiracy.',
   alternates: { canonical: '/insights' },
 };
@@ -68,14 +67,6 @@ const CONTENT_TYPES = [
     icon: '06',
   },
   {
-    type: 'case-studies',
-    label: 'Case Studies',
-    description: 'Real engagement outcomes with measurable results.',
-    href: '/insights/case-studies',
-    color: '#7C3AED',
-    icon: '07',
-  },
-  {
     type: 'industry-briefs',
     label: 'Industry Briefs',
     description: 'Data-driven snapshots of market trends and buyer behavior.',
@@ -120,13 +111,15 @@ export default function InsightsPage() {
         <section className="section-wide mb-20">
           <AnimatedSection>
             <div className="max-w-4xl">
-              <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-                <GradientText>Grist</GradientText>
+              <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-6">
+                Insights
+              </p>
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-normal text-white leading-[1.1] mb-6">
+                Strategic clarity.{' '}
+                <span className="text-white font-extrabold">Measurable growth.</span>
               </h1>
               <p className="text-xl md:text-2xl text-shroomy leading-relaxed max-w-2xl">
-                {config.brand.brandPromise
-                  ? `${config.brand.brandPromise}. Here's the thinking behind it.`
-                  : 'Strategic intelligence for B2B marketing leaders navigating growth and AI transformation.'}
+                Here&apos;s the thinking behind it.
               </p>
             </div>
           </AnimatedSection>
@@ -136,17 +129,17 @@ export default function InsightsPage() {
         {config.jtbd.length > 0 && (
           <section className="section-wide mb-20">
             <AnimatedSection>
-              <h2 className="text-sm font-semibold uppercase tracking-wider text-greige mb-8">
+              <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-8">
                 What are you trying to do?
-              </h2>
+              </p>
             </AnimatedSection>
             <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {config.jtbd.map((job, i) => (
                 <StaggerItem key={i}>
                   <div className="glass rounded-xl p-6 h-full">
                     <h3 className="text-white font-semibold text-lg mb-2">{job.jobName}</h3>
-                    <p className="text-greige text-sm mb-3">{job.startingState}</p>
-                    <div className="flex items-center gap-2 text-atomic-tangerine text-sm">
+                    <p className="text-white text-sm mb-3">{job.startingState}</p>
+                    <div className="flex items-center gap-2 text-white text-sm">
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                       </svg>
@@ -162,9 +155,9 @@ export default function InsightsPage() {
         {/* Content Type Grid */}
         <section className="section-wide">
           <AnimatedSection>
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-greige mb-8">
+            <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-8">
               Explore by type
-            </h2>
+            </p>
           </AnimatedSection>
           <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {CONTENT_TYPES.map((ct) => (
@@ -183,10 +176,10 @@ export default function InsightsPage() {
                     </span>
                     <span className="text-xs text-greige font-mono">{ct.icon}</span>
                   </div>
-                  <p className="text-shroomy text-sm leading-relaxed">
+                  <p className="text-sm text-white leading-relaxed">
                     {ct.description}
                   </p>
-                  <div className="mt-4 flex items-center gap-1 text-xs text-greige group-hover:text-atomic-tangerine transition-colors">
+                  <div className="mt-4 flex items-center gap-1 text-xs text-greige group-hover:text-white/80 transition-colors">
                     <span>Explore</span>
                     <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

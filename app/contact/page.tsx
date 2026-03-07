@@ -54,7 +54,7 @@ export default function ContactPage() {
         <AnswerCapsulesSection
           capsules={contactCapsules}
           accentColor="#FF5910"
-          heading={<>Questions about{' '}<span className="text-atomic-tangerine">getting started.</span></>}
+          heading={<>Questions about{' '}<span className="text-white font-extrabold">getting started.</span></>}
           subheading="What to expect when you reach out."
         />
       </main>

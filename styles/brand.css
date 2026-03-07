@@ -67,7 +67,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 600;
+  font-weight: 400;
   letter-spacing: -0.025em;
   color: var(--color-text);
 }
@@ -97,13 +97,13 @@ p {
 }
 
 a {
-  color: var(--color-primary);
+  color: #ffffff;
   text-decoration: none;
   transition: color 150ms ease;
 }
 
 a:hover {
-  color: var(--color-primary-hover);
+  color: #ffffff;
   text-decoration: underline;
 }
 
@@ -187,7 +187,7 @@ a:hover {
   font-size: 1rem;
   font-weight: 500;
   color: white;
-  background-color: var(--color-primary);
+  background-color: var(--color-heart-of-darkness);
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
@@ -195,14 +195,14 @@ a:hover {
 }
 
 .btn-primary:hover {
-  background-color: var(--color-primary-hover);
+  background-color: white;
   text-decoration: none;
   color: white;
 }
 
 .btn-primary:focus {
   outline: none;
-  box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px white;
 }
 
 .btn-secondary {

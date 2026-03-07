@@ -51,7 +51,7 @@ export function FaqAccordion({ items, schemaId }: FaqAccordionProps) {
               </svg>
             </button>
             {openIndex === index && (
-              <div className="mt-3 text-shroomy leading-relaxed">
+              <div className="mt-3 leading-relaxed">
                 {item.answer}
               </div>
             )}

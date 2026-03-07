@@ -9,7 +9,7 @@ const navLinks = [
   { href: '/services', label: 'Services' },
   { href: '/work', label: 'Work' },
   { href: '/verticals', label: 'Verticals' },
-  { href: '/insights', label: 'Grist' },
+  { href: '/insights', label: 'Insights' },
   { href: '/about', label: 'About' },
   { href: '/pricing', label: 'Pricing' },
 ];
@@ -64,14 +64,14 @@ export function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-xs font-medium text-shroomy uppercase tracking-wider hover:text-atomic-tangerine transition-colors duration-200 hover:no-underline"
+                className="text-xs font-medium uppercase tracking-wider hover:text-white/80 transition-colors duration-200 hover:no-underline"
               >
                 {link.label}
               </Link>
             ))}
             <Link
               href="/contact?cta=header-nav"
-              className="ml-4 inline-flex items-center px-5 py-2.5 text-sm font-medium text-white bg-atomic-tangerine rounded-lg hover:bg-hot-sauce transition-colors hover:no-underline"
+              className="ml-4 inline-flex items-center px-5 py-2.5 text-sm font-medium text-white bg-heart-of-darkness border-2 border-white rounded-lg hover:bg-white hover:text-heart-of-darkness transition-colors hover:no-underline"
               data-track-cta="header-nav"
               data-track-component="Header"
               data-track-label="New Game"
@@ -126,7 +126,7 @@ export function Header() {
                   <Link
                     href={link.href}
                     onClick={() => setMenuOpen(false)}
-                    className="text-4xl font-bold text-white hover:text-atomic-tangerine transition-colors hover:no-underline"
+                    className="text-4xl font-bold text-white hover:text-white/80 transition-colors hover:no-underline"
                   >
                     {link.label}
                   </Link>
@@ -141,7 +141,7 @@ export function Header() {
                 <Link
                   href="/contact?cta=header-mobile"
                   onClick={() => setMenuOpen(false)}
-                  className="mt-4 inline-flex items-center px-8 py-4 text-lg font-medium text-white bg-atomic-tangerine rounded-lg hover:bg-hot-sauce transition-colors hover:no-underline"
+                  className="mt-4 inline-flex items-center px-8 py-4 text-lg font-medium text-white bg-heart-of-darkness border-2 border-white rounded-lg hover:bg-white hover:text-heart-of-darkness transition-colors hover:no-underline"
                   data-track-cta="header-mobile"
                   data-track-component="Header"
                   data-track-label="New Game"

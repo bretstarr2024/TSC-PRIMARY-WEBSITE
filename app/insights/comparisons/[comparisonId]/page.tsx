@@ -75,20 +75,20 @@ export default async function ComparisonDetailPage({
           />
 
           <nav className="flex items-center gap-2 text-sm text-greige mb-8">
-            <Link href="/" className="hover:text-atomic-tangerine">Home</Link>
+            <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
-            <Link href="/insights" className="hover:text-atomic-tangerine">Grist</Link>
+            <Link href="/insights" className="hover:text-white/80">Insights</Link>
             <span>/</span>
-            <Link href="/insights/comparisons" className="hover:text-atomic-tangerine">Comparisons</Link>
+            <Link href="/insights/comparisons" className="hover:text-white/80">Comparisons</Link>
             <span>/</span>
             <span className="text-shroomy">{comp.title}</span>
           </nav>
 
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-6">
+          <h1 className="text-3xl md:text-5xl font-normal text-white mb-6">
             {comp.title}
           </h1>
 
-          <p className="text-shroomy text-lg leading-relaxed mb-10">
+          <p className="text-lg leading-relaxed mb-10">
             {comp.introduction}
           </p>
 
@@ -111,7 +111,7 @@ export default async function ComparisonDetailPage({
                     {comp.criteria.map((criterion) => (
                       <tr key={criterion.name} className="border-b border-white/5">
                         <td className="p-4">
-                          <span className="text-shroomy text-sm font-medium">{criterion.name}</span>
+                          <span className="text-sm font-medium">{criterion.name}</span>
                           {criterion.description && (
                             <p className="text-greige text-xs mt-1">{criterion.description}</p>
                           )}
@@ -146,7 +146,7 @@ export default async function ComparisonDetailPage({
               <div key={item.name} className="glass rounded-xl p-6">
                 <h3 className="text-white font-semibold text-lg mb-4">{item.name}</h3>
                 {item.description && (
-                  <p className="text-shroomy text-sm mb-4">{item.description}</p>
+                  <p className="text-sm mb-4">{item.description}</p>
                 )}
 
                 {item.pros.length > 0 && (
@@ -154,7 +154,7 @@ export default async function ComparisonDetailPage({
                     <h4 className="text-sm font-semibold text-green-400 uppercase tracking-wider mb-2">Pros</h4>
                     <ul className="space-y-1">
                       {item.pros.map((pro, i) => (
-                        <li key={i} className="text-shroomy text-sm flex items-start gap-2">
+                        <li key={i} className="text-sm flex items-start gap-2">
                           <span className="text-green-400 mt-0.5 shrink-0">+</span>
                           <span>{pro}</span>
                         </li>
@@ -168,7 +168,7 @@ export default async function ComparisonDetailPage({
                     <h4 className="text-sm font-semibold text-red-400 uppercase tracking-wider mb-2">Cons</h4>
                     <ul className="space-y-1">
                       {item.cons.map((con, i) => (
-                        <li key={i} className="text-shroomy text-sm flex items-start gap-2">
+                        <li key={i} className="text-sm flex items-start gap-2">
                           <span className="text-red-400 mt-0.5 shrink-0">-</span>
                           <span>{con}</span>
                         </li>
@@ -198,7 +198,7 @@ export default async function ComparisonDetailPage({
           {/* Verdict */}
           <div className="glass rounded-xl p-8 mb-10 border-l-4 border-[#ED0AD2]">
             <h2 className="text-xl font-semibold text-white mb-3">Verdict</h2>
-            <p className="text-shroomy text-lg leading-relaxed">
+            <p className="text-lg leading-relaxed">
               {comp.verdict}
             </p>
           </div>

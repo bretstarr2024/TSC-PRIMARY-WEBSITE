@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from 'framer-motion';
 import { AnimatedSection } from '@/components/AnimatedSection';
-import { GradientText } from '@/components/AnimatedText';
+import { ServiceShapeIcon } from './ServiceShapeIcon';
 import type { ServiceCategory } from '@/lib/services-data';
 
 const offsets = [0, 12, 4, 16, 8, 20, 6, 14];
@@ -36,7 +36,8 @@ export function AiCascade({ aiCategory }: AiCascadeProps) {
       <div className="relative z-10">
         {/* Section Header */}
         <AnimatedSection className="section-wide mb-20">
-          <p className="text-xs font-semibold text-hurricane-sky uppercase tracking-[0.3em] mb-6">
+          <ServiceShapeIcon shape="hexagon" color="#088BA0" size={48} className="mb-6" />
+          <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-6">
             AI-Native Services
           </p>
           <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1] mb-6">
@@ -44,7 +45,7 @@ export function AiCascade({ aiCategory }: AiCascadeProps) {
             <br />
             <span className="text-white">Marketing Solutions</span>
           </h2>
-          <p className="text-xl text-shroomy max-w-2xl leading-relaxed">
+          <p className="text-xl max-w-2xl leading-relaxed">
             Not bolt-on AI. Not AI-curious. This is the intelligence layer beneath
             modern marketing — built by people who ship production systems, not slide decks.
           </p>
@@ -87,13 +88,13 @@ export function AiCascade({ aiCategory }: AiCascadeProps) {
                           0{i + 1}
                         </span>
                         <div className="flex-1">
-                          <h3 className="text-xl md:text-2xl font-bold text-white mb-2 group-hover:text-hurricane-sky transition-colors">
+                          <h3 className="text-xl md:text-2xl font-normal text-white mb-2 group-hover:text-hurricane-sky transition-colors">
                             {service.name}
                           </h3>
                           <p className="text-sm text-hurricane-sky font-medium mb-3">
                             {service.tagline}
                           </p>
-                          <p className="text-shroomy leading-relaxed mb-5">
+                          <p className="leading-relaxed mb-5">
                             {service.description}
                           </p>
 
@@ -102,7 +103,7 @@ export function AiCascade({ aiCategory }: AiCascadeProps) {
                             {service.outcomes.slice(0, 3).map((outcome) => (
                               <span
                                 key={outcome}
-                                className="text-xs px-3 py-1.5 rounded-full border border-hurricane-sky/30 text-shroomy"
+                                className="text-xs px-3 py-1.5 rounded-full border border-hurricane-sky/30"
                               >
                                 {outcome.length > 50 ? outcome.slice(0, 47) + '...' : outcome}
                               </span>

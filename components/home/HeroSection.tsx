@@ -190,7 +190,7 @@ export function HeroSection({ variant = 'gameover' }: HeroSectionProps) {
         >
           The SaaS marketing era is over. AI-native marketing is a whole new game.
           TSC is the B2B agency you can trust to help you{' '}
-          <span className="text-white font-semibold">level up</span>.
+          <a href="/contact" className="text-white font-bold underline hover:text-white/80 transition-colors">level up</a>.
         </motion.p>
       </div>
 

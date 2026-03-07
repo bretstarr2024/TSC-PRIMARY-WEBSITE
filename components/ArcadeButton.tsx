@@ -18,7 +18,7 @@ export function ArcadeButton({
 
   return (
     <motion.div
-      className={`flex flex-col items-center cursor-pointer select-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-2 focus-visible:ring-atomic-tangerine focus-visible:ring-offset-2 focus-visible:ring-offset-heart-of-darkness rounded-lg ${className}`}
+      className={`flex flex-col items-center cursor-pointer select-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-heart-of-darkness rounded-lg ${className}`}
       onClick={onClick}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {

@@ -9,7 +9,7 @@ import { ArcadeButton } from '@/components/ArcadeButton';
 const FroggerGame = dynamic(() => import('./FroggerGame').then(m => ({ default: m.FroggerGame })), { ssr: false });
 
 const clientsRow1 = [
-  'ADP', 'Oracle', 'SAP', 'ServiceNow', 'Thomson Reuters',
+  'ADP', 'Oracle', 'ServiceNow', 'Thomson Reuters',
   'Bank of America', 'Equifax', 'Korn Ferry', 'Willis Towers Watson',
   'Aon', 'Randstad', 'Lyft', 'Zendesk', 'John Wiley & Sons',
   'Infor', 'Ceridian', 'Kronos', 'Ultimate Software', 'Paychex',
@@ -36,7 +36,7 @@ function CarBadge({ name, color, facingRight }: { name: string; color: 'tangerin
   const c = LANE_COLORS[color];
   return (
     <span
-      className="relative inline-flex items-center justify-center whitespace-nowrap text-sm font-bold text-shroomy hover:text-white transition-colors duration-300 group"
+      className="relative inline-flex items-center justify-center whitespace-nowrap text-sm font-bold hover:text-white transition-colors duration-300 group"
       style={{
         padding: '10px 28px',
         borderRadius: 6,
@@ -159,12 +159,12 @@ export function ClientMarquee() {
     <section className="relative py-24 md:py-32 overflow-hidden">
       <div className="section-wide mb-12">
         <AnimatedSection>
-          <p className="text-xs font-semibold text-greige uppercase tracking-[0.3em] mb-6">
+          <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-6">
             Clients
           </p>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal text-white leading-tight">
             3,000+ B2B tech companies since 1999{' '}
-            <span className="text-atomic-tangerine">(and counting)</span>
+            <span className="text-white font-extrabold">(and counting)</span>
           </h2>
         </AnimatedSection>
       </div>

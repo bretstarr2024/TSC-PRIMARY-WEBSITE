@@ -11,14 +11,14 @@ export function CareersContact() {
           {/* Left: heading */}
           <div>
             <AnimatedSection>
-              <p className="text-xs font-semibold text-greige uppercase tracking-[0.3em] mb-6">
+              <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-6">
                 Get in touch
               </p>
-              <h2 className="text-3xl md:text-4xl font-bold text-white leading-tight">
+              <h2 className="text-3xl md:text-4xl font-normal text-white leading-tight">
                 Interested?{' '}
                 <span className="text-tidal-wave">Tell us about yourself.</span>
               </h2>
-              <p className="mt-4 text-shroomy text-sm leading-relaxed">
+              <p className="mt-4 text-sm leading-relaxed">
                 No resume required. Just tell us who you are, which role caught your eye,
                 and what makes you dangerous. A real human reads every one of these.
               </p>

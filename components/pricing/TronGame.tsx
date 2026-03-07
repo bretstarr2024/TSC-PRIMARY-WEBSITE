@@ -499,7 +499,8 @@ export function TronGame({ onClose }: { onClose: () => void }) {
             g.scoreIndex = scores.indexOf(entry);
             g.enteringInitials = false;
             g.scoreSubmitted = true;
-            if (g.scoreIndex === 0) {
+            if (g.scoreIndex === 0 && !localStorage.getItem('tsc-tron-boss')) {
+              localStorage.setItem('tsc-tron-boss', '1');
               bossActive.current = true;
               setBossData({ game: 'tron', score: g.score, initials });
             }
@@ -577,7 +578,8 @@ export function TronGame({ onClose }: { onClose: () => void }) {
             g.scoreIndex = scores.indexOf(entry);
             g.enteringInitials = false;
             g.scoreSubmitted = true;
-            if (g.scoreIndex === 0) {
+            if (g.scoreIndex === 0 && !localStorage.getItem('tsc-tron-boss')) {
+              localStorage.setItem('tsc-tron-boss', '1');
               bossActive.current = true;
               setBossData({ game: 'tron', score: g.score, initials });
             }
@@ -1065,6 +1067,7 @@ export function TronGame({ onClose }: { onClose: () => void }) {
       {createPortal(
         <div data-tron-game style={{ position: 'fixed', inset: 0, zIndex: 99999, background: C.bg, touchAction: 'none', cursor: isOver ? 'default' : 'none' }}>
           {isOver && <style>{`[data-tron-game], [data-tron-game] * { cursor: default !important; }`}</style>}
+          <button onClick={onClose} style={{ position: 'absolute', top: 16, left: 16, zIndex: 10, background: 'rgba(20,18,19,0.75)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 8, color: '#d1d1c6', fontFamily: 'monospace', fontSize: 13, fontWeight: 'bold', padding: '8px 14px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}>✕ EXIT</button>
           <canvas ref={cvs} style={{ display: 'block', width: '100%', height: '100%', touchAction: 'none' }} />
         </div>,
         document.body,

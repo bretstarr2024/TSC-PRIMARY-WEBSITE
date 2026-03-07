@@ -29,9 +29,8 @@ function CursorReactiveParticles() {
     const tangerine = new THREE.Color('#FF5910');
     const tidal = new THREE.Color('#73F5FF');
     const cactus = new THREE.Color('#E1FF00');
-    const sprinkles = new THREE.Color('#ED0AD2');
 
-    const palette = [tangerine, tangerine, tangerine, tidal, cactus, sprinkles];
+    const palette = [tangerine, tangerine, tangerine, tidal, cactus, tidal];
 
     for (let i = 0; i < count; i++) {
       const i3 = i * 3;

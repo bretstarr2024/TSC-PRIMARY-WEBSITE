@@ -24,11 +24,11 @@ export function CtaSection() {
 
       <div className="relative z-10 section-wide text-center">
         <AnimatedSection>
-          <h2 className="text-5xl md:text-6xl lg:text-8xl font-bold tracking-tight text-white leading-[1] mb-8">
+          <h2 className="text-5xl md:text-6xl lg:text-8xl font-normal tracking-tight text-white leading-[1] mb-8">
             Ready to stop<br />
-            <span className="text-atomic-tangerine">compromising?</span>
+            <span className="text-white font-extrabold">compromising?</span>
           </h2>
-          <p className="text-xl text-shroomy max-w-xl mx-auto mb-12 leading-relaxed">
+          <p className="text-xl max-w-xl mx-auto mb-12 leading-relaxed">
             Sharper positioning. Faster pipeline. AI that actually works.
             Tell us where you&apos;re stuck — we&apos;ll tell you what moves the needle.
           </p>

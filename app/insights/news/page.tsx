@@ -8,7 +8,7 @@ import { getAllPublishedNews, NewsItem } from '@/lib/resources-db';
 export const revalidate = 1800; // 30 min for news
 
 export const metadata: Metadata = {
-  title: 'News & Analysis | Grist',
+  title: 'News & Analysis | Insights',
   description: 'What\'s happening in B2B marketing — with our take on why it matters.',
 };
 
@@ -26,15 +26,15 @@ export default async function NewsListingPage() {
       <main className="min-h-screen pt-32 pb-20">
         <section className="section-wide mb-12">
           <nav className="flex items-center gap-2 text-sm text-greige mb-8">
-            <Link href="/" className="hover:text-atomic-tangerine">Home</Link>
+            <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
-            <Link href="/insights" className="hover:text-atomic-tangerine">Grist</Link>
+            <Link href="/insights" className="hover:text-white/80">Insights</Link>
             <span>/</span>
             <span className="text-shroomy">News & Analysis</span>
           </nav>
 
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">News & Analysis</h1>
-          <p className="text-xl text-shroomy max-w-2xl">
+          <h1 className="text-4xl md:text-6xl font-normal text-white mb-4">News & Analysis</h1>
+          <p className="text-xl max-w-2xl">
             What&apos;s happening in B2B marketing &mdash; with our take on why it matters.
           </p>
         </section>

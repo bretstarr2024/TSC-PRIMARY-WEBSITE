@@ -43,15 +43,15 @@ export function AuthorBio({ featuredAuthor }: AuthorBioProps) {
                   <span className="text-white font-semibold">{leader.name}</span>
                   <span className="text-greige text-sm">{leader.title}</span>
                 </div>
-                <p className="text-shroomy text-sm leading-relaxed">{leader.shortBio}</p>
+                <p className="text-sm leading-relaxed">{leader.shortBio}</p>
                 <div className="flex gap-3 mt-2">
                   {leader.linkedIn && (
-                    <a href={leader.linkedIn} target="_blank" rel="noopener noreferrer" className="text-xs text-atomic-tangerine hover:text-hot-sauce">
+                    <a href={leader.linkedIn} target="_blank" rel="noopener noreferrer" className="text-xs text-atomic-tangerine hover:text-white/80">
                       LinkedIn
                     </a>
                   )}
                   {leader.youTube && (
-                    <a href={leader.youTube} target="_blank" rel="noopener noreferrer" className="text-xs text-atomic-tangerine hover:text-hot-sauce">
+                    <a href={leader.youTube} target="_blank" rel="noopener noreferrer" className="text-xs text-atomic-tangerine hover:text-white/80">
                       YouTube
                     </a>
                   )}

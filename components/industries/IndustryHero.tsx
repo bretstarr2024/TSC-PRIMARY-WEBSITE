@@ -34,15 +34,14 @@ export function IndustryHero({ industry }: IndustryHeroProps) {
         >
           <Link
             href="/verticals"
-            className="text-xs font-semibold text-greige uppercase tracking-[0.3em] hover:text-white transition-colors hover:no-underline"
+            className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] hover:text-white transition-colors hover:no-underline"
           >
             ← All Verticals
           </Link>
         </motion.div>
 
         <motion.p
-          className="text-xs font-semibold uppercase tracking-[0.3em] mb-6"
-          style={{ color: industry.color }}
+          className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-6"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
@@ -70,7 +69,7 @@ export function IndustryHero({ industry }: IndustryHeroProps) {
         </motion.p>
 
         <motion.p
-          className="text-xl text-shroomy max-w-3xl leading-relaxed"
+          className="text-xl max-w-3xl leading-relaxed"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
@@ -98,7 +97,7 @@ export function IndustryHero({ industry }: IndustryHeroProps) {
           </div>
           <div className="w-px h-10 bg-white/10" />
           <div>
-            <div className="text-sm text-shroomy font-medium">
+            <div className="text-sm font-medium">
               Typical buyer
             </div>
             <div className="text-xs text-greige mt-1">

@@ -116,12 +116,31 @@ body {
 
 /* ===== DARK THEME LINK OVERRIDES ===== */
 a {
-  color: var(--color-text-secondary);
-  transition: color 150ms ease;
+  color: #ffffff;
+  transition: color 150ms ease, opacity 150ms ease;
 }
 
 a:hover {
-  color: #FF5910;
+  color: #ffffff;
+  opacity: 0.8;
+}
+
+/* Text links in content areas */
+.prose-custom a,
+p a,
+li a {
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.prose-custom a::after,
+p a::after,
+li a::after {
+  content: ' →';
+  display: inline;
+  font-weight: 700;
 }
 
 /* Override brand.css body styles for dark mode */
@@ -130,7 +149,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 p {
-  color: var(--color-text-secondary);
+  color: var(--color-text);
 }
 
 /* ===== PRINT STYLESHEET ===== */

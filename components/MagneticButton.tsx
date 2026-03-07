@@ -43,7 +43,7 @@ export function MagneticButton({
 
   const baseClasses =
     variant === 'primary'
-      ? 'inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-atomic-tangerine rounded-lg hover:bg-hot-sauce transition-colors focus:outline-none focus:ring-2 focus:ring-atomic-tangerine focus:ring-offset-2 focus:ring-offset-heart-of-darkness'
+      ? 'inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-heart-of-darkness border-2 border-white rounded-lg hover:bg-white hover:text-heart-of-darkness transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-heart-of-darkness'
       : 'inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white border border-white/20 rounded-lg hover:bg-white/5 hover:border-white/40 transition-all focus:outline-none focus:ring-2 focus:ring-white/30 focus:ring-offset-2 focus:ring-offset-heart-of-darkness';
 
   const content = (

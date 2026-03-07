@@ -128,7 +128,7 @@ export function HomepageCinematic() {
       {showOverlay && (
         <motion.button
           key={phase === 'start-screen' ? 'skip-start' : 'skip-cinematic'}
-          className="fixed bottom-8 right-8 z-[60] font-arcade text-xs text-white/50 hover:text-white/90 transition-colors cursor-pointer"
+          className="fixed bottom-8 right-8 z-[60] font-arcade text-xs text-greige hover:text-white transition-colors cursor-pointer"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: phase === 'start-screen' ? 3 : 1.5 }}

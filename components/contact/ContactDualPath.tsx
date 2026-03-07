@@ -36,7 +36,7 @@ export function ContactDualPath() {
               />
 
               <div className="relative z-10">
-                <h2 className="text-2xl font-bold text-white mb-1">Drop a line</h2>
+                <h2 className="text-2xl font-normal text-white mb-1">Drop a line</h2>
                 <p className="text-sm text-greige mb-8">
                   We&apos;ll get back to you within one business day.
                 </p>
@@ -53,7 +53,7 @@ export function ContactDualPath() {
               transition={{ duration: 0.3 }}
             >
               <div className="relative z-10">
-                <h2 className="text-2xl font-bold text-white mb-1">Book a call</h2>
+                <h2 className="text-2xl font-normal text-white mb-1">Book a call</h2>
                 <p className="text-sm text-greige mb-6">
                   25 minutes with a senior strategist.
                 </p>

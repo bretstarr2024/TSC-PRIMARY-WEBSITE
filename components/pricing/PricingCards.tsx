@@ -9,14 +9,14 @@ export function PricingCards() {
     <section className="relative py-24 md:py-32 overflow-hidden">
       <div className="relative z-10 section-wide">
         <AnimatedSection>
-          <p className="text-xs font-semibold text-greige uppercase tracking-[0.3em] mb-6 text-center">
+          <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-6 text-center">
             Pricing
           </p>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight text-center max-w-3xl mx-auto mb-6">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal text-white leading-tight text-center max-w-3xl mx-auto mb-6">
             Two ways to{' '}
-            <span className="text-atomic-tangerine">work together.</span>
+            <span className="text-white font-extrabold">work together.</span>
           </h2>
-          <p className="text-lg text-shroomy text-center max-w-2xl mx-auto mb-16 leading-relaxed">
+          <p className="text-lg text-center max-w-2xl mx-auto mb-16 leading-relaxed">
             Not hours. Not deliverables. A measurable change in how efficiently
             your business grows.
           </p>
@@ -37,10 +37,10 @@ export function PricingCards() {
               />
 
               <div className="relative z-10 flex flex-col h-full">
-                <h3 className="text-2xl font-bold text-white mb-2">Subscription</h3>
+                <h3 className="text-2xl font-normal text-white mb-2">Subscription</h3>
                 <div className="flex items-baseline gap-1 mb-1">
                   <span className="text-4xl md:text-5xl font-black text-white">$15K</span>
-                  <span className="text-shroomy text-lg">/month</span>
+                  <span className="text-lg">/month</span>
                 </div>
                 <p className="text-sm text-greige mb-6">minimum</p>
 
@@ -54,7 +54,7 @@ export function PricingCards() {
                     'Traditional agency services',
                     'AI workflows and custom builds',
                   ].map((item) => (
-                    <li key={item} className="flex items-start gap-3 text-sm text-shroomy">
+                    <li key={item} className="flex items-start gap-3 text-sm">
                       <span className="text-atomic-tangerine mt-0.5 flex-shrink-0">&#10003;</span>
                       {item}
                     </li>
@@ -68,7 +68,7 @@ export function PricingCards() {
 
                 <Link
                   href="/book?service=Subscription&cta=pricing-subscription"
-                  className="mt-auto block text-center px-6 py-3 bg-atomic-tangerine text-white font-medium rounded-lg hover:bg-hot-sauce transition-colors hover:no-underline"
+                  className="mt-auto block text-center px-6 py-3 bg-heart-of-darkness text-white border-2 border-white font-medium rounded-lg hover:bg-white hover:text-heart-of-darkness transition-colors hover:no-underline"
                   data-track-cta="pricing-subscription"
                   data-track-component="PricingCards"
                   data-track-label="Let's talk about a subscription"
@@ -88,7 +88,7 @@ export function PricingCards() {
               transition={{ duration: 0.3 }}
             >
               <div className="relative z-10 flex flex-col h-full">
-                <h3 className="text-2xl font-bold text-white mb-2">Project</h3>
+                <h3 className="text-2xl font-normal text-white mb-2">Project</h3>
                 <div className="flex items-baseline gap-1 mb-1">
                   <span className="text-4xl md:text-5xl font-black text-white">$30K</span>
                 </div>
@@ -104,7 +104,7 @@ export function PricingCards() {
                     'Full integration support',
                     'Clear timeline and deliverables',
                   ].map((item) => (
-                    <li key={item} className="flex items-start gap-3 text-sm text-shroomy">
+                    <li key={item} className="flex items-start gap-3 text-sm">
                       <span className="text-tidal-wave mt-0.5 flex-shrink-0">&#10003;</span>
                       {item}
                     </li>

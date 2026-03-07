@@ -15,7 +15,6 @@ export type RelatedItemType =
   | 'comparison'
   | 'expert-qa'
   | 'news'
-  | 'case-study'
   | 'industry-brief'
   | 'video'
   | 'tool'
@@ -40,7 +39,6 @@ const TYPE_CONFIG: Record<
   comparison: { collection: 'comparisons', idField: 'comparisonId', titleField: 'title', descField: 'introduction', pathPrefix: '/insights/comparisons/' },
   'expert-qa': { collection: 'expert_qa', idField: 'qaId', titleField: 'question', descField: 'answer', pathPrefix: '/insights/expert-qa/' },
   news: { collection: 'news_items', idField: 'newsId', titleField: 'headline', descField: 'summary', pathPrefix: '/insights/news/' },
-  'case-study': { collection: 'case_studies', idField: 'caseStudyId', titleField: 'title', descField: 'challenge', pathPrefix: '/insights/case-studies/' },
   'industry-brief': { collection: 'industry_briefs', idField: 'briefId', titleField: 'title', descField: 'summary', pathPrefix: '/insights/industry-briefs/' },
   video: { collection: 'videos', idField: 'videoId', titleField: 'title', descField: 'description', pathPrefix: '/insights/videos/' },
   tool: { collection: 'tools', idField: 'toolId', titleField: 'title', descField: 'description', pathPrefix: '/insights/tools/' },

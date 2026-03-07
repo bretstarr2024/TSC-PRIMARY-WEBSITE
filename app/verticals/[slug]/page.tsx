@@ -68,7 +68,7 @@ export default function VerticalPage({ params }: PageProps) {
         <AnswerCapsulesSection
           capsules={industry.answerCapsules}
           accentColor={industry.color}
-          heading={<>What you need to know about{' '}<span style={{ color: industry.color }}>{industry.name} marketing.</span></>}
+          heading={<>What you need to know about{' '}<span className="text-white font-extrabold">{industry.name} marketing.</span></>}
           subheading={`Straight answers for ${industry.buyerTitle}s evaluating agency partners.`}
         />
 

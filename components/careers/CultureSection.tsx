@@ -34,12 +34,12 @@ export function CultureSection() {
           {/* Left: heading */}
           <div>
             <AnimatedSection>
-              <p className="text-xs font-semibold text-greige uppercase tracking-[0.3em] mb-6">
+              <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-6">
                 How we work
               </p>
-              <h2 className="text-3xl md:text-4xl font-bold text-white leading-tight">
+              <h2 className="text-3xl md:text-4xl font-normal text-white leading-tight">
                 Built for people who{' '}
-                <span className="text-atomic-tangerine">do not need to be managed.</span>
+                <span className="text-white font-extrabold">do not need to be managed.</span>
               </h2>
             </AnimatedSection>
           </div>
@@ -51,7 +51,7 @@ export function CultureSection() {
                 <StaggerItem key={v.label}>
                   <div className="glass rounded-xl p-6">
                     <h3 className="text-white font-semibold text-lg mb-2">{v.label}</h3>
-                    <p className="text-shroomy text-sm leading-relaxed">{v.description}</p>
+                    <p className="text-sm leading-relaxed">{v.description}</p>
                   </div>
                 </StaggerItem>
               ))}

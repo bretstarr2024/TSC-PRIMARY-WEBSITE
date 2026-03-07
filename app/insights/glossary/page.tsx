@@ -7,7 +7,7 @@ import { getAllPublishedGlossaryTerms, GlossaryTerm } from '@/lib/resources-db';
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: 'Glossary | Grist',
+  title: 'Glossary | Insights',
   description: 'Clear definitions for the terms that matter in modern B2B marketing, AI, and go-to-market strategy.',
 };
 
@@ -36,15 +36,15 @@ export default async function GlossaryListingPage() {
       <main className="min-h-screen pt-32 pb-20">
         <section className="section-wide mb-12">
           <nav className="flex items-center gap-2 text-sm text-greige mb-8">
-            <Link href="/" className="hover:text-atomic-tangerine">Home</Link>
+            <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
-            <Link href="/insights" className="hover:text-atomic-tangerine">Grist</Link>
+            <Link href="/insights" className="hover:text-white/80">Insights</Link>
             <span>/</span>
             <span className="text-shroomy">Glossary</span>
           </nav>
 
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">Glossary</h1>
-          <p className="text-xl text-shroomy max-w-2xl">
+          <h1 className="text-4xl md:text-6xl font-normal text-white mb-4">Glossary</h1>
+          <p className="text-xl max-w-2xl">
             Clear definitions for the terms that matter in modern marketing.
           </p>
         </section>
@@ -62,8 +62,8 @@ export default async function GlossaryListingPage() {
                       href={hasTerms ? `#letter-${letter}` : undefined}
                       className={`w-10 h-10 flex items-center justify-center rounded-lg text-sm font-semibold transition-colors ${
                         hasTerms
-                          ? 'glass text-white hover:text-atomic-tangerine cursor-pointer'
-                          : 'text-greige/30 cursor-default'
+                          ? 'glass text-white hover:text-white/80 cursor-pointer'
+                          : 'text-greige cursor-default'
                       }`}
                     >
                       {letter}
@@ -76,7 +76,7 @@ export default async function GlossaryListingPage() {
               <div className="space-y-12">
                 {letters.map((letter) => (
                   <div key={letter} id={`letter-${letter}`}>
-                    <h2 className="text-3xl font-bold text-white mb-6 border-b border-white/10 pb-2">
+                    <h2 className="text-3xl font-normal text-white mb-6 border-b border-white/10 pb-2">
                       {letter}
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -88,7 +88,7 @@ export default async function GlossaryListingPage() {
                           style={{ borderLeftColor: '#73F5FF', borderLeftWidth: 3 }}
                         >
                           <div className="flex items-center gap-2 mb-2">
-                            <h3 className="text-white font-semibold group-hover:text-atomic-tangerine transition-colors">
+                            <h3 className="text-white font-semibold group-hover:text-white/80 transition-colors">
                               {term.term}
                             </h3>
                             {term.acronym && (
@@ -97,7 +97,7 @@ export default async function GlossaryListingPage() {
                               </span>
                             )}
                           </div>
-                          <p className="text-shroomy text-sm leading-relaxed line-clamp-2">
+                          <p className="text-sm leading-relaxed line-clamp-2">
                             {term.shortDefinition}
                           </p>
                         </Link>

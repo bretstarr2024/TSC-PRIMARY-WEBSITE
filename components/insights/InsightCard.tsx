@@ -10,7 +10,6 @@ export type InsightType =
   | 'comparison'
   | 'expert-qa'
   | 'news'
-  | 'case-study'
   | 'industry-brief'
   | 'video'
   | 'tool';
@@ -22,7 +21,6 @@ const TYPE_LABELS: Record<InsightType, string> = {
   comparison: 'Comparison',
   'expert-qa': 'Expert Q&A',
   news: 'News',
-  'case-study': 'Case Study',
   'industry-brief': 'Industry Brief',
   video: 'Video',
   tool: 'Tool',
@@ -35,7 +33,6 @@ const TYPE_COLORS: Record<InsightType, string> = {
   comparison: '#ED0AD2',
   'expert-qa': '#FFBDAE',
   news: '#088BA0',
-  'case-study': '#7C3AED',
   'industry-brief': '#D97706',
   video: '#10B981',
   tool: '#F472B6',
@@ -72,11 +69,11 @@ export function InsightCard({ type, title, description, href, date, author, tags
           )}
         </div>
 
-        <h3 className="text-white font-semibold text-lg mb-2 group-hover:text-atomic-tangerine transition-colors line-clamp-2">
+        <h3 className="text-white font-semibold text-lg mb-2 group-hover:text-white/80 transition-colors line-clamp-2">
           {title}
         </h3>
 
-        <p className="text-shroomy text-sm leading-relaxed line-clamp-3 mb-3">
+        <p className="text-sm leading-relaxed line-clamp-3 mb-3">
           {description}
         </p>
 

@@ -21,10 +21,10 @@ export function WhyDifferent() {
 
       <div className="relative z-10 section-wide">
         <AnimatedSection>
-          <p className="text-xs font-semibold text-greige uppercase tracking-[0.3em] mb-6 text-center">
+          <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-6 text-center">
             Why This Works
           </p>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight text-center max-w-4xl mx-auto mb-16">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal text-white leading-tight text-center max-w-4xl mx-auto mb-16">
             Either one alone{' '}
             <span className="text-greige">isn&apos;t enough.</span>
           </h2>
@@ -42,7 +42,7 @@ export function WhyDifferent() {
                   Senior Talent Alone
                 </p>
               </div>
-              <p className="text-shroomy leading-relaxed">
+              <p className="leading-relaxed">
                 Expensive and capacity-constrained. You get great strategic thinking from
                 people who can only do so much in a day. The output ceiling is the number
                 of hours in the week &mdash; and it doesn&apos;t scale.
@@ -60,7 +60,7 @@ export function WhyDifferent() {
                   AI Alone
                 </p>
               </div>
-              <p className="text-shroomy leading-relaxed">
+              <p className="leading-relaxed">
                 No judgment. No strategic grounding. Doesn&apos;t understand buying committees,
                 long sales cycles, or the difference between a metric that looks good in a
                 dashboard and one that actually moves pipeline.
@@ -98,7 +98,7 @@ export function WhyDifferent() {
                 your ICP, your competitive positioning, and your revenue model, and then build the
                 AI systems that execute against it.
               </p>
-              <p className="text-sm text-shroomy leading-relaxed max-w-3xl">
+              <p className="text-sm leading-relaxed max-w-3xl">
                 That&apos;s not a common skillset. It&apos;s the result of years of investing in both
                 sides simultaneously, when most agencies were still deciding whether AI was a
                 threat or an opportunity.

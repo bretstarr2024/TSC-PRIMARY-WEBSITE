@@ -8,7 +8,7 @@ import { getAllPublishedIndustryBriefs, IndustryBrief } from '@/lib/resources-db
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: 'Industry Briefs | Grist',
+  title: 'Industry Briefs | Insights',
   description: 'Data-driven snapshots of market trends and buyer behavior in B2B marketing.',
 };
 
@@ -26,15 +26,15 @@ export default async function IndustryBriefsListingPage() {
       <main className="min-h-screen pt-32 pb-20">
         <section className="section-wide mb-12">
           <nav className="flex items-center gap-2 text-sm text-greige mb-8">
-            <Link href="/" className="hover:text-atomic-tangerine">Home</Link>
+            <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
-            <Link href="/insights" className="hover:text-atomic-tangerine">Grist</Link>
+            <Link href="/insights" className="hover:text-white/80">Insights</Link>
             <span>/</span>
             <span className="text-shroomy">Industry Briefs</span>
           </nav>
 
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">Industry Briefs</h1>
-          <p className="text-xl text-shroomy max-w-2xl">
+          <h1 className="text-4xl md:text-6xl font-normal text-white mb-4">Industry Briefs</h1>
+          <p className="text-xl max-w-2xl">
             Data-driven snapshots of market trends and buyer behavior.
           </p>
         </section>

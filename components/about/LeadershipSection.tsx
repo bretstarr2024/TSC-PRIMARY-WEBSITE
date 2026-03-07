@@ -239,12 +239,12 @@ export function LeadershipSection() {
     <section className="relative py-24 md:py-32">
       <div className="section-wide">
         <AnimatedSection>
-          <p className="text-xs font-semibold text-greige uppercase tracking-[0.3em] mb-6">
+          <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-6">
             Leadership
           </p>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight max-w-3xl mb-16">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal text-white leading-tight max-w-3xl mb-16">
             Senior people doing the work.{' '}
-            <span className="text-atomic-tangerine">Not selling it.</span>
+            <span className="text-white font-extrabold">Not selling it.</span>
           </h2>
         </AnimatedSection>
 
@@ -283,7 +283,7 @@ export function LeadershipSection() {
                   href={leader.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs text-shroomy hover:text-atomic-tangerine transition-colors mt-auto"
+                  className="text-xs hover:text-white/80 transition-colors mt-auto"
                   onClick={(e) => e.stopPropagation()}
                 >
                   LinkedIn &rarr;
@@ -353,7 +353,7 @@ export function LeadershipSection() {
                     </div>
                   </div>
                   <div className="min-w-0">
-                    <h3 id="leader-modal-name" className="text-white font-bold text-2xl mb-1">
+                    <h3 id="leader-modal-name" className="text-white font-normal text-2xl mb-1">
                       {leaders[selected].name}
                     </h3>
                     <p className="text-greige text-sm mb-3">{leaders[selected].title}</p>
@@ -361,7 +361,7 @@ export function LeadershipSection() {
                       href={leaders[selected].linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-sm font-medium hover:text-atomic-tangerine transition-colors"
+                      className="inline-flex items-center gap-2 text-sm font-medium hover:text-white/80 transition-colors"
                       style={{ color: avatarPalette[selected % avatarPalette.length][0] }}
                     >
                       LinkedIn &rarr;
@@ -378,7 +378,7 @@ export function LeadershipSection() {
                 />
 
                 {/* Bio */}
-                <p className="text-shroomy text-base leading-relaxed">
+                <p className="text-base leading-relaxed">
                   {leaders[selected].bio}
                 </p>
 

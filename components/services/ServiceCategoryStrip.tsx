@@ -3,6 +3,7 @@
 import { AnimatedSection, StaggerContainer, StaggerItem } from '@/components/AnimatedSection';
 import { MagneticButton } from '@/components/MagneticButton';
 import { ServiceCard } from './ServiceCard';
+import { ServiceShapeIcon, CATEGORY_SHAPES } from './ServiceShapeIcon';
 import type { ServiceCategory } from '@/lib/services-data';
 
 interface ServiceCategoryStripProps {
@@ -27,11 +28,13 @@ export function ServiceCategoryStrip({ category, index }: ServiceCategoryStripPr
             direction={isReversed ? 'right' : 'left'}
             className={`${isReversed ? 'md:order-2' : 'md:order-1'}`}
           >
-            <div
-              className="w-3 h-3 rounded-full mb-6"
-              style={{ backgroundColor: category.color }}
+            <ServiceShapeIcon
+              shape={CATEGORY_SHAPES[category.slug] || 'circle'}
+              color={category.color}
+              size={48}
+              className="mb-6"
             />
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-[1.1] mb-4">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-normal tracking-tight text-white leading-[1.1] mb-4">
               {category.name}
             </h2>
             <p
@@ -40,7 +43,7 @@ export function ServiceCategoryStrip({ category, index }: ServiceCategoryStripPr
             >
               {category.tagline}
             </p>
-            <p className="text-shroomy leading-relaxed mb-8 max-w-lg">
+            <p className="leading-relaxed mb-8 max-w-lg">
               {category.description}
             </p>
             <MagneticButton href={`/book?service=${encodeURIComponent(category.name)}&cta=services-${category.slug}`} variant="primary" ctaId={`services-${category.slug}`}>

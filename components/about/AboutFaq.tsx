@@ -15,12 +15,12 @@ export function AboutFaq() {
           {/* Left: heading */}
           <div>
             <AnimatedSection>
-              <p className="text-xs font-semibold text-greige uppercase tracking-[0.3em] mb-6">
+              <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-6">
                 FAQ
               </p>
-              <h2 className="text-3xl md:text-4xl font-bold text-white leading-tight">
+              <h2 className="text-3xl md:text-4xl font-normal text-white leading-tight">
                 Questions we get asked.{' '}
-                <span className="text-atomic-tangerine">Straight answers.</span>
+                <span className="text-white font-extrabold">Straight answers.</span>
               </h2>
             </AnimatedSection>
           </div>
@@ -65,7 +65,7 @@ export function AboutFaq() {
                           transition={{ duration: 0.3 }}
                           className="overflow-hidden"
                         >
-                          <p className="px-6 pb-5 text-shroomy text-sm leading-relaxed">
+                          <p className="px-6 pb-5 text-sm leading-relaxed">
                             {faq.answer}
                           </p>
                         </motion.div>

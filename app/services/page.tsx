@@ -47,7 +47,7 @@ export default function ServicesPage() {
         <AnswerCapsulesSection
           capsules={servicesCapsules}
           accentColor="#FF5910"
-          heading={<>Common questions about <span className="text-atomic-tangerine">our services.</span></>}
+          heading={<>Common questions about <span className="text-white font-extrabold">our services.</span></>}
           subheading="What B2B marketing leaders want to know before engaging an agency."
         />
 

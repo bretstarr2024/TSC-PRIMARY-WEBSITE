@@ -22,8 +22,8 @@ export function ServiceCard({ service, accentColor, borderClass }: ServiceCardPr
       <div className="p-6">
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1">
-            <h4 className="text-lg font-bold text-white mb-1">{service.name}</h4>
-            <p className="text-sm text-shroomy">{service.tagline}</p>
+            <h4 className="text-lg font-normal text-white mb-1">{service.name}</h4>
+            <p className="text-sm">{service.tagline}</p>
           </div>
           <motion.div
             animate={{ rotate: isOpen ? 45 : 0 }}
@@ -44,7 +44,7 @@ export function ServiceCard({ service, accentColor, borderClass }: ServiceCardPr
               className="overflow-hidden"
             >
               <div className="pt-5 mt-5 border-t border-white/5">
-                <p className="text-shroomy leading-relaxed mb-6">{service.description}</p>
+                <p className="leading-relaxed mb-6">{service.description}</p>
 
                 <div className="mb-6">
                   <p className="text-xs font-semibold text-greige uppercase tracking-wider mb-3">
@@ -52,7 +52,7 @@ export function ServiceCard({ service, accentColor, borderClass }: ServiceCardPr
                   </p>
                   <ul className="space-y-2">
                     {service.outcomes.map((outcome) => (
-                      <li key={outcome} className="flex items-start gap-2.5 text-sm text-shroomy">
+                      <li key={outcome} className="flex items-start gap-2.5 text-sm">
                         <span
                           className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0"
                           style={{ backgroundColor: accentColor }}
@@ -63,7 +63,7 @@ export function ServiceCard({ service, accentColor, borderClass }: ServiceCardPr
                   </ul>
                 </div>
 
-                <p className="mt-4 text-sm text-shroomy/80 italic">{service.whoItsFor}</p>
+                <p className="mt-4 text-sm text-shroomy italic"><span className="font-bold not-italic">Best for:</span> {service.whoItsFor}</p>
               </div>
             </motion.div>
           )}

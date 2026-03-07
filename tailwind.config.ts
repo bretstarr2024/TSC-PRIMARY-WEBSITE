@@ -17,7 +17,7 @@ const config: Config = {
         foreground: "var(--color-text)",
       },
       fontFamily: {
-        sans: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-work-sans)', '"Work Sans"', 'system-ui', 'sans-serif'],
         arcade: ['var(--font-arcade)', '"Press Start 2P"', 'monospace'],
       },
       fontSize: {

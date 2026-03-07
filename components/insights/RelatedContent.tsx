@@ -13,7 +13,6 @@ const TYPE_COLORS: Record<RelatedItemType, string> = {
   comparison: '#ED0AD2',
   'expert-qa': '#FFBDAE',
   news: '#088BA0',
-  'case-study': '#7C3AED',
   'industry-brief': '#D97706',
   video: '#10B981',
   tool: '#F472B6',
@@ -27,7 +26,6 @@ const TYPE_LABELS: Record<RelatedItemType, string> = {
   comparison: 'Comparison',
   'expert-qa': 'Expert Q&A',
   news: 'News',
-  'case-study': 'Case Study',
   'industry-brief': 'Industry Brief',
   video: 'Video',
   tool: 'Tool',
@@ -60,7 +58,7 @@ export async function RelatedContent({
 
   return (
     <section className="my-12">
-      <h3 className="text-lg font-semibold text-white mb-6">Related Grist</h3>
+      <h3 className="text-lg font-semibold text-white mb-6">Related Insights</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {items.map((item) => {
           const color = TYPE_COLORS[item.type];
@@ -77,7 +75,7 @@ export async function RelatedContent({
               >
                 {TYPE_LABELS[item.type]}
               </span>
-              <h4 className="text-white font-medium mt-1 group-hover:text-atomic-tangerine transition-colors line-clamp-2">
+              <h4 className="text-white font-medium mt-1 group-hover:text-white/80 transition-colors line-clamp-2">
                 {item.title}
               </h4>
               <p className="text-greige text-sm mt-1 line-clamp-2">

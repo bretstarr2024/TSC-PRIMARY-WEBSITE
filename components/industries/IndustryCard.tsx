@@ -46,7 +46,7 @@ export function IndustryCard({ industry, index }: IndustryCardProps) {
         </div>
 
         {/* Name */}
-        <h3 className="text-2xl font-bold text-white mb-2 group-hover:translate-x-1 transition-transform">
+        <h3 className="text-2xl font-normal text-white mb-2 group-hover:translate-x-1 transition-transform">
           {industry.name}
         </h3>
 
@@ -59,7 +59,7 @@ export function IndustryCard({ industry, index }: IndustryCardProps) {
         </p>
 
         {/* Description preview */}
-        <p className="text-sm text-shroomy leading-relaxed line-clamp-3 mb-5">
+        <p className="text-sm leading-relaxed line-clamp-3 mb-5">
           {industry.description}
         </p>
 

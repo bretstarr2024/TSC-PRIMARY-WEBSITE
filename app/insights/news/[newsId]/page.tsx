@@ -101,16 +101,16 @@ export default async function NewsDetailPage({
           />
 
           <nav className="flex items-center gap-2 text-sm text-greige mb-8">
-            <Link href="/" className="hover:text-atomic-tangerine">Home</Link>
+            <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
-            <Link href="/insights" className="hover:text-atomic-tangerine">Grist</Link>
+            <Link href="/insights" className="hover:text-white/80">Insights</Link>
             <span>/</span>
-            <Link href="/insights/news" className="hover:text-atomic-tangerine">News</Link>
+            <Link href="/insights/news" className="hover:text-white/80">News</Link>
             <span>/</span>
             <span className="text-shroomy">{item.headline}</span>
           </nav>
 
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-6">
+          <h1 className="text-3xl md:text-5xl font-normal text-white mb-6">
             {item.headline}
           </h1>
 
@@ -141,7 +141,7 @@ export default async function NewsDetailPage({
 
           {/* Summary */}
           <section className="mb-10">
-            <p className="text-shroomy text-lg leading-relaxed">
+            <p className="text-lg leading-relaxed">
               {item.summary}
             </p>
           </section>
@@ -152,7 +152,7 @@ export default async function NewsDetailPage({
               <h2 className="text-xl font-semibold text-white mb-4">Our Take</h2>
               <div>
                 {item.commentary.split('\n\n').map((paragraph, i) => (
-                  <p key={i} className="text-shroomy leading-relaxed mb-4 last:mb-0">
+                  <p key={i} className="leading-relaxed mb-4 last:mb-0">
                     {paragraph}
                   </p>
                 ))}
@@ -167,7 +167,7 @@ export default async function NewsDetailPage({
                 href={item.source.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-atomic-tangerine hover:text-hot-sauce transition-colors"
+                className="inline-flex items-center gap-2 text-atomic-tangerine hover:text-white/80 transition-colors"
               >
                 <span>Read original source at {item.source.name}</span>
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

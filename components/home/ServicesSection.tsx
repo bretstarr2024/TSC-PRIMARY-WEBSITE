@@ -7,14 +7,14 @@ const services = [
   {
     category: 'Brand & Positioning',
     items: ['Market Positioning', 'Messaging Frameworks', 'Brand Architecture', 'Visual Identity & Design Systems', 'Thought Leadership Programs', 'Analyst Relations'],
-    color: '#FF5910',
-    borderColor: 'border-atomic-tangerine/30',
+    color: '#73F5FF',
+    borderColor: 'border-tidal-wave/30',
   },
   {
     category: 'GTM Strategy & Architecture',
     items: ['ICP & Buyer Journey Mapping', 'Competitive Positioning', 'Launch Strategy', 'Sales Enablement', 'Channel Strategy', 'Revenue Architecture'],
-    color: '#FFBDAE',
-    borderColor: 'border-fing-peachy/30',
+    color: '#73F5FF',
+    borderColor: 'border-tidal-wave/30',
   },
   {
     category: 'Demand & Pipeline',
@@ -25,20 +25,20 @@ const services = [
   {
     category: 'Digital Performance',
     items: ['Paid Search & Social', 'Programmatic & Retargeting', 'SEO & Technical SEO', 'PR & Analyst Relations', 'Social Media Management', 'Conversion Rate Optimization'],
-    color: '#E1FF00',
-    borderColor: 'border-neon-cactus/30',
+    color: '#73F5FF',
+    borderColor: 'border-tidal-wave/30',
   },
   {
     category: 'Content & Creative',
     items: ['Content Strategy & Production', 'Research & Original Data', 'Campaign Creative & Design', 'Video & Motion', 'Web & Interactive', 'Brand Editorial'],
-    color: '#ED0AD2',
-    borderColor: 'border-sprinkles/30',
+    color: '#73F5FF',
+    borderColor: 'border-tidal-wave/30',
   },
   {
     category: 'AI-Native Solutions',
     items: ['AI Marketing Strategy', 'AI GTM Activation', 'AI Content Studio', 'AI Design Studio', 'Answer Engine Optimization', 'Autonomous Outbound AI', 'Managed Services'],
-    color: '#088BA0',
-    borderColor: 'border-hurricane-sky/30',
+    color: '#E1FF00',
+    borderColor: 'border-neon-cactus/30',
   },
 ];
 
@@ -70,12 +70,12 @@ export function ServicesSection() {
         <AnimatedSection className="section-wide mb-16">
           <div className="flex items-end justify-between gap-8">
             <div>
-              <p className="text-xs font-semibold text-greige uppercase tracking-[0.3em] mb-6">
+              <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-6">
                 What We Build
               </p>
-              <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1]">
+              <h2 className="text-5xl md:text-6xl lg:text-7xl font-normal tracking-tight text-white leading-[1]">
                 Full-stack marketing<br />
-                <span className="text-atomic-tangerine">for full-stack companies.</span>
+                <span className="text-white font-extrabold">for full-stack companies.</span>
               </h2>
             </div>
 
@@ -122,13 +122,13 @@ export function ServicesSection() {
                   className="w-3 h-3 rounded-full mb-6"
                   style={{ backgroundColor: service.color }}
                 />
-                <h3 className="text-2xl font-bold text-white mb-4 group-hover:translate-x-1 transition-transform">
+                <h3 className="text-2xl font-normal text-white mb-4 group-hover:translate-x-1 transition-transform">
                   {service.category}
                 </h3>
                 <ul className="space-y-2">
                   {service.items.map((item) => (
-                    <li key={item} className="text-shroomy flex items-center gap-2">
-                      <span className="w-1 h-1 rounded-full bg-greige" />
+                    <li key={item} className="flex items-center gap-2 text-white">
+                      <span className="w-1 h-1 rounded-full" style={{ backgroundColor: service.color }} />
                       {item}
                     </li>
                   ))}
@@ -157,9 +157,9 @@ export function ServicesSection() {
                     className="w-2.5 h-2.5 rounded-full"
                     style={{ backgroundColor: service.color }}
                   />
-                  <h3 className="text-lg font-bold text-white">{service.category}</h3>
+                  <h3 className="text-lg font-normal text-white">{service.category}</h3>
                 </div>
-                <p className="text-sm text-shroomy">{service.items.join(' · ')}</p>
+                <p className="text-sm text-white">{service.items.join(' · ')}</p>
               </div>
             ))}
           </div>

@@ -963,7 +963,7 @@ export function GalagaGame({ onClose }: { onClose: () => void }) {
             g.scoreIndex = scores.indexOf(entry);
             g.enteringInitials = false;
             g.scoreSubmitted = true;
-            if (g.scoreIndex === 0) { bossActive.current = true; setBossData({ game: 'galaga', score: g.score, initials }); }
+            if (g.scoreIndex === 0 && !localStorage.getItem('tsc-galaga-boss')) { localStorage.setItem('tsc-galaga-boss', '1'); bossActive.current = true; setBossData({ game: 'galaga', score: g.score, initials }); }
           } else if (/^[a-zA-Z]$/.test(key)) {
             g.initialsChars[g.initialsPos] = key.toUpperCase().charCodeAt(0) - 65;
             if (g.initialsPos < 2) g.initialsPos++;
@@ -1015,7 +1015,7 @@ export function GalagaGame({ onClose }: { onClose: () => void }) {
             saveHighScores(scores); g.highScores = scores;
             g.scoreIndex = scores.indexOf(entry);
             g.enteringInitials = false; g.scoreSubmitted = true;
-            if (g.scoreIndex === 0) { bossActive.current = true; setBossData({ game: 'galaga', score: g.score, initials }); }
+            if (g.scoreIndex === 0 && !localStorage.getItem('tsc-galaga-boss')) { localStorage.setItem('tsc-galaga-boss', '1'); bossActive.current = true; setBossData({ game: 'galaga', score: g.score, initials }); }
           }
         } else if (justTouched('restart')) {
           game.current = init(el.width, el.height); setIsOver(false);
@@ -1870,6 +1870,7 @@ export function GalagaGame({ onClose }: { onClose: () => void }) {
       {createPortal(
         <div data-galaga-game style={{ position: 'fixed', inset: 0, zIndex: 99999, background: C.bg, touchAction: 'none', cursor: isOver ? 'default' : 'none' }}>
           {isOver && <style>{`[data-galaga-game], [data-galaga-game] * { cursor: default !important; }`}</style>}
+          <button onClick={onClose} style={{ position: 'absolute', top: 16, left: 16, zIndex: 10, background: 'rgba(20,18,19,0.75)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 8, color: '#d1d1c6', fontFamily: 'monospace', fontSize: 13, fontWeight: 'bold', padding: '8px 14px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}>✕ EXIT</button>
           <canvas ref={cvs} style={{ display: 'block', width: '100%', height: '100%', touchAction: 'none' }} />
         </div>,
         document.body,

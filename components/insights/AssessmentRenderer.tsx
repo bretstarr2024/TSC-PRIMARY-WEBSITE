@@ -65,7 +65,7 @@ export function AssessmentRenderer({ questions, results }: AssessmentRendererPro
           <h2 className="text-2xl font-semibold text-white mb-4">
             {matchingResult.title}
           </h2>
-          <p className="text-shroomy leading-relaxed mb-6">
+          <p className="leading-relaxed mb-6">
             {matchingResult.description}
           </p>
 
@@ -74,7 +74,7 @@ export function AssessmentRenderer({ questions, results }: AssessmentRendererPro
               <h3 className="font-semibold text-white mb-3">Recommended Next Steps:</h3>
               <ul className="space-y-2">
                 {matchingResult.recommendations.map((rec, index) => (
-                  <li key={index} className="flex items-start gap-3 text-shroomy">
+                  <li key={index} className="flex items-start gap-3">
                     <span className="shrink-0 w-6 h-6 flex items-center justify-center bg-atomic-tangerine/20 text-atomic-tangerine rounded-full text-sm font-medium">
                       {index + 1}
                     </span>
@@ -90,7 +90,7 @@ export function AssessmentRenderer({ questions, results }: AssessmentRendererPro
         <div className="text-center">
           <button
             onClick={handleReset}
-            className="px-6 py-3 bg-atomic-tangerine text-white rounded-lg font-medium hover:bg-hot-sauce transition-colors"
+            className="px-6 py-3 bg-heart-of-darkness text-white border-2 border-white rounded-lg font-medium hover:bg-white hover:text-heart-of-darkness transition-colors"
           >
             Retake Assessment
           </button>
@@ -155,7 +155,7 @@ export function AssessmentRenderer({ questions, results }: AssessmentRendererPro
                               value={option.value}
                               checked={isSelected}
                               onChange={() => handleAnswer(question.id, option.value)}
-                              className="w-4 h-4 text-atomic-tangerine focus:ring-atomic-tangerine cursor-pointer"
+                              className="w-4 h-4 text-atomic-tangerine focus:ring-white cursor-pointer"
                             />
                             <span className={isSelected ? 'text-white' : 'text-shroomy'}>
                               {option.text}
@@ -177,8 +177,8 @@ export function AssessmentRenderer({ questions, results }: AssessmentRendererPro
         <button
           onClick={handleSubmit}
           disabled={!allAnswered}
-          className={`px-6 py-3 bg-atomic-tangerine text-white rounded-lg font-medium transition-colors ${
-            !allAnswered ? 'opacity-50 cursor-not-allowed' : 'hover:bg-hot-sauce'
+          className={`px-6 py-3 bg-heart-of-darkness text-white border-2 border-white rounded-lg font-medium transition-colors ${
+            !allAnswered ? 'opacity-50 cursor-not-allowed' : 'hover:bg-white hover:text-heart-of-darkness'
           }`}
         >
           {allAnswered

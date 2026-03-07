@@ -91,7 +91,7 @@ export function ChecklistRenderer({ items }: ChecklistRendererProps) {
                       type="checkbox"
                       checked={isChecked}
                       onChange={() => toggleItem(item.id)}
-                      className="mt-1 w-5 h-5 rounded border-white/30 text-atomic-tangerine focus:ring-atomic-tangerine cursor-pointer"
+                      className="mt-1 w-5 h-5 rounded border-white/30 text-atomic-tangerine focus:ring-white cursor-pointer"
                     />
                     <div className="flex-1">
                       <span

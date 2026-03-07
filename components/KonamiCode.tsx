@@ -65,7 +65,7 @@ export function KonamiCode() {
       </motion.div>
       <button
         onClick={() => setActive(false)}
-        className="fixed bottom-4 right-4 z-[99998] px-3 py-1.5 bg-atomic-tangerine text-white text-xs font-arcade rounded-lg hover:bg-hot-sauce transition-colors"
+        className="fixed bottom-4 right-4 z-[99998] px-3 py-1.5 bg-heart-of-darkness text-white border-2 border-white text-xs font-arcade rounded-lg hover:bg-white hover:text-heart-of-darkness transition-colors"
       >
         BOSS MODE OFF
       </button>

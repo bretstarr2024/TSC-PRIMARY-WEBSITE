@@ -20,7 +20,7 @@ export function IndustryContent({ industry, relevantServices }: IndustryContentP
         <div className="section-wide">
           <AnimatedSection>
             <div className="glass rounded-2xl p-8 md:p-12 border" style={{ borderColor: `${industry.color}15` }}>
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-greige mb-4">
+              <p className="text-[16px] font-bold uppercase tracking-[4px] text-shroomy mb-4">
                 Market Context
               </p>
               <p className="text-lg md:text-xl text-shroomy leading-relaxed max-w-4xl">
@@ -38,13 +38,10 @@ export function IndustryContent({ industry, relevantServices }: IndustryContentP
             {/* Pain Points */}
             <div>
               <AnimatedSection>
-                <p
-                  className="text-xs font-semibold uppercase tracking-[0.3em] mb-4"
-                  style={{ color: industry.color }}
-                >
+                <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-4">
                   The Challenges
                 </p>
-                <h2 className="text-3xl md:text-4xl font-bold text-white mb-8">
+                <h2 className="text-3xl md:text-4xl font-normal text-white mb-8">
                   What makes {industry.name} marketing hard
                 </h2>
               </AnimatedSection>
@@ -62,7 +59,7 @@ export function IndustryContent({ industry, relevantServices }: IndustryContentP
                       >
                         {i + 1}
                       </div>
-                      <p className="text-shroomy leading-relaxed">{point}</p>
+                      <p className="leading-relaxed">{point}</p>
                     </div>
                   </StaggerItem>
                 ))}
@@ -72,10 +69,10 @@ export function IndustryContent({ industry, relevantServices }: IndustryContentP
             {/* How We Help */}
             <div>
               <AnimatedSection delay={0.2}>
-                <p className="text-xs font-semibold text-atomic-tangerine uppercase tracking-[0.3em] mb-4">
+                <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-4">
                   Our Approach
                 </p>
-                <h2 className="text-3xl md:text-4xl font-bold text-white mb-8">
+                <h2 className="text-3xl md:text-4xl font-normal text-white mb-8">
                   How we move the needle
                 </h2>
               </AnimatedSection>
@@ -91,13 +88,13 @@ export function IndustryContent({ industry, relevantServices }: IndustryContentP
                       >
                         <path
                           d="M6 10l3 3 5-6"
-                          stroke={industry.color}
+                          stroke="#FF5910"
                           strokeWidth="2"
                           strokeLinecap="round"
                           strokeLinejoin="round"
                         />
                       </svg>
-                      <p className="text-shroomy leading-relaxed">{point}</p>
+                      <p className="leading-relaxed">{point}</p>
                     </div>
                   </StaggerItem>
                 ))}
@@ -112,15 +109,15 @@ export function IndustryContent({ industry, relevantServices }: IndustryContentP
         <section className="py-16 md:py-24">
           <div className="section-wide">
             <AnimatedSection>
-              <p className="text-xs font-semibold text-greige uppercase tracking-[0.3em] mb-4">
+              <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-4">
                 Track Record
               </p>
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-10">
+              <h2 className="text-3xl md:text-4xl font-normal text-white mb-10">
                 {industry.name} clients we&apos;ve worked with
               </h2>
             </AnimatedSection>
 
-            <StaggerContainer className="flex flex-wrap gap-4">
+            <StaggerContainer className="flex flex-wrap gap-4 justify-start">
               {industry.notableClients.map((client) => (
                 <StaggerItem key={client}>
                   <div
@@ -142,10 +139,10 @@ export function IndustryContent({ industry, relevantServices }: IndustryContentP
 
         <div className="relative z-10 section-wide">
           <AnimatedSection>
-            <p className="text-xs font-semibold text-greige uppercase tracking-[0.3em] mb-4">
+            <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-4">
               Services for {industry.name}
             </p>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-10">
+            <h2 className="text-3xl md:text-4xl font-normal text-white mb-10">
               How we work with {industry.name} companies
             </h2>
           </AnimatedSection>
@@ -164,11 +161,11 @@ export function IndustryContent({ industry, relevantServices }: IndustryContentP
                         className="w-2.5 h-2.5 rounded-full transition-transform group-hover:scale-125"
                         style={{ backgroundColor: cat.color }}
                       />
-                      <h3 className="text-lg font-bold text-white group-hover:translate-x-1 transition-transform">
+                      <h3 className="text-lg font-normal text-white group-hover:translate-x-1 transition-transform">
                         {cat.name}
                       </h3>
                     </div>
-                    <p className="text-sm text-shroomy mb-3">{cat.tagline}</p>
+                    <p className="text-sm mb-3">{cat.tagline}</p>
                     <p className="text-xs text-greige">
                       {cat.services.length} services →
                     </p>
@@ -194,11 +191,11 @@ export function IndustryContent({ industry, relevantServices }: IndustryContentP
 
         <div className="relative z-10 section-wide text-center">
           <AnimatedSection>
-            <h2 className="text-5xl md:text-6xl lg:text-8xl font-bold tracking-tight text-white leading-[1] mb-8">
+            <h2 className="text-5xl md:text-6xl lg:text-8xl font-normal tracking-tight text-white leading-[1] mb-8">
               Ready to own<br />
-              <span style={{ color: industry.color }}>{industry.name}?</span>
+              <span className="text-white font-extrabold">{industry.name}?</span>
             </h2>
-            <p className="text-xl text-shroomy max-w-xl mx-auto mb-12 leading-relaxed">
+            <p className="text-xl max-w-xl mx-auto mb-12 leading-relaxed">
               We already know the buyers, the competitors, and the category dynamics.
               Let&apos;s talk about what moves your pipeline.
             </p>

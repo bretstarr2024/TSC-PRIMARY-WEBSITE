@@ -8,7 +8,7 @@ import { getAllPublishedFaqs, FaqItem } from '@/lib/resources-db';
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: 'FAQ | Grist',
+  title: 'FAQ | Insights',
   description: 'Direct answers to the questions B2B marketers actually ask. From strategy to AI to demand gen.',
 };
 
@@ -56,15 +56,15 @@ export default async function FaqListingPage() {
 
         <section className="section-wide mb-12">
           <nav className="flex items-center gap-2 text-sm text-greige mb-8">
-            <Link href="/" className="hover:text-atomic-tangerine">Home</Link>
+            <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
-            <Link href="/insights" className="hover:text-atomic-tangerine">Grist</Link>
+            <Link href="/insights" className="hover:text-white/80">Insights</Link>
             <span>/</span>
             <span className="text-shroomy">FAQ</span>
           </nav>
 
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">FAQ</h1>
-          <p className="text-xl text-shroomy max-w-2xl">
+          <h1 className="text-4xl md:text-6xl font-normal text-white mb-4">FAQ</h1>
+          <p className="text-xl max-w-2xl">
             Direct answers to the questions B2B marketers actually ask.
           </p>
         </section>

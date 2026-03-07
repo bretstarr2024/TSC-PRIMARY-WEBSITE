@@ -22,10 +22,10 @@ export default function PrivacyPage() {
             dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
           />
 
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">Privacy Policy</h1>
+          <h1 className="text-3xl md:text-5xl font-normal text-white mb-4">Privacy Policy</h1>
           <p className="text-greige text-sm mb-12">Last updated: February 27, 2026</p>
 
-          <div className="space-y-10 text-shroomy leading-relaxed">
+          <div className="space-y-10 leading-relaxed">
             <section>
               <h2 className="text-xl font-semibold text-white mb-3">Who we are</h2>
               <p>

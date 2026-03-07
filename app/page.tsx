@@ -31,7 +31,7 @@ export default function Home() {
         <AnswerCapsulesSection
           capsules={homepageCapsules}
           accentColor="#FF5910"
-          heading={<>Questions B2B leaders ask <span className="text-atomic-tangerine">before choosing an agency.</span></>}
+          heading={<>Questions B2B leaders ask <span className="text-white font-extrabold">before choosing an agency.</span></>}
           subheading="Straight answers. No pitch deck required."
         />
 

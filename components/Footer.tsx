@@ -16,7 +16,7 @@ const companyLinks = [
   { href: '/about', label: 'About' },
   { href: '/work', label: 'Work' },
   { href: '/verticals', label: 'Verticals' },
-  { href: '/insights', label: 'Grist' },
+  { href: '/insights', label: 'Insights' },
   { href: '/pricing', label: 'Pricing' },
   { href: '/careers', label: 'Careers' },
 ];
@@ -45,7 +45,7 @@ export function Footer() {
 
           {/* Services */}
           <div>
-            <h4 className="text-xs font-semibold text-shroomy uppercase tracking-wider mb-4">
+            <h4 className="text-xs font-semibold uppercase tracking-wider mb-4">
               Services
             </h4>
             <ul className="space-y-2.5">
@@ -64,7 +64,7 @@ export function Footer() {
 
           {/* Company */}
           <div>
-            <h4 className="text-xs font-semibold text-shroomy uppercase tracking-wider mb-4">
+            <h4 className="text-xs font-semibold uppercase tracking-wider mb-4">
               Company
             </h4>
             <ul className="space-y-2.5">
@@ -83,7 +83,7 @@ export function Footer() {
 
           {/* Connect */}
           <div>
-            <h4 className="text-xs font-semibold text-shroomy uppercase tracking-wider mb-4">
+            <h4 className="text-xs font-semibold uppercase tracking-wider mb-4">
               Connect
             </h4>
             <ul className="space-y-2.5">
@@ -108,7 +108,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/contact?cta=footer"
-                  className="text-sm text-atomic-tangerine hover:text-hot-sauce transition-colors hover:no-underline"
+                  className="text-sm text-atomic-tangerine hover:text-white/80 transition-colors hover:no-underline"
                   data-track-cta="footer"
                   data-track-component="Footer"
                   data-track-label="New Game →"
@@ -127,10 +127,10 @@ export function Footer() {
             © {new Date().getFullYear()} The Starr Conspiracy. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
-            <Link href="/privacy" className="text-xs text-greige/50 hover:text-greige transition-colors hover:no-underline">
+            <Link href="/privacy" className="text-xs text-greige hover:text-white transition-colors hover:no-underline">
               Privacy
             </Link>
-            <p className="text-xs text-greige/50">
+            <p className="text-xs text-greige">
               Built by an AI content engine. Obviously.
             </p>
           </div>

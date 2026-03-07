@@ -6,7 +6,6 @@ import {
   getAllPublishedComparisons,
   getAllPublishedExpertQa,
   getAllPublishedNews,
-  getAllPublishedCaseStudies,
   getAllPublishedIndustryBriefs,
   getAllPublishedVideos,
   getAllPublishedTools,
@@ -15,14 +14,13 @@ import {
 const BASE_URL = 'https://tsc-primary-website.vercel.app';
 
 export async function GET() {
-  const [blogs, faqs, glossary, comparisons, expertQa, news, caseStudies, briefs, videos, tools] = await Promise.all([
+  const [blogs, faqs, glossary, comparisons, expertQa, news, briefs, videos, tools] = await Promise.all([
     getAllPublishedBlogPosts().catch(() => []),
     getAllPublishedFaqs().catch(() => []),
     getAllPublishedGlossaryTerms().catch(() => []),
     getAllPublishedComparisons().catch(() => []),
     getAllPublishedExpertQa().catch(() => []),
     getAllPublishedNews().catch(() => []),
-    getAllPublishedCaseStudies().catch(() => []),
     getAllPublishedIndustryBriefs().catch(() => []),
     getAllPublishedVideos().catch(() => []),
     getAllPublishedTools().catch(() => []),
@@ -84,14 +82,6 @@ export async function GET() {
     lines.push('## News & Analysis');
     for (const n of news.slice(0, 20)) {
       lines.push(`- [${n.headline}](${BASE_URL}/insights/news/${n.newsId})`);
-    }
-    lines.push('');
-  }
-
-  if (caseStudies.length > 0) {
-    lines.push('## Case Studies');
-    for (const cs of caseStudies) {
-      lines.push(`- [${cs.title}](${BASE_URL}/insights/case-studies/${cs.caseStudyId})`);
     }
     lines.push('');
   }

@@ -10,16 +10,16 @@ export function OriginStory() {
           {/* Left: story */}
           <div>
             <AnimatedSection>
-              <p className="text-xs font-semibold text-greige uppercase tracking-[0.3em] mb-6">
+              <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-6">
                 Est. 1999
               </p>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-8">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal text-white leading-tight mb-8">
                 You shouldn&apos;t have to teach your agency what your company does for a living.
               </h2>
             </AnimatedSection>
 
             <AnimatedSection delay={0.15}>
-              <div className="space-y-6 text-lg text-shroomy leading-relaxed">
+              <div className="space-y-6 text-lg leading-relaxed">
                 <p>
                   That was the principle Bret Starr built The Starr Conspiracy on in 1999.
                   After years on the brand side watching agencies stumble through their own
@@ -70,7 +70,7 @@ export function OriginStory() {
                 <p className="text-white font-semibold text-xl mb-3">
                   A Humble Guide to Fixing Everything in Brand, Marketing, and Sales
                 </p>
-                <p className="text-shroomy text-sm leading-relaxed mb-3">
+                <p className="text-sm leading-relaxed mb-3">
                   Nearly every tech company is experiencing performance declines from their
                   tried-and-true sales and marketing strategies. Many don&apos;t know why. Bret
                   Starr&apos;s definitive take on what&apos;s broken in B2B marketing and how to fix
@@ -93,7 +93,7 @@ export function OriginStory() {
                     href="https://www.linkedin.com/newsletters/7114623320527929345/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-shroomy text-sm font-medium hover:bg-white/10 transition-colors"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-sm font-medium hover:bg-white/10 transition-colors"
                   >
                     Subscribe to Newsletter
                   </a>

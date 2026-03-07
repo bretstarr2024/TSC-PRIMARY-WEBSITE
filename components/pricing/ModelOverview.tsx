@@ -17,10 +17,10 @@ export function ModelOverview() {
 
       <div className="relative z-10 section-wide">
         <AnimatedSection>
-          <p className="text-xs font-semibold text-greige uppercase tracking-[0.3em] mb-6">
+          <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-6">
             The Model
           </p>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight max-w-4xl mb-16">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal text-white leading-tight max-w-4xl mb-16">
             We change the unit economics of your business.{' '}
             <span className="text-greige">Everything else is in service of that.</span>
           </h2>
@@ -35,15 +35,15 @@ export function ModelOverview() {
               </p>
               <div className="space-y-4 text-greige">
                 <p className="flex items-start gap-3">
-                  <span className="text-greige/40 mt-0.5 flex-shrink-0">&#8594;</span>
+                  <span className="text-greige mt-0.5 flex-shrink-0">&#8594;</span>
                   <span>Start with legacy playbooks and processes</span>
                 </p>
                 <p className="flex items-start gap-3">
-                  <span className="text-greige/40 mt-0.5 flex-shrink-0">&#8594;</span>
+                  <span className="text-greige mt-0.5 flex-shrink-0">&#8594;</span>
                   <span>Bolt AI on as an add-on feature</span>
                 </p>
                 <p className="flex items-start gap-3">
-                  <span className="text-greige/40 mt-0.5 flex-shrink-0">&#8594;</span>
+                  <span className="text-greige mt-0.5 flex-shrink-0">&#8594;</span>
                   <span>Produce the same work, marginally faster</span>
                 </p>
               </div>
@@ -59,7 +59,7 @@ export function ModelOverview() {
               <p className="text-xs font-bold text-atomic-tangerine uppercase tracking-widest mb-5">
                 The Starr Conspiracy
               </p>
-              <div className="space-y-4 text-shroomy">
+              <div className="space-y-4">
                 <p className="flex items-start gap-3">
                   <span className="text-atomic-tangerine mt-0.5 flex-shrink-0">&#8594;</span>
                   <span>Design every workflow for the AI era from day one</span>
@@ -79,7 +79,7 @@ export function ModelOverview() {
 
         {/* Outcome Metrics */}
         <AnimatedSection delay={0.15}>
-          <p className="text-xs font-semibold text-greige uppercase tracking-[0.3em] mb-8">
+          <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-8">
             What We Optimize For
           </p>
         </AnimatedSection>

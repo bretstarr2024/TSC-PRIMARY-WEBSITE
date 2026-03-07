@@ -16,10 +16,10 @@ export function RelatedServices({ categories }: RelatedServicesProps) {
 
       <div className="relative z-10 section-wide">
         <AnimatedSection className="mb-12">
-          <p className="text-xs font-semibold text-greige uppercase tracking-[0.3em] mb-4">
+          <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-4">
             You Might Also Need
           </p>
-          <h2 className="text-3xl md:text-4xl font-bold text-white">
+          <h2 className="text-3xl md:text-4xl font-normal text-white">
             Related Services
           </h2>
         </AnimatedSection>
@@ -36,10 +36,10 @@ export function RelatedServices({ categories }: RelatedServicesProps) {
                   className="w-3 h-3 rounded-full mb-4 transition-transform group-hover:scale-125"
                   style={{ backgroundColor: cat.color }}
                 />
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:translate-x-1 transition-transform">
+                <h3 className="text-xl font-normal text-white mb-2 group-hover:translate-x-1 transition-transform">
                   {cat.name}
                 </h3>
-                <p className="text-sm text-shroomy mb-3">{cat.tagline}</p>
+                <p className="text-sm mb-3">{cat.tagline}</p>
                 <p className="text-xs text-greige">
                   {cat.services.length} services →
                 </p>

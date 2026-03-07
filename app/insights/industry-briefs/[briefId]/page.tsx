@@ -76,16 +76,16 @@ export default async function IndustryBriefDetailPage({
           />
 
           <nav className="flex items-center gap-2 text-sm text-greige mb-8">
-            <Link href="/" className="hover:text-atomic-tangerine">Home</Link>
+            <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
-            <Link href="/insights" className="hover:text-atomic-tangerine">Grist</Link>
+            <Link href="/insights" className="hover:text-white/80">Insights</Link>
             <span>/</span>
-            <Link href="/insights/industry-briefs" className="hover:text-atomic-tangerine">Industry Briefs</Link>
+            <Link href="/insights/industry-briefs" className="hover:text-white/80">Industry Briefs</Link>
             <span>/</span>
             <span className="text-shroomy">{brief.title}</span>
           </nav>
 
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
+          <h1 className="text-3xl md:text-5xl font-normal text-white mb-4">
             {brief.title}
           </h1>
 
@@ -119,7 +119,7 @@ export default async function IndustryBriefDetailPage({
           {/* Summary in glass card */}
           <div className="glass rounded-xl p-8 mb-10 border-l-4 border-[#D97706]">
             <h2 className="text-sm font-semibold uppercase tracking-wider text-greige mb-3">Executive Summary</h2>
-            <p className="text-shroomy text-lg leading-relaxed">
+            <p className="text-lg leading-relaxed">
               {brief.summary}
             </p>
           </div>
@@ -137,7 +137,7 @@ export default async function IndustryBriefDetailPage({
                     <span className="text-atomic-tangerine font-bold text-lg shrink-0">
                       {String(i + 1).padStart(2, '0')}
                     </span>
-                    <p className="text-shroomy leading-relaxed">{finding}</p>
+                    <p className="leading-relaxed">{finding}</p>
                   </div>
                 ))}
               </div>
@@ -154,7 +154,7 @@ export default async function IndustryBriefDetailPage({
                     <svg className="w-5 h-5 text-atomic-tangerine mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
-                    <p className="text-shroomy leading-relaxed">{rec}</p>
+                    <p className="leading-relaxed">{rec}</p>
                   </div>
                 ))}
               </div>

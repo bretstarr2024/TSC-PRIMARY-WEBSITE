@@ -99,16 +99,16 @@ export default async function ExpertQaDetailPage({
           />
 
           <nav className="flex items-center gap-2 text-sm text-greige mb-8">
-            <Link href="/" className="hover:text-atomic-tangerine">Home</Link>
+            <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
-            <Link href="/insights" className="hover:text-atomic-tangerine">Grist</Link>
+            <Link href="/insights" className="hover:text-white/80">Insights</Link>
             <span>/</span>
-            <Link href="/insights/expert-qa" className="hover:text-atomic-tangerine">Expert Q&A</Link>
+            <Link href="/insights/expert-qa" className="hover:text-white/80">Expert Q&A</Link>
             <span>/</span>
             <span className="text-shroomy">{qa.question}</span>
           </nav>
 
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-8">
+          <h1 className="text-3xl md:text-5xl font-normal text-white mb-8">
             {qa.question}
           </h1>
 
@@ -128,7 +128,7 @@ export default async function ExpertQaDetailPage({
           {/* Answer paragraphs */}
           <div className="mb-10">
             {qa.answer.split('\n\n').map((paragraph, i) => (
-              <p key={i} className="text-shroomy leading-relaxed mb-4">
+              <p key={i} className="leading-relaxed mb-4">
                 {paragraph}
               </p>
             ))}

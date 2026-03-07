@@ -116,7 +116,7 @@ export function ContactHero() {
 
         {/* Sub-headline */}
         <motion.p
-          className="mt-8 text-base md:text-lg text-shroomy max-w-[600px] mx-auto leading-relaxed"
+          className="mt-8 text-base md:text-lg max-w-[600px] mx-auto leading-relaxed"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 1.4 }}

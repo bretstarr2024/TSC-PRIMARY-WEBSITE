@@ -16,7 +16,7 @@ interface AnswerCapsulesSectionProps {
 export function AnswerCapsulesSection({
   capsules,
   accentColor,
-  label = 'Buyer Questions',
+  label = 'Frequently Asked Questions',
   heading,
   subheading = 'Straight answers to the questions B2B marketing leaders ask before choosing a partner.',
 }: AnswerCapsulesSectionProps) {
@@ -29,14 +29,14 @@ export function AnswerCapsulesSection({
           {/* Left: heading */}
           <div>
             <AnimatedSection>
-              <p className="text-xs font-semibold text-greige uppercase tracking-[0.3em] mb-6">
+              <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-6">
                 {label}
               </p>
-              <h2 className="text-3xl md:text-4xl font-bold text-white leading-tight">
+              <h2 className="text-3xl md:text-4xl font-normal text-white leading-tight">
                 {heading}
               </h2>
               {subheading && (
-                <p className="mt-4 text-shroomy text-sm leading-relaxed">
+                <p className="mt-4 text-sm leading-relaxed">
                   {subheading}
                 </p>
               )}
@@ -84,7 +84,7 @@ export function AnswerCapsulesSection({
                           transition={{ duration: 0.3 }}
                           className="overflow-hidden"
                         >
-                          <p className="px-6 pb-5 text-shroomy text-sm leading-relaxed">
+                          <p className="px-6 pb-5 text-sm leading-relaxed">
                             {capsule.answer}
                           </p>
                         </motion.div>

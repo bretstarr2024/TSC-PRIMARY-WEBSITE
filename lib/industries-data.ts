@@ -30,7 +30,7 @@ export const INDUSTRIES: Industry[] = [
     group: 'hr-tech',
     color: '#ED0AD2',
     colorName: 'sprinkles',
-    tagline: 'We\'ve marketed more recruiting tech than any agency on Earth.',
+    tagline: 'We\'ve marketed more recruiting tech than nearly any agency on Earth.',
     description:
       'With 109 recruiting technology clients and counting, TSC has positioned, launched, and scaled more TA platforms than any agency in the world. From enterprise ATS to AI sourcing to candidate experience — we know the buyers, the objections, and the competitive landscape cold.',
     marketContext:
@@ -140,7 +140,7 @@ export const INDUSTRIES: Industry[] = [
     colorName: 'atomic-tangerine',
     tagline: 'Culture isn\'t a feature. It\'s a positioning problem.',
     description:
-      'Every engagement platform promises to "transform company culture." Fifty-seven of them hired us to figure out how to actually say something different. The engagement and recognition category is crowded, emotional, and resistant to traditional B2B playbooks — which is exactly why you need an agency that\'s been inside it for decades.',
+      'Every engagement platform promises to "transform company culture." 57 of them hired us to figure out how to actually say something different. The engagement and recognition category is crowded, emotional, and resistant to traditional B2B playbooks — which is exactly why you need an agency that\'s been inside it for decades.',
     marketContext:
       'Employee engagement and recognition technology is an emotionally driven market where every vendor claims to improve culture, boost retention, and make employees happier. The challenge is that these promises are nearly impossible to differentiate — and increasingly, CHROs demand ROI proof that engagement spend actually moves business metrics.',
     painPoints: [
@@ -160,7 +160,7 @@ export const INDUSTRIES: Industry[] = [
       'AI content engines trained on engagement and recognition buyer psychology',
     ],
     relevantServiceSlugs: ['brand-strategy', 'demand-generation', 'content-marketing', 'gtm-strategy'],
-    notableClients: ['Workhuman', 'Culture Amp', 'O.C. Tanner', 'Achievers', 'Perceptyx', 'Bonusly', 'Quantum Workplace', 'Reward Gateway'],
+    notableClients: ['Workhuman', 'Culture Amp', 'O.C. Tanner', 'Achievers', 'Bonusly', 'Perceptyx', 'Quantum Workplace', 'Reward Gateway'],
     buyerTitle: 'CHRO / VP People & Culture',
     stat: { value: '57', label: 'Clients served' },
     answerCapsules: [
@@ -194,7 +194,7 @@ export const INDUSTRIES: Industry[] = [
     colorName: 'neon-cactus',
     tagline: 'The platform wars are won on positioning, not product.',
     description:
-      'Core HCM is the most contested territory in HR tech — and we\'ve been in the middle of it since day one. With 42 HCM platform clients including ADP, Oracle, and SAP/SuccessFactors, we understand the enterprise buying dynamics, the competitive chess matches, and the positioning levers that actually move market share.',
+      'Core HCM is the most contested territory in HR tech — and we\'ve been in the middle of it since day one. With 42 HCM platform clients including ADP and Oracle, we understand the enterprise buying dynamics, the competitive chess matches, and the positioning levers that actually move market share.',
     marketContext:
       'The core HCM market is dominated by a handful of mega-vendors with massive installed bases, surrounded by mid-market challengers trying to carve out defensible positions. Buying decisions are high-stakes, multi-year commitments that involve HR, IT, finance, and procurement — making positioning and trust the ultimate competitive weapons.',
     painPoints: [
@@ -214,7 +214,7 @@ export const INDUSTRIES: Industry[] = [
       'Brand strategy that transcends feature comparison and wins on strategic narrative',
     ],
     relevantServiceSlugs: ['brand-strategy', 'gtm-strategy', 'demand-generation', 'content-marketing'],
-    notableClients: ['ADP', 'Oracle', 'SAP/SuccessFactors', 'Ceridian', 'Ultimate Software', 'Kronos', 'Cornerstone OnDemand', 'INFOR'],
+    notableClients: ['ADP', 'Oracle', 'Ceridian', 'Kronos', 'Ultimate Software', 'Cornerstone OnDemand', 'INFOR'],
     buyerTitle: 'CHRO / CIO',
     stat: { value: '42', label: 'Clients served' },
     answerCapsules: [
@@ -376,7 +376,7 @@ export const INDUSTRIES: Industry[] = [
       'Multi-audience marketing that reaches both HR buyers and benefits broker channels',
     ],
     relevantServiceSlugs: ['brand-strategy', 'content-marketing', 'demand-generation', 'digital-performance'],
-    notableClients: ['Willis Towers Watson', 'Alight Solutions', 'Payscale', 'Businessolver', 'PlanSource', 'Salary.com', 'Nayya', 'Jellyvision'],
+    notableClients: ['Willis Towers Watson', 'Alight Solutions', 'Payscale', 'Businessolver', 'Salary.com', 'PlanSource', 'Nayya', 'Jellyvision'],
     buyerTitle: 'VP Total Rewards / Benefits Director',
     stat: { value: '32', label: 'Clients served' },
     answerCapsules: [
@@ -650,7 +650,7 @@ export const INDUSTRIES: Industry[] = [
       'Brand differentiation in a 14,000-vendor landscape',
     ],
     relevantServiceSlugs: ['brand-strategy', 'content-marketing', 'digital-performance', 'demand-generation'],
-    notableClients: ['Influitive', 'Madison Logic', 'Terminus', 'Goodway Group', 'SmartKarrot', 'Solutions by Text'],
+    notableClients: ['Goodway Group', 'SmartKarrot', 'Solutions by Text'],
     buyerTitle: 'CMO / VP Marketing Ops',
     stat: { value: '16', label: 'Clients served' },
     answerCapsules: [

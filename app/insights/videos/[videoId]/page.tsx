@@ -76,11 +76,11 @@ export default async function VideoDetailPage({
           />
 
           <nav className="flex items-center gap-2 text-sm text-greige mb-8">
-            <Link href="/" className="hover:text-atomic-tangerine">Home</Link>
+            <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
-            <Link href="/insights" className="hover:text-atomic-tangerine">Grist</Link>
+            <Link href="/insights" className="hover:text-white/80">Insights</Link>
             <span>/</span>
-            <Link href="/insights/videos" className="hover:text-atomic-tangerine">Videos</Link>
+            <Link href="/insights/videos" className="hover:text-white/80">Videos</Link>
             <span>/</span>
             <span className="text-shroomy">{video.title}</span>
           </nav>
@@ -105,7 +105,7 @@ export default async function VideoDetailPage({
                 href={video.videoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-atomic-tangerine hover:text-hot-sauce transition-colors text-lg font-medium"
+                className="inline-flex items-center gap-2 text-atomic-tangerine hover:text-white/80 transition-colors text-lg font-medium"
               >
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
@@ -116,7 +116,7 @@ export default async function VideoDetailPage({
             </div>
           )}
 
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-6">
+          <h1 className="text-3xl md:text-5xl font-normal text-white mb-6">
             {video.title}
           </h1>
 

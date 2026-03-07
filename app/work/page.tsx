@@ -24,7 +24,7 @@ export default function WorkPage() {
       <main className="min-h-screen pt-32 pb-20">
         <div className="section-wide">
           <AnimatedSection>
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
+            <h1 className="text-5xl md:text-7xl font-normal text-white mb-6">
               <GradientText>Work</GradientText>
             </h1>
             <p className="text-xl md:text-2xl text-shroomy leading-relaxed max-w-2xl">

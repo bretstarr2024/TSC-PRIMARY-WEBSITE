@@ -8,7 +8,7 @@ const SITE_URL = 'https://tsc-primary-website.vercel.app';
 
 export async function GET() {
   const feed = new Feed({
-    title: 'The Starr Conspiracy — Grist',
+    title: 'The Starr Conspiracy — Insights',
     description: 'B2B marketing intelligence for AI-era GTM leaders. Strategy, demand gen, AI transformation, and brand — from the agency that does both.',
     id: SITE_URL,
     link: `${SITE_URL}/insights`,

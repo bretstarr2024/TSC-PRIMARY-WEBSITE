@@ -52,10 +52,10 @@ export function RolesSection() {
     <section className="relative py-24 md:py-32">
       <div className="section-wide">
         <AnimatedSection>
-          <p className="text-xs font-semibold text-greige uppercase tracking-[0.3em] mb-6">
+          <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-6">
             Open roles
           </p>
-          <h2 className="text-3xl md:text-4xl font-bold text-white leading-tight mb-16 max-w-2xl">
+          <h2 className="text-3xl md:text-4xl font-normal text-white leading-tight mb-16 max-w-2xl">
             Two roles.{' '}
             <span className="text-neon-cactus">No &ldquo;future openings&rdquo; list.</span>
           </h2>
@@ -67,7 +67,7 @@ export function RolesSection() {
               <div className="glass rounded-2xl p-8 md:p-10">
                 <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
                   <div>
-                    <h3 className="text-2xl md:text-3xl font-bold text-white">
+                    <h3 className="text-2xl md:text-3xl font-normal text-white">
                       {role.title}
                     </h3>
                     <p className="text-sm mt-1" style={{ color: role.accent }}>
@@ -76,7 +76,7 @@ export function RolesSection() {
                   </div>
                 </div>
 
-                <p className="text-shroomy leading-relaxed mb-8 max-w-3xl">
+                <p className="leading-relaxed mb-8 max-w-3xl">
                   {role.summary}
                 </p>
 
@@ -87,7 +87,7 @@ export function RolesSection() {
                     </h4>
                     <ul className="space-y-3">
                       {role.responsibilities.map((item) => (
-                        <li key={item} className="flex gap-3 text-sm text-shroomy">
+                        <li key={item} className="flex gap-3 text-sm">
                           <span className="shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full" style={{ backgroundColor: role.accent }} />
                           {item}
                         </li>
@@ -101,7 +101,7 @@ export function RolesSection() {
                     </h4>
                     <ul className="space-y-3">
                       {role.qualifications.map((item) => (
-                        <li key={item} className="flex gap-3 text-sm text-shroomy">
+                        <li key={item} className="flex gap-3 text-sm">
                           <span className="shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full" style={{ backgroundColor: role.accent }} />
                           {item}
                         </li>

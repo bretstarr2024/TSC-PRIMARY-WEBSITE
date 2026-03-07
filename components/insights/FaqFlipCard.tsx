@@ -65,7 +65,7 @@ export function FaqFlipCard({ question, answer, faqId, tags }: FaqFlipCardProps)
           }}
         >
           <div>
-            <p className="text-shroomy text-sm leading-relaxed line-clamp-6">
+            <p className="text-sm leading-relaxed line-clamp-6">
               {answer}
             </p>
           </div>

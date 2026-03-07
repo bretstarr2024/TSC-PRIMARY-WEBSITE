@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Press_Start_2P } from "next/font/google";
+import { Work_Sans, Press_Start_2P } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -11,10 +11,10 @@ import { KonamiCode } from "@/components/KonamiCode";
 import { PageTransition } from "@/components/PageTransition";
 import { CookieConsent } from "@/components/CookieConsent";
 
-const inter = Inter({
+const workSans = Work_Sans({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-inter",
+  weight: ["400", "700", "800"],
+  variable: "--font-work-sans",
   display: "swap",
 });
 
@@ -81,14 +81,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`dark ${inter.variable} ${pressStart.variable}`}>
+    <html lang="en" className={`dark ${workSans.variable} ${pressStart.variable}`}>
       <head>
         <meta name="theme-color" content="#141213" />
       </head>
       <body className="bg-heart-of-darkness text-white antialiased font-sans">
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[99999] focus:px-4 focus:py-2 focus:bg-atomic-tangerine focus:text-white focus:rounded-lg focus:text-sm focus:font-medium"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[99999] focus:px-4 focus:py-2 focus:bg-heart-of-darkness focus:border-2 focus:border-white focus:text-white focus:rounded-lg focus:text-sm focus:font-medium"
         >
           Skip to content
         </a>

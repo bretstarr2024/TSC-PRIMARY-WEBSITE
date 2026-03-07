@@ -50,6 +50,7 @@ function BookPageInner() {
   const reducedMotion = useReducedMotion();
   const calContainerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [calLoaded, setCalLoaded] = useState(false);
   const searchParams = useSearchParams();
   const service = searchParams.get('service');
 
@@ -346,14 +347,21 @@ function BookPageInner() {
               />
               <div
                 ref={calContainerRef}
-                className="rounded-2xl overflow-hidden"
+                className="relative rounded-2xl overflow-hidden"
                 style={{ height: 700, transition: 'height 0.3s ease' }}
               >
+                {!calLoaded && (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 z-10">
+                    <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                    <p className="text-sm text-greige">Loading calendar...</p>
+                  </div>
+                )}
                 <iframe
                   src={calUrl}
-                  className="w-full h-full border-0"
+                  className={`w-full h-full border-0 transition-opacity duration-500 ${calLoaded ? 'opacity-100' : 'opacity-0'}`}
                   title="Book a meeting with The Starr Conspiracy"
                   allow="payment"
+                  onLoad={() => setCalLoaded(true)}
                 />
               </div>
             </div>

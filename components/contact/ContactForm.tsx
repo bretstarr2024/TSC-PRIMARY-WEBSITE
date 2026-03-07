@@ -103,7 +103,7 @@ export function ContactForm({ source, ctaId }: ContactFormProps) {
                 required
                 autoComplete="name"
                 placeholder="Your name"
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-greige focus:border-atomic-tangerine focus:ring-1 focus:ring-atomic-tangerine outline-none transition-colors text-sm"
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-greige focus:border-white/40 focus:ring-1 focus:ring-white/20 outline-none transition-colors text-sm"
                 disabled={formState === 'loading'}
               />
             </div>
@@ -116,7 +116,7 @@ export function ContactForm({ source, ctaId }: ContactFormProps) {
                 required
                 autoComplete="email"
                 placeholder="you@company.com"
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-greige focus:border-atomic-tangerine focus:ring-1 focus:ring-atomic-tangerine outline-none transition-colors text-sm"
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-greige focus:border-white/40 focus:ring-1 focus:ring-white/20 outline-none transition-colors text-sm"
                 disabled={formState === 'loading'}
               />
             </div>
@@ -127,7 +127,7 @@ export function ContactForm({ source, ctaId }: ContactFormProps) {
                 name="message"
                 rows={3}
                 placeholder="What are you working on?"
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-greige focus:border-atomic-tangerine focus:ring-1 focus:ring-atomic-tangerine outline-none transition-colors text-sm resize-none"
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-greige focus:border-white/40 focus:ring-1 focus:ring-white/20 outline-none transition-colors text-sm resize-none"
                 disabled={formState === 'loading'}
               />
             </div>
@@ -139,7 +139,7 @@ export function ContactForm({ source, ctaId }: ContactFormProps) {
             <button
               type="submit"
               disabled={formState === 'loading'}
-              className="w-full px-6 py-3 bg-atomic-tangerine text-white font-medium rounded-lg hover:bg-hot-sauce transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+              className="w-full px-6 py-3 bg-heart-of-darkness text-white border-2 border-white font-medium rounded-lg hover:bg-white hover:text-heart-of-darkness transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
               data-track-cta="contact-form"
               data-track-component="ContactForm"
               data-track-label="Send it"

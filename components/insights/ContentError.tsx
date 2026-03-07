@@ -17,16 +17,16 @@ export function ContentError({ error, reset, backLabel, backHref }: ContentError
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="text-center max-w-md">
-        <h2 className="font-arcade text-2xl sm:text-3xl text-atomic-tangerine mb-6">
+        <h2 className="font-arcade text-2xl sm:text-3xl text-white mb-6">
           Content unavailable
         </h2>
-        <p className="text-shroomy mb-8">
+        <p className="mb-8">
           This content couldn&apos;t be loaded right now. Try again, or browse other content.
         </p>
         <div className="flex gap-4 justify-center flex-wrap">
           <button
             onClick={reset}
-            className="px-6 py-3 bg-atomic-tangerine text-white font-medium rounded-lg hover:bg-hot-sauce transition-colors text-sm"
+            className="px-6 py-3 bg-heart-of-darkness text-white border-2 border-white font-medium rounded-lg hover:bg-white hover:text-heart-of-darkness transition-colors text-sm"
           >
             Try again
           </button>

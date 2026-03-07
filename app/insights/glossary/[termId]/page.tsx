@@ -87,17 +87,17 @@ export default async function GlossaryDetailPage({
           />
 
           <nav className="flex items-center gap-2 text-sm text-greige mb-8">
-            <Link href="/" className="hover:text-atomic-tangerine">Home</Link>
+            <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
-            <Link href="/insights" className="hover:text-atomic-tangerine">Grist</Link>
+            <Link href="/insights" className="hover:text-white/80">Insights</Link>
             <span>/</span>
-            <Link href="/insights/glossary" className="hover:text-atomic-tangerine">Glossary</Link>
+            <Link href="/insights/glossary" className="hover:text-white/80">Glossary</Link>
             <span>/</span>
             <span className="text-shroomy">{term.term}</span>
           </nav>
 
           <div className="flex items-center gap-3 mb-4">
-            <h1 className="text-3xl md:text-5xl font-bold text-white">
+            <h1 className="text-3xl md:text-5xl font-normal text-white">
               {term.term}
             </h1>
             {term.acronym && (
@@ -109,7 +109,7 @@ export default async function GlossaryDetailPage({
 
           {/* Short definition - quote box */}
           <div className="glass rounded-xl p-8 mb-10 border-l-4 border-[#73F5FF]">
-            <p className="text-shroomy text-lg leading-relaxed italic">
+            <p className="text-lg leading-relaxed italic">
               {term.shortDefinition}
             </p>
           </div>
@@ -117,7 +117,7 @@ export default async function GlossaryDetailPage({
           {/* Full definition */}
           <section className="mb-10">
             <h2 className="text-xl font-semibold text-white mb-4">Full Definition</h2>
-            <p className="text-shroomy leading-relaxed whitespace-pre-line">
+            <p className="leading-relaxed whitespace-pre-line">
               {term.fullDefinition}
             </p>
           </section>
@@ -128,7 +128,7 @@ export default async function GlossaryDetailPage({
               <h2 className="text-xl font-semibold text-white mb-4">Examples</h2>
               <ol className="list-decimal list-inside space-y-3">
                 {term.examples.map((example, i) => (
-                  <li key={i} className="text-shroomy leading-relaxed">
+                  <li key={i} className="leading-relaxed">
                     {example}
                   </li>
                 ))}
@@ -144,7 +144,7 @@ export default async function GlossaryDetailPage({
                 {term.synonyms.map((synonym) => (
                   <span
                     key={synonym}
-                    className="text-sm text-shroomy bg-white/5 px-3 py-1.5 rounded-lg"
+                    className="text-sm bg-white/5 px-3 py-1.5 rounded-lg"
                   >
                     {synonym}
                   </span>

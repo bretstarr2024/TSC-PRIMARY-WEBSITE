@@ -23,11 +23,11 @@ export function ServiceCTA() {
 
       <div className="relative z-10 section-wide text-center">
         <AnimatedSection>
-          <h2 className="text-5xl md:text-6xl lg:text-8xl font-bold tracking-tight text-white leading-[1] mb-8">
+          <h2 className="text-5xl md:text-6xl lg:text-8xl font-normal tracking-tight text-white leading-[1] mb-8">
             Ready to build your<br />
-            <span className="text-atomic-tangerine">marketing engine?</span>
+            <span className="text-white font-extrabold">marketing engine?</span>
           </h2>
-          <p className="text-xl text-shroomy max-w-xl mx-auto mb-12 leading-relaxed">
+          <p className="text-xl max-w-xl mx-auto mb-12 leading-relaxed">
             Whether you need strategic fundamentals, AI transformation, or both —
             let&apos;s figure out what moves the needle.
           </p>

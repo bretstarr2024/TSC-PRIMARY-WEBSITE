@@ -8,7 +8,7 @@ import { getAllPublishedTools, Tool } from '@/lib/resources-db';
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: 'Tools | Grist',
+  title: 'Tools | Insights',
   description: 'Interactive checklists, assessments, and calculators for B2B marketing leaders.',
 };
 
@@ -47,15 +47,15 @@ export default async function ToolsListingPage() {
       <main className="min-h-screen pt-32 pb-20">
         <section className="section-wide mb-12">
           <nav className="flex items-center gap-2 text-sm text-greige mb-8">
-            <Link href="/" className="hover:text-atomic-tangerine">Home</Link>
+            <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
-            <Link href="/insights" className="hover:text-atomic-tangerine">Grist</Link>
+            <Link href="/insights" className="hover:text-white/80">Insights</Link>
             <span>/</span>
             <span className="text-shroomy">Tools</span>
           </nav>
 
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">Tools</h1>
-          <p className="text-xl text-shroomy max-w-2xl">
+          <h1 className="text-4xl md:text-6xl font-normal text-white mb-4">Tools</h1>
+          <p className="text-xl max-w-2xl">
             Interactive checklists, assessments, and calculators for B2B marketing leaders.
           </p>
         </section>
@@ -66,7 +66,7 @@ export default async function ToolsListingPage() {
             {Object.entries(TOOL_TYPE_INFO).map(([type, info]) => (
               <div key={type} className="glass rounded-xl p-6" style={{ borderLeftColor: '#F472B6', borderLeftWidth: 3 }}>
                 <h3 className="text-white font-semibold text-lg mb-2">{info.label}</h3>
-                <p className="text-shroomy text-sm">{info.description}</p>
+                <p className="text-sm">{info.description}</p>
                 <p className="text-greige text-xs mt-3">
                   {toolsByType[type]?.length || 0} available
                 </p>

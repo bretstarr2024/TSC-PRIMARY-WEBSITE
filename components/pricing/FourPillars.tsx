@@ -43,12 +43,12 @@ export function FourPillars() {
     <section className="relative py-24 md:py-32 overflow-hidden">
       <div className="relative z-10 section-wide">
         <AnimatedSection>
-          <p className="text-xs font-semibold text-greige uppercase tracking-[0.3em] mb-6">
+          <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-6">
             Four Pillars
           </p>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight max-w-4xl mb-16">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal text-white leading-tight max-w-4xl mb-16">
             The operating model behind{' '}
-            <span className="text-atomic-tangerine">the results.</span>
+            <span className="text-white font-extrabold">the results.</span>
           </h2>
         </AnimatedSection>
 
@@ -76,13 +76,13 @@ export function FourPillars() {
                   >
                     {pillar.number}
                   </span>
-                  <h3 className="text-xl md:text-2xl font-bold text-white mt-3 mb-2">
+                  <h3 className="text-xl md:text-2xl font-normal text-white mt-3 mb-2">
                     {pillar.title}
                   </h3>
-                  <p className="text-base font-medium text-white/80 mb-4">
+                  <p className="text-base font-medium text-shroomy mb-4">
                     {pillar.hook}
                   </p>
-                  <p className="text-sm text-shroomy leading-relaxed">
+                  <p className="text-sm leading-relaxed">
                     {pillar.description}
                   </p>
                 </div>

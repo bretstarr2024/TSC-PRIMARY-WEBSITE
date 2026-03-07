@@ -33,10 +33,10 @@ export function BridgeStatement() {
       </div>
 
       <AnimatedSection className="relative z-10 text-center section-wide">
-        <h2 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight text-white leading-[1.1]">
+        <h2 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-normal tracking-tight text-white leading-[1.1]">
           You don&apos;t have to choose.
         </h2>
-        <p className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight text-atomic-tangerine leading-[1.1] mt-2">
+        <p className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold tracking-tight text-white leading-[1.1] mt-2">
           You get both.
         </p>
         {!playing && (
