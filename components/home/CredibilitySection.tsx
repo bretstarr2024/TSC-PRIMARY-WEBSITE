@@ -62,20 +62,17 @@ export function CredibilitySection() {
         <div className="max-w-4xl mx-auto">
           {/* Bret — visionary, bold, declarative */}
           <AnimatedSection>
-            <div className="relative">
-              <span className="text-8xl text-atomic-tangerine/80 font-serif leading-none">&ldquo;</span>
-              <blockquote className="pt-3 pb-3 text-2xl md:text-3xl text-white font-normal leading-snug text-center">
+            <div className="relative pl-12 md:pl-16">
+              <span className="text-8xl text-atomic-tangerine/50 font-serif leading-none absolute left-0 -top-2">&ldquo;</span>
+              <blockquote className="text-2xl md:text-3xl text-white font-normal leading-snug">
                 I wrote the book on brand, marketing, and sales fundamentals.
                 Then we built the AI systems that make those fundamentals scale.
                 That&apos;s not a pivot — that&apos;s the whole point.
               </blockquote>
-              <div className="mt-6 flex items-center justify-center gap-3">
-                <div className="w-10 h-px bg-atomic-tangerine/60" />
-                <p className="text-sm text-white">
-                  <span className="font-bold">Bret Starr</span>
-                  <span> · Founder</span>
-                </p>
-              </div>
+              <p className="mt-6 text-sm text-white">
+                <span className="font-bold">Bret Starr</span>
+                <span> · Founder</span>
+              </p>
             </div>
           </AnimatedSection>
         </div>

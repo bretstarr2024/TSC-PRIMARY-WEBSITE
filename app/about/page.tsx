@@ -7,7 +7,7 @@ import { ApproachSection } from '@/components/about/ApproachSection';
 import { LeadershipSection } from '@/components/about/LeadershipSection';
 import { ClientMarquee } from '@/components/about/ClientMarquee';
 import { AboutFaq } from '@/components/about/AboutFaq';
-import { ServiceCTA } from '@/components/services/ServiceCTA';
+import { CoinSlotCTA } from '@/components/CoinSlotCTA';
 import { getOrganizationSchema } from '@/lib/schema/people';
 import { getAboutFaqSchema } from '@/lib/schema/about-faq';
 import { aboutBreadcrumb } from '@/lib/schema/breadcrumbs';
@@ -57,7 +57,21 @@ export default function AboutPage() {
         <LeadershipSection />
         <ClientMarquee />
         <AboutFaq />
-        <ServiceCTA />
+        {/* CTA */}
+        <section className="relative py-32 md:py-40 overflow-hidden">
+          <div className="relative z-10 section-wide text-center">
+            <h2 className="text-3xl md:text-4xl font-normal text-white leading-tight mb-4">
+              Now you know who we are.{' '}
+              <span className="font-extrabold">Let&apos;s talk about you.</span>
+            </h2>
+            <p className="text-lg text-shroomy mb-12 max-w-xl mx-auto">
+              Tell us what you&apos;re building. We&apos;ll tell you how we can help.
+            </p>
+            <div className="flex justify-center">
+              <CoinSlotCTA href="/contact?cta=about-bottom" ctaId="about-bottom" />
+            </div>
+          </div>
+        </section>
       </main>
       <Footer />
     </>

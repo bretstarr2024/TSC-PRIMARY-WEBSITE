@@ -125,3 +125,13 @@ export const careersBreadcrumb = () =>
 
 export const privacyBreadcrumb = () =>
   breadcrumb([{ name: 'Home', url: '/' }, { name: 'Privacy Policy', url: '/privacy' }]);
+
+export const workBreadcrumb = () =>
+  breadcrumb([{ name: 'Home', url: '/' }, { name: 'Work', url: '/work' }]);
+
+export const workCaseStudyBreadcrumb = (client?: string) =>
+  breadcrumb([
+    { name: 'Home', url: '/' },
+    { name: 'Work', url: '/work' },
+    ...(client ? [{ name: client, url: '#' }] : []),
+  ]);

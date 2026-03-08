@@ -1,7 +1,6 @@
 'use client';
 
 import { AnimatedSection } from '@/components/AnimatedSection';
-import { GradientText } from '@/components/AnimatedText';
 
 export function PricingHero() {
   return (
@@ -9,12 +8,15 @@ export function PricingHero() {
       <div className="section-wide">
         <AnimatedSection>
           <div className="max-w-4xl">
-            <h1 className="text-5xl md:text-7xl font-normal text-white mb-6">
-              <GradientText>Pricing</GradientText>
+            <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-6">
+              Pricing
+            </p>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-normal text-white leading-[1.1] mb-6">
+              We don&apos;t sell hours.{' '}
+              <span className="text-white font-extrabold">We sell growth.</span>
             </h1>
             <p className="text-xl md:text-2xl text-shroomy leading-relaxed max-w-2xl">
-              We don&apos;t sell hours. We sell growth. A fundamentally different
-              model — built for this era, not adapted from the last one.
+              Instead of billing for time, we give you ongoing access to senior talent, AI workflows, proprietary agents, and institutional knowledge, all bundled into a single recurring engagement built for this era.
             </p>
           </div>
         </AnimatedSection>

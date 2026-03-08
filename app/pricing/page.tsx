@@ -7,7 +7,7 @@ import { FourPillars } from '@/components/pricing/FourPillars';
 import { WhyDifferent } from '@/components/pricing/WhyDifferent';
 import { PricingCards } from '@/components/pricing/PricingCards';
 import { AnswerCapsulesSection } from '@/components/AnswerCapsulesSection';
-import { ServiceCTA } from '@/components/services/ServiceCTA';
+import { CoinSlotCTA } from '@/components/CoinSlotCTA';
 import { pricingBreadcrumb } from '@/lib/schema/breadcrumbs';
 import { pricingCapsules } from '@/lib/schema/pricing-faq';
 import { getFaqSchema } from '@/lib/schema/service-faq';
@@ -61,7 +61,21 @@ export default function PricingPage() {
           subheading="Straight answers about pricing, engagement models, and what you actually get."
         />
 
-        <ServiceCTA />
+        {/* CTA */}
+        <section className="relative py-32 md:py-40 overflow-hidden">
+          <div className="relative z-10 section-wide text-center">
+            <h2 className="text-3xl md:text-4xl font-normal text-white leading-tight mb-4">
+              Like the model?{' '}
+              <span className="font-extrabold">Let&apos;s scope yours.</span>
+            </h2>
+            <p className="text-lg text-shroomy mb-12 max-w-xl mx-auto">
+              No generic proposals. Tell us what you need and we&apos;ll build a plan that fits.
+            </p>
+            <div className="flex justify-center">
+              <CoinSlotCTA href="/contact?cta=pricing-bottom" ctaId="pricing-bottom" />
+            </div>
+          </div>
+        </section>
       </main>
       <Footer />
     </>

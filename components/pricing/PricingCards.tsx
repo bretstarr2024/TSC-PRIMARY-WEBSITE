@@ -37,12 +37,7 @@ export function PricingCards() {
               />
 
               <div className="relative z-10 flex flex-col h-full">
-                <h3 className="text-2xl font-normal text-white mb-2">Subscription</h3>
-                <div className="flex items-baseline gap-1 mb-1">
-                  <span className="text-4xl md:text-5xl font-black text-white">$15K</span>
-                  <span className="text-lg">/month</span>
-                </div>
-                <p className="text-sm text-greige mb-6">minimum</p>
+                <h3 className="text-2xl font-normal text-white mb-6">Subscription</h3>
 
                 <div className="w-full h-px bg-white/10 mb-6" />
 
@@ -88,11 +83,7 @@ export function PricingCards() {
               transition={{ duration: 0.3 }}
             >
               <div className="relative z-10 flex flex-col h-full">
-                <h3 className="text-2xl font-normal text-white mb-2">Project</h3>
-                <div className="flex items-baseline gap-1 mb-1">
-                  <span className="text-4xl md:text-5xl font-black text-white">$30K</span>
-                </div>
-                <p className="text-sm text-greige mb-6">minimum</p>
+                <h3 className="text-2xl font-normal text-white mb-6">Project</h3>
 
                 <div className="w-full h-px bg-white/10 mb-6" />
 

@@ -172,42 +172,6 @@ const leaders: Leader[] = [
     bio: 'JJ has spent over a decade shaping marketing strategy for some of the most ambitious B2B technology companies in the market. He leads the development of cohesive, pipeline-driving strategies that help tech brands cut through the noise. As former VP of Strategy and AI Innovation, he was at the forefront of integrating artificial intelligence into TSC\'s strategic offerings. His expertise spans media strategy, digital marketing, SEM, SEO, conversion rate optimization, paid media, and account-based experience (ABX). JJ holds a BS in Marketing from TCU.',
     linkedin: 'https://www.linkedin.com/in/jj-la-pata-761b1a64/',
   },
-  {
-    name: 'Nancy Crabb',
-    title: 'VP of Brand Experience',
-    bio: 'Nancy has spent nearly 15 years shaping the visual and brand identity of some of B2B marketing\'s most compelling work. Equal parts strategist and maker, she ensures that brand expression is not just beautiful, but meaningful. Before TSC, she led creative services at PPAI, served as Director of Marketing and Communications at UNT Libraries, and was Partner and Marketing Director at Aduro Bean & Leaf, a specialty fair-trade coffee roastery. She holds a BA in Arts and Performance from UT Dallas and studied Communications at UT Austin.',
-    linkedin: 'https://www.linkedin.com/in/nancy-pummill-crabb-2946726/',
-  },
-  {
-    name: 'Noah Johnson',
-    title: 'Director of Digital Strategy',
-    bio: 'Noah brings more than a decade of experience designing and executing digital marketing strategies across a wide range of industries. Before TSC, he spent four years at Metric Theory (a Media.Monks company), rising from Account Director to Director of Media Planning & Strategy, leading planning for high-budget international multi-channel accounts with monthly budgets exceeding $1M. He leads digital strategy for B2B tech clients spanning SEM, AEO, paid social, programmatic media, SEO, and multi-channel campaign management. Noah holds a BBA in Marketing from Harding University.',
-    linkedin: 'https://www.linkedin.com/in/noahmorganjohnson/',
-  },
-  {
-    name: 'Joanna Castle',
-    title: 'Senior Client Success & Marketing Manager',
-    bio: 'Joanna serves as a strategic advisor for B2B SaaS clients navigating go-to-market strategy, marketing execution, and customer experience. With over five years at TSC and seven years in B2B marketing, she specializes in helping SaaS and professional services brands turn complex business goals into audience-driven strategies. Before TSC, she led digital marketing at BGM — the first CPA firm to work exclusively with the cannabis industry — and consulted for accounting firms across the Bay Area. She holds a BA in Communication from Denison University and studied Political Science at the University of Oslo.',
-    linkedin: 'https://www.linkedin.com/in/joanna-castle/',
-  },
-  {
-    name: 'Evan Addison Payne',
-    title: 'Marketing & Brand Strategist',
-    bio: 'Evan focuses on scaling go-to-market programs for work tech companies to maximize pipeline and drive measurable business impact. His career spans brand strategy, digital marketing, communications, and customer experience across Fortune 500 companies and high-growth startups. Previous roles include Senior Manager of Digital Marketing at hireEZ and Director of Marketing, Communications & Digital Engagement for AIDS/LifeCycle at the San Francisco AIDS Foundation. He holds a BS in Marketing and Economics from the University of Arkansas.',
-    linkedin: 'https://www.linkedin.com/in/evanaddison/',
-  },
-  {
-    name: 'Melissa Casey',
-    title: 'Growth Strategist',
-    bio: 'Melissa is a seasoned business development and marketing leader with more than 15 years of experience across nonprofit, agency, and tech environments. As former Managing Director of Marketing and Partnerships at Truth Initiative, she led grassroots, experiential, and out-of-home marketing for one of the country\'s most recognized public health brands. A lifelong traveler who has explored nearly 100 countries, she is fluent in English and Spanish with professional proficiency in French, Portuguese, Arabic, and Italian. She holds a BA from Georgetown University.',
-    linkedin: 'https://www.linkedin.com/in/mel-casey/',
-  },
-  {
-    name: 'Skylin Solaris',
-    title: 'AI Workflow Engineer',
-    bio: 'Skylin sits at the intersection of artificial intelligence and B2B marketing — building the systems, automations, and integrations that turn AI\'s promise into actual business results. While most agencies are still talking about adopting AI, Skylin is the one wiring it in. A self-taught systems thinker with deep expertise in ERP and CRM integrations, APIs, EDI, and cross-platform data exchange, he\'s migrated legacy systems, rescued at-risk integration projects, and once stabilized a company after a cyberattack before anyone had time to panic.',
-    linkedin: 'https://www.linkedin.com/in/technicallyrain/',
-  },
 ];
 
 export function LeadershipSection() {
@@ -243,12 +207,12 @@ export function LeadershipSection() {
             Leadership
           </p>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal text-white leading-tight max-w-3xl mb-16">
-            Senior people doing the work.{' '}
-            <span className="text-white font-extrabold">Not selling it.</span>
+            Experience that runs deep.{' '}
+            <span className="text-white font-extrabold">Vision that runs ahead.</span>
           </h2>
         </AnimatedSection>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {leaders.map((leader, i) => (
             <AnimatedSection key={leader.name} delay={i * 0.05}>
               <motion.div

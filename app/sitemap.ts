@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next';
 import { INDUSTRIES } from '@/lib/industries-data';
 import { SERVICE_CATEGORIES } from '@/lib/services-data';
+import { CASE_STUDIES } from '@/lib/work-data';
 import { getAllPublishedBlogPosts } from '@/lib/content-db';
 import {
   getAllPublishedFaqs,
@@ -37,7 +38,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/book`, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${BASE_URL}/contact`, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${BASE_URL}/careers`, changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${BASE_URL}/work`, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE_URL}/work`, changeFrequency: 'monthly', priority: 0.8 },
+    ...CASE_STUDIES.map((cs) => ({
+      url: `${BASE_URL}/work/${cs.slug}`,
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    })),
     { url: `${BASE_URL}/insights`, changeFrequency: 'daily', priority: 0.9 },
     { url: `${BASE_URL}/insights/blog`, changeFrequency: 'daily', priority: 0.8 },
     { url: `${BASE_URL}/insights/faq`, changeFrequency: 'daily', priority: 0.8 },

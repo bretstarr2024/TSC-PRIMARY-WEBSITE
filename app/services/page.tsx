@@ -6,7 +6,7 @@ import { ServiceDualUniverse } from '@/components/services/ServiceDualUniverse';
 import { ServiceCategoryStrip } from '@/components/services/ServiceCategoryStrip';
 import { AiCascade } from '@/components/services/AiCascade';
 import { BridgeStatement } from '@/components/services/BridgeStatement';
-import { ServiceCTA } from '@/components/services/ServiceCTA';
+import { CoinSlotCTA } from '@/components/CoinSlotCTA';
 import { AnswerCapsulesSection } from '@/components/AnswerCapsulesSection';
 import { getStrategicCategories, getAiCategory } from '@/lib/services-data';
 import { servicesCapsules } from '@/lib/schema/hub-faqs';
@@ -51,7 +51,21 @@ export default function ServicesPage() {
           subheading="What B2B marketing leaders want to know before engaging an agency."
         />
 
-        <ServiceCTA />
+        {/* CTA */}
+        <section className="relative py-32 md:py-40 overflow-hidden">
+          <div className="relative z-10 section-wide text-center">
+            <h2 className="text-3xl md:text-4xl font-normal text-white leading-tight mb-4">
+              Ready to build your{' '}
+              <span className="font-extrabold">marketing engine?</span>
+            </h2>
+            <p className="text-lg text-shroomy mb-12 max-w-xl mx-auto">
+              Whether you need strategic fundamentals, AI transformation, or both, let&apos;s figure out what moves the needle.
+            </p>
+            <div className="flex justify-center">
+              <CoinSlotCTA href="/contact?cta=services-bottom" ctaId="services-bottom" />
+            </div>
+          </div>
+        </section>
       </main>
       <Footer />
 

@@ -14,7 +14,7 @@ export function SnakeGameTrigger() {
   return (
     <>
       {playing && <SnakeGame onClose={() => setPlaying(false)} />}
-      <div className="flex justify-center my-8">
+      <div className="flex justify-end pr-8 md:pr-16 my-8">
         {!playing && <ArcadeButton onClick={() => setPlaying(true)} delay={0.5} />}
       </div>
     </>

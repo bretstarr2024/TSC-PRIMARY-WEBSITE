@@ -4,7 +4,7 @@ import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { ServiceDetailSection } from '@/components/services/ServiceDetailSection';
 import { AnswerCapsulesSection } from '@/components/AnswerCapsulesSection';
-import { ServiceCTA } from '@/components/services/ServiceCTA';
+import { CoinSlotCTA } from '@/components/CoinSlotCTA';
 import { ServiceSubpageHero } from '@/components/services/ServiceSubpageHero';
 import { RelatedServices } from '@/components/services/RelatedServices';
 import {
@@ -71,7 +71,21 @@ export default function ServiceCategoryPage({ params }: PageProps) {
         />
 
         <RelatedServices categories={related} currentSlug={params.slug} />
-        <ServiceCTA />
+        {/* CTA */}
+        <section className="relative py-32 md:py-40 overflow-hidden">
+          <div className="relative z-10 section-wide text-center">
+            <h2 className="text-3xl md:text-4xl font-normal text-white leading-tight mb-4">
+              Ready to build your{' '}
+              <span className="font-extrabold">marketing engine?</span>
+            </h2>
+            <p className="text-lg text-shroomy mb-12 max-w-xl mx-auto">
+              Whether you need strategic fundamentals, AI transformation, or both, let&apos;s figure out what moves the needle.
+            </p>
+            <div className="flex justify-center">
+              <CoinSlotCTA href="/contact?cta=services-bottom" ctaId="services-bottom" />
+            </div>
+          </div>
+        </section>
       </main>
       <Footer />
 

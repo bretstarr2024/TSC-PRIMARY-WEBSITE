@@ -30,10 +30,17 @@ export function HomepageCinematic() {
   const soundRef = useRef<IntroSoundEngine | null>(null);
   const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
-  // Skip cinematic entirely if reduced motion is preferred
+  // Skip cinematic if reduced motion is preferred
   const shouldSkip = !!reducedMotion;
 
   const [phase, setPhase] = useState<Phase>(shouldSkip ? 'complete' : 'start-screen');
+
+  // Also skip if already seen this session (checked after mount to avoid SSR mismatch)
+  useEffect(() => {
+    if (!shouldSkip && sessionStorage.getItem('tsc-cinematic-seen') === '1') {
+      setPhase('complete');
+    }
+  }, [shouldSkip]);
 
   // Create sound engine on mount (no AudioContext yet — just an object)
   useEffect(() => {
@@ -92,6 +99,9 @@ export function HomepageCinematic() {
               break;
           }
         }
+        if (nextPhase === 'complete') {
+          sessionStorage.setItem('tsc-cinematic-seen', '1');
+        }
       }, at);
       timersRef.current.push(timer);
     });
@@ -103,6 +113,7 @@ export function HomepageCinematic() {
     timersRef.current = [];
     soundRef.current?.dispose();
     setPhase('complete');
+    sessionStorage.setItem('tsc-cinematic-seen', '1');
   }, []);
 
   const showOverlay = phase !== 'rebirth' && phase !== 'complete';

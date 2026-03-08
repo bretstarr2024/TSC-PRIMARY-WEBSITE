@@ -55,6 +55,13 @@ export default function VerticalsPage() {
         {/* CTA */}
         <section className="relative py-32 md:py-40 overflow-hidden">
           <div className="relative z-10 section-wide text-center">
+            <h2 className="text-3xl md:text-4xl font-normal text-white leading-tight mb-4">
+              We speak your{' '}
+              <span className="font-extrabold">vertical fluently.</span>
+            </h2>
+            <p className="text-lg text-shroomy mb-12 max-w-xl mx-auto">
+              25+ years in B2B tech means we already know your buyers, your competitors, and what actually moves pipeline.
+            </p>
             <div className="flex justify-center">
               <CoinSlotCTA href="/contact?cta=verticals-bottom" ctaId="verticals-bottom" />
             </div>

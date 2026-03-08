@@ -74,10 +74,10 @@ export function Header() {
               className="ml-4 inline-flex items-center px-5 py-2.5 text-sm font-medium text-white bg-heart-of-darkness border-2 border-white rounded-lg hover:bg-white hover:text-heart-of-darkness transition-colors hover:no-underline"
               data-track-cta="header-nav"
               data-track-component="Header"
-              data-track-label="New Game"
+              data-track-label="Let's go"
               data-track-destination="/contact"
             >
-              New Game
+              Let&apos;s go
             </Link>
           </nav>
 
@@ -144,10 +144,10 @@ export function Header() {
                   className="mt-4 inline-flex items-center px-8 py-4 text-lg font-medium text-white bg-heart-of-darkness border-2 border-white rounded-lg hover:bg-white hover:text-heart-of-darkness transition-colors hover:no-underline"
                   data-track-cta="header-mobile"
                   data-track-component="Header"
-                  data-track-label="New Game"
+                  data-track-label="Let's go"
                   data-track-destination="/contact"
                 >
-                  New Game
+                  Let&apos;s go
                 </Link>
               </motion.div>
             </nav>

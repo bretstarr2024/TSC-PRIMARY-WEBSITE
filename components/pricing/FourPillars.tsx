@@ -6,10 +6,10 @@ import { AnimatedSection } from '@/components/AnimatedSection';
 const pillars = [
   {
     number: '01',
-    title: 'Senior Talent Only',
-    hook: 'No juniors. No account coordinators. No learning curves.',
+    title: 'Senior Talent',
+    hook: 'And the balance of experience + innovation.',
     description:
-      "Every engagement is led and executed by practitioners with decades of B2B experience \u2014 demand generation, pipeline strategy, positioning, category creation \u2014 who've spent years becoming fluent in AI-native tools and methods. The fundamentals give us judgment. The AI gives us leverage.",
+      "Every engagement is led by people who've actually done the work. Decades in B2B\u2014demand gen, pipeline, positioning, category creation. Now paired with deep fluency in AI-native tools and methods.\n\nThe fundamentals give us judgment. AI gives us leverage.",
     color: '#FF5910',
   },
   {

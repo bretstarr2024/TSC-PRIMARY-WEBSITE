@@ -7,7 +7,7 @@ interface CtaStripProps {
 
 export function CtaStrip({
   headline = 'Ready to talk strategy?',
-  buttonText = "New Game",
+  buttonText = "Let's go",
   buttonHref = '/contact',
   ctaId = 'insights-strip',
 }: CtaStripProps) {

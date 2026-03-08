@@ -105,7 +105,7 @@ export function ContentRenderer({ content }: ContentRendererProps) {
       elements.push(
         <blockquote
           key={key++}
-          className="border-l-4 border-atomic-tangerine pl-4 py-2 my-6 italic"
+          className="relative pl-12 md:pl-16 py-2 my-6 italic before:content-['\201C'] before:absolute before:left-0 before:-top-2 before:text-8xl before:font-serif before:leading-none before:text-atomic-tangerine/50"
         >
           {renderInline(trimmed.slice(2))}
         </blockquote>
