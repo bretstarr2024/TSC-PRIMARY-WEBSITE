@@ -7,12 +7,12 @@ import { CoinSlotCTA } from '@/components/CoinSlotCTA';
 import { CASE_STUDIES } from '@/lib/work-data';
 
 export const metadata: Metadata = {
-  title: 'Work | The Starr Conspiracy',
+  title: 'Examples | The Starr Conspiracy',
   description:
     'The work that built our reputation. Brands, campaigns, and strategies that moved markets for B2B tech companies.',
-  alternates: { canonical: '/work' },
+  alternates: { canonical: '/examples' },
   openGraph: {
-    title: 'Work | The Starr Conspiracy',
+    title: 'Examples | The Starr Conspiracy',
     description:
       'The work that built our reputation. Brands, campaigns, and strategies that moved markets for B2B tech companies.',
   },

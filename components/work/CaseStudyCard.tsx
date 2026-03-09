@@ -13,7 +13,7 @@ export function CaseStudyCard({ study, index }: CaseStudyCardProps) {
   return (
     <AnimatedSection delay={index * 0.1}>
       <Link
-        href={`/work/${study.slug}`}
+        href={`/examples/${study.slug}`}
         scroll={true}
         className="group block relative overflow-hidden rounded-2xl border border-white/10 hover:border-white/30 transition-all duration-300"
       >

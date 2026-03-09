@@ -105,7 +105,7 @@ export const aboutBreadcrumb = () =>
   breadcrumb([{ name: 'Home', url: '/' }, { name: 'About', url: '/about' }]);
 
 export const pricingBreadcrumb = () =>
-  breadcrumb([{ name: 'Home', url: '/' }, { name: 'Pricing', url: '/pricing' }]);
+  breadcrumb([{ name: 'Home', url: '/' }, { name: 'Working Together', url: '/working-together' }]);
 
 export const verticalsBreadcrumb = () =>
   breadcrumb([{ name: 'Home', url: '/' }, { name: 'Verticals', url: '/verticals' }]);
@@ -127,11 +127,11 @@ export const privacyBreadcrumb = () =>
   breadcrumb([{ name: 'Home', url: '/' }, { name: 'Privacy Policy', url: '/privacy' }]);
 
 export const workBreadcrumb = () =>
-  breadcrumb([{ name: 'Home', url: '/' }, { name: 'Work', url: '/work' }]);
+  breadcrumb([{ name: 'Home', url: '/' }, { name: 'Examples', url: '/examples' }]);
 
 export const workCaseStudyBreadcrumb = (client?: string) =>
   breadcrumb([
     { name: 'Home', url: '/' },
-    { name: 'Work', url: '/work' },
+    { name: 'Examples', url: '/examples' },
     ...(client ? [{ name: client, url: '#' }] : []),
   ]);

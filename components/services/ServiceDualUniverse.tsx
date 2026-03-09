@@ -8,30 +8,35 @@ import type { ServiceCategory } from '@/lib/services-data';
 const strategicCapabilities = [
   {
     name: 'Brand & Positioning',
+    slug: 'brand-strategy',
     color: '#FF5910',
     shape: 'circle' as const,
     items: ['Market Positioning', 'Messaging Frameworks', 'Brand Architecture', 'Visual Identity & Design Systems', 'Thought Leadership Programs', 'Analyst Relations'],
   },
   {
     name: 'GTM Strategy & Architecture',
+    slug: 'gtm-strategy',
     color: '#FFBDAE',
     shape: 'triangle' as const,
     items: ['ICP & Buyer Journey Mapping', 'Competitive Positioning', 'Launch Strategy', 'Sales Enablement', 'Channel Strategy', 'Revenue Architecture'],
   },
   {
     name: 'Demand & Pipeline',
+    slug: 'demand-generation',
     color: '#73F5FF',
     shape: 'square' as const,
     items: ['Full-Funnel Demand Gen', 'Account-Based Marketing', 'Marketing Automation & Nurture', 'Lead Scoring & Routing', 'Pipeline Analytics', 'Campaign Operations'],
   },
   {
     name: 'Digital Performance',
+    slug: 'digital-performance',
     color: '#E1FF00',
     shape: 'rectangle' as const,
     items: ['Paid Search & Social', 'Programmatic & Retargeting', 'SEO & Technical SEO', 'PR & Analyst Relations', 'Social Media Management', 'Conversion Rate Optimization'],
   },
   {
     name: 'Content & Creative',
+    slug: 'content-marketing',
     color: '#ED0AD2',
     shape: 'pentagon' as const,
     items: ['Content Strategy & Production', 'Research & Original Data', 'Campaign Creative & Design', 'Video & Motion', 'Web & Interactive', 'Brand Editorial'],
@@ -95,12 +100,12 @@ export function ServiceDualUniverse({ aiCategory }: ServiceDualUniverseProps) {
                   viewport={{ once: true }}
                   transition={{ delay: 0.4 + i * 0.1, duration: 0.5 }}
                 >
-                  <div className="flex items-center gap-3 mb-2">
+                  <a href={`#${cat.slug}`} className="flex items-center gap-3 mb-2 group/link">
                     <ServiceShapeIcon shape={cat.shape} color={cat.color} size={24} />
-                    <span className="text-white font-medium">
+                    <span className="text-white font-medium group-hover/link:underline underline-offset-4 transition-colors" style={{ textDecorationColor: cat.color }}>
                       {cat.name}
                     </span>
-                  </div>
+                  </a>
                   <p className="text-sm text-greige pl-[36px]">
                     {cat.items.join(' · ')}
                   </p>
@@ -108,15 +113,10 @@ export function ServiceDualUniverse({ aiCategory }: ServiceDualUniverseProps) {
               ))}
             </div>
 
-            <p className="mt-8 text-sm text-greige">
-              {strategicCapabilities.reduce((acc, cat) => acc + cat.items.length, 0)} capabilities across{' '}
-              {strategicCapabilities.length} disciplines
-            </p>
           </AnimatedSection>
 
           {/* AI-Native Side */}
           <AnimatedSection direction="right" className="pl-0 md:pl-16">
-            <ServiceShapeIcon shape="hexagon" color="#088BA0" size={48} className="mb-4" />
             <h3 className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-3">
               AI-Native Solutions
             </h3>
@@ -140,7 +140,7 @@ export function ServiceDualUniverse({ aiCategory }: ServiceDualUniverseProps) {
                     viewport={{ once: true }}
                     transition={{ delay: 0.4 + i * 0.08, duration: 0.5 }}
                   >
-                    <span className="mt-2 w-1.5 h-1.5 rounded-full bg-hurricane-sky flex-shrink-0" />
+                    <ServiceShapeIcon shape="hexagon" color="#088BA0" size={18} className="mt-0.5 flex-shrink-0" />
                     <div>
                       <span className="text-white font-medium text-sm font-mono">
                         {service.name}
@@ -151,9 +151,6 @@ export function ServiceDualUniverse({ aiCategory }: ServiceDualUniverseProps) {
               </div>
             )}
 
-            <p className="mt-8 text-sm text-greige">
-              {aiCategory?.services.length} AI-native services — from strategy to production systems
-            </p>
           </AnimatedSection>
         </div>
       </div>

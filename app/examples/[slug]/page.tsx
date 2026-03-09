@@ -26,11 +26,11 @@ export function generateMetadata({ params }: PageProps): Metadata {
   if (!study) return {};
 
   return {
-    title: `${study.client} | Work | The Starr Conspiracy`,
+    title: `${study.client} | Examples | The Starr Conspiracy`,
     description: `${study.headline} ${study.subheading}`,
-    alternates: { canonical: `/work/${params.slug}` },
+    alternates: { canonical: `/examples/${params.slug}` },
     openGraph: {
-      title: `${study.client} | Work | The Starr Conspiracy`,
+      title: `${study.client} | Examples | The Starr Conspiracy`,
       description: study.headline,
     },
   };

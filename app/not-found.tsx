@@ -7,14 +7,6 @@ import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 
 export default function NotFound() {
-  // Brand color rings — stacked outward like Charlie's Angels poster glow
-  const rings = [
-    { color: '#FF5910', size: 280, delay: 0 },    // Atomic Tangerine (inner)
-    { color: '#E1FF00', size: 340, delay: 0.1 },   // Neon Cactus
-    { color: '#73F5FF', size: 400, delay: 0.2 },   // Tidal Wave
-    { color: '#ED0AD2', size: 460, delay: 0.3 },   // Sprinkles (outer)
-  ];
-
   const reducedMotion = useReducedMotion();
 
   return (
@@ -35,39 +27,10 @@ export default function NotFound() {
           transition={{ duration: 20, repeat: reducedMotion ? 0 : Infinity, ease: 'linear' }}
         />
 
-        <div className="relative z-10 text-center px-4">
-          {/* Photo with glow rings */}
-          <div className="relative mx-auto mb-12" style={{ width: 460, height: 460 }}>
-            {/* Animated glow rings */}
-            {rings.map((ring, i) => (
-              <motion.div
-                key={i}
-                className="absolute rounded-full"
-                style={{
-                  width: ring.size,
-                  height: ring.size,
-                  top: '50%',
-                  left: '50%',
-                  marginTop: -ring.size / 2,
-                  marginLeft: -ring.size / 2,
-                  border: `2px solid ${ring.color}`,
-                  boxShadow: `0 0 30px ${ring.color}40, inset 0 0 30px ${ring.color}20, 0 0 60px ${ring.color}20`,
-                }}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={reducedMotion ? {} : {
-                  opacity: [0.4, 0.8, 0.4],
-                  scale: [0.98, 1.02, 0.98],
-                  rotate: [0, i % 2 === 0 ? 360 : -360],
-                }}
-                transition={{
-                  opacity: { duration: 3, repeat: reducedMotion ? 0 : Infinity, delay: ring.delay, ease: 'easeInOut' },
-                  scale: { duration: 4, repeat: reducedMotion ? 0 : Infinity, delay: ring.delay, ease: 'easeInOut' },
-                  rotate: { duration: 30 + i * 10, repeat: reducedMotion ? 0 : Infinity, ease: 'linear' },
-                }}
-              />
-            ))}
-
-            {/* Inner glow disc behind photo */}
+        <div className="relative z-10 text-center px-4 mt-[200px]">
+          {/* Ocho with glow */}
+          <div className="relative mx-auto -mb-1" style={{ width: 460, height: 460 }}>
+            {/* Inner glow disc behind logo */}
             <motion.div
               className="absolute rounded-full"
               style={{
@@ -87,9 +50,9 @@ export default function NotFound() {
               transition={{ duration: 4, repeat: reducedMotion ? 0 : Infinity, ease: 'easeInOut' }}
             />
 
-            {/* The photo — circular, 70s treatment */}
+            {/* Dancing Ocho */}
             <motion.div
-              className="absolute rounded-full overflow-hidden"
+              className="absolute"
               style={{
                 width: 220,
                 height: 220,
@@ -97,35 +60,29 @@ export default function NotFound() {
                 left: '50%',
                 marginTop: -110,
                 marginLeft: -110,
-                boxShadow: `
-                  0 0 40px #FF591080,
-                  0 0 80px #ED0AD240,
-                  0 0 120px #73F5FF30
-                `,
               }}
-              initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
-              animate={{ opacity: 1, scale: 1, rotate: 0 }}
-              transition={{ duration: 1, delay: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={reducedMotion ? { opacity: 1, scale: 1 } : {
+                opacity: 1,
+                scale: 1,
+                rotate: [-5, 5, -5],
+                y: [0, -12, 0],
+              }}
+              transition={reducedMotion ? { duration: 0.6 } : {
+                opacity: { duration: 0.6 },
+                scale: { duration: 0.6 },
+                rotate: { duration: 1.2, repeat: Infinity, ease: 'easeInOut' },
+                y: { duration: 0.8, repeat: Infinity, ease: 'easeInOut' },
+              }}
             >
               <Image
-                src="/images/melissa.jpeg"
-                alt="Hi, Melissa!"
+                src="/images/ocho.png"
+                alt="Ocho the octopus"
                 width={220}
                 height={220}
-                className="object-cover w-full h-full"
-                style={{
-                  filter: 'contrast(1.2) saturate(1.3) brightness(1.1)',
-                  mixBlendMode: 'screen',
-                }}
+                className="object-contain w-full h-full drop-shadow-[0_0_30px_#FF591080]"
+                style={{ imageRendering: 'pixelated' }}
                 priority
-              />
-              {/* Warm overlay for 70s vibe */}
-              <div
-                className="absolute inset-0 rounded-full"
-                style={{
-                  background: 'linear-gradient(135deg, #FF591020 0%, #ED0AD215 50%, #73F5FF10 100%)',
-                  mixBlendMode: 'overlay',
-                }}
               />
             </motion.div>
 
@@ -172,7 +129,7 @@ export default function NotFound() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.5 }}
           >
-            Hi, Melissa!
+            Oops!
           </motion.h1>
 
           <motion.p
@@ -181,7 +138,7 @@ export default function NotFound() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.8 }}
           >
-            This page doesn&apos;t exist yet. But we&apos;re building fast.
+            Looks like this page doesn&apos;t exist.
           </motion.p>
 
           <motion.div
@@ -196,6 +153,7 @@ export default function NotFound() {
               Back to Home
             </Link>
           </motion.div>
+          <div className="pb-[50px]" />
         </div>
       </main>
       <Footer />

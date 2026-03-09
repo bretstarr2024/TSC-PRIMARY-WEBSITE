@@ -14,10 +14,10 @@ const serviceLinks = [
 
 const companyLinks = [
   { href: '/about', label: 'About' },
-  { href: '/work', label: 'Work' },
+  { href: '/examples', label: 'Examples' },
   { href: '/verticals', label: 'Verticals' },
   { href: '/insights', label: 'Insights' },
-  { href: '/pricing', label: 'Pricing' },
+  { href: '/working-together', label: 'Working Together' },
   { href: '/careers', label: 'Careers' },
 ];
 

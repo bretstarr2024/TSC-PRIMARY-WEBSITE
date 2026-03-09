@@ -757,7 +757,7 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
     borderClass: 'border-hurricane-sky/30',
     services: [
       {
-        name: 'AI Marketing Strategy',
+        name: 'Marketing Strategy',
         slug: 'ai-marketing-strategy',
         tagline: 'A real AI roadmap. Not another innovation theater deck.',
         description:
@@ -775,7 +775,7 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
           'Marketing leaders who know AI matters but need a clear-eyed strategic partner — not a vendor selling tools.',
       },
       {
-        name: 'AI GTM Activation',
+        name: 'GTM Activation',
         slug: 'ai-gtm-activation',
         tagline: 'Launch faster. Target sharper. Convert smarter.',
         description:
@@ -793,7 +793,7 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
           'B2B companies launching products or entering markets who want AI to compress their time-to-pipeline instead of waiting quarters for results.',
       },
       {
-        name: 'AI Content Studio',
+        name: 'Content Studio',
         slug: 'ai-content-studio',
         tagline: 'Human-quality output at non-human scale.',
         description:
@@ -811,7 +811,7 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
           'Companies that need 10x content output without 10x headcount — and won\'t accept generic AI slop as a substitute for quality.',
       },
       {
-        name: 'AI Design Studio',
+        name: 'Design Studio',
         slug: 'ai-design-studio',
         tagline: 'Creative at the speed of strategy.',
         description:

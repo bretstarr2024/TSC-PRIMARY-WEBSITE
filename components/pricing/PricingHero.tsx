@@ -9,7 +9,7 @@ export function PricingHero() {
         <AnimatedSection>
           <div className="max-w-4xl">
             <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-6">
-              Pricing
+              Working Together
             </p>
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-normal text-white leading-[1.1] mb-6">
               We don&apos;t sell hours.{' '}

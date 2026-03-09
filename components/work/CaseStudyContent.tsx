@@ -23,7 +23,7 @@ export function CaseStudyContent({ study, prev, next }: CaseStudyContentProps) {
         <div className="section-wide">
           <AnimatedSection>
             <Link
-              href="/work"
+              href="/examples"
               className="inline-flex items-center gap-2 text-sm font-bold text-shroomy hover:text-white transition-colors mb-8"
             >
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="stroke-current" strokeWidth="2">
@@ -178,7 +178,7 @@ export function CaseStudyContent({ study, prev, next }: CaseStudyContentProps) {
           <div className="flex justify-between items-center border-t border-white/10 pt-8">
             {prev ? (
               <Link
-                href={`/work/${prev.slug}`}
+                href={`/examples/${prev.slug}`}
                 className="group inline-flex items-center gap-3 text-shroomy hover:text-white transition-colors"
               >
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="stroke-current" strokeWidth="2">
@@ -189,7 +189,7 @@ export function CaseStudyContent({ study, prev, next }: CaseStudyContentProps) {
             ) : <div />}
             {next ? (
               <Link
-                href={`/work/${next.slug}`}
+                href={`/examples/${next.slug}`}
                 className="group inline-flex items-center gap-3 text-shroomy hover:text-white transition-colors"
               >
                 <span className="text-sm font-bold">{next.client}</span>

@@ -13,10 +13,10 @@ import { pricingCapsules } from '@/lib/schema/pricing-faq';
 import { getFaqSchema } from '@/lib/schema/service-faq';
 
 export const metadata: Metadata = {
-  title: 'Pricing | The Starr Conspiracy',
+  title: 'Working Together | The Starr Conspiracy',
   description:
     'Senior B2B marketing talent combined with AI-native execution. Subscriptions from $15K/month, projects from $30K. We sell growth, not hours.',
-  alternates: { canonical: '/pricing' },
+  alternates: { canonical: '/working-together' },
   keywords: [
     'B2B marketing agency pricing',
     'AI marketing agency',
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     'B2B agency model',
   ],
   openGraph: {
-    title: 'Pricing | The Starr Conspiracy',
+    title: 'Working Together | The Starr Conspiracy',
     description:
       'Senior B2B marketing talent combined with AI-native execution. Subscriptions from $15K/month, projects from $30K.',
   },
