@@ -1,0 +1,91 @@
+session_id: "LXXI"
+date: "2026-03-09"
+branch: main
+version: "0.44.0"  # MINOR: Authentic arcade intro sequences + Breakout speed fix
+
+deployment:
+  platform: vercel
+  url: "tsc-primary-website.vercel.app"
+  environment: production
+  job_id: "TBD"
+  status: pending
+
+build_verification:
+  next_build: PASS  # 407 routes
+  index_content: SKIP  # Expected without MONGODB_URI
+
+data_structure_consistency:
+  status: "not modified"
+  notes: "All changes are client-side game components. No MongoDB writes affected."
+
+commits:
+  - hash: "a76b911"
+    message: "feat: Add authentic arcade intro sequences to 6 games + fix Breakout speed"
+  - hash: "82a8b85"
+    message: "docs: Update roadmap with Session LXXI arcade intros"
+
+artifacts_updated:
+  - "components/careers/PacManGame.tsx — 5s intro: descending 16-note chromatic jingle (B4→C4), PLAYER ONE + READY! text"
+  - "components/work/GalagaGame.tsx — 4.5s intro: ascending arpeggio fanfare (C5→E5→G5→C6), PLAYER 1 + STAGE 1 text, new 'intro' GamePhase"
+  - "components/industries/SpaceInvadersGame.tsx — 1.5s intro: 3 march beats during countdown, PLAY PLAYER⋅1⋅ with blinking <1>"
+  - "components/home/AsteroidsGame.tsx — 1.5s intro: alternating heartbeat thumps (48/55Hz triangle waves), ship materializes in empty space, rocks spawn after"
+  - "components/pricing/TronGame.tsx — PLAYER 1 text above existing countdown (first 2s of 3s)"
+  - "components/contact/PongGame.tsx — 0.75s intro: single 440Hz beep, PLAYER 1 quick fade"
+  - "components/services/BreakoutGame.tsx — BASE_SPEED 4.5→7, SPEED_INC 0.4→0.5"
+  - "app/examples/page.tsx — Restored GalagaGameTrigger import after Racheal's refactor"
+  - "docs/roadmap.md — Session LXXI entry"
+
+decisions_made:
+  - decision: "Each intro faithful to original arcade cabinet experience"
+    rationale: "User directive: true to the era and the form. Researched what happened after inserting a quarter in each original game."
+    reversible: true
+  - decision: "Intros auto-play after ArcadeButton (no second click)"
+    rationale: "ArcadeButton click is already the user gesture. Adding a second click would break flow."
+    reversible: true
+  - decision: "Restart always skips intro (introTimer: 0)"
+    rationale: "Original arcades only showed intro once per credit. Replay should drop straight into gameplay."
+    reversible: true
+  - decision: "3 games skipped: Frogger (has intro), Breakout (no intro in original), Snake (no intro in original)"
+    rationale: "Already authentic — adding an intro would be inauthentic."
+    reversible: false
+  - decision: "Breakout BASE_SPEED 4.5→7"
+    rationale: "Game was 'excruciatingly slow' per user. 7 feels right for immediate engagement."
+    reversible: true
+
+known_risks:
+  - risk: "unsafe-inline still in CSP script-src and style-src"
+    mitigation: "Deferred to future session. Removing requires nonce-based CSP middleware and page-by-page testing."
+    severity: medium
+  - risk: "In-memory rate limiter resets per serverless invocation"
+    mitigation: "Acceptable for now. Persistent rate limiting would require Redis or similar external store."
+    severity: low
+
+explicitly_deferred:
+  - "Full nonce-based CSP — needs middleware + careful page-by-page testing"
+  - "Work/Examples page content — needs direction from user (Racheal's refactor in place)"
+  - "Domain configuration — not yet ready to go live"
+  - "Production cron monitoring — verify pipeline fixes from LX work in prod"
+
+next_actions:
+  - "Verify on production — all 6 game intros play correctly with sound and text"
+  - "Verify Breakout speed feels right on production"
+  - "Monitor production cron runs — verify rate-limit retry and idempotent seeding"
+  - "Domain configuration when ready to go live"
+
+invariants:
+  - "Database: tsc collection in MongoDB Atlas (never aeo)"
+  - "Deploy hook required after every git push (auto-deploy disabled)"
+  - "Donor codebase: /Volumes/Queen Amara/AnswerEngineOptimization.com/"
+  - "GTM Kernel: /Volumes/Queen Amara/GTM Kernel/"
+  - "All API clients use pure fetch (no SDK dependencies)"
+  - "All OG image routes use nodejs runtime (not edge)"
+  - "metadataBase in app/layout.tsx must be updated when final domain is assigned"
+  - "Start screen is Frame 0 — indefinite wait for user click before cinematic begins"
+  - "Button click in start screen IS the AudioContext user gesture — sound guaranteed after click"
+  - "Arcade intros auto-play after ArcadeButton — no second click required"
+  - "Restart always skips intro (introTimer: 0 in all restart paths)"
+  - "Reduced motion skips intros (timer set to 0)"
+  - "Touch buttons hidden during intro phases"
+  - "CRT dot persists through blackout as last point of light until rebirth"
+  - "Hero is always-mounted behind overlay — never conditionally rendered"
+  - "Cinematic replays every page load (no sessionStorage gating)"

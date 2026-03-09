@@ -1,16 +1,63 @@
 # Session Handoff: The Starr Conspiracy Smart Website
 
-**Last Updated:** March 4, 2026 (Session LXX)
+**Last Updated:** March 9, 2026 (Session LXXI)
 
 ---
 
 ## Current Phase: Phase 2 — Homepage Complete, Pipeline Active
 
-The site is live with **143 pages** (407 routes) across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, Vercel Analytics + Speed Insights, **dynamic OG images on every page**, RSS feed, cookie consent, privacy policy, print stylesheet, and a **fully activated autonomous content pipeline**. Three rounds of code review complete. The homepage now opens with a **start screen** ("THE STARR CONSPIRACY" title card + 1_player button) that gates the GAME OVER cinematic — solving the browser audio autoplay issue and strengthening the narrative arc.
+The site is live with **143 pages** (407 routes) across **11 content types**, **15 verticals**, **37 services**, 9 arcade games, full email infrastructure, CTA tracking, Vercel Analytics + Speed Insights, **dynamic OG images on every page**, RSS feed, cookie consent, privacy policy, print stylesheet, and a **fully activated autonomous content pipeline**. Three rounds of code review complete. All 9 arcade games now have **authentic opening sequences** true to the original cabinet experience — complete with synthesized SFX faithful to each era.
 
 - **Active systems:** Vercel deployment (tsc-primary-website.vercel.app), GitHub (bretstarr2024/TSC-PRIMARY-WEBSITE), MongoDB Atlas (`tsc` database), Resend email, 3 Vercel cron jobs (ACTIVE — CRON_SECRET set), Vercel Analytics + Speed Insights
-- **Next actions:** Verify start screen on production, build Work page, domain configuration
-- **Roadmap:** See `docs/roadmap.md` Session LXX
+- **Next actions:** Verify arcade intros on production, domain configuration
+- **Roadmap:** See `docs/roadmap.md` Session LXXI
+
+### Session LXXI Summary (March 9, 2026)
+
+**Focus:** Authentic arcade opening sequences for 6 games, Breakout speed fix, Galaga restored to Examples page.
+
+**What was done:**
+
+1. **`components/services/BreakoutGame.tsx`** — BASE_SPEED 4.5→7, SPEED_INC 0.4→0.5. Game was too slow at start.
+
+2. **`app/examples/page.tsx`** — Restored GalagaGameTrigger import lost in Racheal's Examples page refactor.
+
+3. **`components/careers/PacManGame.tsx`** — 5s intro: "PLAYER ONE" + "READY!" text, 16-note descending chromatic jingle (B4→C4) via `pacmanIntro()` SFX.
+
+4. **`components/work/GalagaGame.tsx`** — 4.5s intro: "PLAYER 1" → "STAGE 1" text, ascending arpeggio fanfare (C5→E5→G5→C6). New `'intro'` GamePhase.
+
+5. **`components/industries/SpaceInvadersGame.tsx`** — 1.5s intro: "PLAY PLAYER⋅1⋅" with blinking <1>, first 3 march beats.
+
+6. **`components/home/AsteroidsGame.tsx`** — 1.5s intro: "PLAYER 1" fade, ship materializes in empty space, alternating heartbeat thumps (48/55Hz).
+
+7. **`components/pricing/TronGame.tsx`** — "PLAYER 1" text above countdown (first 2s).
+
+8. **`components/contact/PongGame.tsx`** — 0.75s intro: single 440Hz beep, "PLAYER 1" quick fade.
+
+**3 games skipped (already authentic):** Frogger (has intro), Breakout (original had none), Snake (Nokia had none).
+
+**Commits this session:**
+- `a76b911` — feat: Add authentic arcade intro sequences to 6 games + fix Breakout speed
+- `82a8b85` — docs: Update roadmap with Session LXXI arcade intros
+
+**Results:**
+- Build: 407 routes, PASS
+- All 6 intros faithful to original arcade cabinets with Web Audio API synthesized sounds
+- Restart skips intro in all games, touch buttons hidden during intro, reduced motion skips
+
+**Key decisions (do not re-debate):**
+- Each intro researched against original arcade behavior — faithful recreation
+- Intros auto-play after ArcadeButton (no second click)
+- Restart always skips intro (introTimer: 0)
+- 3 games correctly have no intro (authentic to originals)
+- Breakout speed 7 feels right per user feedback
+
+**What must happen next:**
+1. Verify all arcade intros on production
+2. Monitor production cron runs
+3. Domain configuration when ready to go live
+
+---
 
 ### Session LXX Summary (March 4, 2026)
 
