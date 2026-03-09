@@ -1,6 +1,6 @@
 # Build Roadmap: The Starr Conspiracy Smart Website
 
-**Status: SESSION LXVII** | Last Updated: March 3, 2026
+**Status: SESSION LXXI** | Last Updated: March 9, 2026
 
 ## Scope
 - Build an AI-native, self-generating content engine for The Starr Conspiracy
@@ -1454,6 +1454,44 @@ Build: 131 pages (up from 127), 0 type errors.
 - [ ] Monitor production cron runs — verify pipeline fixes work in prod
 - [ ] Work page — last remaining stub
 - [ ] Domain configuration
+
+---
+
+#### Session LXXI: Arcade Intro Sequences + Breakout Speed Fix ✅ COMPLETE (Mar 9, 2026)
+
+**Focus:** Added authentic arcade opening sequences to 6 games, fixed Breakout ball speed, and restored Galaga to the Examples page after Racheal's refactor.
+
+**What was done:**
+
+1. **Breakout speed fix** (`components/services/BreakoutGame.tsx`) — BASE_SPEED increased from 4.5→7, SPEED_INC from 0.4→0.5. Game was painfully slow at start.
+
+2. **Galaga restored** (`app/examples/page.tsx`) — Racheal's Examples page refactor dropped the GalagaGameTrigger import. Re-added between case study grid and CTA section.
+
+3. **Pac-Man intro** (`components/careers/PacManGame.tsx`) — 5-second intro: "PLAYER ONE" in cyan + "READY!" in yellow. 16-note descending chromatic jingle (B4→C4) via `pacmanIntro()` SFX — THE sound of arcades. Intro plays on first game only; restarts skip it.
+
+4. **Galaga intro** (`components/work/GalagaGame.tsx`) — 4.5-second intro: "PLAYER 1" (frames 270→180), then "STAGE 1" in cyan with fade-out (frames 180→0). Ascending arpeggio fanfare (C5→E5→G5→C6) via `galagaFanfare()`. New `'intro'` phase added to GamePhase union.
+
+5. **Space Invaders intro** (`components/industries/SpaceInvadersGame.tsx`) — 1.5-second intro: "PLAY PLAYER⋅1⋅" with blinking `<1>`. Triggers first 3 march beats during intro to establish the iconic rhythm before gameplay.
+
+6. **Asteroids intro** (`components/home/AsteroidsGame.tsx`) — 1.5-second intro: "PLAYER 1" in yellow with fade-out. Ship materializes in empty space (rocks spawn after intro). Alternating heartbeat thumps (48Hz/55Hz triangle waves) via `heartbeat()` SFX.
+
+7. **Tron enhancement** (`components/pricing/TronGame.tsx`) — Added "PLAYER 1" text above existing countdown numbers (visible during first 2s of 3s countdown). No structural changes.
+
+8. **Pong intro** (`components/contact/PongGame.tsx`) — 0.75-second intro: "PLAYER 1" with quick fade + single 440Hz beep via `introBeep()`. Ultra-minimal, true to form.
+
+**3 games skipped (already authentic):**
+- Frogger — already has full title screen with Ocho mascot + start prompt
+- Breakout — original had zero intro (bricks appear, ball sits on paddle)
+- Snake/Serpent Arena — Nokia Snake had no intro
+
+**Key decisions (do not re-debate):**
+- Each intro is faithful to what you saw/heard after inserting your quarter in the original arcade cabinet
+- All intros auto-play after ArcadeButton opens the game (no second click required)
+- Touch buttons hidden during intro phases
+- Restart always skips intro (introTimer: 0 in all restart paths)
+- Reduced motion skips intros (timer set to 0)
+
+**Build:** 407 routes, PASS.
 
 ---
 
