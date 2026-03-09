@@ -276,6 +276,25 @@ class SFX {
     });
   }
 
+  galagaFanfare() {
+    const c = this.ensure();
+    if (!c || this._muted) return;
+    /* Iconic Galaga "Game Start" ascending fanfare */
+    const notes = [523.25, 659.25, 783.99, 1046.50];
+    notes.forEach((freq, i) => {
+      const o = c.createOscillator();
+      const g = c.createGain();
+      o.type = 'square';
+      const t = c.currentTime + i * 0.12;
+      const dur = i === 3 ? 0.3 : 0.14;
+      o.frequency.setValueAtTime(freq, t);
+      g.gain.setValueAtTime(0.12, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+      o.connect(g).connect(c.destination);
+      o.start(t); o.stop(t + dur);
+    });
+  }
+
   dispose() {
     try { this.ctx?.close(); } catch { /* */ }
     this.ctx = null;
@@ -287,7 +306,7 @@ class SFX {
    ══════════════════════════════════════════════════════ */
 type EnemyType = 'grunt' | 'butterfly' | 'boss';
 type EnemyState = 'entering' | 'formation' | 'diving' | 'beaming' | 'returning' | 'dead';
-type GamePhase = 'entering' | 'playing' | 'challenge' | 'challengeResults' | 'levelComplete';
+type GamePhase = 'intro' | 'entering' | 'playing' | 'challenge' | 'challengeResults' | 'levelComplete';
 type BeamPhase = 'none' | 'deploying' | 'active' | 'retracting';
 
 interface Star { x: number; y: number; speed: number; size: number; color: string }
@@ -347,6 +366,7 @@ interface RescueShip {
 
 interface Game {
   phase: GamePhase;
+  introTimer: number;
   enemies: GEnemy[];
   playerX: number;
   playerAlive: boolean;
@@ -805,7 +825,7 @@ function calcButtons(w: number, h: number, g: Game): TBtn[] {
     } else {
       btns.push({ id: 'restart', x: w / 2, y: h * 0.82, r: r * 1.4, label: '\u25B6' });
     }
-  } else if (!g.over) {
+  } else if (!g.over && g.phase !== 'intro') {
     btns.push({ id: 'tleft', x: r * 2, y: h - r * 2.5, r, label: '\u25C0' });
     btns.push({ id: 'tright', x: r * 5, y: h - r * 2.5, r, label: '\u25B6' });
     btns.push({ id: 'fire', x: w - r * 2.5, y: h - r * 2.5, r: r * 1.3, label: '\u25CF' });
@@ -856,7 +876,8 @@ export function GalagaGame({ onClose }: { onClose: () => void }) {
   }
 
   const init = useCallback((w: number, h: number): Game => ({
-    phase: 'entering',
+    phase: 'intro',
+    introTimer: 270,
     enemies: makeFormation(1, w, h),
     playerX: w / 2,
     playerAlive: true,
@@ -971,7 +992,7 @@ export function GalagaGame({ onClose }: { onClose: () => void }) {
           return;
         }
         if (e.key === 'm' || e.key === 'M') { sfx.toggle(); return; }
-        if (e.key === 'Enter') { keys.current.clear(); game.current = init(el.width, el.height); setIsOver(false); }
+        if (e.key === 'Enter') { keys.current.clear(); game.current = init(el.width, el.height); game.current.phase = 'entering'; game.current.introTimer = 0; setIsOver(false); }
         return;
       }
 
@@ -1018,7 +1039,7 @@ export function GalagaGame({ onClose }: { onClose: () => void }) {
             if (g.scoreIndex === 0 && !localStorage.getItem('tsc-galaga-boss')) { localStorage.setItem('tsc-galaga-boss', '1'); bossActive.current = true; setBossData({ game: 'galaga', score: g.score, initials }); }
           }
         } else if (justTouched('restart')) {
-          game.current = init(el.width, el.height); setIsOver(false);
+          game.current = init(el.width, el.height); game.current.phase = 'entering'; game.current.introTimer = 0; setIsOver(false);
           prevTouch.current = { ...ta }; raf.current = requestAnimationFrame(loop); return;
         }
       }
@@ -1032,7 +1053,14 @@ export function GalagaGame({ onClose }: { onClose: () => void }) {
       g.breathPhase += 0.015;
       g.formationOffsetX = Math.sin(g.frame * 0.01) * 30;
 
-      if (!g.over && g.levelFlash <= 0 && g.phase !== 'challengeResults') {
+      /* ── Intro phase: PLAYER 1 + STAGE 1 + fanfare ── */
+      if (g.phase === 'intro') {
+        if (g.introTimer === 180) sfx.galagaFanfare();
+        g.introTimer--;
+        if (g.introTimer <= 0) g.phase = 'entering';
+      }
+
+      if (!g.over && g.levelFlash <= 0 && g.phase !== 'challengeResults' && g.phase !== 'intro') {
 
         /* ── Player movement (always active unless captured) ── */
         if (g.playerAlive && g.capturedByBoss < 0) {
@@ -1701,8 +1729,28 @@ export function GalagaGame({ onClose }: { onClose: () => void }) {
         ctx.fillText('DUAL', 20, 80);
       }
 
+      /* ── Intro screen ── */
+      if (g.phase === 'intro') {
+        ctx.textAlign = 'center';
+        /* "PLAYER 1" — visible for first 90 frames (270→180) */
+        if (g.introTimer > 180) {
+          ctx.fillStyle = C.ui;
+          ctx.font = 'bold 28px monospace';
+          ctx.fillText('PLAYER 1', w / 2, h / 2 - 30);
+        }
+        /* "STAGE 1" — appears at frame 180, visible until end */
+        if (g.introTimer <= 180) {
+          /* Fade out in last 30 frames */
+          ctx.globalAlpha = g.introTimer < 30 ? g.introTimer / 30 : 1;
+          ctx.fillStyle = C.boss;
+          ctx.font = 'bold 24px monospace';
+          ctx.fillText(`STAGE ${g.level}`, w / 2, h / 2 + 10);
+          ctx.globalAlpha = 1;
+        }
+      }
+
       /* ── Launch prompt ── */
-      if (g.frame < 120 && !g.over && g.levelFlash <= 0 && g.phase !== 'challenge' && g.phase !== 'challengeResults') {
+      if (g.phase === 'entering' && g.frame < 120 && !g.over && g.levelFlash <= 0) {
         ctx.fillStyle = C.ui;
         ctx.globalAlpha = 0.5 + 0.3 * Math.sin(g.frame * 0.06);
         ctx.font = '16px monospace'; ctx.textAlign = 'center';

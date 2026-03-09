@@ -242,6 +242,34 @@ class SFX {
     });
   }
 
+  pacmanIntro() {
+    const c = this.ensure();
+    if (!c || this._muted) return;
+    /* Iconic Pac-Man opening jingle — descending chromatic cascade with ascending resolve */
+    const notes = [
+      /* Descending run */
+      493.88, 466.16, 440.00, 415.30, 392.00, 369.99, 349.23, 329.63,
+      311.13, 293.66, 277.18, 261.63,
+      /* Brief pause then ascending resolve */
+      349.23, 392.00, 440.00, 523.25,
+    ];
+    const dur = 0.12;
+    const gap = 0.14;
+    notes.forEach((freq, i) => {
+      /* Small pause before the ascending resolve (after note 12) */
+      const offset = i < 12 ? i * gap : 12 * gap + 0.2 + (i - 12) * gap;
+      const o = c.createOscillator();
+      const g = c.createGain();
+      o.type = 'square';
+      o.frequency.setValueAtTime(freq, c.currentTime + offset);
+      g.gain.setValueAtTime(0.1, c.currentTime + offset);
+      g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + offset + dur);
+      o.connect(g).connect(c.destination);
+      o.start(c.currentTime + offset);
+      o.stop(c.currentTime + offset + dur);
+    });
+  }
+
   dispose() {
     this.stopSiren();
     try { this.ctx?.close(); } catch { /* */ }
@@ -307,6 +335,7 @@ interface Game {
   modePhase: number;
   deathAnim: number;
   sparks: Spark[];
+  introTimer: number;
   readyTimer: number;
   enteringInitials: boolean;
   initialsChars: number[];
@@ -365,7 +394,7 @@ function calcButtons(w: number, h: number, g: Game): TBtn[] {
     } else {
       btns.push({ id: 'restart', x: w / 2, y: h * 0.82, r: r * 1.4, label: '\u25B6' });
     }
-  } else if (!g.over && g.readyTimer <= 0 && g.deathAnim <= 0) {
+  } else if (!g.over && g.introTimer <= 0 && g.readyTimer <= 0 && g.deathAnim <= 0) {
     /* D-pad for gameplay */
     const cx = w / 2;
     const cy = h - r * 4;
@@ -570,6 +599,7 @@ export function PacManGame({ onClose }: { onClose: () => void }) {
       modePhase: 0,
       deathAnim: 0,
       sparks: [],
+      introTimer: 300,
       readyTimer: 120,
       enteringInitials: false,
       initialsChars: [0, 0, 0],
@@ -682,6 +712,8 @@ export function PacManGame({ onClose }: { onClose: () => void }) {
         if (e.key === 'Enter') {
           keys.current.clear();
           game.current = init(el.width, el.height);
+          game.current.introTimer = 0;
+          sirenStarted = false;
           setIsOver(false);
         }
         return;
@@ -746,6 +778,8 @@ export function PacManGame({ onClose }: { onClose: () => void }) {
           }
         } else if (justTouched('restart')) {
           game.current = init(el.width, el.height);
+          game.current.introTimer = 0;
+          sirenStarted = false;
           setIsOver(false);
           prevTouch.current = { ...ta };
           raf.current = requestAnimationFrame(loop);
@@ -768,8 +802,15 @@ export function PacManGame({ onClose }: { onClose: () => void }) {
       const ox = g.offsetX;
       const oy = g.offsetY;
 
+      /* ── Intro timer (Pac-Man jingle) ── */
+      if (g.introTimer > 0) {
+        if (g.introTimer === 295) sfx.pacmanIntro();
+        g.introTimer--;
+        /* Skip to render — readyTimer frozen during intro */
+      }
+
       /* ── Ready timer ── */
-      if (g.readyTimer > 0) {
+      else if (g.readyTimer > 0) {
         g.readyTimer--;
         /* Skip to render */
       }
@@ -1497,8 +1538,20 @@ export function PacManGame({ onClose }: { onClose: () => void }) {
         ctx.restore();
       }
 
-      /* ── Ready prompt ── */
-      if (g.readyTimer > 0) {
+      /* ── Intro "PLAYER ONE" + "READY!" ── */
+      if (g.introTimer > 0) {
+        ctx.textAlign = 'center';
+        /* "PLAYER ONE" in cyan, visible throughout intro */
+        ctx.fillStyle = C.inky;
+        ctx.font = 'bold 28px monospace';
+        ctx.fillText('PLAYER ONE', w / 2, h / 2 - 30);
+        /* "READY!" in yellow below */
+        ctx.fillStyle = C.score;
+        ctx.font = 'bold 24px monospace';
+        ctx.fillText('READY!', w / 2, h / 2 + 10);
+      }
+      /* ── Ready prompt (after intro ends) ── */
+      else if (g.readyTimer > 0) {
         ctx.fillStyle = C.score;
         ctx.font = 'bold 24px monospace'; ctx.textAlign = 'center';
         ctx.fillText('READY!', w / 2, h / 2);

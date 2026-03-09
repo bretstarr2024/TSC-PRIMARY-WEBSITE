@@ -4,6 +4,7 @@ import { Footer } from '@/components/Footer';
 import { WorkHero } from '@/components/work/WorkHero';
 import { CaseStudyCard } from '@/components/work/CaseStudyCard';
 import { CoinSlotCTA } from '@/components/CoinSlotCTA';
+import { GalagaGameTrigger } from '@/components/work/GalagaGameTrigger';
 import { CASE_STUDIES } from '@/lib/work-data';
 
 export const metadata: Metadata = {
@@ -33,6 +34,7 @@ export default function WorkPage() {
               ))}
             </div>
           </div>
+          <GalagaGameTrigger />
         </section>
 
         {/* CTA */}

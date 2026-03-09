@@ -140,6 +140,19 @@ class SFX {
     });
   }
 
+  introBeep() {
+    const c = this.ensure();
+    if (!c || this._muted) return;
+    const o = c.createOscillator();
+    const g = c.createGain();
+    o.type = 'square';
+    o.frequency.setValueAtTime(440, c.currentTime);
+    g.gain.setValueAtTime(0.08, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.06);
+    o.connect(g).connect(c.destination);
+    o.start(); o.stop(c.currentTime + 0.06);
+  }
+
   dispose() {
     try { this.ctx?.close(); } catch { /* */ }
     this.ctx = null;
@@ -174,6 +187,7 @@ interface Game {
   aiReaction: number;
   rally: number;
   sparks: Spark[];
+  introTimer: number;
   serving: boolean;
   serveTimer: number;
   serveDir: 1 | -1;
@@ -322,6 +336,7 @@ export function PongGame({ onClose }: { onClose: () => void }) {
     aiReaction: 0.4,
     rally: 0,
     sparks: [],
+    introTimer: 45,
     serving: true,
     serveTimer: 60,
     serveDir: 1,
@@ -446,6 +461,7 @@ export function PongGame({ onClose }: { onClose: () => void }) {
         if (e.key === 'Enter') {
           keys.current.clear();
           game.current = init(el.width, el.height);
+          game.current.introTimer = 0;
           setIsOver(false);
         }
         return;
@@ -503,6 +519,7 @@ export function PongGame({ onClose }: { onClose: () => void }) {
           }
         } else if (justTouched('restart')) {
           game.current = init(el.width, el.height);
+          game.current.introTimer = 0;
           setIsOver(false);
           prevTouch.current = { ...ta };
           raf.current = requestAnimationFrame(loop);
@@ -549,8 +566,14 @@ export function PongGame({ onClose }: { onClose: () => void }) {
         }
         g.aiY = Math.max(g.paddleH / 2, Math.min(h - g.paddleH / 2, g.aiY));
 
-        /* ── Serve countdown ── */
-        if (g.serving) {
+        /* ── Intro timer ── */
+        if (g.introTimer > 0) {
+          if (g.introTimer === 40) sfx.introBeep();
+          g.introTimer--;
+        }
+
+        /* ── Serve countdown (frozen during intro) ── */
+        if (g.serving && g.introTimer <= 0) {
           g.serveTimer--;
           g.ballX = w / 2;
           g.ballY = h / 2;
@@ -822,8 +845,18 @@ export function PongGame({ onClose }: { onClose: () => void }) {
         ctx.globalAlpha = 1;
       }
 
+      /* ── Intro "PLAYER 1" ── */
+      if (g.introTimer > 0 && !g.over) {
+        ctx.textAlign = 'center';
+        ctx.globalAlpha = g.introTimer < 10 ? g.introTimer / 10 : 1;
+        ctx.fillStyle = C.ui;
+        ctx.font = 'bold 28px monospace';
+        ctx.fillText('PLAYER 1', w / 2, h / 2 - 60);
+        ctx.globalAlpha = 1;
+      }
+
       /* ── Serve countdown ── */
-      if (g.serving && !g.over) {
+      if (g.introTimer <= 0 && g.serving && !g.over) {
         const seconds = Math.ceil(g.serveTimer / 20);
         const countdownText = seconds > 0 ? String(seconds) : '';
         if (countdownText) {

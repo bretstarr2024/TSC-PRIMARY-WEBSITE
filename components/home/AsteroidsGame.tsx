@@ -237,6 +237,19 @@ class SFX {
     }
   }
 
+  heartbeat(low: boolean) {
+    const c = this.ensure();
+    if (!c || this._muted) return;
+    const o = c.createOscillator();
+    const g = c.createGain();
+    o.type = 'triangle';
+    o.frequency.setValueAtTime(low ? 48 : 55, c.currentTime);
+    g.gain.setValueAtTime(0.12, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.12);
+    o.connect(g).connect(c.destination);
+    o.start(); o.stop(c.currentTime + 0.12);
+  }
+
   dispose() {
     this.stopThrust();
     this.stopUfoHum();
@@ -299,6 +312,7 @@ interface Game {
   score: number;
   lives: number;
   level: number;
+  introTimer: number;
   over: boolean;
   overTimer: number;
   cooldown: number;
@@ -436,7 +450,7 @@ function calcButtons(w: number, h: number, g: Game): TBtn[] {
     } else {
       btns.push({ id: 'restart', x: w / 2, y: h * 0.82, r: r * 1.4, label: '\u25B6' });
     }
-  } else if (!g.over) {
+  } else if (!g.over && g.introTimer <= 0) {
     const by = h - 25 - r;
     btns.push({ id: 'left',   x: 25 + r,             y: by, r, label: '\u25C0' });
     btns.push({ id: 'right',  x: 25 + r * 3 + 15,    y: by, r, label: '\u25B6' });
@@ -503,11 +517,12 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
       rot: -Math.PI / 2,
       alive: true, invuln: INVULN, respawn: 0,
     },
-    rocks: spawnWave(START_ROCKS, w, h, w / 2, h / 2),
+    rocks: [],
     bullets: [], sparks: [],
     ufo: null, ufoBullets: [],
     ufoTimer: UFO_SPAWN_MIN + Math.floor(Math.random() * (UFO_SPAWN_MAX - UFO_SPAWN_MIN)),
     score: 0, lives: 3, level: 1,
+    introTimer: 90,
     over: false, overTimer: 0, cooldown: 0, shake: 0, frame: 0,
     bulletLife: Math.ceil(Math.hypot(w, h) * 0.8 / BULLET_V),
     enteringInitials: false,
@@ -612,6 +627,8 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
           sfx.stopThrust(); sfx.stopUfoHum();
           keys.current.clear();
           game.current = init(el.width, el.height);
+          game.current.introTimer = 0;
+          game.current.rocks = spawnWave(START_ROCKS, el.width, el.height, el.width / 2, el.height / 2);
           setIsOver(false);
         }
         return;
@@ -686,6 +703,8 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
           sfx.stopThrust(); sfx.stopUfoHum();
           wasThrusting = false; hadUfo = false; wasOver = false;
           game.current = init(el.width, el.height);
+          game.current.introTimer = 0;
+          game.current.rocks = spawnWave(START_ROCKS, el.width, el.height, el.width / 2, el.height / 2);
           setIsOver(false);
           prevTouch.current = { ...ta };
           raf.current = requestAnimationFrame(loop);
@@ -700,8 +719,22 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
       }
       if (justTouched('mute')) sfx.toggle();
 
+      /* ── Intro timer ── */
+      if (g.introTimer > 0) {
+        /* Alternating heartbeat thumps */
+        if (g.introTimer === 85) sfx.heartbeat(false);
+        if (g.introTimer === 65) sfx.heartbeat(true);
+        if (g.introTimer === 45) sfx.heartbeat(false);
+        if (g.introTimer === 25) sfx.heartbeat(true);
+        g.introTimer--;
+        /* Spawn rocks when intro ends */
+        if (g.introTimer === 0) {
+          g.rocks = spawnWave(START_ROCKS, w, h, g.ship.x, g.ship.y);
+        }
+      }
+
       /* ═══ GAME LOGIC ═══ */
-      if (!g.over) {
+      if (!g.over && g.introTimer <= 0) {
         const s = g.ship;
 
         /* helper: kill the ship */
@@ -1024,6 +1057,17 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
         ctx.beginPath();
         ctx.moveTo(8, 0); ctx.lineTo(-5, -4); ctx.lineTo(-3, 0); ctx.lineTo(-5, 4);
         ctx.closePath(); ctx.stroke(); ctx.restore();
+      }
+
+      /* ── Intro "PLAYER 1" text ── */
+      if (g.introTimer > 0) {
+        ctx.textAlign = 'center';
+        /* Fade out in last 20 frames */
+        ctx.globalAlpha = g.introTimer < 20 ? g.introTimer / 20 : 1;
+        ctx.fillStyle = C.score;
+        ctx.font = 'bold 28px monospace';
+        ctx.fillText('PLAYER 1', w / 2, h / 2);
+        ctx.globalAlpha = 1;
       }
 
       /* controls hint (desktop only) */

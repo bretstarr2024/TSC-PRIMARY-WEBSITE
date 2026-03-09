@@ -258,6 +258,7 @@ interface Game {
   plungerCol: number;
   flashTimer: number;
   fireCooldown: number;
+  introTimer: number;
   over: boolean;
   overTimer: number;
   shake: number;
@@ -374,7 +375,7 @@ function calcButtons(w: number, h: number, g: Game): TBtn[] {
     } else {
       btns.push({ id: 'restart', x: w / 2, y: h * 0.82, r: r * 1.4, label: '\u25B6' });
     }
-  } else if (!g.over) {
+  } else if (!g.over && g.introTimer <= 0) {
     btns.push({ id: 'left', x: r * 2, y: h - r * 2.5, r, label: '\u25C0' });
     btns.push({ id: 'right', x: r * 5, y: h - r * 2.5, r, label: '\u25B6' });
     btns.push({ id: 'fire', x: w - r * 2.5, y: h - r * 2.5, r: r * 1.3, label: '\u25CF' });
@@ -583,6 +584,7 @@ export function SpaceInvadersGame({ onClose }: { onClose: () => void }) {
     plungerCol: 0,
     flashTimer: 0,
     fireCooldown: 0,
+    introTimer: 90,
     over: false,
     overTimer: 0,
     shake: 0,
@@ -703,6 +705,7 @@ export function SpaceInvadersGame({ onClose }: { onClose: () => void }) {
         if (e.key === 'Enter') {
           keys.current.clear();
           game.current = init(el.width, el.height);
+          game.current.introTimer = 0;
           setIsOver(false);
         }
         return;
@@ -764,6 +767,7 @@ export function SpaceInvadersGame({ onClose }: { onClose: () => void }) {
           }
         } else if (justTouched('restart')) {
           game.current = init(el.width, el.height);
+          game.current.introTimer = 0;
           setIsOver(false);
           prevTouch.current = { ...ta };
           raf.current = requestAnimationFrame(loop);
@@ -774,8 +778,17 @@ export function SpaceInvadersGame({ onClose }: { onClose: () => void }) {
       if (justTouched('close')) { sfx.dispose(); onClose(); return; }
       if (justTouched('mute')) sfx.toggle();
 
+      /* ── Intro timer ── */
+      if (g.introTimer > 0) {
+        /* Play first march beats to establish the iconic rhythm */
+        if (g.introTimer === 80) sfx.march(0);
+        if (g.introTimer === 50) sfx.march(1);
+        if (g.introTimer === 20) sfx.march(2);
+        g.introTimer--;
+      }
+
       /* ═══ GAME LOGIC ═══ */
-      if (!g.over && g.levelFlash <= 0) {
+      if (!g.over && g.levelFlash <= 0 && g.introTimer <= 0) {
         /* ── Move player ── */
         if (g.playerAlive) {
           if (k.has('arrowleft') || k.has('a') || ta['left']) {
@@ -1314,8 +1327,18 @@ export function SpaceInvadersGame({ onClose }: { onClose: () => void }) {
         ctx.restore();
       }
 
+      /* ── Intro "PLAY PLAYER<1>" ── */
+      if (g.introTimer > 0) {
+        ctx.textAlign = 'center';
+        ctx.fillStyle = C.score;
+        ctx.font = 'bold 28px monospace';
+        /* Blink the "<1>" */
+        const blink = Math.floor(g.frame / 15) % 2 === 0;
+        ctx.fillText(blink ? 'PLAY PLAYER\u22C51\u22C5' : 'PLAY PLAYER   ', w / 2, h / 2);
+      }
+
       /* ── Ready prompt ── */
-      if (g.playerAlive && !g.over && g.levelFlash <= 0 && g.frame < 120) {
+      if (g.introTimer <= 0 && g.playerAlive && !g.over && g.levelFlash <= 0 && g.frame < 120) {
         ctx.fillStyle = C.ui;
         ctx.globalAlpha = 0.5 + 0.3 * Math.sin(g.frame * 0.06);
         ctx.font = '16px monospace'; ctx.textAlign = 'center';

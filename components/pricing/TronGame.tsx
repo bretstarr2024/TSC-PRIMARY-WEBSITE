@@ -931,9 +931,15 @@ export function TronGame({ onClose }: { onClose: () => void }) {
       /* ── Countdown ── */
       if (g.countdown > 0 && !g.over) {
         const sec = Math.ceil(g.countdown / 20);
+        ctx.textAlign = 'center';
+        /* "PLAYER 1" above countdown — visible for first 2 seconds */
+        if (g.countdown > 20) {
+          ctx.fillStyle = C.ui;
+          ctx.font = 'bold 20px monospace';
+          ctx.fillText('PLAYER 1', w / 2, h / 2 - 60);
+        }
         ctx.fillStyle = C.score;
         ctx.font = 'bold 72px monospace';
-        ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         const pulse = 1 + 0.1 * Math.sin(g.frame * 0.15);
         ctx.save();
