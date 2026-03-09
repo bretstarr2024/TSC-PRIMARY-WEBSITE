@@ -294,7 +294,44 @@ export function MissionGrid() {
 
   return (
     <section className="relative py-32 md:py-40 overflow-hidden">
-      {/* Animated divider */}
+      {/* Deep space background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0c1118] via-[#0e0c14] to-heart-of-darkness" />
+
+      {/* Large domain-reactive glow — shifts color when you switch domains */}
+      <motion.div
+        key={`glow-${activeDomain}`}
+        className="absolute top-[20%] right-[0%] w-[800px] h-[800px] rounded-full blur-[120px] pointer-events-none"
+        style={{ background: `radial-gradient(circle, ${meta.color}33 0%, ${meta.color}08 50%, transparent 70%)` }}
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{
+          opacity: reducedMotion ? 0.4 : [0.3, 0.55, 0.3],
+          scale: reducedMotion ? 1 : [0.95, 1.05, 0.95],
+        }}
+        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+      />
+
+      {/* Sprinkles accent — bottom left, always present */}
+      <motion.div
+        className="absolute bottom-[15%] left-[5%] w-[500px] h-[500px] rounded-full blur-[100px] pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(237,10,210,0.1) 0%, transparent 70%)' }}
+        animate={reducedMotion ? { opacity: 0.3 } : {
+          opacity: [0.2, 0.4, 0.2],
+          scale: [1, 1.1, 1],
+        }}
+        transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
+      />
+
+      {/* Tangerine warmth — top left corner */}
+      <motion.div
+        className="absolute top-[5%] left-[15%] w-[400px] h-[400px] rounded-full blur-[100px] pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(255,89,16,0.08) 0%, transparent 70%)' }}
+        animate={reducedMotion ? { opacity: 0.3 } : {
+          opacity: [0.2, 0.4, 0.2],
+        }}
+        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+      />
+
+      {/* Animated divider — brighter */}
       <div className="absolute top-0 left-0 right-0 h-px overflow-hidden">
         <motion.div
           className="h-full w-full"

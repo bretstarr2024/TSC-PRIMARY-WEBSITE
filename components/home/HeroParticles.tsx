@@ -153,20 +153,20 @@ function InnerGlow() {
   return <Sphere ref={meshRef} args={[1, 32, 32]} material={material} />;
 }
 
-function Scene() {
+function Scene({ starsOnly = false }: { starsOnly?: boolean }) {
   const light = useMemo(() => new THREE.AmbientLight(0xffffff, 0.3), []);
 
   return (
     <>
       <primitive object={light} />
       <CursorReactiveParticles />
-      <FloatingWireframe />
-      <InnerGlow />
+      {!starsOnly && <FloatingWireframe />}
+      {!starsOnly && <InnerGlow />}
     </>
   );
 }
 
-export function HeroParticles() {
+export function HeroParticles({ starsOnly = false }: { starsOnly?: boolean } = {}) {
   const [mounted, setMounted] = useState(false);
   const [visible, setVisible] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -206,7 +206,7 @@ export function HeroParticles() {
         gl={{ antialias: true, alpha: true }}
         frameloop={visible ? 'always' : 'never'}
       >
-        <Scene />
+        <Scene starsOnly={starsOnly} />
       </Canvas>
     </div>
   );

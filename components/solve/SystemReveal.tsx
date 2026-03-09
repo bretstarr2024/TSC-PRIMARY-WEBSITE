@@ -18,31 +18,68 @@ export function SystemReveal() {
 
   return (
     <section className="relative py-32 md:py-40 overflow-hidden">
-      {/* Cool-toned background */}
-      <div className="absolute inset-0 bg-[#0c1118]" />
+      {/* Deep space background — coolest part of the journey */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0c1118] via-[#08101a] to-[#0e0c14]" />
 
-      {/* Animated threshold divider */}
-      <div className="absolute top-0 left-0 right-0 h-px overflow-hidden">
+      {/* Animated threshold divider — brighter, wider glow */}
+      <div className="absolute top-0 left-0 right-0 h-[2px] overflow-hidden">
         <motion.div
           className="h-full w-full"
           style={{
-            background: 'linear-gradient(90deg, transparent, #088BA0, #73F5FF, #088BA0, transparent)',
+            background: 'linear-gradient(90deg, transparent, #088BA0, #73F5FF, #E1FF00, #088BA0, transparent)',
             backgroundSize: '200% 100%',
           }}
           animate={reducedMotion ? {} : { backgroundPosition: ['0% 0%', '200% 0%'] }}
           transition={{ duration: 5, repeat: Infinity, ease: 'linear' }}
         />
       </div>
+      {/* Glow halo below divider */}
+      <div
+        className="absolute top-0 left-0 right-0 h-32 pointer-events-none"
+        style={{ background: 'linear-gradient(to bottom, rgba(115,245,255,0.06) 0%, transparent 100%)' }}
+      />
 
-      {/* Center radial pulse */}
+      {/* Central nebula — tangerine core with sprinkles halo */}
       <motion.div
-        className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full blur-3xl"
-        style={{ background: 'radial-gradient(circle, #FF5910 0%, transparent 70%)' }}
-        animate={reducedMotion ? { opacity: 0.06 } : {
-          scale: [1, 1.15, 1],
-          opacity: [0.04, 0.08, 0.04],
+        className="absolute top-[15%] left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full blur-[130px] pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(255,89,16,0.18) 0%, rgba(237,10,210,0.06) 40%, transparent 70%)' }}
+        animate={reducedMotion ? { opacity: 0.5 } : {
+          scale: [1, 1.1, 1],
+          opacity: [0.4, 0.65, 0.4],
         }}
         transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+      />
+
+      {/* Tidal glow — behind platform mockups area */}
+      <motion.div
+        className="absolute bottom-[15%] right-[5%] w-[700px] h-[700px] rounded-full blur-[120px] pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(115,245,255,0.14) 0%, rgba(115,245,255,0.03) 50%, transparent 70%)' }}
+        animate={reducedMotion ? { opacity: 0.4 } : {
+          opacity: [0.3, 0.5, 0.3],
+          scale: [1, 1.08, 1],
+        }}
+        transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
+      />
+
+      {/* Neon cactus accent — mid left */}
+      <motion.div
+        className="absolute top-[50%] left-[3%] w-[450px] h-[450px] rounded-full blur-[100px] pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(225,255,0,0.08) 0%, transparent 70%)' }}
+        animate={reducedMotion ? { opacity: 0.25 } : {
+          opacity: [0.15, 0.3, 0.15],
+          scale: [1, 1.06, 1],
+        }}
+        transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut', delay: 5 }}
+      />
+
+      {/* Sprinkles accent — bottom left */}
+      <motion.div
+        className="absolute bottom-[25%] left-[15%] w-[350px] h-[350px] rounded-full blur-[100px] pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(237,10,210,0.08) 0%, transparent 70%)' }}
+        animate={reducedMotion ? { opacity: 0.2 } : {
+          opacity: [0.15, 0.28, 0.15],
+        }}
+        transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut', delay: 7 }}
       />
 
       <div className="relative z-10">

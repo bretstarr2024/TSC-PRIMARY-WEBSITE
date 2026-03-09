@@ -46,18 +46,44 @@ export function SolveCTA() {
 
   return (
     <section className="relative min-h-[80vh] flex items-center overflow-hidden">
-      {/* Warm gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0c1118] via-[#1a0e08] to-heart-of-darkness" />
+      {/* Warm arrival gradient — journey ends here */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0e0c14] via-[#1a0e08] to-heart-of-darkness" />
 
-      {/* Radial pulse */}
+      {/* Top glow halo — warm transition in */}
+      <div
+        className="absolute top-0 left-0 right-0 h-40 pointer-events-none"
+        style={{ background: 'linear-gradient(to bottom, rgba(237,10,210,0.04) 0%, transparent 100%)' }}
+      />
+
+      {/* Central tangerine nebula — large, warm, inviting */}
       <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-3xl"
-        style={{ background: 'radial-gradient(circle, #FF5910 0%, transparent 70%)' }}
-        animate={reducedMotion ? { opacity: 0.08 } : {
-          scale: [1, 1.15, 1],
-          opacity: [0.06, 0.12, 0.06],
+        className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-[120px] pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(255,89,16,0.2) 0%, rgba(237,10,210,0.06) 50%, transparent 70%)' }}
+        animate={reducedMotion ? { opacity: 0.5 } : {
+          scale: [1, 1.1, 1],
+          opacity: [0.4, 0.65, 0.4],
         }}
         transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+      />
+
+      {/* Tidal accent — right side */}
+      <motion.div
+        className="absolute bottom-[20%] right-[10%] w-[400px] h-[400px] rounded-full blur-[100px] pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(115,245,255,0.1) 0%, transparent 70%)' }}
+        animate={reducedMotion ? { opacity: 0.3 } : {
+          opacity: [0.2, 0.4, 0.2],
+        }}
+        transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+      />
+
+      {/* Neon cactus accent — left side */}
+      <motion.div
+        className="absolute top-[60%] left-[8%] w-[350px] h-[350px] rounded-full blur-[100px] pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(225,255,0,0.06) 0%, transparent 70%)' }}
+        animate={reducedMotion ? { opacity: 0.2 } : {
+          opacity: [0.15, 0.3, 0.15],
+        }}
+        transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut', delay: 4 }}
       />
 
       <div className="relative z-10 section-wide py-32 md:py-40">

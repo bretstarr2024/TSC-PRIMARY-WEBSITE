@@ -1,34 +1,54 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { motion, useReducedMotion } from 'framer-motion';
 import { AnimatedSection } from '@/components/AnimatedSection';
 import { GradientText } from '@/components/AnimatedText';
+
+const HeroParticles = dynamic(
+  () => import('@/components/home/HeroParticles').then((mod) => ({ default: mod.HeroParticles })),
+  { ssr: false }
+);
 
 export function SolveHero() {
   const reducedMotion = useReducedMotion();
 
   return (
-    <section className="relative min-h-[80vh] flex items-center overflow-hidden">
-      {/* Ambient radial glow */}
+    <section className="relative min-h-[90vh] flex items-center overflow-hidden">
+      {/* Three.js star particles — no wireframe sphere */}
+      <HeroParticles starsOnly />
+
+      {/* Large nebula glow — top center, tangerine-to-sprinkles blend */}
       <motion.div
-        className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-3xl opacity-10"
-        style={{ background: 'radial-gradient(circle, #FF5910 0%, transparent 70%)' }}
+        className="absolute top-[10%] left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full blur-[120px] pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(255,89,16,0.25) 0%, rgba(237,10,210,0.08) 50%, transparent 70%)' }}
         animate={reducedMotion ? {} : {
-          scale: [1, 1.2, 1],
-          opacity: [0.08, 0.15, 0.08],
+          scale: [1, 1.08, 1],
+          opacity: [0.6, 0.85, 0.6],
         }}
-        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
       />
 
-      {/* Secondary glow */}
+      {/* Tidal accent — right side */}
       <motion.div
-        className="absolute bottom-0 right-1/4 w-[400px] h-[400px] rounded-full blur-3xl opacity-5"
-        style={{ background: 'radial-gradient(circle, #73F5FF 0%, transparent 70%)' }}
+        className="absolute top-1/2 right-[5%] w-[500px] h-[500px] rounded-full blur-[100px] pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(115,245,255,0.18) 0%, transparent 70%)' }}
+        animate={reducedMotion ? {} : {
+          scale: [1, 1.12, 1],
+          opacity: [0.5, 0.8, 0.5],
+        }}
+        transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+      />
+
+      {/* Sprinkles accent — bottom left */}
+      <motion.div
+        className="absolute bottom-[10%] left-[10%] w-[400px] h-[400px] rounded-full blur-[100px] pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(237,10,210,0.12) 0%, transparent 70%)' }}
         animate={reducedMotion ? {} : {
           scale: [1, 1.15, 1],
-          opacity: [0.05, 0.1, 0.05],
+          opacity: [0.4, 0.7, 0.4],
         }}
-        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+        transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut', delay: 4 }}
       />
 
       <div className="relative z-10 section-wide py-32 md:py-40">
@@ -73,9 +93,9 @@ export function SolveHero() {
         </div>
       </div>
 
-      {/* Bottom fade */}
+      {/* Bottom fade — seamless into next section */}
       <div
-        className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
+        className="absolute bottom-0 left-0 right-0 h-48 pointer-events-none"
         style={{ background: 'linear-gradient(to bottom, transparent 0%, #141213 100%)' }}
       />
     </section>

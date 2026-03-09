@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { DiagnosticShell } from '@/components/solve/DiagnosticShell';
 import { SolveHero } from '@/components/solve/SolveHero';
 import { DomainCards } from '@/components/solve/DomainCards';
 import { MissionGrid } from '@/components/solve/MissionGrid';
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
 
 export default function DiagnosticPage() {
   return (
-    <>
+    <DiagnosticShell>
       <Header />
       <main>
         <SolveHero />
@@ -31,6 +32,6 @@ export default function DiagnosticPage() {
         <SolveCTA />
       </main>
       <Footer />
-    </>
+    </DiagnosticShell>
   );
 }
