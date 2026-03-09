@@ -11,7 +11,7 @@ export function ContactCalendar({ service }: ContactCalendarProps) {
   const [inView, setInView] = useState(false);
 
   // Build Cal.com URL with optional service context in notes (no internal tracking metadata)
-  const calBaseUrl = 'https://cal.com/team/tsc/25-50?embed=true&theme=dark&layout=month_view&hideEventTypeDetails=true';
+  const calBaseUrl = 'https://cal.com/melissatsc/30min?embed=true&theme=dark&layout=month_view&hideEventTypeDetails=true&utm_source=tsc-website&utm_medium=contact-page&utm_campaign=calendar_booking';
   const calUrl = service
     ? `${calBaseUrl}&notes=${encodeURIComponent(`Interested in: ${service}`)}`
     : calBaseUrl;

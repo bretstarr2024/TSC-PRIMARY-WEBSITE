@@ -55,7 +55,7 @@ function BookPageInner() {
   const service = searchParams.get('service');
 
   // Build Cal.com URL with optional service context in notes (no internal tracking metadata)
-  const calBaseUrl = 'https://cal.com/team/tsc/25-50?embed=true&theme=dark&layout=month_view';
+  const calBaseUrl = 'https://cal.com/melissatsc/30min?embed=true&theme=dark&layout=month_view&utm_source=tsc-website&utm_medium=book-page&utm_campaign=calendar_booking';
   const calUrl = service
     ? `${calBaseUrl}&notes=${encodeURIComponent(`Interested in: ${service}`)}`
     : calBaseUrl;
