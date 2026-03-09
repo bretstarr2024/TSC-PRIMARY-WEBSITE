@@ -36,16 +36,16 @@ export function SystemReveal() {
       {/* Glow halo below divider */}
       <div
         className="absolute top-0 left-0 right-0 h-32 pointer-events-none"
-        style={{ background: 'linear-gradient(to bottom, rgba(115,245,255,0.06) 0%, transparent 100%)' }}
+        style={{ background: 'linear-gradient(to bottom, rgba(115,245,255,0.12) 0%, transparent 100%)' }}
       />
 
       {/* Central nebula — tangerine core with sprinkles halo */}
       <motion.div
         className="absolute top-[15%] left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full blur-[130px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(255,89,16,0.18) 0%, rgba(237,10,210,0.06) 40%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, rgba(255,89,16,0.32) 0%, rgba(237,10,210,0.12) 40%, transparent 70%)' }}
         animate={reducedMotion ? { opacity: 0.5 } : {
           scale: [1, 1.1, 1],
-          opacity: [0.4, 0.65, 0.4],
+          opacity: [0.5, 0.85, 0.5],
         }}
         transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
       />
@@ -53,9 +53,9 @@ export function SystemReveal() {
       {/* Tidal glow — behind platform mockups area */}
       <motion.div
         className="absolute bottom-[15%] right-[5%] w-[700px] h-[700px] rounded-full blur-[120px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(115,245,255,0.14) 0%, rgba(115,245,255,0.03) 50%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, rgba(115,245,255,0.26) 0%, rgba(115,245,255,0.08) 50%, transparent 70%)' }}
         animate={reducedMotion ? { opacity: 0.4 } : {
-          opacity: [0.3, 0.5, 0.3],
+          opacity: [0.4, 0.7, 0.4],
           scale: [1, 1.08, 1],
         }}
         transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
@@ -64,9 +64,9 @@ export function SystemReveal() {
       {/* Neon cactus accent — mid left */}
       <motion.div
         className="absolute top-[50%] left-[3%] w-[450px] h-[450px] rounded-full blur-[100px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(225,255,0,0.08) 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, rgba(225,255,0,0.16) 0%, transparent 70%)' }}
         animate={reducedMotion ? { opacity: 0.25 } : {
-          opacity: [0.15, 0.3, 0.15],
+          opacity: [0.25, 0.45, 0.25],
           scale: [1, 1.06, 1],
         }}
         transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut', delay: 5 }}
@@ -75,9 +75,9 @@ export function SystemReveal() {
       {/* Sprinkles accent — bottom left */}
       <motion.div
         className="absolute bottom-[25%] left-[15%] w-[350px] h-[350px] rounded-full blur-[100px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(237,10,210,0.08) 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, rgba(237,10,210,0.16) 0%, transparent 70%)' }}
         animate={reducedMotion ? { opacity: 0.2 } : {
-          opacity: [0.15, 0.28, 0.15],
+          opacity: [0.25, 0.42, 0.25],
         }}
         transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut', delay: 7 }}
       />
@@ -85,7 +85,7 @@ export function SystemReveal() {
       <div className="relative z-10">
         {/* The reveal */}
         <div className="section-wide">
-          <AnimatedSection>
+          <AnimatedSection journey>
             <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-6">
               The Answer
             </p>
@@ -95,7 +95,7 @@ export function SystemReveal() {
             </h2>
           </AnimatedSection>
 
-          <AnimatedSection delay={0.2} className="mb-20 max-w-3xl">
+          <AnimatedSection journey delay={0.2} className="mb-20 max-w-3xl">
             <div className="space-y-4 text-lg text-shroomy leading-relaxed">
               <p>
                 They have tools. CRMs, marketing automation platforms, analytics dashboards,
@@ -111,7 +111,7 @@ export function SystemReveal() {
 
         {/* GTM Kernel callout — full-width emphasis */}
         <div className="section-wide mb-24">
-          <AnimatedSection>
+          <AnimatedSection journey>
             <div className="relative glass rounded-2xl border border-atomic-tangerine/20 p-8 md:p-12 lg:p-16 overflow-hidden">
               {/* Corner glow */}
               <div
@@ -145,7 +145,7 @@ export function SystemReveal() {
 
         {/* System Flow — visual cascade */}
         <div className="section-wide mb-24">
-          <AnimatedSection className="mb-12">
+          <AnimatedSection journey className="mb-12">
             <h3 className="text-3xl md:text-4xl font-normal text-white">
               System <span className="font-extrabold">Flow</span>
             </h3>
@@ -168,7 +168,7 @@ export function SystemReveal() {
 
             <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4" staggerDelay={0.12}>
               {systemSteps.map((step) => (
-                <StaggerItem key={step.name}>
+                <StaggerItem key={step.name} journey>
                   <motion.div
                     className="glass rounded-xl p-6 border h-full relative overflow-hidden group"
                     style={{ borderColor: `${step.color}22` }}
@@ -208,7 +208,7 @@ export function SystemReveal() {
 
         {/* Platform Previews — animated browser mockups */}
         <div className="section-wide">
-          <AnimatedSection className="mb-12">
+          <AnimatedSection journey className="mb-12">
             <h3 className="text-3xl md:text-4xl font-normal text-white mb-4">
               See the system <span className="font-extrabold">in action</span>
             </h3>

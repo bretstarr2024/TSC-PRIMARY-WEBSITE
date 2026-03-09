@@ -21,10 +21,10 @@ export function SolveHero() {
       {/* Large nebula glow — top center, tangerine-to-sprinkles blend */}
       <motion.div
         className="absolute top-[10%] left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full blur-[120px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(255,89,16,0.25) 0%, rgba(237,10,210,0.08) 50%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, rgba(255,89,16,0.4) 0%, rgba(237,10,210,0.15) 50%, transparent 70%)' }}
         animate={reducedMotion ? {} : {
           scale: [1, 1.08, 1],
-          opacity: [0.6, 0.85, 0.6],
+          opacity: [0.7, 1, 0.7],
         }}
         transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
       />
@@ -32,10 +32,10 @@ export function SolveHero() {
       {/* Tidal accent — right side */}
       <motion.div
         className="absolute top-1/2 right-[5%] w-[500px] h-[500px] rounded-full blur-[100px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(115,245,255,0.18) 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, rgba(115,245,255,0.3) 0%, transparent 70%)' }}
         animate={reducedMotion ? {} : {
           scale: [1, 1.12, 1],
-          opacity: [0.5, 0.8, 0.5],
+          opacity: [0.6, 0.95, 0.6],
         }}
         transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
       />
@@ -43,16 +43,16 @@ export function SolveHero() {
       {/* Sprinkles accent — bottom left */}
       <motion.div
         className="absolute bottom-[10%] left-[10%] w-[400px] h-[400px] rounded-full blur-[100px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(237,10,210,0.12) 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, rgba(237,10,210,0.22) 0%, transparent 70%)' }}
         animate={reducedMotion ? {} : {
           scale: [1, 1.15, 1],
-          opacity: [0.4, 0.7, 0.4],
+          opacity: [0.5, 0.85, 0.5],
         }}
         transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut', delay: 4 }}
       />
 
       <div className="relative z-10 section-wide py-32 md:py-40">
-        <AnimatedSection>
+        <AnimatedSection journey>
           <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-6">
             The Diagnostic
           </p>

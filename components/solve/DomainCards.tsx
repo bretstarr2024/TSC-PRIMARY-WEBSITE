@@ -41,34 +41,34 @@ export function DomainCards() {
       {/* Nebula glows — brighter, more blended, positioned behind each card column */}
       <motion.div
         className="absolute top-[15%] left-[10%] w-[600px] h-[600px] rounded-full blur-[100px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(255,89,16,0.2) 0%, rgba(237,10,210,0.05) 60%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, rgba(255,89,16,0.35) 0%, rgba(237,10,210,0.1) 60%, transparent 70%)' }}
         animate={reducedMotion ? { opacity: 0.5 } : {
-          opacity: [0.4, 0.7, 0.4],
+          opacity: [0.5, 0.9, 0.5],
           scale: [1, 1.08, 1],
         }}
         transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
       />
       <motion.div
         className="absolute top-[30%] right-[5%] w-[550px] h-[550px] rounded-full blur-[100px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(115,245,255,0.15) 0%, rgba(115,245,255,0.03) 60%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, rgba(115,245,255,0.28) 0%, rgba(115,245,255,0.03) 60%, transparent 70%)' }}
         animate={reducedMotion ? { opacity: 0.4 } : {
-          opacity: [0.3, 0.6, 0.3],
+          opacity: [0.4, 0.8, 0.4],
           scale: [1, 1.12, 1],
         }}
         transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
       />
       <motion.div
         className="absolute bottom-[10%] left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full blur-[100px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(225,255,0,0.1) 0%, rgba(115,245,255,0.04) 60%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, rgba(225,255,0,0.2) 0%, rgba(115,245,255,0.04) 60%, transparent 70%)' }}
         animate={reducedMotion ? { opacity: 0.3 } : {
-          opacity: [0.2, 0.45, 0.2],
+          opacity: [0.3, 0.6, 0.3],
           scale: [1, 1.1, 1],
         }}
         transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 4 }}
       />
 
       <div className="relative z-10 section-wide">
-        <AnimatedSection className="mb-20">
+        <AnimatedSection journey className="mb-20">
           <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-6">
             The Diagnosis
           </p>
@@ -80,7 +80,7 @@ export function DomainCards() {
 
         <StaggerContainer className="grid md:grid-cols-3 gap-6" staggerDelay={0.15}>
           {domains.map((domain) => (
-            <StaggerItem key={domain.name}>
+            <StaggerItem key={domain.name} journey>
               <motion.div
                 className="glass rounded-xl p-8 md:p-10 h-full relative overflow-hidden group"
                 style={{ borderLeftColor: domain.color, borderLeftWidth: 3 }}
@@ -97,13 +97,13 @@ export function DomainCards() {
 
                 {/* Corner glow on hover — brighter */}
                 <div
-                  className="absolute -top-16 -right-16 w-48 h-48 rounded-full blur-3xl opacity-0 group-hover:opacity-25 transition-opacity duration-500"
+                  className="absolute -top-16 -right-16 w-48 h-48 rounded-full blur-3xl opacity-0 group-hover:opacity-35 transition-opacity duration-500"
                   style={{ background: domain.color }}
                 />
 
                 {/* Bottom edge glow on hover */}
                 <div
-                  className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-3/4 h-20 rounded-full blur-2xl opacity-0 group-hover:opacity-15 transition-opacity duration-500"
+                  className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-3/4 h-20 rounded-full blur-2xl opacity-0 group-hover:opacity-25 transition-opacity duration-500"
                   style={{ background: domain.color }}
                 />
 
@@ -130,7 +130,7 @@ export function DomainCards() {
           ))}
         </StaggerContainer>
 
-        <AnimatedSection delay={0.3} className="mt-20">
+        <AnimatedSection journey delay={0.3} className="mt-20">
           <p className="text-2xl md:text-3xl text-shroomy max-w-3xl leading-snug">
             All three trace back to the same root cause:{' '}
             <span className="text-white font-extrabold">a missing GTM operating system.</span>{' '}

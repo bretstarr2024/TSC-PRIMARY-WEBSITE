@@ -45,49 +45,64 @@ export function SolveCTA() {
   const reducedMotion = useReducedMotion();
 
   return (
-    <section className="relative min-h-[80vh] flex items-center overflow-hidden">
-      {/* Warm arrival gradient — journey ends here */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0e0c14] via-[#1a0e08] to-heart-of-darkness" />
+    <section className="relative min-h-screen overflow-hidden">
+      {/* Video background — cinematic finale */}
+      <div className="absolute inset-0 z-0">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+          poster=""
+        >
+          <source src="/videos/diagnostic-finale.mp4" type="video/mp4" />
+        </video>
+        {/* Dark overlay to keep text readable */}
+        <div className="absolute inset-0 bg-black/60" />
+        {/* Gradient fade from previous section */}
+        <div
+          className="absolute top-0 left-0 right-0 h-64 pointer-events-none"
+          style={{ background: 'linear-gradient(to bottom, #0e0c14 0%, transparent 100%)' }}
+        />
+        {/* Bottom fade */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-40 pointer-events-none"
+          style={{ background: 'linear-gradient(to top, #141213 0%, transparent 100%)' }}
+        />
+      </div>
 
-      {/* Top glow halo — warm transition in */}
-      <div
-        className="absolute top-0 left-0 right-0 h-40 pointer-events-none"
-        style={{ background: 'linear-gradient(to bottom, rgba(237,10,210,0.04) 0%, transparent 100%)' }}
-      />
-
-      {/* Central tangerine nebula — large, warm, inviting */}
+      {/* Bright nebula overlays on top of video */}
       <motion.div
-        className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-[120px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(255,89,16,0.2) 0%, rgba(237,10,210,0.06) 50%, transparent 70%)' }}
+        className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] rounded-full blur-[130px] pointer-events-none z-[1]"
+        style={{ background: 'radial-gradient(circle, rgba(255,89,16,0.35) 0%, rgba(237,10,210,0.12) 50%, transparent 70%)' }}
         animate={reducedMotion ? { opacity: 0.5 } : {
-          scale: [1, 1.1, 1],
-          opacity: [0.4, 0.65, 0.4],
+          scale: [1, 1.12, 1],
+          opacity: [0.5, 0.85, 0.5],
         }}
         transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
       />
 
-      {/* Tidal accent — right side */}
       <motion.div
-        className="absolute bottom-[20%] right-[10%] w-[400px] h-[400px] rounded-full blur-[100px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(115,245,255,0.1) 0%, transparent 70%)' }}
+        className="absolute bottom-[15%] right-[5%] w-[500px] h-[500px] rounded-full blur-[100px] pointer-events-none z-[1]"
+        style={{ background: 'radial-gradient(circle, rgba(115,245,255,0.2) 0%, transparent 70%)' }}
         animate={reducedMotion ? { opacity: 0.3 } : {
-          opacity: [0.2, 0.4, 0.2],
+          opacity: [0.3, 0.55, 0.3],
         }}
         transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
       />
 
-      {/* Neon cactus accent — left side */}
       <motion.div
-        className="absolute top-[60%] left-[8%] w-[350px] h-[350px] rounded-full blur-[100px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(225,255,0,0.06) 0%, transparent 70%)' }}
+        className="absolute top-[55%] left-[5%] w-[400px] h-[400px] rounded-full blur-[100px] pointer-events-none z-[1]"
+        style={{ background: 'radial-gradient(circle, rgba(225,255,0,0.12) 0%, transparent 70%)' }}
         animate={reducedMotion ? { opacity: 0.2 } : {
-          opacity: [0.15, 0.3, 0.15],
+          opacity: [0.2, 0.4, 0.2],
         }}
         transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut', delay: 4 }}
       />
 
       <div className="relative z-10 section-wide py-32 md:py-40">
-        <AnimatedSection className="text-center mb-20">
+        <AnimatedSection journey className="text-center mb-20">
           <h2 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-normal tracking-tight text-white leading-[1.05]">
             Ready to fix
           </h2>
@@ -102,16 +117,16 @@ export function SolveCTA() {
 
         <StaggerContainer className="grid md:grid-cols-3 gap-6 mb-20" staggerDelay={0.15}>
           {ctaOptions.map((option) => (
-            <StaggerItem key={option.ctaId}>
+            <StaggerItem key={option.ctaId} journey>
               <motion.div
-                className="glass rounded-2xl border p-8 h-full flex flex-col relative overflow-hidden group"
-                style={{ borderColor: `${option.color}22` }}
+                className="glass rounded-2xl border p-8 h-full flex flex-col relative overflow-hidden group backdrop-blur-xl"
+                style={{ borderColor: `${option.color}33` }}
                 whileHover={reducedMotion ? {} : { y: -4 }}
                 transition={{ duration: 0.3 }}
               >
-                {/* Corner glow */}
+                {/* Corner glow — brighter */}
                 <div
-                  className="absolute -top-20 -right-20 w-40 h-40 rounded-full blur-3xl opacity-0 group-hover:opacity-15 transition-opacity duration-500"
+                  className="absolute -top-20 -right-20 w-40 h-40 rounded-full blur-3xl opacity-0 group-hover:opacity-30 transition-opacity duration-500"
                   style={{ background: option.color }}
                 />
 
@@ -148,14 +163,16 @@ export function SolveCTA() {
         </StaggerContainer>
 
         {/* Coin slot */}
-        <div className="text-center">
-          <p className="text-lg text-shroomy mb-8">
-            Not sure which path? Start a conversation.
-          </p>
-          <div className="flex justify-center">
-            <CoinSlotCTA href="/contact?cta=solve-bottom" ctaId="solve-bottom" />
+        <AnimatedSection journey delay={0.3}>
+          <div className="text-center">
+            <p className="text-lg text-shroomy mb-8">
+              Not sure which path? Start a conversation.
+            </p>
+            <div className="flex justify-center">
+              <CoinSlotCTA href="/contact?cta=solve-bottom" ctaId="solve-bottom" />
+            </div>
           </div>
-        </div>
+        </AnimatedSection>
       </div>
     </section>
   );

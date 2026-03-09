@@ -301,10 +301,10 @@ export function MissionGrid() {
       <motion.div
         key={`glow-${activeDomain}`}
         className="absolute top-[20%] right-[0%] w-[800px] h-[800px] rounded-full blur-[120px] pointer-events-none"
-        style={{ background: `radial-gradient(circle, ${meta.color}33 0%, ${meta.color}08 50%, transparent 70%)` }}
+        style={{ background: `radial-gradient(circle, ${meta.color}55 0%, ${meta.color}15 50%, transparent 70%)` }}
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{
-          opacity: reducedMotion ? 0.4 : [0.3, 0.55, 0.3],
+          opacity: reducedMotion ? 0.4 : [0.4, 0.75, 0.4],
           scale: reducedMotion ? 1 : [0.95, 1.05, 0.95],
         }}
         transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
@@ -313,9 +313,9 @@ export function MissionGrid() {
       {/* Sprinkles accent — bottom left, always present */}
       <motion.div
         className="absolute bottom-[15%] left-[5%] w-[500px] h-[500px] rounded-full blur-[100px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(237,10,210,0.1) 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, rgba(237,10,210,0.2) 0%, transparent 70%)' }}
         animate={reducedMotion ? { opacity: 0.3 } : {
-          opacity: [0.2, 0.4, 0.2],
+          opacity: [0.3, 0.6, 0.3],
           scale: [1, 1.1, 1],
         }}
         transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
@@ -324,9 +324,9 @@ export function MissionGrid() {
       {/* Tangerine warmth — top left corner */}
       <motion.div
         className="absolute top-[5%] left-[15%] w-[400px] h-[400px] rounded-full blur-[100px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(255,89,16,0.08) 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, rgba(255,89,16,0.16) 0%, transparent 70%)' }}
         animate={reducedMotion ? { opacity: 0.3 } : {
-          opacity: [0.2, 0.4, 0.2],
+          opacity: [0.3, 0.55, 0.3],
         }}
         transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
       />
@@ -345,7 +345,7 @@ export function MissionGrid() {
       </div>
 
       <div className="relative z-10 section-wide">
-        <AnimatedSection className="mb-12">
+        <AnimatedSection journey className="mb-12">
           <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-6">
             Choose Your Mission
           </p>
