@@ -18,13 +18,13 @@ export function SolveHero() {
       {/* Three.js star particles — no wireframe sphere */}
       <HeroParticles starsOnly />
 
-      {/* Large nebula glow — top center, tangerine-to-sprinkles blend */}
+      {/* Large nebula glow — top center, tidal/blue-dominant clinical blend */}
       <motion.div
         className="absolute top-[10%] left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full blur-[120px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(255,89,16,0.4) 0%, rgba(237,10,210,0.15) 50%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, rgba(115,245,255,0.25) 0%, rgba(8,139,160,0.1) 50%, transparent 70%)' }}
         animate={reducedMotion ? {} : {
           scale: [1, 1.08, 1],
-          opacity: [0.7, 1, 0.7],
+          opacity: [0.4, 0.7, 0.4],
         }}
         transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
       />
@@ -32,10 +32,10 @@ export function SolveHero() {
       {/* Tidal accent — right side */}
       <motion.div
         className="absolute top-1/2 right-[5%] w-[500px] h-[500px] rounded-full blur-[100px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(115,245,255,0.3) 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, rgba(115,245,255,0.18) 0%, transparent 70%)' }}
         animate={reducedMotion ? {} : {
           scale: [1, 1.12, 1],
-          opacity: [0.6, 0.95, 0.6],
+          opacity: [0.3, 0.55, 0.3],
         }}
         transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
       />
@@ -43,10 +43,10 @@ export function SolveHero() {
       {/* Sprinkles accent — bottom left */}
       <motion.div
         className="absolute bottom-[10%] left-[10%] w-[400px] h-[400px] rounded-full blur-[100px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(237,10,210,0.22) 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, rgba(100,120,200,0.12) 0%, transparent 70%)' }}
         animate={reducedMotion ? {} : {
           scale: [1, 1.15, 1],
-          opacity: [0.5, 0.85, 0.5],
+          opacity: [0.25, 0.45, 0.25],
         }}
         transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut', delay: 4 }}
       />
@@ -96,7 +96,7 @@ export function SolveHero() {
       {/* Bottom fade — seamless into next section */}
       <div
         className="absolute bottom-0 left-0 right-0 h-48 pointer-events-none"
-        style={{ background: 'linear-gradient(to bottom, transparent 0%, #141213 100%)' }}
+        style={{ background: 'linear-gradient(to bottom, transparent 0%, #0c1118 100%)' }}
       />
     </section>
   );

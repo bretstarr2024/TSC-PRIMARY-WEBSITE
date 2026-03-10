@@ -58,12 +58,13 @@ export function SolveCTA() {
         >
           <source src="/videos/diagnostic-finale.mp4" type="video/mp4" />
         </video>
-        {/* Dark overlay to keep text readable */}
-        <div className="absolute inset-0 bg-black/60" />
+        {/* Lighter overlay — let the disco ball shine */}
+        <div className="absolute inset-0 bg-black/30" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[rgba(255,89,16,0.08)] to-[rgba(255,89,16,0.15)]" />
         {/* Gradient fade from previous section */}
         <div
           className="absolute top-0 left-0 right-0 h-64 pointer-events-none"
-          style={{ background: 'linear-gradient(to bottom, #0e0c14 0%, transparent 100%)' }}
+          style={{ background: 'linear-gradient(to bottom, #1a0e08 0%, transparent 100%)' }}
         />
         {/* Bottom fade */}
         <div
@@ -75,28 +76,28 @@ export function SolveCTA() {
       {/* Bright nebula overlays on top of video */}
       <motion.div
         className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] rounded-full blur-[130px] pointer-events-none z-[1]"
-        style={{ background: 'radial-gradient(circle, rgba(255,89,16,0.35) 0%, rgba(237,10,210,0.12) 50%, transparent 70%)' }}
-        animate={reducedMotion ? { opacity: 0.5 } : {
-          scale: [1, 1.12, 1],
-          opacity: [0.5, 0.85, 0.5],
+        style={{ background: 'radial-gradient(circle, rgba(255,89,16,0.65) 0%, rgba(237,10,210,0.3) 50%, transparent 70%)' }}
+        animate={reducedMotion ? { opacity: 0.7 } : {
+          scale: [1, 1.15, 1],
+          opacity: [0.7, 1, 0.7],
         }}
         transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
       />
 
       <motion.div
         className="absolute bottom-[15%] right-[5%] w-[500px] h-[500px] rounded-full blur-[100px] pointer-events-none z-[1]"
-        style={{ background: 'radial-gradient(circle, rgba(115,245,255,0.2) 0%, transparent 70%)' }}
-        animate={reducedMotion ? { opacity: 0.3 } : {
-          opacity: [0.3, 0.55, 0.3],
+        style={{ background: 'radial-gradient(circle, rgba(255,189,174,0.35) 0%, transparent 70%)' }}
+        animate={reducedMotion ? { opacity: 0.4 } : {
+          opacity: [0.4, 0.7, 0.4],
         }}
         transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
       />
 
       <motion.div
         className="absolute top-[55%] left-[5%] w-[400px] h-[400px] rounded-full blur-[100px] pointer-events-none z-[1]"
-        style={{ background: 'radial-gradient(circle, rgba(225,255,0,0.12) 0%, transparent 70%)' }}
-        animate={reducedMotion ? { opacity: 0.2 } : {
-          opacity: [0.2, 0.4, 0.2],
+        style={{ background: 'radial-gradient(circle, rgba(237,10,210,0.3) 0%, transparent 70%)' }}
+        animate={reducedMotion ? { opacity: 0.35 } : {
+          opacity: [0.35, 0.6, 0.35],
         }}
         transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut', delay: 4 }}
       />
@@ -104,14 +105,13 @@ export function SolveCTA() {
       <div className="relative z-10 section-wide py-32 md:py-40">
         <AnimatedSection journey className="text-center mb-20">
           <h2 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-normal tracking-tight text-white leading-[1.05]">
-            Ready to fix
+            This is what winning
           </h2>
           <p className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold tracking-tight text-white leading-[1.05] mt-2">
-            the system?
+            looks like.
           </p>
           <p className="text-xl text-shroomy max-w-2xl mx-auto mt-8 leading-relaxed">
-            Every engagement starts with understanding where you are and where
-            the system is breaking. Choose the path that fits.
+            A GTM system that actually works. Pipeline that compounds. Teams that execute with clarity. It starts with one conversation.
           </p>
         </AnimatedSection>
 
@@ -166,7 +166,7 @@ export function SolveCTA() {
         <AnimatedSection journey delay={0.3}>
           <div className="text-center">
             <p className="text-lg text-shroomy mb-8">
-              Not sure which path? Start a conversation.
+              Ready to feel this? Let&apos;s talk.
             </p>
             <div className="flex justify-center">
               <CoinSlotCTA href="/contact?cta=solve-bottom" ctaId="solve-bottom" />

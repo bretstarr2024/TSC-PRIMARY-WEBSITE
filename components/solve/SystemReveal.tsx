@@ -18,8 +18,8 @@ export function SystemReveal() {
 
   return (
     <section className="relative py-32 md:py-40 overflow-hidden">
-      {/* Deep space background — coolest part of the journey */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0c1118] via-[#08101a] to-[#0e0c14]" />
+      {/* Warm background — heating up */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#1a0e08] via-[#1f0f06] to-[#241008]" />
 
       {/* Animated threshold divider — brighter, wider glow */}
       <div className="absolute top-0 left-0 right-0 h-[2px] overflow-hidden">
@@ -36,16 +36,16 @@ export function SystemReveal() {
       {/* Glow halo below divider */}
       <div
         className="absolute top-0 left-0 right-0 h-32 pointer-events-none"
-        style={{ background: 'linear-gradient(to bottom, rgba(115,245,255,0.12) 0%, transparent 100%)' }}
+        style={{ background: 'linear-gradient(to bottom, rgba(255,89,16,0.15) 0%, transparent 100%)' }}
       />
 
-      {/* Central nebula — tangerine core with sprinkles halo */}
+      {/* Central nebula — blazing tangerine core */}
       <motion.div
-        className="absolute top-[15%] left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full blur-[130px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(255,89,16,0.32) 0%, rgba(237,10,210,0.12) 40%, transparent 70%)' }}
-        animate={reducedMotion ? { opacity: 0.5 } : {
-          scale: [1, 1.1, 1],
-          opacity: [0.5, 0.85, 0.5],
+        className="absolute top-[15%] left-1/2 -translate-x-1/2 w-[1000px] h-[1000px] rounded-full blur-[140px] pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(255,89,16,0.6) 0%, rgba(237,10,210,0.25) 40%, transparent 70%)' }}
+        animate={reducedMotion ? { opacity: 0.7 } : {
+          scale: [1, 1.12, 1],
+          opacity: [0.7, 1, 0.7],
         }}
         transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
       />
@@ -53,9 +53,9 @@ export function SystemReveal() {
       {/* Tidal glow — behind platform mockups area */}
       <motion.div
         className="absolute bottom-[15%] right-[5%] w-[700px] h-[700px] rounded-full blur-[120px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(115,245,255,0.26) 0%, rgba(115,245,255,0.08) 50%, transparent 70%)' }}
-        animate={reducedMotion ? { opacity: 0.4 } : {
-          opacity: [0.4, 0.7, 0.4],
+        style={{ background: 'radial-gradient(circle, rgba(115,245,255,0.18) 0%, rgba(115,245,255,0.08) 50%, transparent 70%)' }}
+        animate={reducedMotion ? { opacity: 0.3 } : {
+          opacity: [0.3, 0.5, 0.3],
           scale: [1, 1.08, 1],
         }}
         transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
@@ -64,10 +64,10 @@ export function SystemReveal() {
       {/* Neon cactus accent — mid left */}
       <motion.div
         className="absolute top-[50%] left-[3%] w-[450px] h-[450px] rounded-full blur-[100px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(225,255,0,0.16) 0%, transparent 70%)' }}
-        animate={reducedMotion ? { opacity: 0.25 } : {
-          opacity: [0.25, 0.45, 0.25],
-          scale: [1, 1.06, 1],
+        style={{ background: 'radial-gradient(circle, rgba(225,255,0,0.35) 0%, transparent 70%)' }}
+        animate={reducedMotion ? { opacity: 0.4 } : {
+          opacity: [0.4, 0.7, 0.4],
+          scale: [1, 1.08, 1],
         }}
         transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut', delay: 5 }}
       />
@@ -75,9 +75,9 @@ export function SystemReveal() {
       {/* Sprinkles accent — bottom left */}
       <motion.div
         className="absolute bottom-[25%] left-[15%] w-[350px] h-[350px] rounded-full blur-[100px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(237,10,210,0.16) 0%, transparent 70%)' }}
-        animate={reducedMotion ? { opacity: 0.2 } : {
-          opacity: [0.25, 0.42, 0.25],
+        style={{ background: 'radial-gradient(circle, rgba(237,10,210,0.35) 0%, transparent 70%)' }}
+        animate={reducedMotion ? { opacity: 0.4 } : {
+          opacity: [0.4, 0.7, 0.4],
         }}
         transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut', delay: 7 }}
       />
@@ -115,11 +115,11 @@ export function SystemReveal() {
             <div className="relative glass rounded-2xl border border-atomic-tangerine/20 p-8 md:p-12 lg:p-16 overflow-hidden">
               {/* Corner glow */}
               <div
-                className="absolute -top-20 -right-20 w-60 h-60 rounded-full blur-3xl opacity-15"
+                className="absolute -top-20 -right-20 w-60 h-60 rounded-full blur-3xl opacity-25"
                 style={{ background: '#FF5910' }}
               />
               <div
-                className="absolute -bottom-20 -left-20 w-40 h-40 rounded-full blur-3xl opacity-10"
+                className="absolute -bottom-20 -left-20 w-40 h-40 rounded-full blur-3xl opacity-20"
                 style={{ background: '#73F5FF' }}
               />
 

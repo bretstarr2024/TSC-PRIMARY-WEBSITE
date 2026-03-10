@@ -5,7 +5,7 @@ import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion
 
 /**
  * Full-page wrapper for The Diagnostic.
- * Adds a scroll-linked gradient journey (warm → cool → warm)
+ * Adds a scroll-linked gradient journey (cool → warm)
  * and a subtle noise texture for depth and differentiation from the homepage.
  */
 export function DiagnosticShell({ children }: { children: React.ReactNode }) {
@@ -14,8 +14,8 @@ export function DiagnosticShell({ children }: { children: React.ReactNode }) {
   const { scrollYProgress } = useScroll({ target: ref });
 
   // Scroll-linked hue rotation on the gradient overlay
-  const hueRotate = useTransform(scrollYProgress, [0, 0.5, 1], [0, 40, -10]);
-  const overlayOpacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.18, 0.28, 0.22, 0.16]);
+  const hueRotate = useTransform(scrollYProgress, [0, 0.5, 1], [0, 60, -30]);
+  const overlayOpacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.1, 0.2, 0.28, 0.35]);
 
   return (
     <div ref={ref} className="relative">
@@ -24,10 +24,10 @@ export function DiagnosticShell({ children }: { children: React.ReactNode }) {
         className="fixed inset-0 pointer-events-none z-0"
         style={{
           background:
-            'radial-gradient(ellipse 80% 60% at 30% 20%, rgba(255,89,16,0.22) 0%, transparent 50%), ' +
-            'radial-gradient(ellipse 60% 50% at 70% 50%, rgba(115,245,255,0.16) 0%, transparent 50%), ' +
-            'radial-gradient(ellipse 70% 60% at 40% 80%, rgba(237,10,210,0.12) 0%, transparent 50%)',
-          opacity: reducedMotion ? 0.12 : undefined,
+            'radial-gradient(ellipse 80% 60% at 30% 20%, rgba(115,245,255,0.14) 0%, transparent 50%), ' +
+            'radial-gradient(ellipse 60% 50% at 70% 50%, rgba(8,139,160,0.1) 0%, transparent 50%), ' +
+            'radial-gradient(ellipse 70% 60% at 40% 80%, rgba(255,89,16,0.08) 0%, transparent 50%)',
+          opacity: reducedMotion ? 0.12 : overlayOpacity,
           filter: reducedMotion ? undefined : `hue-rotate(${hueRotate}deg)`,
         }}
       />

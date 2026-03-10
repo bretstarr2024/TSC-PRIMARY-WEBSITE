@@ -36,14 +36,14 @@ export function DomainCards() {
   return (
     <section className="relative py-32 md:py-40 overflow-hidden">
       {/* Gradient background — subtle shift to differentiate from pure black */}
-      <div className="absolute inset-0 bg-gradient-to-b from-heart-of-darkness via-[#100e16] to-[#0c1118]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0c1118] via-[#0e0e18] to-[#0c1118]" />
 
       {/* Nebula glows — brighter, more blended, positioned behind each card column */}
       <motion.div
         className="absolute top-[15%] left-[10%] w-[600px] h-[600px] rounded-full blur-[100px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(255,89,16,0.35) 0%, rgba(237,10,210,0.1) 60%, transparent 70%)' }}
-        animate={reducedMotion ? { opacity: 0.5 } : {
-          opacity: [0.5, 0.9, 0.5],
+        style={{ background: 'radial-gradient(circle, rgba(255,89,16,0.15) 0%, rgba(237,10,210,0.04) 60%, transparent 70%)' }}
+        animate={reducedMotion ? { opacity: 0.3 } : {
+          opacity: [0.3, 0.5, 0.3],
           scale: [1, 1.08, 1],
         }}
         transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
@@ -51,17 +51,17 @@ export function DomainCards() {
       <motion.div
         className="absolute top-[30%] right-[5%] w-[550px] h-[550px] rounded-full blur-[100px] pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(115,245,255,0.28) 0%, rgba(115,245,255,0.03) 60%, transparent 70%)' }}
-        animate={reducedMotion ? { opacity: 0.4 } : {
-          opacity: [0.4, 0.8, 0.4],
+        animate={reducedMotion ? { opacity: 0.35 } : {
+          opacity: [0.35, 0.65, 0.35],
           scale: [1, 1.12, 1],
         }}
         transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
       />
       <motion.div
         className="absolute bottom-[10%] left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full blur-[100px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(225,255,0,0.2) 0%, rgba(115,245,255,0.04) 60%, transparent 70%)' }}
-        animate={reducedMotion ? { opacity: 0.3 } : {
-          opacity: [0.3, 0.6, 0.3],
+        style={{ background: 'radial-gradient(circle, rgba(225,255,0,0.08) 0%, rgba(115,245,255,0.04) 60%, transparent 70%)' }}
+        animate={reducedMotion ? { opacity: 0.15 } : {
+          opacity: [0.15, 0.3, 0.15],
           scale: [1, 1.1, 1],
         }}
         transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 4 }}
@@ -118,12 +118,11 @@ export function DomainCards() {
                     {domain.name}
                   </h3>
                   <p
-                    className="text-lg font-medium mb-4"
+                    className="text-lg font-medium"
                     style={{ color: domain.color }}
                   >
                     {domain.summary}
                   </p>
-                  <p className="text-shroomy leading-relaxed">{domain.description}</p>
                 </div>
               </motion.div>
             </StaggerItem>
