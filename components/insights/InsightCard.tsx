@@ -48,6 +48,12 @@ interface InsightCardProps {
   tags?: string[];
 }
 
+function formatDate(date: string): string {
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return date;
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
 export function InsightCard({ type, title, description, href, date, author, tags }: InsightCardProps) {
   const color = TYPE_COLORS[type];
 
@@ -65,7 +71,7 @@ export function InsightCard({ type, title, description, href, date, author, tags
             {TYPE_LABELS[type]}
           </span>
           {date && (
-            <span className="text-xs text-greige">{date}</span>
+            <span className="text-xs text-greige">{formatDate(date)}</span>
           )}
         </div>
 
