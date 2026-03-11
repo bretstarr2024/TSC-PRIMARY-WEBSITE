@@ -5,6 +5,7 @@ import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import { RelatedContent } from '@/components/insights/RelatedContent';
+import { ContentRenderer } from '@/components/insights/ContentRenderer';
 import { CtaStrip } from '@/components/insights/CtaStrip';
 import { getPublishedGlossaryTermById, getAllGlossaryTermIds, GlossaryTerm } from '@/lib/resources-db';
 import { glossaryBreadcrumb } from '@/lib/schema/breadcrumbs';
@@ -117,9 +118,7 @@ export default async function GlossaryDetailPage({
           {/* Full definition */}
           <section className="mb-10">
             <h2 className="text-xl font-semibold text-white mb-4">Full Definition</h2>
-            <p className="leading-relaxed whitespace-pre-line">
-              {term.fullDefinition}
-            </p>
+            <ContentRenderer content={term.fullDefinition} />
           </section>
 
           {/* Examples */}

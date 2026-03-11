@@ -16,7 +16,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getUncoveredQueries } from '@/lib/resources-db';
 import { enqueueContent, type ContentType } from '@/lib/content-db';
-import { getClientConfig } from '@/lib/kernel/client';
 import { logPipelineEvent } from '@/lib/pipeline/logger';
 import { DAILY_CAPS } from '@/lib/pipeline/content-guardrails';
 import { verifyCronAuth } from '@/lib/cron-auth';
@@ -77,7 +76,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'MONGODB_URI not configured' }, { status: 500 });
   }
 
-  const kernel = getClientConfig();
   const enqueued: Record<string, number> = {};
   const skipped: string[] = [];
   const caps: Record<string, number> = {};
@@ -116,9 +114,6 @@ export async function GET(request: NextRequest) {
       skipped.push(`${queryCov.query} (cap reached for ${contentType})`);
       continue;
     }
-
-    // Build context from kernel
-    const context = buildContextForQuery(queryCov.query, queryCov.clusterName, kernel);
 
     try {
       await enqueueContent({
@@ -162,36 +157,4 @@ export async function GET(request: NextRequest) {
     skipped: skipped.length,
     skippedQueries: skipped.slice(0, 10), // Show first 10
   });
-}
-
-// ============================================
-// Helpers
-// ============================================
-
-function buildContextForQuery(
-  query: string,
-  clusterName: string | undefined,
-  kernel: ReturnType<typeof getClientConfig>
-): string {
-  const parts: string[] = [];
-
-  // Find matching JTBD cluster
-  if (clusterName) {
-    const cluster = kernel.jtbd.find((j) => j.jobName === clusterName);
-    if (cluster) {
-      parts.push(`JTBD: ${cluster.jobName}`);
-      parts.push(`Starting state: ${cluster.startingState}`);
-      parts.push(`Desired state: ${cluster.desiredState}`);
-      parts.push(`Obstacles: ${cluster.obstacles.join(', ')}`);
-    }
-  }
-
-  // Add ICP context
-  parts.push(`ICP: ${kernel.icp.primary.label}`);
-  parts.push(`Pain points: ${kernel.icp.primary.painPoints.slice(0, 3).join(', ')}`);
-
-  // Brand promise
-  parts.push(`Brand promise: ${kernel.brand.brandPromise}`);
-
-  return parts.join('\n');
 }

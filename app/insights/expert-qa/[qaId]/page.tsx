@@ -8,6 +8,7 @@ import { RelatedContent } from '@/components/insights/RelatedContent';
 import { AuthorBio } from '@/components/insights/AuthorBio';
 import { CtaStrip } from '@/components/insights/CtaStrip';
 import { getPublishedExpertQaById, getAllExpertQaIds, ExpertQaItem } from '@/lib/resources-db';
+import { ContentRenderer } from '@/components/insights/ContentRenderer';
 import { getArticleSchema } from '@/lib/schema/people';
 import { expertQaBreadcrumb } from '@/lib/schema/breadcrumbs';
 
@@ -78,10 +79,9 @@ export default async function ExpertQaDetailPage({
     dateModified: qa.updatedAt.toISOString(),
   });
 
-  const expertInitials = qa.expert.name
-    .split(' ')
-    .map((n) => n[0])
-    .join('');
+  const initialsOverrides: Record<string, string> = { 'JJ La Pata': 'JJL' };
+  const expertInitials = initialsOverrides[qa.expert.name]
+    || qa.expert.name.split(' ').map((n) => n[0]).join('');
 
   return (
     <>
@@ -125,13 +125,9 @@ export default async function ExpertQaDetailPage({
             </div>
           </div>
 
-          {/* Answer paragraphs */}
+          {/* Answer */}
           <div className="mb-10">
-            {qa.answer.split('\n\n').map((paragraph, i) => (
-              <p key={i} className="leading-relaxed mb-4">
-                {paragraph}
-              </p>
-            ))}
+            <ContentRenderer content={qa.answer} />
           </div>
 
           {/* Quotable snippets */}

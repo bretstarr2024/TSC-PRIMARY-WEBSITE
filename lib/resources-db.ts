@@ -232,6 +232,7 @@ export interface IndustryBrief {
   industry: string;
   keyFindings: string[];
   recommendations: string[];
+  sources?: { name: string; url: string; publishedAt: string }[];
   author: string;
   tags: string[];
   seedId?: number;

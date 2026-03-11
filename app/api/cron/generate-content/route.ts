@@ -65,6 +65,8 @@ import {
   getToolPrompts,
 } from '@/lib/pipeline/content-prompts';
 import { getClientConfig } from '@/lib/kernel/client';
+import { buildKernelContext } from '@/lib/pipeline/context-builder';
+import { searchForNewsArticle, searchForBriefSources } from '@/lib/pipeline/news-search';
 import { verifyCronAuth } from '@/lib/cron-auth';
 
 export const maxDuration = 300; // 5 minutes
@@ -73,10 +75,10 @@ export const maxDuration = 300; // 5 minutes
 // Prompt Routing
 // ============================================
 
-function getPromptsForItem(
+async function getPromptsForItem(
   item: ContentQueueItem,
   context: string
-): { system: string; user: string } | null {
+): Promise<{ system: string; user: string } | null> {
   const kernel = getClientConfig();
   const title = item.title || '';
 
@@ -95,12 +97,21 @@ function getPromptsForItem(
         { name: 'Bret Starr', title: 'Founder & CEO' };
       return getExpertQaPrompts(expert, title, context);
     }
-    case 'news_item':
-      return getNewsPrompts(title, context);
+    case 'news_item': {
+      // Search for a real article before generating commentary
+      const article = await searchForNewsArticle(title);
+      if (!article) {
+        console.log(`[Generate] No real article found for news topic: ${title}, skipping`);
+        return null; // Skip news generation if no real source found
+      }
+      return getNewsPrompts(title, context, article);
+    }
     case 'case_study':
       return getCaseStudyPrompts(title, context);
-    case 'industry_brief':
-      return getIndustryBriefPrompts(title, context);
+    case 'industry_brief': {
+      const sources = await searchForBriefSources(title);
+      return getIndustryBriefPrompts(title, context, sources);
+    }
     case 'video':
       return getVideoPrompts(title, context);
     case 'tool':
@@ -362,7 +373,8 @@ export async function GET(request: NextRequest) {
   // Process queue items by type, respecting daily caps
   const contentTypes: ContentType[] = [
     'faq_item', 'glossary_term', 'blog_post', 'comparison', 'expert_qa',
-    'news_item', 'case_study', 'industry_brief', 'video', 'tool',
+    'news_item', 'case_study', 'industry_brief', 'tool',
+    // 'video' — paused until real video infrastructure is in place
   ];
 
   // --- FIX #2: DB-backed daily caps (query actual published-today counts) ---
@@ -411,11 +423,11 @@ export async function GET(request: NextRequest) {
 
       // Item is already in 'generating' status from claimNextPendingItem
 
-      const context = `JTBD cluster: ${item.clusterName || 'General'}\nTarget queries: ${(item.targetQueries || []).join(', ')}`;
+      const context = buildKernelContext(item.clusterName, item.targetQueries);
 
       try {
         // Get prompts
-        const prompts = getPromptsForItem(item, context);
+        const prompts = await getPromptsForItem(item, context);
         if (!prompts) {
           await markQueueItemFailed(itemId, `No prompt generator for type: ${contentType}`);
           results.push({ contentType, title: item.title || '', status: 'failed', reason: 'No prompts' });

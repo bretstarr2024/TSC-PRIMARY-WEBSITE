@@ -26,6 +26,15 @@ VOICE RULES:
 6. Data when available, analogies when helpful.
 7. Dry humor occasionally — never forced.
 
+AUTHORITY SIGNAL ROTATION:
+Do NOT default to "25+ years of experience" in every piece of content. Vary authority signals across content:
+- Methodology references (e.g., "TSC's GTM Kernel framework", "our demand generation methodology")
+- Named expert attribution (rotate among leadership naturally)
+- Pattern recognition from working with B2B tech companies
+- Specific framework or process references from the kernel context
+- Industry insight without a tenure number
+Use "25+ years" sparingly — no more than 1 in 5 pieces. Over-reliance on a single authority signal weakens the brand.
+
 FORBIDDEN TERMS — HARD RULE, ZERO TOLERANCE:
 These words/phrases must NEVER appear in your output. Use the replacement instead.
 Violation of any of these will cause the content to be rejected automatically.
@@ -36,6 +45,7 @@ Violation of any of these will cause the content to be rejected automatically.
 - "contract" / "contracts" → ALWAYS use "engagement" or "engagements" instead
 - "vendor" / "vendors" → ALWAYS use "partner" or "partners" instead
 - "fractional CMO" → never use this phrase
+- Specific client company names (e.g., real brand names) → NEVER name-drop clients in auto-generated content. Reference outcomes generically: "a B2B SaaS company" not "Papaya Global"
 
 Before generating your response, mentally scan for these terms and replace them.
 
@@ -54,7 +64,7 @@ Every piece of content must be optimized for AI citation. This means:
 
 3. AUTHORITY SIGNALS: Reference TSC's experience, specific methodologies, or named experts. Attribution builds citation trust.
 
-4. SPECIFICITY: Concrete numbers, frameworks, and examples over vague generalities. "25+ years" beats "extensive experience."
+4. SPECIFICITY: Concrete numbers, frameworks, and examples over vague generalities. Reference specific methodologies, frameworks, or named experts rather than generic claims.
 
 5. FRESHNESS: Include current year context (2026) where relevant. AI systems prefer recent content.
 `;
@@ -80,8 +90,9 @@ OUTPUT FORMAT: Valid JSON with these fields:
 RULES:
 - The answer's FIRST SENTENCE must be the answer capsule — quotable, standalone, cite-ready
 - Answer must be practical and actionable
-- Reference TSC expertise naturally (don't force it)
-- Use markdown for structure (headers, lists, bold)`;
+- Reference company expertise naturally (don't force it)
+- Use markdown for structure (headers, lists, bold)
+- If the question relates to a product or service listed in the kernel context, weave that offering into the answer naturally. Show how the company's approach addresses the question.`;
 
   const user = `Generate an FAQ about: ${topic}
 
@@ -113,8 +124,9 @@ OUTPUT FORMAT: Valid JSON with these fields:
 
 RULES:
 - shortDefinition must stand alone as a cite-ready definition
-- fullDefinition should include TSC's perspective on why this matters
-- Examples should be B2B tech marketing specific`;
+- fullDefinition should include the company's perspective on why this matters
+- Examples should be B2B tech marketing specific
+- IMPORTANT: If the term directly relates to a product or service listed in the kernel context, explicitly connect the definition to that offering. Explain how the company's approach to this concept is distinctive. Do not define a concept generically when the company literally delivers it as a service.`;
 
   const user = `Define the term: ${term}
 
@@ -142,9 +154,10 @@ RULES:
 - First sentence must be a bold, standalone claim (answer capsule)
 - Use the Insight First pattern: claim → evidence → implication → action
 - Include 2-3 subheadings (## headers)
-- Reference specific TSC methodologies or experience
+- Reference specific company methodologies or experience
 - End with a clear takeaway or call to action
-- 800-1500 words`;
+- 800-1500 words
+- If the topic relates to a product or service listed in the kernel context, reference it naturally within the article. Show how the company's offering addresses the topic — but keep it editorial, not salesy.`;
 
   const user = `Write a blog post about: ${topic}
 
@@ -186,7 +199,8 @@ RULES:
 - Be genuinely balanced — acknowledge strengths of all options
 - Scores are 1-10, use the full range
 - Verdict should be opinionated but fair
-- Include TSC's perspective on when each option makes sense`;
+- Include the company's perspective on when each option makes sense
+- If any compared option relates to a product or service in the kernel context, acknowledge the company's relevant offering and how it fits into the comparison.`;
 
   const user = `Create a comparison: ${topic}
 
@@ -226,17 +240,28 @@ ${context}`;
   return { system, user };
 }
 
-export function getNewsPrompts(topic: string, context: string) {
+export interface NewsArticleInput {
+  title: string;
+  url: string;
+  sourceName: string;
+  publishedAt: string;
+  snippet: string;
+  content: string;
+}
+
+export function getNewsPrompts(topic: string, context: string, article?: NewsArticleInput) {
   const system = `${BRAND_VOICE_CONTEXT}${CITABILITY_GUIDELINES}
 You are generating a news commentary for The Starr Conspiracy's insights section.
+
+CRITICAL: You are commenting on a REAL article that has been provided to you. Do NOT invent or fabricate any facts, statistics, or claims. Your commentary should reference the real article and add the company's perspective.
 
 OUTPUT FORMAT: Valid JSON with these fields:
 {
   "newsId": "url-friendly-id",
-  "headline": "Headline",
-  "summary": "2-3 sentence summary of the news",
-  "commentary": "TSC's perspective and analysis (200-400 words, markdown)",
-  "source": {"name": "Source Name", "url": "", "publishedAt": "2026-02-11T00:00:00Z"},
+  "headline": "Headline (your editorial angle, not just the article's headline)",
+  "summary": "2-3 sentence summary of the actual news",
+  "commentary": "The company's perspective and analysis (200-400 words, markdown with ## headers)",
+  "source": {"name": "${article?.sourceName || 'Source Name'}", "url": "${article?.url || ''}", "publishedAt": "${article?.publishedAt || new Date().toISOString()}"},
   "category": "One of: marketing, ai, industry, research",
   "sentiment": "positive, neutral, or negative",
   "impact": "high, medium, or low",
@@ -244,13 +269,20 @@ OUTPUT FORMAT: Valid JSON with these fields:
 }
 
 RULES:
+- The source name, URL, and publishedAt are pre-filled from the real article — use them exactly as provided
 - Commentary should add genuine insight, not just restate the news
-- Include TSC's perspective on what this means for B2B marketers
-- Be opinionated — our readers value candid takes`;
+- Include the company's perspective on what this means for B2B marketers
+- Connect the news to relevant products/services from the kernel context where natural
+- Be opinionated — readers value candid takes
+- Do NOT fabricate statistics or quotes not found in the source article`;
 
-  const user = `Write news commentary about: ${topic}
+  const articleContext = article
+    ? `\n\nSOURCE ARTICLE:\nTitle: ${article.title}\nURL: ${article.url}\nSource: ${article.sourceName}\nSnippet: ${article.snippet}\n\nArticle content:\n${article.content}`
+    : '';
 
-Context from TSC's GTM Kernel:
+  const user = `Write news commentary about: ${topic}${articleContext}
+
+Context from the GTM Kernel:
 ${context}`;
 
   return { system, user };
@@ -289,7 +321,16 @@ ${context}`;
   return { system, user };
 }
 
-export function getIndustryBriefPrompts(topic: string, context: string) {
+export interface IndustryBriefSource {
+  title: string;
+  url: string;
+  sourceName: string;
+  publishedAt: string;
+  snippet: string;
+  content: string;
+}
+
+export function getIndustryBriefPrompts(topic: string, context: string, sources?: IndustryBriefSource[]) {
   const system = `${BRAND_VOICE_CONTEXT}${CITABILITY_GUIDELINES}
 You are generating an industry brief for The Starr Conspiracy's insights section.
 
@@ -302,17 +343,28 @@ OUTPUT FORMAT: Valid JSON with these fields:
   "industry": "Industry or topic area",
   "keyFindings": ["Finding 1", "Finding 2", "Finding 3"],
   "recommendations": ["Recommendation 1", "Recommendation 2"],
+  "sources": [{"name": "Source Name", "url": "https://...", "publishedAt": "2026-01-01"}],
   "author": "One of: Bret Starr, Racheal Bates, JJ La Pata",
   "tags": ["tag1", "tag2"]
 }
 
 RULES:
-- Lead with data and trends
-- 3-5 key findings that are specific and actionable
-- 2-3 recommendations grounded in TSC methodology
-- Include 2026 context where relevant`;
+- CRITICAL: Do NOT invent statistics. Every specific number or percentage in the content must come from the source articles provided below. If no source provides a specific stat, state it as a directional observation ("B2B teams are increasingly...") not a fabricated number.
+- Key findings must reflect real patterns either from the sources provided OR from well-established, widely-known facts — not invented benchmarks.
+- The sources field must list every source article you reference. Do not include sources you did not actually reference.
+- Lead with insight, not a literature review.
+- 3-5 key findings grounded in real patterns or the provided sources.
+- 2-3 recommendations grounded in company methodology from the kernel context.
+- Include 2026 context where relevant.
+- If no source articles are provided, write the brief as analytical commentary and opinion — no stats, no percentages, no benchmarks.`;
 
-  const user = `Write an industry brief about: ${topic}
+  const sourcesContext = sources && sources.length > 0
+    ? `\n\nSOURCE ARTICLES (use these for any statistics or data points — do not invent your own):\n${sources.map((s, i) =>
+        `[${i + 1}] ${s.title}\nSource: ${s.sourceName} | URL: ${s.url}\nSnippet: ${s.snippet}\n\n${s.content}`
+      ).join('\n\n---\n\n')}`
+    : `\n\nNO SOURCE ARTICLES PROVIDED. Write this brief as analytical perspective and directional observations only. Do not include any specific statistics, percentages, or benchmarks.`;
+
+  const user = `Write an industry brief about: ${topic}${sourcesContext}
 
 Context from TSC's GTM Kernel:
 ${context}`;
