@@ -25,7 +25,7 @@ export default async function InfographicsListingPage() {
       <Header />
       <main className="min-h-screen pt-32 pb-20">
         <section className="section-wide mb-12">
-          <nav className="flex items-center gap-2 text-sm text-greige mb-8">
+          <nav className="flex items-center gap-2 text-sm text-shroomy mb-8">
             <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
             <Link href="/insights" className="hover:text-white/80">Insights</Link>
@@ -63,13 +63,13 @@ export default async function InfographicsListingPage() {
                     <h2 className="text-white font-semibold text-lg group-hover:text-white/80 transition-colors line-clamp-2">
                       {ig.title}
                     </h2>
-                    <p className="text-greige text-sm mt-2 line-clamp-2">
+                    <p className="text-shroomy text-sm mt-2 line-clamp-2">
                       {ig.description}
                     </p>
                     {ig.tags.length > 0 && (
                       <div className="flex flex-wrap gap-2 mt-3">
                         {ig.tags.slice(0, 3).map((tag) => (
-                          <span key={tag} className="text-xs text-greige bg-white/5 rounded-full px-2 py-0.5">
+                          <span key={tag} className="text-xs text-shroomy bg-white/5 rounded-full px-2 py-0.5">
                             {tag}
                           </span>
                         ))}
@@ -81,7 +81,7 @@ export default async function InfographicsListingPage() {
             </div>
           ) : (
             <div className="glass rounded-xl p-12 text-center">
-              <p className="text-greige text-lg">Content is being generated. Check back soon.</p>
+              <p className="text-shroomy text-lg">Content is being generated. Check back soon.</p>
             </div>
           )}
         </section>

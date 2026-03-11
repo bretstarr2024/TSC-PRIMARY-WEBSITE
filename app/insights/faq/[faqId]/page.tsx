@@ -6,6 +6,7 @@ import { Footer } from '@/components/Footer';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import { RelatedContent } from '@/components/insights/RelatedContent';
 import { CtaStrip } from '@/components/insights/CtaStrip';
+import { ContentRenderer } from '@/components/insights/ContentRenderer';
 import { getPublishedFaqById, getAllFaqIds, FaqItem } from '@/lib/resources-db';
 import { faqBreadcrumb } from '@/lib/schema/breadcrumbs';
 
@@ -93,7 +94,7 @@ export default async function FaqDetailPage({
             dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
           />
 
-          <nav className="flex items-center gap-2 text-sm text-greige mb-8">
+          <nav className="flex items-center gap-2 text-sm text-shroomy mb-8">
             <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
             <Link href="/insights" className="hover:text-white/80">Insights</Link>
@@ -115,9 +116,7 @@ export default async function FaqDetailPage({
           </h1>
 
           <div className="glass rounded-xl p-8 mb-10">
-            <p className="text-lg leading-relaxed whitespace-pre-line">
-              {faq.answer}
-            </p>
+            <ContentRenderer content={faq.answer} />
           </div>
 
           {faq.tags.length > 0 && (
@@ -125,7 +124,7 @@ export default async function FaqDetailPage({
               {faq.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="text-xs text-greige bg-white/5 px-3 py-1 rounded-full"
+                  className="text-xs text-shroomy bg-white/5 px-3 py-1 rounded-full"
                 >
                   {tag}
                 </span>

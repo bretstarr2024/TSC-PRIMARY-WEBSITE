@@ -82,7 +82,7 @@ export default async function ToolDetailPage({
             dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
           />
 
-          <nav className="flex items-center gap-2 text-sm text-greige mb-8">
+          <nav className="flex items-center gap-2 text-sm text-shroomy mb-8">
             <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
             <Link href="/insights" className="hover:text-white/80">Insights</Link>
@@ -123,7 +123,7 @@ export default async function ToolDetailPage({
 
             {tool.toolType === 'calculator' && (
               <div className="glass rounded-xl p-8 text-center">
-                <p className="text-greige">Calculator tools coming soon.</p>
+                <p className="text-shroomy">Calculator tools coming soon.</p>
               </div>
             )}
           </section>
@@ -134,7 +134,7 @@ export default async function ToolDetailPage({
               {tool.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="text-xs text-greige bg-white/5 px-3 py-1 rounded-full"
+                  className="text-xs text-shroomy bg-white/5 px-3 py-1 rounded-full"
                 >
                   {tag}
                 </span>

@@ -98,7 +98,7 @@ export default async function BlogDetailPage({
             dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
           />
 
-          <nav className="flex items-center gap-2 text-sm text-greige mb-8">
+          <nav className="flex items-center gap-2 text-sm text-shroomy mb-8">
             <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
             <Link href="/insights" className="hover:text-white/80">Insights</Link>
@@ -113,7 +113,7 @@ export default async function BlogDetailPage({
               {post.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="text-xs text-greige bg-white/5 px-3 py-1 rounded-full"
+                  className="text-xs text-shroomy bg-white/5 px-3 py-1 rounded-full"
                 >
                   {tag}
                 </span>
@@ -125,7 +125,7 @@ export default async function BlogDetailPage({
             {post.title}
           </h1>
 
-          <div className="flex items-center gap-4 text-sm text-greige mb-10">
+          <div className="flex items-center gap-4 text-sm text-shroomy mb-10">
             <span>{post.author}</span>
             <span className="w-1 h-1 rounded-full bg-greige" />
             <time dateTime={post.date}>

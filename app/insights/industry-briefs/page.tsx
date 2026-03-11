@@ -25,7 +25,7 @@ export default async function IndustryBriefsListingPage() {
       <Header />
       <main className="min-h-screen pt-32 pb-20">
         <section className="section-wide mb-12">
-          <nav className="flex items-center gap-2 text-sm text-greige mb-8">
+          <nav className="flex items-center gap-2 text-sm text-shroomy mb-8">
             <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
             <Link href="/insights" className="hover:text-white/80">Insights</Link>
@@ -56,7 +56,7 @@ export default async function IndustryBriefsListingPage() {
             </div>
           ) : (
             <div className="glass rounded-xl p-12 text-center">
-              <p className="text-greige text-lg">Content is being generated. Check back soon.</p>
+              <p className="text-shroomy text-lg">Content is being generated. Check back soon.</p>
             </div>
           )}
         </section>

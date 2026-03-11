@@ -74,7 +74,7 @@ export default async function ComparisonDetailPage({
             dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
           />
 
-          <nav className="flex items-center gap-2 text-sm text-greige mb-8">
+          <nav className="flex items-center gap-2 text-sm text-shroomy mb-8">
             <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
             <Link href="/insights" className="hover:text-white/80">Insights</Link>
@@ -99,7 +99,7 @@ export default async function ComparisonDetailPage({
                 <table className="w-full text-left">
                   <thead>
                     <tr className="border-b border-white/10">
-                      <th className="p-4 text-greige text-sm font-semibold">Criteria</th>
+                      <th className="p-4 text-shroomy text-sm font-semibold">Criteria</th>
                       {comp.items.map((item) => (
                         <th key={item.name} className="p-4 text-white text-sm font-semibold">
                           {item.name}
@@ -113,7 +113,7 @@ export default async function ComparisonDetailPage({
                         <td className="p-4">
                           <span className="text-sm font-medium">{criterion.name}</span>
                           {criterion.description && (
-                            <p className="text-greige text-xs mt-1">{criterion.description}</p>
+                            <p className="text-shroomy text-xs mt-1">{criterion.description}</p>
                           )}
                         </td>
                         {comp.items.map((item) => {

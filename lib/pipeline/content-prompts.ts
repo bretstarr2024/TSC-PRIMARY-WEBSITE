@@ -87,6 +87,12 @@ OUTPUT FORMAT: Valid JSON with these fields:
   "answerCapsule": "20-25 word standalone answer for AI citation"
 }
 
+ICP TITLE AWARENESS:
+The audience for these FAQs includes the full range of B2B marketing leadership roles — not just CMOs. Buyers vary by company size and engagement type:
+- Smaller companies (≤250 employees): CMO, VP of Marketing, CEO, Founder
+- Larger companies (250+ employees): VP or Director of Demand Generation, Content, Brand, or Communications
+Do NOT default every question to "How can B2B CMOs..." — frame questions for the role most relevant to the topic. A demand gen question should address VPs/Directors of Demand Gen. A brand question should address brand leaders. A strategy question can address marketing leadership broadly. Vary the framing naturally.
+
 RULES:
 - The answer's FIRST SENTENCE must be the answer capsule — quotable, standalone, cite-ready
 - Answer must be practical and actionable
@@ -99,7 +105,7 @@ RULES:
 Context from TSC's GTM Kernel:
 ${context}
 
-Write a direct, practical answer that a B2B CMO would find genuinely useful.`;
+Write a direct, practical answer that a senior B2B marketing leader would find genuinely useful. Match the role framing to the topic — not every question is a CMO question.`;
 
   return { system, user };
 }

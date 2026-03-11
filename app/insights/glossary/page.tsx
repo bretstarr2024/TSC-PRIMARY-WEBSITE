@@ -35,7 +35,7 @@ export default async function GlossaryListingPage() {
       <Header />
       <main className="min-h-screen pt-32 pb-20">
         <section className="section-wide mb-12">
-          <nav className="flex items-center gap-2 text-sm text-greige mb-8">
+          <nav className="flex items-center gap-2 text-sm text-shroomy mb-8">
             <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
             <Link href="/insights" className="hover:text-white/80">Insights</Link>
@@ -63,7 +63,7 @@ export default async function GlossaryListingPage() {
                       className={`w-10 h-10 flex items-center justify-center rounded-lg text-sm font-semibold transition-colors ${
                         hasTerms
                           ? 'glass text-white hover:text-white/80 cursor-pointer'
-                          : 'text-greige cursor-default'
+                          : 'text-shroomy cursor-default'
                       }`}
                     >
                       {letter}
@@ -92,7 +92,7 @@ export default async function GlossaryListingPage() {
                               {term.term}
                             </h3>
                             {term.acronym && (
-                              <span className="text-xs text-greige bg-white/5 px-2 py-0.5 rounded">
+                              <span className="text-xs text-shroomy bg-white/5 px-2 py-0.5 rounded">
                                 {term.acronym}
                               </span>
                             )}
@@ -109,7 +109,7 @@ export default async function GlossaryListingPage() {
             </>
           ) : (
             <div className="glass rounded-xl p-12 text-center">
-              <p className="text-greige text-lg">Content is being generated. Check back soon.</p>
+              <p className="text-shroomy text-lg">Content is being generated. Check back soon.</p>
             </div>
           )}
         </section>

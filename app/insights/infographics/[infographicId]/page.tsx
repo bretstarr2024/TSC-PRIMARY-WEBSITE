@@ -75,7 +75,7 @@ export default async function InfographicDetailPage({
             dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
           />
 
-          <nav className="flex items-center gap-2 text-sm text-greige mb-8">
+          <nav className="flex items-center gap-2 text-sm text-shroomy mb-8">
             <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
             <Link href="/insights" className="hover:text-white/80">Insights</Link>
@@ -96,7 +96,7 @@ export default async function InfographicDetailPage({
           {ig.tags.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-8">
               {ig.tags.map((tag) => (
-                <span key={tag} className="text-xs text-greige bg-white/5 rounded-full px-3 py-1">
+                <span key={tag} className="text-xs text-shroomy bg-white/5 rounded-full px-3 py-1">
                   {tag}
                 </span>
               ))}

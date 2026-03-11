@@ -67,7 +67,7 @@ const IMPACT_COLORS: Record<string, string> = {
 
 const SENTIMENT_COLORS: Record<string, string> = {
   positive: 'text-green-400 bg-green-400/10',
-  neutral: 'text-greige bg-white/5',
+  neutral: 'text-shroomy bg-white/5',
   negative: 'text-red-400 bg-red-400/10',
 };
 
@@ -100,7 +100,7 @@ export default async function NewsDetailPage({
             dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
           />
 
-          <nav className="flex items-center gap-2 text-sm text-greige mb-8">
+          <nav className="flex items-center gap-2 text-sm text-shroomy mb-8">
             <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
             <Link href="/insights" className="hover:text-white/80">Insights</Link>
@@ -129,7 +129,7 @@ export default async function NewsDetailPage({
               {item.sentiment}
             </span>
             {item.source.publishedAt && (
-              <span className="text-xs text-greige">
+              <span className="text-xs text-shroomy">
                 {new Date(item.source.publishedAt).toLocaleDateString('en-US', {
                   year: 'numeric',
                   month: 'long',
@@ -183,7 +183,7 @@ export default async function NewsDetailPage({
               {item.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="text-xs text-greige bg-white/5 px-3 py-1 rounded-full"
+                  className="text-xs text-shroomy bg-white/5 px-3 py-1 rounded-full"
                 >
                   {tag}
                 </span>

@@ -75,7 +75,7 @@ export default async function VideoDetailPage({
             dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
           />
 
-          <nav className="flex items-center gap-2 text-sm text-greige mb-8">
+          <nav className="flex items-center gap-2 text-sm text-shroomy mb-8">
             <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
             <Link href="/insights" className="hover:text-white/80">Insights</Link>
@@ -124,11 +124,11 @@ export default async function VideoDetailPage({
           <div className="flex flex-wrap items-center gap-4 mb-8">
             {video.speaker && (
               <span className="text-shroomy">
-                <span className="text-greige">Speaker:</span> {video.speaker}
+                <span className="text-shroomy">Speaker:</span> {video.speaker}
               </span>
             )}
             {video.duration && (
-              <span className="text-greige">{video.duration}</span>
+              <span className="text-shroomy">{video.duration}</span>
             )}
           </div>
 
@@ -167,7 +167,7 @@ export default async function VideoDetailPage({
               {video.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="text-xs text-greige bg-white/5 px-3 py-1 rounded-full"
+                  className="text-xs text-shroomy bg-white/5 px-3 py-1 rounded-full"
                 >
                   {tag}
                 </span>

@@ -98,7 +98,7 @@ export default async function ExpertQaDetailPage({
             dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
           />
 
-          <nav className="flex items-center gap-2 text-sm text-greige mb-8">
+          <nav className="flex items-center gap-2 text-sm text-shroomy mb-8">
             <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
             <Link href="/insights" className="hover:text-white/80">Insights</Link>
@@ -119,7 +119,7 @@ export default async function ExpertQaDetailPage({
             </div>
             <div>
               <span className="text-white font-semibold">{qa.expert.name}</span>
-              <p className="text-greige text-sm">
+              <p className="text-shroomy text-sm">
                 {qa.expert.title}{qa.expert.organization ? `, ${qa.expert.organization}` : ''}
               </p>
             </div>
@@ -141,7 +141,7 @@ export default async function ExpertQaDetailPage({
                   <p className="text-white text-lg italic leading-relaxed">
                     &ldquo;{snippet}&rdquo;
                   </p>
-                  <footer className="text-greige text-sm mt-2">
+                  <footer className="text-shroomy text-sm mt-2">
                     &mdash; {qa.expert.name}
                   </footer>
                 </blockquote>
@@ -155,7 +155,7 @@ export default async function ExpertQaDetailPage({
               {qa.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="text-xs text-greige bg-white/5 px-3 py-1 rounded-full"
+                  className="text-xs text-shroomy bg-white/5 px-3 py-1 rounded-full"
                 >
                   {tag}
                 </span>

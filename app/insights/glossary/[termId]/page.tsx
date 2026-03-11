@@ -87,7 +87,7 @@ export default async function GlossaryDetailPage({
             dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
           />
 
-          <nav className="flex items-center gap-2 text-sm text-greige mb-8">
+          <nav className="flex items-center gap-2 text-sm text-shroomy mb-8">
             <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
             <Link href="/insights" className="hover:text-white/80">Insights</Link>
@@ -102,7 +102,7 @@ export default async function GlossaryDetailPage({
               {term.term}
             </h1>
             {term.acronym && (
-              <span className="text-lg text-greige bg-white/5 px-3 py-1 rounded-lg">
+              <span className="text-lg text-shroomy bg-white/5 px-3 py-1 rounded-lg">
                 {term.acronym}
               </span>
             )}

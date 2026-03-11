@@ -75,7 +75,7 @@ export default async function IndustryBriefDetailPage({
             dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
           />
 
-          <nav className="flex items-center gap-2 text-sm text-greige mb-8">
+          <nav className="flex items-center gap-2 text-sm text-shroomy mb-8">
             <Link href="/" className="hover:text-white/80">Home</Link>
             <span>/</span>
             <Link href="/insights" className="hover:text-white/80">Insights</Link>
@@ -89,7 +89,7 @@ export default async function IndustryBriefDetailPage({
             {brief.title}
           </h1>
 
-          <div className="flex flex-wrap items-center gap-4 text-sm text-greige mb-10">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-shroomy mb-10">
             <span
               className="text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full"
               style={{ color: '#D97706', backgroundColor: 'rgba(217, 119, 6, 0.08)' }}
@@ -118,7 +118,7 @@ export default async function IndustryBriefDetailPage({
 
           {/* Summary in glass card */}
           <div className="glass rounded-xl p-8 mb-10 border-l-4 border-[#D97706]">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-greige mb-3">Executive Summary</h2>
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-shroomy mb-3">Executive Summary</h2>
             <p className="text-lg leading-relaxed">
               {brief.summary}
             </p>

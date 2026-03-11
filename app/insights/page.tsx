@@ -174,12 +174,12 @@ export default function InsightsPage() {
                     >
                       {ct.label}
                     </span>
-                    <span className="text-xs text-greige font-mono">{ct.icon}</span>
+                    <span className="text-xs text-shroomy font-mono">{ct.icon}</span>
                   </div>
                   <p className="text-sm text-white leading-relaxed">
                     {ct.description}
                   </p>
-                  <div className="mt-4 flex items-center gap-1 text-xs text-greige group-hover:text-white/80 transition-colors">
+                  <div className="mt-4 flex items-center gap-1 text-xs text-shroomy group-hover:text-white/80 transition-colors">
                     <span>Explore</span>
                     <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
