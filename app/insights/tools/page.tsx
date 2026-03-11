@@ -64,12 +64,12 @@ export default async function ToolsListingPage() {
         <section className="section-wide mb-16">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {Object.entries(TOOL_TYPE_INFO).map(([type, info]) => (
-              <div key={type} className="glass rounded-xl p-6" style={{ borderLeftColor: '#F472B6', borderLeftWidth: 3 }}>
-                <h3 className="text-white font-semibold text-lg mb-2">{info.label}</h3>
-                <p className="text-sm">{info.description}</p>
-                <p className="text-shroomy text-xs mt-3">
-                  {toolsByType[type]?.length || 0} available
-                </p>
+              <div key={type} className="rounded-xl p-6 border border-white/10 bg-white/[0.03]" style={{ borderTopColor: '#F472B6', borderTopWidth: 2 }}>
+                <div className="flex items-baseline justify-between mb-3">
+                  <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: '#F472B6' }}>{info.label}</span>
+                  <span className="text-2xl font-light text-white/40">{toolsByType[type]?.length || 0}</span>
+                </div>
+                <p className="text-sm text-shroomy">{info.description}</p>
               </div>
             ))}
           </div>
