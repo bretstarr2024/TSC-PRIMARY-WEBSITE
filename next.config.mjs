@@ -1,5 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async redirects() {
+    return [
+      { source: '/insights/videos', destination: '/insights', permanent: false },
+      { source: '/insights/infographics', destination: '/insights', permanent: false },
+    ];
+  },
   async headers() {
     return [
       {

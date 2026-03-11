@@ -82,22 +82,6 @@ const CONTENT_TYPES = [
     color: '#F472B6',
     icon: '09',
   },
-  {
-    type: 'videos',
-    label: 'Videos',
-    description: 'Strategic video perspectives on B2B marketing, AI, and growth.',
-    href: '/insights/videos',
-    color: '#10B981',
-    icon: '10',
-  },
-  {
-    type: 'infographics',
-    label: 'Infographics',
-    description: 'Visual breakdowns of data, frameworks, and strategies worth sharing.',
-    href: '/insights/infographics',
-    color: '#818CF8',
-    icon: '11',
-  },
 ];
 
 export default function InsightsPage() {
