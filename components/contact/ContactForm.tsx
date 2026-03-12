@@ -8,9 +8,27 @@ type FormState = 'idle' | 'loading' | 'success' | 'error';
 interface ContactFormProps {
   source?: string;
   ctaId?: string;
+  messagePlaceholder?: string;
+  successHeading?: string;
+  successSubtext?: React.ReactNode;
+  submitLabel?: string;
 }
 
-export function ContactForm({ source, ctaId }: ContactFormProps) {
+export function ContactForm({
+  source,
+  ctaId,
+  messagePlaceholder = 'What are you working on?',
+  successHeading = "Got it. We\u2019ll be in touch.",
+  successSubtext = (
+    <>
+      In the meantime, explore our{' '}
+      <a href="/insights" className="text-tidal-wave hover:text-white transition-colors">
+        insights
+      </a>.
+    </>
+  ),
+  submitLabel = 'Send it',
+}: ContactFormProps) {
   const [formState, setFormState] = useState<FormState>('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -77,13 +95,8 @@ export function ContactForm({ source, ctaId }: ContactFormProps) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
               </svg>
             </motion.div>
-            <p className="text-xl font-semibold text-white mb-2">Got it. We&apos;ll be in touch.</p>
-            <p className="text-sm text-greige">
-              In the meantime, explore our{' '}
-              <a href="/insights" className="text-tidal-wave hover:text-white transition-colors">
-                insights
-              </a>.
-            </p>
+            <p className="text-xl font-semibold text-white mb-2">{successHeading}</p>
+            <p className="text-sm text-greige">{successSubtext}</p>
           </motion.div>
         ) : (
           <motion.form
@@ -126,7 +139,7 @@ export function ContactForm({ source, ctaId }: ContactFormProps) {
                 id="contact-message"
                 name="message"
                 rows={3}
-                placeholder="What are you working on?"
+                placeholder={messagePlaceholder}
                 className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-greige focus:border-white/40 focus:ring-1 focus:ring-white/20 outline-none transition-colors text-sm resize-none"
                 disabled={formState === 'loading'}
               />
@@ -145,7 +158,7 @@ export function ContactForm({ source, ctaId }: ContactFormProps) {
               data-track-label="Send it"
               data-track-destination="/api/lead"
             >
-              {formState === 'loading' ? 'Sending...' : 'Send it'}
+              {formState === 'loading' ? 'Sending...' : submitLabel}
             </button>
           </motion.form>
         )}

@@ -125,10 +125,12 @@ export async function POST(request: Request) {
     const safeSource = data.source ? escapeHtml(data.source) : '';
     const safeCtaId = data.ctaId ? escapeHtml(data.ctaId) : '';
 
+    const isCareers = data.source === 'careers';
+
     // Team notification email
     const teamHtml = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #FF5910; margin-bottom: 20px;">New Lead</h2>
+        <h2 style="color: #FF5910; margin-bottom: 20px;">${isCareers ? 'New Application' : 'New Lead'}</h2>
         <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
           <tr>
             <td style="padding: 10px 0; border-bottom: 1px solid #333; font-weight: bold; color: #999; width: 100px;">Name</td>
@@ -168,7 +170,14 @@ export async function POST(request: Request) {
     `;
 
     // Auto-reply to submitter
-    const replyHtml = `
+    const replyHtml = isCareers ? `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+        <p>Hey ${safeName},</p>
+        <p>We received your application. A real human reads every one of these — we'll reach out directly if there's a match.</p>
+        <p>No follow-up needed on your end. We'll be in touch if we see a fit.</p>
+        <p style="margin-top: 32px; color: #666;">&mdash; The Starr Conspiracy</p>
+      </div>
+    ` : `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
         <p>Hey ${safeName},</p>
         <p>Thanks for reaching out. Someone from our team will be in touch within one business day.</p>
@@ -190,13 +199,13 @@ export async function POST(request: Request) {
       resend.emails.send({
         from: fromEmail,
         to: recipients,
-        subject: `[TSC] New lead: ${safeName} (${safeEmail})`,
+        subject: isCareers ? `[TSC] New application: ${safeName} (${safeEmail})` : `[TSC] New lead: ${safeName} (${safeEmail})`,
         html: teamHtml,
       }),
       resend.emails.send({
         from: fromEmail,
         to: data.email,
-        subject: 'We got your message',
+        subject: isCareers ? 'Application received' : 'We got your message',
         html: replyHtml,
       }),
     ]);

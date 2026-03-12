@@ -29,7 +29,14 @@ export function CareersContact() {
           <div className="lg:col-span-2">
             <AnimatedSection delay={0.1}>
               <div className="glass rounded-xl p-8 max-w-xl">
-                <ContactForm source="careers" ctaId="careers-form" />
+                <ContactForm
+                  source="careers"
+                  ctaId="careers-form"
+                  messagePlaceholder="Which role interests you, and what makes you the right fit?"
+                  successHeading="Application received."
+                  successSubtext="A real human reads every one of these. We'll reach out if there's a match."
+                  submitLabel="Submit application"
+                />
               </div>
             </AnimatedSection>
           </div>
