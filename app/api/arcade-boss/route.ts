@@ -142,8 +142,8 @@ export async function POST(request: Request) {
               Not many people find our arcade, and even fewer claim the top spot. We like that.
             </p>
             <p>
-              Someone from our team will be in touch about your prize. In the meantime,
-              if you want to talk about leveling up your marketing:
+              The grand prize goes to the highest aggregate scorer across all TSC arcade games — so keep playing.
+              In the meantime, if you want to talk about leveling up your marketing:
             </p>
             <p style="margin: 24px 0;">
               <a href="https://thestarrconspiracy.com/book"

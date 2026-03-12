@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
 const BRAND_COLORS = ['#FF5910', '#73F5FF', '#E1FF00', '#ED0AD2', '#d1d1c6'];
+const EMAIL_KEY = 'tsc-arcade-email';
 const CONFETTI_COUNT = 80;
 
 interface ArcadeBossOverlayProps {
@@ -38,12 +39,24 @@ export function ArcadeBossOverlay({ game, score, initials, onClose }: ArcadeBoss
     const currentEmail = emailRef.current;
     if (!currentEmail || submittedRef.current) return;
     setSubmitting(true);
+
+    // Save email to localStorage so ArcadeScoreCapture picks it up on future plays
+    try { localStorage.setItem(EMAIL_KEY, currentEmail.toLowerCase().trim()); } catch {}
+
     try {
-      await fetch('/api/arcade-boss', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: currentEmail, game, score, initials }),
-      });
+      await Promise.allSettled([
+        fetch('/api/arcade-boss', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: currentEmail, game, score, initials }),
+        }),
+        // Also post to arcade/score so email appears in main stats dashboard
+        fetch('/api/arcade/score', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: currentEmail.toLowerCase().trim(), game, score, initials }),
+        }),
+      ]);
     } catch { /* graceful degradation */ }
     setSubmitted(true);
     setSubmitting(false);
@@ -125,7 +138,7 @@ export function ArcadeBossOverlay({ game, score, initials, onClose }: ArcadeBoss
               {initials} &mdash; {String(score).padStart(6, '0')}
             </p>
             <p style={{ color: '#FF5910', fontSize: 14, marginBottom: 16 }}>
-              Enter your email to claim your prize
+              Enter your email to compete for the grand prize — awarded to the highest aggregate scorer across all TSC arcade games.
             </p>
             <input
               type="email"
@@ -169,7 +182,7 @@ export function ArcadeBossOverlay({ game, score, initials, onClose }: ArcadeBoss
                 marginBottom: 16,
               }}
             >
-              {submitting ? 'SENDING...' : 'CLAIM PRIZE'}
+              {submitting ? 'SENDING...' : 'ENTER THE COMPETITION'}
             </button>
             <br />
             <button
@@ -201,7 +214,7 @@ export function ArcadeBossOverlay({ game, score, initials, onClose }: ArcadeBoss
               You&apos;re in the system, boss.
             </h2>
             <p style={{ color: '#d1d1c6', fontSize: 14, marginBottom: 24 }}>
-              We&apos;ll be in touch about your prize.
+              Keep playing. The grand prize goes to the highest aggregate scorer across all TSC arcade games.
             </p>
             <button
               onClick={onClose}
