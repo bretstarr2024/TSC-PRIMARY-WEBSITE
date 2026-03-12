@@ -24,8 +24,8 @@ const C = {
 /* ── Tuning knobs ── */
 const MAZE_W = 28;
 const MAZE_H = 31;
-const PACMAN_SPEED = 2;
-const GHOST_SPEED = 1.5;
+const PACMAN_SPEED = 3.5;
+const GHOST_SPEED = 2.2;
 const GHOST_FRIGHTENED_SPEED = 0.8;
 const GHOST_EATEN_SPEED = 3;
 const POWER_DURATION = 360;
@@ -599,8 +599,8 @@ export function PacManGame({ onClose }: { onClose: () => void }) {
       modePhase: 0,
       deathAnim: 0,
       sparks: [],
-      introTimer: 300,
-      readyTimer: 120,
+      introTimer: 60,
+      readyTimer: 45,
       enteringInitials: false,
       initialsChars: [0, 0, 0],
       initialsPos: 0,
@@ -804,7 +804,7 @@ export function PacManGame({ onClose }: { onClose: () => void }) {
 
       /* ── Intro timer (Pac-Man jingle) ── */
       if (g.introTimer > 0) {
-        if (g.introTimer === 295) sfx.pacmanIntro();
+        if (g.introTimer === 59) sfx.pacmanIntro();
         g.introTimer--;
         /* Skip to render — readyTimer frozen during intro */
       }
@@ -1192,7 +1192,7 @@ export function PacManGame({ onClose }: { onClose: () => void }) {
             g.pacDir = 'left';
             g.pendingDir = null;
             g.powerTimer = 0;
-            g.readyTimer = 60;
+            g.readyTimer = 45;
 
             const gs = ghostStarts;
             const positions = [
@@ -1251,7 +1251,7 @@ export function PacManGame({ onClose }: { onClose: () => void }) {
           g.pendingDir = null;
           g.pacSpeed = PACMAN_SPEED;
           g.powerTimer = 0;
-          g.readyTimer = 60;
+          g.readyTimer = 45;
           g.modeTimer = MODE_DURATIONS[0];
           g.modePhase = 0;
 
