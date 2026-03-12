@@ -599,8 +599,8 @@ export function PacManGame({ onClose }: { onClose: () => void }) {
       modePhase: 0,
       deathAnim: 0,
       sparks: [],
-      introTimer: 60,
-      readyTimer: 45,
+      introTimer: 15,
+      readyTimer: 15,
       enteringInitials: false,
       initialsChars: [0, 0, 0],
       initialsPos: 0,
@@ -1192,7 +1192,7 @@ export function PacManGame({ onClose }: { onClose: () => void }) {
             g.pacDir = 'left';
             g.pendingDir = null;
             g.powerTimer = 0;
-            g.readyTimer = 45;
+            g.readyTimer = 15;
 
             const gs = ghostStarts;
             const positions = [
@@ -1251,7 +1251,7 @@ export function PacManGame({ onClose }: { onClose: () => void }) {
           g.pendingDir = null;
           g.pacSpeed = PACMAN_SPEED;
           g.powerTimer = 0;
-          g.readyTimer = 45;
+          g.readyTimer = 15;
           g.modeTimer = MODE_DURATIONS[0];
           g.modePhase = 0;
 
