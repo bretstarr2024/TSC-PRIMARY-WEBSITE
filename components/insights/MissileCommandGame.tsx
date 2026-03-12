@@ -19,6 +19,7 @@ const C = {
 /* ── Constants ── */
 const GROUND_RATIO = 0.88;
 const PLAYER_SPEED = 7;
+const CURSOR_SPEED = 6;
 const MAX_EX_R = 42;
 const EX_EXPAND = 24;
 const EX_HOLD = 12;
@@ -599,6 +600,7 @@ export function MissileCommandGame({ onClose }: Props) {
   const sfxRef = useRef(new SFX());
   const rafRef = useRef(0);
   const isOverRef = useRef(false);
+  const keysHeldRef = useRef<Set<string>>(new Set());
   const [isOver, setIsOver] = useState(false);
   const [isBoss, setIsBoss] = useState(false);
   const [muted, setMuted] = useState(false);
@@ -630,6 +632,14 @@ export function MissileCommandGame({ onClose }: Props) {
       const ctx = el?.getContext('2d');
       const g = gameRef.current;
       if (el && ctx && g) {
+        // Move crosshair with held arrow keys
+        if (!g.enteringInitials) {
+          const k = keysHeldRef.current;
+          if (k.has('arrowleft'))  g.cursorX = Math.max(0,             g.cursorX - CURSOR_SPEED);
+          if (k.has('arrowright')) g.cursorX = Math.min(g.w,           g.cursorX + CURSOR_SPEED);
+          if (k.has('arrowup'))    g.cursorY = Math.max(0,             g.cursorY - CURSOR_SPEED);
+          if (k.has('arrowdown'))  g.cursorY = Math.min(g.groundY - 10, g.cursorY + CURSOR_SPEED);
+        }
         updateGame(g, sfxRef.current);
         renderGame(ctx, g);
         if (g.over && !g.enteringInitials && !isOverRef.current) {
@@ -643,9 +653,19 @@ export function MissileCommandGame({ onClose }: Props) {
   }, [mounted]);
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
+    const onKeyDown = (e: KeyboardEvent) => {
       const g = gameRef.current;
       if (!g) return;
+
+      // Track held keys for cursor movement
+      keysHeldRef.current.add(e.key.toLowerCase());
+
+      // Prevent arrow keys and space from scrolling the page
+      if (['arrowleft','arrowright','arrowup','arrowdown',' '].includes(e.key.toLowerCase()) ||
+          ['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' '].includes(e.key)) {
+        e.preventDefault();
+      }
+
       if (e.key === 'Escape') { onClose(); return; }
       if (e.key.toLowerCase() === 'b') { setIsBoss(p => !p); return; }
       if (e.key.toLowerCase() === 'm') { setMuted(sfxRef.current.toggle()); return; }
@@ -657,29 +677,46 @@ export function MissileCommandGame({ onClose }: Props) {
         setIsOver(false);
         return;
       }
-      if (!g.enteringInitials) return;
-      if (e.key === 'ArrowUp') {
-        g.initialsChars[g.initialsPos] = (g.initialsChars[g.initialsPos] + 1) % 26;
-      } else if (e.key === 'ArrowDown') {
-        g.initialsChars[g.initialsPos] = (g.initialsChars[g.initialsPos] + 25) % 26;
-      } else if (e.key === 'ArrowRight' || e.key === 'Enter') {
-        if (g.initialsPos < 2) { g.initialsPos++; }
-        else {
-          const initials = g.initialsChars.map(c => ABC[c]).join('');
-          const hs = loadHS();
-          hs.push({ score: g.score, initials, wave: g.wave });
-          hs.sort((a, b) => b.score - a.score);
-          saveHS(hs.slice(0, HS_MAX));
-          g.enteringInitials = false;
-          setIsOver(true);
+
+      if (g.enteringInitials) {
+        if (e.key === 'ArrowUp') {
+          g.initialsChars[g.initialsPos] = (g.initialsChars[g.initialsPos] + 1) % 26;
+        } else if (e.key === 'ArrowDown') {
+          g.initialsChars[g.initialsPos] = (g.initialsChars[g.initialsPos] + 25) % 26;
+        } else if (e.key === 'ArrowRight' || e.key === 'Enter') {
+          if (g.initialsPos < 2) { g.initialsPos++; }
+          else {
+            const initials = g.initialsChars.map(c => ABC[c]).join('');
+            const hs = loadHS();
+            hs.push({ score: g.score, initials, wave: g.wave });
+            hs.sort((a, b) => b.score - a.score);
+            saveHS(hs.slice(0, HS_MAX));
+            g.enteringInitials = false;
+            setIsOver(true);
+          }
+        } else if (e.key === 'ArrowLeft') {
+          if (g.initialsPos > 0) g.initialsPos--;
         }
-      } else if (e.key === 'ArrowLeft') {
-        if (g.initialsPos > 0) g.initialsPos--;
+        forceUpdate(n => n + 1);
+        return;
       }
-      forceUpdate(n => n + 1);
+
+      // Spacebar fires at current crosshair position
+      if (e.key === ' ' && !g.over && g.waveEndTimer === 0) {
+        fireMissile(g, g.cursorX, g.cursorY, sfxRef.current);
+      }
     };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+
+    const onKeyUp = (e: KeyboardEvent) => {
+      keysHeldRef.current.delete(e.key.toLowerCase());
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('keyup', onKeyUp);
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('keyup', onKeyUp);
+    };
   }, [onClose]);
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -744,7 +781,7 @@ export function MissileCommandGame({ onClose }: Props) {
       <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: '#0a0a0a', fontFamily: 'monospace' }}>
         <canvas
           ref={canvasRef}
-          style={{ display: 'block', cursor: 'none', width: '100%', height: '100%' }}
+          style={{ display: 'block', cursor: 'crosshair', width: '100%', height: '100%' }}
           onMouseMove={handleMouseMove}
           onClick={handleClick}
           onTouchStart={handleTouchStart}
