@@ -4,7 +4,6 @@ import { AnimatedSection, StaggerContainer, StaggerItem } from '@/components/Ani
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { AnswerCapsulesSection } from '@/components/AnswerCapsulesSection';
-import { getClientConfig } from '@/lib/kernel/client';
 import { insightsCapsules } from '@/lib/schema/hub-faqs';
 import { getFaqSchema } from '@/lib/schema/service-faq';
 import { SnakeGameTrigger } from '@/components/insights/SnakeGameTrigger';
@@ -85,8 +84,6 @@ const CONTENT_TYPES = [
 ];
 
 export default function InsightsPage() {
-  const config = getClientConfig();
-
   return (
     <>
       <Header />
@@ -108,33 +105,6 @@ export default function InsightsPage() {
             </div>
           </AnimatedSection>
         </section>
-
-        {/* Buyer Goal Clusters */}
-        {config.jtbd.length > 0 && (
-          <section className="section-wide mb-20">
-            <AnimatedSection>
-              <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-8">
-                What are you trying to do?
-              </p>
-            </AnimatedSection>
-            <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {config.jtbd.map((job, i) => (
-                <StaggerItem key={i}>
-                  <div className="glass rounded-xl p-6 h-full">
-                    <h3 className="text-white font-semibold text-lg mb-2">{job.jobName}</h3>
-                    <p className="text-white text-sm mb-3">{job.startingState}</p>
-                    <div className="flex items-center gap-2 text-white text-sm">
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                      </svg>
-                      <span>{job.desiredState}</span>
-                    </div>
-                  </div>
-                </StaggerItem>
-              ))}
-            </StaggerContainer>
-          </section>
-        )}
 
         {/* Content Type Grid */}
         <section className="section-wide">
