@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 
 export type ConstellationPage =
   | 'services'
@@ -13,197 +14,235 @@ export type ConstellationPage =
 interface StarPoint { x: number; y: number; }
 
 interface Config {
-  accent: string;
-  glowX: number; // % for radial-gradient x
-  glowY: number; // % for radial-gradient y
-  stars: StarPoint[]; // 0–1 normalized canvas coords
+  label: string;         // constellation name
+  accent: string;        // hex node/edge color
+  glow1: string;         // "r,g,b" primary blob
+  glow2: string;         // "r,g,b" secondary blob
+  stars: StarPoint[];    // 0–1 normalized canvas coords
   edges: [number, number][];
 }
 
-function hexToRgb(hex: string): string {
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
-  return `${r},${g},${b}`;
+function hexToRgb(hex: string): [number, number, number] {
+  return [
+    parseInt(hex.slice(1, 3), 16),
+    parseInt(hex.slice(3, 5), 16),
+    parseInt(hex.slice(5, 7), 16),
+  ];
 }
 
-function genBgStars(count: number) {
-  const stars: { x: number; y: number; size: number; opacity: number; twinkleOffset: number; twinkleSpeed: number }[] = [];
-  for (let i = 0; i < count; i++) {
-    stars.push({
-      x: Math.random(),
-      y: Math.random(),
-      size: 0.3 + Math.random() * 1.0,
-      opacity: 0.08 + Math.random() * 0.28,
-      twinkleOffset: Math.random() * Math.PI * 2,
-      twinkleSpeed: 0.3 + Math.random() * 0.8,
-    });
-  }
-  return stars;
+interface BgStar {
+  x: number; y: number;
+  vx: number; vy: number;
+  size: number;
+  opacity: number;
+  twinkleOffset: number;
+  twinkleSpeed: number;
 }
 
-// ── Per-page constellation configs ──────────────────────────────────────────
+function genBgStars(count: number): BgStar[] {
+  return Array.from({ length: count }, () => ({
+    x: Math.random(),
+    y: Math.random(),
+    vx: (Math.random() - 0.5) * 0.00028,
+    vy: (Math.random() - 0.5) * 0.00015,
+    size: 0.28 + Math.random() * 0.88,
+    opacity: 0.06 + Math.random() * 0.22,
+    twinkleOffset: Math.random() * Math.PI * 2,
+    twinkleSpeed: 0.25 + Math.random() * 0.75,
+  }));
+}
+
+// ── Real constellation configs ───────────────────────────────────────────────
+// Star positions are normalized (0–1) to canvas space, constellation placed
+// right-of-center so hero text on the left breathes freely.
 
 const CONFIGS: Record<ConstellationPage, Config> = {
 
-  // SERVICES — compass rose: navigation, direction, strategy
-  // 8-pointed star radiating from center, center-right placement
+  // ORION — Services
+  // The hunter: commands the field, full offensive capability, nothing held back.
+  // Distinctive: belt of three, two shoulders, two feet.
   services: {
+    label: 'Orion',
     accent: '#E1FF00',
-    glowX: 74, glowY: 16,
+    glow1: '225,255,0',
+    glow2: '255,89,16',
     stars: [
-      { x: 0.720, y: 0.500 }, // 0 center
-      { x: 0.720, y: 0.270 }, // 1 N
-      { x: 0.878, y: 0.343 }, // 2 NE
-      { x: 0.912, y: 0.500 }, // 3 E
-      { x: 0.878, y: 0.657 }, // 4 SE
-      { x: 0.720, y: 0.730 }, // 5 S
-      { x: 0.562, y: 0.657 }, // 6 SW
-      { x: 0.528, y: 0.500 }, // 7 W
-      { x: 0.562, y: 0.343 }, // 8 NW
+      { x: 0.718, y: 0.188 }, // 0 Meissa (head)
+      { x: 0.632, y: 0.335 }, // 1 Betelgeuse (L shoulder)
+      { x: 0.798, y: 0.315 }, // 2 Bellatrix (R shoulder)
+      { x: 0.655, y: 0.490 }, // 3 Alnitak (L belt)
+      { x: 0.718, y: 0.478 }, // 4 Alnilam (C belt)
+      { x: 0.781, y: 0.465 }, // 5 Mintaka (R belt)
+      { x: 0.648, y: 0.695 }, // 6 Saiph (L foot)
+      { x: 0.812, y: 0.702 }, // 7 Rigel (R foot)
     ],
     edges: [
-      [0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7],[0,8],
-      [1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,1],
+      [0,1],[0,2],             // head to shoulders
+      [1,3],[2,5],             // shoulders to belt
+      [3,4],[4,5],             // belt
+      [3,6],[5,7],             // belt to feet
+      [6,7],                   // base
     ],
   },
 
-  // EXAMPLES — crown: achievement, reputation, excellence
-  // 3 peaks + 2 valleys + base line, right-of-center
+  // LEO — Examples
+  // The lion: pride, strength, proven results that roar.
+  // Distinctive: sickle (mane/head) + hindquarters triangle, Regulus at heart.
   examples: {
+    label: 'Leo',
     accent: '#FF5910',
-    glowX: 70, glowY: 10,
+    glow1: '255,89,16',
+    glow2: '237,10,210',
     stars: [
-      { x: 0.545, y: 0.670 }, // 0 base L
-      { x: 0.605, y: 0.445 }, // 1 peak L
-      { x: 0.668, y: 0.572 }, // 2 valley L
-      { x: 0.725, y: 0.330 }, // 3 center peak (tallest)
-      { x: 0.782, y: 0.572 }, // 4 valley R
-      { x: 0.845, y: 0.445 }, // 5 peak R
-      { x: 0.905, y: 0.670 }, // 6 base R
+      { x: 0.600, y: 0.622 }, // 0 Regulus (heart, brightest)
+      { x: 0.640, y: 0.482 }, // 1 η Leo
+      { x: 0.688, y: 0.412 }, // 2 γ Leo (Algieba)
+      { x: 0.738, y: 0.378 }, // 3 ζ Leo
+      { x: 0.790, y: 0.418 }, // 4 μ Leo
+      { x: 0.842, y: 0.468 }, // 5 ε Leo
+      { x: 0.818, y: 0.558 }, // 6 δ Leo (Zosma)
+      { x: 0.910, y: 0.510 }, // 7 β Leo (Denebola, tail)
+      { x: 0.862, y: 0.635 }, // 8 θ Leo
     ],
     edges: [
-      [0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,0],
+      [0,1],[1,2],[2,3],[3,4],[4,5], // sickle (mane)
+      [5,6],[6,7],[7,8],[8,6],        // hindquarters triangle
+      [0,8],                          // belly
     ],
   },
 
-  // VERTICALS — grid matrix: market segmentation, structure, categories
-  // 3×3 grid of nodes
+  // SAGITTARIUS TEAPOT — Verticals
+  // The archer: targeting diverse markets, aiming true.
+  // Distinctive: the iconic teapot asterism — spout left, handle right.
   verticals: {
+    label: 'Sagittarius',
     accent: '#73F5FF',
-    glowX: 76, glowY: 20,
+    glow1: '115,245,255',
+    glow2: '8,139,160',
     stars: [
-      { x: 0.578, y: 0.318 }, { x: 0.720, y: 0.318 }, { x: 0.862, y: 0.318 }, // row 0
-      { x: 0.578, y: 0.500 }, { x: 0.720, y: 0.500 }, { x: 0.862, y: 0.500 }, // row 1
-      { x: 0.578, y: 0.682 }, { x: 0.720, y: 0.682 }, { x: 0.862, y: 0.682 }, // row 2
+      { x: 0.548, y: 0.468 }, // 0 Alnasl γ² Sgr (spout tip)
+      { x: 0.605, y: 0.380 }, // 1 δ Sgr
+      { x: 0.695, y: 0.308 }, // 2 λ Sgr Kaus Borealis (lid)
+      { x: 0.668, y: 0.502 }, // 3 ε Sgr Kaus Australis (base L)
+      { x: 0.748, y: 0.470 }, // 4 ζ Sgr Ascella (base R)
+      { x: 0.848, y: 0.322 }, // 5 σ Sgr Nunki (upper R)
+      { x: 0.872, y: 0.430 }, // 6 τ Sgr (handle)
+      { x: 0.888, y: 0.522 }, // 7 φ Sgr (handle tip)
     ],
     edges: [
-      [0,1],[1,2],[3,4],[4,5],[6,7],[7,8], // horizontals
-      [0,3],[3,6],[1,4],[4,7],[2,5],[5,8], // verticals
+      [0,1],[1,2],             // spout to lid
+      [2,5],                   // lid top
+      [0,3],[3,4],[4,5],       // body outline
+      [4,6],[5,6],[6,7],       // handle
     ],
   },
 
-  // INSIGHTS — eye/lens: clarity, vision, perception
-  // Outer ellipse + iris spokes
+  // AQUARIUS — Insights
+  // The water bearer: knowledge flows outward, clarity through data.
+  // Distinctive: Y-shaped water jar asterism + radiating streams.
   insights: {
+    label: 'Aquarius',
     accent: '#E1FF00',
-    glowX: 80, glowY: 25,
+    glow1: '225,255,0',
+    glow2: '115,245,255',
     stars: [
-      { x: 0.545, y: 0.500 }, // 0 left corner
-      { x: 0.606, y: 0.362 }, // 1 upper L
-      { x: 0.720, y: 0.318 }, // 2 top
-      { x: 0.834, y: 0.362 }, // 3 upper R
-      { x: 0.895, y: 0.500 }, // 4 right corner
-      { x: 0.834, y: 0.638 }, // 5 lower R
-      { x: 0.720, y: 0.682 }, // 6 bottom
-      { x: 0.606, y: 0.638 }, // 7 lower L
-      { x: 0.720, y: 0.500 }, // 8 iris
+      { x: 0.618, y: 0.320 }, // 0 Sadalsuud β Aqr (brightest)
+      { x: 0.718, y: 0.340 }, // 1 Sadalmelik α Aqr
+      { x: 0.668, y: 0.438 }, // 2 γ Aqr Sadachbia (jar L)
+      { x: 0.705, y: 0.460 }, // 3 ζ Aqr (jar center)
+      { x: 0.748, y: 0.438 }, // 4 η Aqr (jar R)
+      { x: 0.788, y: 0.510 }, // 5 δ Aqr Skat
+      { x: 0.638, y: 0.622 }, // 6 ε Aqr Albali (stream L)
+      { x: 0.812, y: 0.642 }, // 7 λ Aqr (stream R)
     ],
     edges: [
-      [0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,0], // eye outline
-      [8,2],[8,4],[8,6],[8,0],                          // iris spokes
+      [0,1],                   // shoulders
+      [0,2],[1,4],             // to jar
+      [2,3],[3,4],             // jar
+      [1,5],[5,7],             // right chain (water R)
+      [3,6],                   // water flowing L
     ],
   },
 
-  // ABOUT — 5-pointed star: identity, The Starr Conspiracy, legacy
-  // Classic star, outer R≈0.19, inner r≈0.075
+  // CASSIOPEIA — About
+  // The queen: enduring legacy, royal authority since 1999.
+  // Distinctive: iconic W / M shape — five stars, unmistakable.
   about: {
+    label: 'Cassiopeia',
     accent: '#FF5910',
-    glowX: 68, glowY: 10,
+    glow1: '255,89,16',
+    glow2: '225,255,0',
     stars: [
-      // outer
-      { x: 0.720, y: 0.310 }, // 0 top      (-90°)
-      { x: 0.881, y: 0.428 }, // 1 upper R  (-18°)
-      { x: 0.820, y: 0.621 }, // 2 lower R  (+54°)
-      { x: 0.620, y: 0.621 }, // 3 lower L  (+126°)
-      { x: 0.559, y: 0.428 }, // 4 upper L  (+198°)
-      // inner
-      { x: 0.760, y: 0.428 }, // 5 inner top-R  (-54°)
-      { x: 0.791, y: 0.524 }, // 6 inner R       (+18°)
-      { x: 0.720, y: 0.574 }, // 7 inner bottom  (+90°)
-      { x: 0.649, y: 0.524 }, // 8 inner L       (+162°)
-      { x: 0.680, y: 0.428 }, // 9 inner top-L   (+234°)
+      { x: 0.552, y: 0.458 }, // 0 Caph β Cas
+      { x: 0.625, y: 0.398 }, // 1 Schedar α Cas
+      { x: 0.705, y: 0.472 }, // 2 Gamma γ Cas
+      { x: 0.788, y: 0.382 }, // 3 Ruchbah δ Cas
+      { x: 0.870, y: 0.432 }, // 4 Segin ε Cas
     ],
     edges: [
-      [0,5],[5,1],[1,6],[6,2],[2,7],[7,3],[3,8],[8,4],[4,9],[9,0],
+      [0,1],[1,2],[2,3],[3,4], // the W
     ],
   },
 
-  // WORKING TOGETHER — two clusters bridged: partnership, collaboration, integration
-  // Left 3-node cluster + bridge + right 3-node cluster
+  // GEMINI — Working Together
+  // The twins: partnership personified, two as one, the original collaboration.
+  // Distinctive: two parallel chains from twin heads (Castor + Pollux).
   'working-together': {
+    label: 'Gemini',
     accent: '#73F5FF',
-    glowX: 65, glowY: 28,
+    glow1: '115,245,255',
+    glow2: '100,120,200',
     stars: [
-      // Left cluster
-      { x: 0.558, y: 0.345 }, // 0
-      { x: 0.498, y: 0.500 }, // 1
-      { x: 0.558, y: 0.655 }, // 2
-      // Bridge
-      { x: 0.645, y: 0.428 }, // 3
-      { x: 0.720, y: 0.500 }, // 4 center
-      { x: 0.795, y: 0.428 }, // 5
-      // Right cluster
-      { x: 0.882, y: 0.345 }, // 6
-      { x: 0.942, y: 0.500 }, // 7
-      { x: 0.882, y: 0.655 }, // 8
+      { x: 0.682, y: 0.220 }, // 0 Castor α Gem (twin L)
+      { x: 0.765, y: 0.258 }, // 1 Pollux β Gem (twin R, brighter)
+      { x: 0.645, y: 0.365 }, // 2 ε Gem (Castor chain)
+      { x: 0.708, y: 0.385 }, // 3 δ Gem Wasat
+      { x: 0.622, y: 0.495 }, // 4 ζ Gem Mekbuda
+      { x: 0.772, y: 0.450 }, // 5 γ Gem Alhena
+      { x: 0.595, y: 0.598 }, // 6 η Gem
+      { x: 0.572, y: 0.692 }, // 7 μ Gem Tejat (Castor foot)
+      { x: 0.738, y: 0.550 }, // 8 ξ Gem
+      { x: 0.752, y: 0.652 }, // 9 ν Gem (Pollux foot)
     ],
     edges: [
-      [0,1],[1,2],[0,2],   // left cluster
-      [0,3],[2,3],         // left → bridge
-      [3,4],[4,5],         // bridge
-      [5,6],[5,8],         // bridge → right
-      [6,7],[7,8],[6,8],   // right cluster
+      [0,1],                   // twins' heads
+      [0,2],[2,4],[4,6],[6,7], // Castor chain
+      [1,3],[3,5],[3,8],[8,9], // Pollux chain
+      [2,3],[4,5],             // cross-bars (shoulders/hips)
     ],
   },
 };
 
+// Cursor must come within this many screen pixels to reveal a star
+const REVEAL_RADIUS = 185;
+
 // ── Component ────────────────────────────────────────────────────────────────
 
-interface Props {
-  page: ConstellationPage;
-}
-
-export function ConstellationBackground({ page }: Props) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+export function ConstellationBackground({ page }: { page: ConstellationPage }) {
   const [mounted, setMounted] = useState(false);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const bgStarsRef = useRef<BgStar[]>([]);
+  const revealRef = useRef<Float32Array>(new Float32Array(0));
   const stateRef = useRef({
-    mouse: { x: 0, y: 0 },
-    damped: { x: 0, y: 0 },
+    mouseX: -9999,
+    mouseY: -9999,
     time: 0,
     visible: true,
     rafId: 0,
     reduced: false,
+    frameCount: 0,
+    canvasRect: null as DOMRect | null,
   });
-  const bgStarsRef = useRef<ReturnType<typeof genBgStars>>([]);
 
+  const reducedMotion = useReducedMotion();
   const config = CONFIGS[page];
 
-  // Defer mount to idle time — avoid blocking main thread
+  // Defer mount to idle time to avoid blocking main thread
   useEffect(() => {
-    bgStarsRef.current = genBgStars(
-      typeof window !== 'undefined' && window.innerWidth < 768 ? 90 : 160
-    );
+    const count = typeof window !== 'undefined' && window.innerWidth < 768 ? 110 : 210;
+    bgStarsRef.current = genBgStars(count);
+    revealRef.current = new Float32Array(config.stars.length).fill(0);
+
     const cb = () => setMounted(true);
     if ('requestIdleCallback' in window) {
       const id = (window as any).requestIdleCallback(cb, { timeout: 2000 });
@@ -211,7 +250,7 @@ export function ConstellationBackground({ page }: Props) {
     }
     const id = setTimeout(cb, 120);
     return () => clearTimeout(id);
-  }, []);
+  }, [config.stars.length]);
 
   useEffect(() => {
     if (!mounted) return;
@@ -222,30 +261,35 @@ export function ConstellationBackground({ page }: Props) {
 
     const s = stateRef.current;
     s.reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const bgStars = bgStarsRef.current;
-    const accentRgb = hexToRgb(config.accent);
 
-    // Size canvas to container, accounting for DPR
+    const bgStars = bgStarsRef.current;
+    const reveal = revealRef.current;
+    const cStars = config.stars;
+    const edges = config.edges;
+    const [acR, acG, acB] = hexToRgb(config.accent);
+
     function resize() {
       if (!canvas || !ctx) return;
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       const rect = canvas.getBoundingClientRect();
+      s.canvasRect = rect;
       canvas.width = Math.round(rect.width * dpr);
       canvas.height = Math.round(rect.height * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
-    const onMouse = (e: MouseEvent) => {
-      s.mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-      s.mouse.y = (e.clientY / window.innerHeight) * 2 - 1;
+    const onMouse = (e: MouseEvent) => { s.mouseX = e.clientX; s.mouseY = e.clientY; };
+    const onTouch = (e: TouchEvent) => {
+      const t = e.touches[0];
+      if (t) { s.mouseX = t.clientX; s.mouseY = t.clientY; }
     };
     const onResize = () => resize();
 
     window.addEventListener('mousemove', onMouse, { passive: true });
+    window.addEventListener('touchmove', onTouch, { passive: true });
     window.addEventListener('resize', onResize, { passive: true });
     resize();
 
-    // Pause RAF when off-screen
     const observer = new IntersectionObserver(
       ([entry]) => { s.visible = entry.isIntersecting; },
       { threshold: 0 }
@@ -261,68 +305,103 @@ export function ConstellationBackground({ page }: Props) {
       const dt = Math.min((ts - lastTs) / 1000, 0.05);
       lastTs = ts;
       s.time += dt;
+      s.frameCount++;
 
-      // Smooth mouse with lerp
-      const lf = s.reduced ? 1 : 0.055;
-      s.damped.x += (s.mouse.x - s.damped.x) * lf;
-      s.damped.y += (s.mouse.y - s.damped.y) * lf;
+      // Refresh canvas rect every ~1s (not every frame — getBCR is cheap but no need to spam)
+      if (s.frameCount % 60 === 0) {
+        s.canvasRect = canvas.getBoundingClientRect();
+      }
 
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       const W = canvas.width / dpr;
       const H = canvas.height / dpr;
 
+      // ── Update per-star reveal factor ──
+      // Each constellation star starts indistinguishable from background stars.
+      // As the cursor approaches, it lights up in the accent color with connecting lines.
+      if (s.canvasRect && !s.reduced) {
+        const rLeft = s.canvasRect.left;
+        const rTop  = s.canvasRect.top;
+        for (let i = 0; i < cStars.length; i++) {
+          const sx = cStars[i].x * W + rLeft;
+          const sy = cStars[i].y * H + rTop;
+          const dx = s.mouseX - sx;
+          const dy = s.mouseY - sy;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const target = Math.max(0, 1 - dist / REVEAL_RADIUS);
+          // Smooth lerp toward target — reveals quickly, fades slowly
+          const lf = target > reveal[i] ? 0.10 : 0.045;
+          reveal[i] += (target - reveal[i]) * lf;
+        }
+      }
+
+      // ── Drift background stars ──
+      if (!s.reduced) {
+        for (const star of bgStars) {
+          star.x += star.vx * dt;
+          star.y += star.vy * dt;
+          if (star.x < -0.01) star.x += 1.02;
+          if (star.x > 1.01) star.x -= 1.02;
+          if (star.y < -0.01) star.y += 1.02;
+          if (star.y > 1.01) star.y -= 1.02;
+        }
+      }
+
       ctx.clearRect(0, 0, W, H);
-
-      const mx = s.damped.x;
-      const my = s.damped.y;
-
-      // Parallax: bg stars shift more, constellation shifts less
-      const bgOX = s.reduced ? 0 : mx * 20;
-      const bgOY = s.reduced ? 0 : my * 12;
-      const cOX  = s.reduced ? 0 : mx * 9;
-      const cOY  = s.reduced ? 0 : my * 5;
 
       // ── Background star field ──
       for (const star of bgStars) {
-        const tw = s.reduced ? 0 : Math.sin(s.time * star.twinkleSpeed + star.twinkleOffset) * 0.12;
-        const op = Math.max(0, star.opacity + tw);
+        const tw = s.reduced ? 0 : Math.sin(s.time * star.twinkleSpeed + star.twinkleOffset) * 0.10;
+        const op = Math.max(0.04, star.opacity + tw);
         ctx.beginPath();
-        ctx.arc(star.x * W + bgOX, star.y * H + bgOY, star.size, 0, Math.PI * 2);
+        ctx.arc(star.x * W, star.y * H, star.size, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255,255,255,${op.toFixed(2)})`;
         ctx.fill();
       }
 
-      // ── Constellation edges ──
-      const pulse = s.reduced ? 0.5 : 0.5 + 0.5 * Math.sin(s.time * 0.8);
-      const edgeOp = 0.16 + pulse * 0.08;
+      // ── Constellation edges — appear as cursor reveals both endpoint stars ──
+      for (const [a, b] of edges) {
+        const ra = reveal[a];
+        const rb = reveal[b];
+        const er = Math.min(ra, rb);
+        if (er < 0.02) continue;
 
-      ctx.strokeStyle = `rgba(${accentRgb},${edgeOp.toFixed(2)})`;
-      ctx.lineWidth = 0.75;
-
-      for (const [a, b] of config.edges) {
-        const sa = config.stars[a];
-        const sb = config.stars[b];
+        const op = (er * 0.75).toFixed(2);
+        ctx.strokeStyle = `rgba(${acR},${acG},${acB},${op})`;
+        ctx.lineWidth = 0.65 + er * 0.6;
         ctx.beginPath();
-        ctx.moveTo(sa.x * W + cOX, sa.y * H + cOY);
-        ctx.lineTo(sb.x * W + cOX, sb.y * H + cOY);
+        ctx.moveTo(cStars[a].x * W, cStars[a].y * H);
+        ctx.lineTo(cStars[b].x * W, cStars[b].y * H);
         ctx.stroke();
       }
 
-      // ── Constellation nodes ──
-      const nodePulse = s.reduced ? 0.5 : 0.5 + 0.5 * Math.sin(s.time * 1.4);
-      const nodeR = 1.6 + nodePulse * 0.65;
+      // ── Constellation stars — blend from invisible-in-field to bright accent ──
+      for (let i = 0; i < cStars.length; i++) {
+        const rv = reveal[i];
+        const x = cStars[i].x * W;
+        const y = cStars[i].y * H;
 
-      ctx.shadowColor = config.accent;
-      ctx.shadowBlur = 5 + nodePulse * 6;
+        // At rv=0: looks exactly like a background star (dim, white, small)
+        // At rv=1: bright accent dot with halo
+        const size    = 0.55 + rv * 2.05;
+        const opacity = 0.14 + rv * 0.78;
 
-      for (const star of config.stars) {
+        // Interpolate color: white → accent
+        const r = Math.round(255 + (acR - 255) * rv);
+        const g = Math.round(255 + (acG - 255) * rv);
+        const b = Math.round(255 + (acB - 255) * rv);
+
+        if (rv > 0.06) {
+          ctx.shadowColor = config.accent;
+          ctx.shadowBlur  = rv * 16;
+        }
+
         ctx.beginPath();
-        ctx.arc(star.x * W + cOX, star.y * H + cOY, nodeR, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${accentRgb},0.88)`;
+        ctx.arc(x, y, size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${r},${g},${b},${opacity.toFixed(2)})`;
         ctx.fill();
+        ctx.shadowBlur = 0;
       }
-
-      ctx.shadowBlur = 0;
     }
 
     s.rafId = requestAnimationFrame(frame);
@@ -330,23 +409,70 @@ export function ConstellationBackground({ page }: Props) {
     return () => {
       cancelAnimationFrame(s.rafId);
       window.removeEventListener('mousemove', onMouse);
+      window.removeEventListener('touchmove', onTouch);
       window.removeEventListener('resize', onResize);
       observer.disconnect();
     };
   }, [mounted, config]);
 
-  const accentRgb = hexToRgb(config.accent);
-
   return (
-    <div className="absolute inset-0 -z-10 pointer-events-none">
-      {/* Off-center cinematic glow — CSS only, renders on server */}
-      <div
-        className="absolute inset-0"
+    <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+
+      {/* ── Primary nebula blob — upper-right, large atmospheric glow ── */}
+      <motion.div
+        className="absolute rounded-full"
         style={{
-          background: `radial-gradient(ellipse 48% 42% at ${config.glowX}% ${config.glowY}%, rgba(${accentRgb},0.11) 0%, transparent 70%)`,
+          top: '-20%',
+          right: '-8%',
+          width: 680,
+          height: 680,
+          background: `radial-gradient(circle, rgba(${config.glow1},0.22) 0%, rgba(${config.glow1},0.06) 55%, transparent 70%)`,
+          filter: 'blur(90px)',
         }}
+        animate={reducedMotion ? {} : {
+          scale: [1, 1.08, 1],
+          opacity: [0.65, 1, 0.65],
+        }}
+        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
       />
-      {/* Constellation canvas — deferred until idle */}
+
+      {/* ── Secondary accent blob — center-right, smaller, offset color ── */}
+      <motion.div
+        className="absolute rounded-full"
+        style={{
+          top: '18%',
+          right: '4%',
+          width: 420,
+          height: 420,
+          background: `radial-gradient(circle, rgba(${config.glow2},0.16) 0%, transparent 70%)`,
+          filter: 'blur(70px)',
+        }}
+        animate={reducedMotion ? {} : {
+          scale: [1, 1.12, 1],
+          opacity: [0.45, 0.78, 0.45],
+        }}
+        transition={{ duration: 13, repeat: Infinity, ease: 'easeInOut', delay: 2.5 }}
+      />
+
+      {/* ── Tertiary ambient — bottom right, very subtle ── */}
+      <motion.div
+        className="absolute rounded-full"
+        style={{
+          bottom: '-5%',
+          right: '15%',
+          width: 320,
+          height: 320,
+          background: `radial-gradient(circle, rgba(${config.glow1},0.08) 0%, transparent 70%)`,
+          filter: 'blur(60px)',
+        }}
+        animate={reducedMotion ? {} : {
+          scale: [1, 1.15, 1],
+          opacity: [0.3, 0.55, 0.3],
+        }}
+        transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut', delay: 5 }}
+      />
+
+      {/* ── Star field canvas with constellation reveal ── */}
       {mounted && (
         <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
       )}
