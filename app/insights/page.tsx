@@ -6,7 +6,7 @@ import { Footer } from '@/components/Footer';
 import { AnswerCapsulesSection } from '@/components/AnswerCapsulesSection';
 import { insightsCapsules } from '@/lib/schema/hub-faqs';
 import { getFaqSchema } from '@/lib/schema/service-faq';
-import { SnakeGameTrigger } from '@/components/insights/SnakeGameTrigger';
+import { MissileCommandTrigger } from '@/components/insights/MissileCommandTrigger';
 
 export const revalidate = 3600;
 
@@ -145,7 +145,7 @@ export default function InsightsPage() {
           </StaggerContainer>
         </section>
 
-        <SnakeGameTrigger />
+        <MissileCommandTrigger />
 
         <AnswerCapsulesSection
           capsules={insightsCapsules}
