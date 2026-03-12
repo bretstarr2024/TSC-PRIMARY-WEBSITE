@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
   }
 
   const response = NextResponse.json({ ok: true });
-  response.cookies.set(DASHBOARD_COOKIE, hashPassword(expected), {
+  response.cookies.set(DASHBOARD_COOKIE, await hashPassword(expected), {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',

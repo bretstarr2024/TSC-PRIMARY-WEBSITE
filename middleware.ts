@@ -3,14 +3,14 @@ import { verifyDashboardSession } from '@/lib/dashboard-auth';
 
 const PROTECTED = /^\/dashboard(?!\/login)/;
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (PROTECTED.test(pathname)) {
     // Allow the API reporting routes through (they do their own auth check)
     if (pathname.startsWith('/api/')) return NextResponse.next();
 
-    if (!verifyDashboardSession(request)) {
+    if (!await verifyDashboardSession(request)) {
       const login = new URL('/dashboard/login', request.url);
       login.searchParams.set('from', pathname);
       return NextResponse.redirect(login);
