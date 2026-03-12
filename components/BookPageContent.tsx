@@ -7,6 +7,7 @@ import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { ContactForm } from '@/components/contact/ContactForm';
 
 // Same Three.js star particles as the homepage
 const HeroParticles = dynamic(
@@ -51,7 +52,16 @@ function BookPageInner() {
   const calContainerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [calLoaded, setCalLoaded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
   const service = searchParams.get('service');
 
   // Build Cal.com URL with optional service context in notes (no internal tracking metadata)
@@ -176,196 +186,220 @@ function BookPageInner() {
 
         {/* Content */}
         <div className="relative z-10 section-wide">
-          {/* Calendar + Team Photo layout */}
-          <motion.div
-            className="relative max-w-4xl mx-auto"
-            initial={{ opacity: 0, y: 40 }}
+          {/* Section label */}
+          <motion.p
+            className="font-arcade text-xs text-greige uppercase tracking-[0.3em] text-center mb-12"
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
           >
-            {/* Rotating team photo — top right of calendar */}
+            Select Your Path
+          </motion.p>
+
+          {/* Service context — shown when arriving from a service CTA */}
+          {service && (
             <motion.div
-              className="absolute -top-8 -right-4 md:-right-24 z-20"
-              initial={{ opacity: 0, scale: 0.5, rotate: 10 }}
-              animate={{ opacity: 1, scale: 1, rotate: 0 }}
-              transition={{ duration: 0.8, delay: 0.8, ease: [0.25, 0.4, 0.25, 1] }}
+              className="text-center mb-8"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
             >
-              {/* Sparkle constellation around photo */}
-              <div className="relative w-24 h-24 md:w-28 md:h-28">
-                {!reducedMotion && photoSparkles.map((spark, i) => (
-                  <motion.div
-                    key={`m-spark-${i}`}
-                    className="absolute rounded-full"
-                    style={{
-                      left: `${spark.x}%`,
-                      top: `${spark.y}%`,
-                      width: spark.size,
-                      height: spark.size,
-                      backgroundColor: spark.color,
-                      boxShadow: `0 0 8px ${spark.color}, 0 0 16px ${spark.color}90, 0 0 24px ${spark.color}40`,
-                    }}
-                    animate={{
-                      opacity: [0, 1, 0.3, 1, 0],
-                      scale: [0.3, 1.8, 0.8, 1.5, 0.3],
-                    }}
-                    transition={{
-                      duration: 2.2,
-                      repeat: Infinity,
-                      delay: spark.delay,
-                      ease: 'easeInOut',
-                    }}
-                  />
-                ))}
+              <p className="text-sm text-greige uppercase tracking-wider mb-1">You&apos;re interested in</p>
+              <p className="text-lg font-semibold text-atomic-tangerine">{service}</p>
+            </motion.div>
+          )}
 
-                {/* Photo / Placeholder */}
-                <div
-                  className="relative w-full h-full rounded-full overflow-hidden"
-                  style={{
-                    boxShadow: `
-                      0 0 25px ${activeMember.color}70,
-                      0 0 50px ${activeMember.color}40,
-                      0 0 75px ${activeMember.color}25,
-                      0 0 100px ${activeMember.color}15
-                    `,
-                  }}
-                >
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={activeIndex}
-                      className="absolute inset-0"
-                      initial={{ opacity: 0, scale: 1.1 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.9 }}
-                      transition={{ duration: 0.5 }}
-                    >
-                      {activeMember.image ? (
-                        <Image
-                          src={activeMember.image}
-                          alt={activeMember.name}
-                          width={112}
-                          height={112}
-                          className="object-cover w-full h-full"
-                          style={{
-                            filter: 'contrast(1.15) saturate(1.2) brightness(1.1)',
-                          }}
-                        />
-                      ) : (
-                        <div
-                          className="w-full h-full flex items-center justify-center text-white font-bold text-2xl"
-                          style={{
-                            background: `linear-gradient(135deg, ${activeMember.color}40, ${activeMember.color}15)`,
-                          }}
-                        >
-                          {activeMember.initials}
-                        </div>
-                      )}
-                    </motion.div>
-                  </AnimatePresence>
-                  <div
-                    className="absolute inset-0 rounded-full pointer-events-none"
-                    style={{
-                      background: `linear-gradient(135deg, ${activeMember.color}15 0%, transparent 50%)`,
-                      mixBlendMode: 'overlay',
-                    }}
-                  />
-                </div>
-
-                {/* Inner glow ring */}
-                <motion.div
-                  className="absolute -inset-1.5 rounded-full pointer-events-none"
-                  style={{
-                    border: `1.5px solid ${activeMember.color}`,
-                    boxShadow: `0 0 20px ${activeMember.color}50, 0 0 40px ${activeMember.color}20`,
-                  }}
-                  animate={reducedMotion ? {} : {
-                    opacity: [0.5, 1, 0.5],
-                    scale: [0.98, 1.03, 0.98],
-                  }}
-                  transition={{ duration: 2, repeat: reducedMotion ? 0 : Infinity, ease: 'easeInOut' }}
-                />
-
-                {/* Outer glow ring */}
-                <motion.div
-                  className="absolute -inset-3.5 rounded-full pointer-events-none"
-                  style={{
-                    border: `1px solid ${activeMember.color}`,
-                    boxShadow: `0 0 15px ${activeMember.color}30, 0 0 30px ${activeMember.color}15`,
-                  }}
-                  animate={reducedMotion ? {} : {
-                    opacity: [0.2, 0.6, 0.2],
-                    scale: [1.02, 0.97, 1.02],
-                    rotate: [0, 360],
-                  }}
-                  transition={{
-                    opacity: { duration: 3, repeat: reducedMotion ? 0 : Infinity, ease: 'easeInOut', delay: 0.5 },
-                    scale: { duration: 4, repeat: reducedMotion ? 0 : Infinity, ease: 'easeInOut', delay: 0.5 },
-                    rotate: { duration: 20, repeat: reducedMotion ? 0 : Infinity, ease: 'linear' },
-                  }}
-                />
-
-                {/* Name label */}
-                <AnimatePresence mode="wait">
-                  <motion.p
-                    key={activeMember.name}
-                    className="absolute -bottom-7 left-1/2 -translate-x-1/2 text-xs font-medium whitespace-nowrap"
-                    style={{
-                      color: activeMember.color,
-                      textShadow: `0 0 10px ${activeMember.color}60`,
-                    }}
-                    initial={{ opacity: 0, y: 4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -4 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    {activeMember.name}
-                  </motion.p>
-                </AnimatePresence>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto items-start">
+            {/* Left card: Drop a line */}
+            <motion.div
+              className="relative glass rounded-2xl p-8 md:p-10 flex flex-col overflow-hidden border border-atomic-tangerine/30"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              whileHover={{ y: -4 }}
+            >
+              <div
+                className="absolute -top-20 -left-20 w-40 h-40 rounded-full blur-3xl opacity-15 pointer-events-none"
+                style={{ background: '#FF5910' }}
+              />
+              <div className="relative z-10">
+                <h2 className="text-2xl font-normal text-white mb-1">Drop a line</h2>
+                <p className="text-sm text-greige mb-8">We&apos;ll get back to you within one business day.</p>
+                <ContactForm source="/book" ctaId="book-form" />
               </div>
             </motion.div>
 
-            {/* Service context — shown when arriving from a service CTA */}
-            {service && (
+            {/* Right column: Book a call + calendar */}
+            <motion.div
+              className="relative"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              {/* Rotating team photo — top right of calendar column */}
               <motion.div
-                className="text-center mb-6"
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
+                className="absolute -top-8 -right-4 md:-right-12 z-20"
+                initial={{ opacity: 0, scale: 0.5, rotate: 10 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                transition={{ duration: 0.8, delay: 0.8, ease: [0.25, 0.4, 0.25, 1] }}
               >
-                <p className="text-sm text-greige uppercase tracking-wider mb-1">You&apos;re interested in</p>
-                <p className="text-lg font-semibold text-atomic-tangerine">{service}</p>
-              </motion.div>
-            )}
+                <div className="relative w-24 h-24 md:w-28 md:h-28">
+                  {!reducedMotion && !isMobile && photoSparkles.map((spark, i) => (
+                    <motion.div
+                      key={`m-spark-${i}`}
+                      className="absolute rounded-full"
+                      style={{
+                        left: `${spark.x}%`,
+                        top: `${spark.y}%`,
+                        width: spark.size,
+                        height: spark.size,
+                        backgroundColor: spark.color,
+                        boxShadow: `0 0 8px ${spark.color}, 0 0 16px ${spark.color}90, 0 0 24px ${spark.color}40`,
+                      }}
+                      animate={{
+                        opacity: [0, 1, 0.3, 1, 0],
+                        scale: [0.3, 1.8, 0.8, 1.5, 0.3],
+                      }}
+                      transition={{
+                        duration: 2.2,
+                        repeat: Infinity,
+                        delay: spark.delay,
+                        ease: 'easeInOut',
+                      }}
+                    />
+                  ))}
 
-            {/* Calendar embed */}
-            <div className="relative rounded-2xl glass border border-white/10" style={{ overflow: 'visible' }}>
-              {/* Glow behind the iframe */}
-              <div
-                className="absolute inset-0 pointer-events-none rounded-2xl"
-                style={{
-                  background: 'radial-gradient(ellipse at center, #FF591008 0%, transparent 60%)',
-                }}
-              />
-              <div
-                ref={calContainerRef}
-                className="relative rounded-2xl overflow-hidden"
-                style={{ height: 700, transition: 'height 0.3s ease' }}
-              >
-                {!calLoaded && (
-                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 z-10">
-                    <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                    <p className="text-sm text-greige">Loading calendar...</p>
+                  <div
+                    className="relative w-full h-full rounded-full overflow-hidden"
+                    style={{
+                      boxShadow: `
+                        0 0 25px ${activeMember.color}70,
+                        0 0 50px ${activeMember.color}40,
+                        0 0 75px ${activeMember.color}25,
+                        0 0 100px ${activeMember.color}15
+                      `,
+                    }}
+                  >
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={activeIndex}
+                        className="absolute inset-0"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: isMobile ? 0.3 : 0.5 }}
+                      >
+                        {activeMember.image ? (
+                          <Image
+                            src={activeMember.image}
+                            alt={activeMember.name}
+                            width={112}
+                            height={112}
+                            className="object-cover w-full h-full"
+                            style={{ filter: 'contrast(1.15) saturate(1.2) brightness(1.1)' }}
+                          />
+                        ) : (
+                          <div
+                            className="w-full h-full flex items-center justify-center text-white font-bold text-2xl"
+                            style={{ background: `linear-gradient(135deg, ${activeMember.color}40, ${activeMember.color}15)` }}
+                          >
+                            {activeMember.initials}
+                          </div>
+                        )}
+                      </motion.div>
+                    </AnimatePresence>
+                    <div
+                      className="absolute inset-0 rounded-full pointer-events-none"
+                      style={{
+                        background: `linear-gradient(135deg, ${activeMember.color}15 0%, transparent 50%)`,
+                        mixBlendMode: 'overlay',
+                      }}
+                    />
                   </div>
-                )}
-                <iframe
-                  src={calUrl}
-                  className={`w-full h-full border-0 transition-opacity duration-500 ${calLoaded ? 'opacity-100' : 'opacity-0'}`}
-                  title="Book a meeting with The Starr Conspiracy"
-                  allow="payment"
-                  onLoad={() => setCalLoaded(true)}
-                />
+
+                  {/* Inner glow ring */}
+                  <motion.div
+                    className="absolute -inset-1.5 rounded-full pointer-events-none"
+                    style={{
+                      border: `1.5px solid ${activeMember.color}`,
+                      boxShadow: `0 0 20px ${activeMember.color}50, 0 0 40px ${activeMember.color}20`,
+                    }}
+                    animate={(reducedMotion || isMobile) ? {} : {
+                      opacity: [0.5, 1, 0.5],
+                      scale: [0.98, 1.03, 0.98],
+                    }}
+                    transition={{ duration: 2, repeat: (reducedMotion || isMobile) ? 0 : Infinity, ease: 'easeInOut' }}
+                  />
+
+                  {/* Outer glow ring */}
+                  <motion.div
+                    className="absolute -inset-3.5 rounded-full pointer-events-none"
+                    style={{
+                      border: `1px solid ${activeMember.color}`,
+                      boxShadow: `0 0 15px ${activeMember.color}30, 0 0 30px ${activeMember.color}15`,
+                    }}
+                    animate={reducedMotion ? {} : {
+                      opacity: [0.2, 0.6, 0.2],
+                      scale: [1.02, 0.97, 1.02],
+                      rotate: [0, 360],
+                    }}
+                    transition={{
+                      opacity: { duration: 3, repeat: reducedMotion ? 0 : Infinity, ease: 'easeInOut', delay: 0.5 },
+                      scale: { duration: 4, repeat: reducedMotion ? 0 : Infinity, ease: 'easeInOut', delay: 0.5 },
+                      rotate: { duration: 20, repeat: reducedMotion ? 0 : Infinity, ease: 'linear' },
+                    }}
+                  />
+
+                  {/* Name label */}
+                  <AnimatePresence mode="wait">
+                    <motion.p
+                      key={activeMember.name}
+                      className="absolute -bottom-7 left-1/2 -translate-x-1/2 text-xs font-medium whitespace-nowrap"
+                      style={{ color: activeMember.color, textShadow: `0 0 10px ${activeMember.color}60` }}
+                      initial={{ opacity: 0, y: 4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -4 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {activeMember.name}
+                    </motion.p>
+                  </AnimatePresence>
+                </div>
+              </motion.div>
+
+              <div className="glass rounded-2xl p-6 md:p-8 flex flex-col border border-white/10">
+                <h2 className="text-2xl font-normal text-white mb-1">Book a call</h2>
+                <p className="text-sm text-greige mb-6">25 minutes with a senior strategist.</p>
+
+                {/* Calendar embed */}
+                <div className="relative rounded-xl overflow-hidden border border-white/5" style={{ overflow: 'visible' }}>
+                  <div
+                    className="absolute inset-0 pointer-events-none rounded-xl"
+                    style={{ background: 'radial-gradient(ellipse at center, #FF591008 0%, transparent 60%)' }}
+                  />
+                  <div
+                    ref={calContainerRef}
+                    className="relative rounded-xl overflow-hidden"
+                    style={{ height: 700, transition: 'height 0.3s ease' }}
+                  >
+                    {!calLoaded && (
+                      <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 z-10">
+                        <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                        <p className="text-sm text-greige">Loading calendar...</p>
+                      </div>
+                    )}
+                    <iframe
+                      src={calUrl}
+                      className={`w-full h-full border-0 transition-opacity duration-500 ${calLoaded ? 'opacity-100' : 'opacity-0'}`}
+                      title="Book a meeting with The Starr Conspiracy"
+                      allow="payment"
+                      onLoad={() => setCalLoaded(true)}
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </div>
       </main>
       <Footer />
