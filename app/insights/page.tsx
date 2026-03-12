@@ -7,6 +7,7 @@ import { AnswerCapsulesSection } from '@/components/AnswerCapsulesSection';
 import { insightsCapsules } from '@/lib/schema/hub-faqs';
 import { getFaqSchema } from '@/lib/schema/service-faq';
 import { MissileCommandTrigger } from '@/components/insights/MissileCommandTrigger';
+import { InsightsHero } from '@/components/insights/InsightsHero';
 
 export const revalidate = 3600;
 
@@ -87,24 +88,8 @@ export default function InsightsPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen pt-32 pb-20">
-        {/* Hero */}
-        <section className="section-wide mb-20">
-          <AnimatedSection>
-            <div className="max-w-4xl">
-              <p className="text-[16px] font-bold text-shroomy uppercase tracking-[4px] mb-6">
-                Insights
-              </p>
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-normal text-white leading-[1.1] mb-6">
-                Strategic clarity.{' '}
-                <span className="text-white font-extrabold">Measurable growth.</span>
-              </h1>
-              <p className="text-xl md:text-2xl text-shroomy leading-relaxed max-w-2xl">
-                Here&apos;s the thinking behind it.
-              </p>
-            </div>
-          </AnimatedSection>
-        </section>
+      <main className="min-h-screen pb-20">
+        <InsightsHero />
 
         {/* Content Type Grid */}
         <section className="section-wide">

@@ -1,10 +1,12 @@
 'use client';
 
 import { AnimatedSection } from '@/components/AnimatedSection';
+import { ConstellationBackground } from '@/components/shared/ConstellationBackground';
 
 export function AboutHero() {
   return (
-    <section className="relative pt-32 pb-20 md:pt-40 md:pb-28">
+    <section className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
+      <ConstellationBackground page="about" />
       <div className="section-wide">
         <AnimatedSection>
           <div className="max-w-4xl">
