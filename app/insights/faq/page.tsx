@@ -30,6 +30,9 @@ export default async function FaqListingPage() {
 
   const categories = Object.keys(grouped).sort();
 
+  const formatCategory = (cat: string) =>
+    cat.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+
   // Build FAQPage schema for SEO/AEO
   const schema = {
     '@context': 'https://schema.org',
@@ -74,7 +77,7 @@ export default async function FaqListingPage() {
             <div className="space-y-12">
               {categories.map((category) => (
                 <div key={category}>
-                  <h2 className="text-2xl font-semibold text-white mb-6">{category}</h2>
+                  <h2 className="text-2xl font-semibold text-white mb-6">{formatCategory(category)}</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {grouped[category].map((faq) => (
                       <FaqFlipCard
