@@ -100,7 +100,7 @@ export function CaseStudyContent({ study, prev, next }: CaseStudyContentProps) {
       <section className="pb-16 md:pb-24">
         <div className="section-wide">
           <AnimatedSection>
-            <div className="max-w-3xl">
+            <div className="max-w-4xl">
               <p className="text-lg md:text-xl text-white leading-relaxed">
                 {study.intro}
               </p>
@@ -113,7 +113,7 @@ export function CaseStudyContent({ study, prev, next }: CaseStudyContentProps) {
       <section className="pb-16 md:pb-24">
         <div className="section-wide">
           <AnimatedSection>
-            <div className="max-w-3xl">
+            <div className="max-w-4xl">
               <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-6">
                 {study.sectionHeading}
               </h2>
@@ -154,7 +154,7 @@ export function CaseStudyContent({ study, prev, next }: CaseStudyContentProps) {
         <section className="pb-16 md:pb-24">
           <div className="section-wide">
             <AnimatedSection>
-              <div className="max-w-3xl">
+              <div className="max-w-4xl">
                 <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-6">
                   {study.outcomeHeading}
                 </h2>
@@ -172,7 +172,7 @@ export function CaseStudyContent({ study, prev, next }: CaseStudyContentProps) {
         <section className="pb-16 md:pb-24">
           <div className="section-wide">
             <AnimatedSection>
-              <div className="max-w-3xl mx-auto">
+              <div className="max-w-4xl">
                 <div className="relative pl-12 md:pl-16">
                   <span
                     className="text-8xl font-serif leading-none absolute left-0 -top-2"
@@ -197,7 +197,7 @@ export function CaseStudyContent({ study, prev, next }: CaseStudyContentProps) {
       <section className="pb-16 md:pb-24">
         <div className="section-wide">
           <AnimatedSection>
-            <div className="max-w-3xl">
+            <div className="max-w-4xl">
               <p className="text-sm text-shroomy uppercase tracking-wider mb-2">Client</p>
               <p className="text-white font-bold mb-1">{study.client}</p>
               <a
