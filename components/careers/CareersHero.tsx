@@ -1,7 +1,6 @@
 'use client';
 
 import { AnimatedSection } from '@/components/AnimatedSection';
-import { GradientText } from '@/components/AnimatedText';
 
 export function CareersHero() {
   return (
@@ -10,7 +9,7 @@ export function CareersHero() {
         <AnimatedSection>
           <div className="max-w-4xl">
             <h1 className="text-5xl md:text-7xl font-normal text-white mb-6">
-              <GradientText>Careers</GradientText>
+              Careers
             </h1>
             <p className="text-xl md:text-2xl text-shroomy leading-relaxed max-w-2xl">
               We hire people who build things, not people who talk about building things.
