@@ -119,7 +119,7 @@ export default function ArcadeLeaderboardPage() {
             <button style={s.tab(tab === 'overall')} onClick={() => setTab('overall')}>
               Overall
             </button>
-            {GAME_ORDER.filter(g => data.perGame[g]).map(g => (
+            {GAME_ORDER.map(g => (
               <button key={g} style={s.tab(tab === g)} onClick={() => setTab(g)}>
                 {data.gameLabels[g] || g}
               </button>
