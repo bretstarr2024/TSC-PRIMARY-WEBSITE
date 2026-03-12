@@ -31,7 +31,8 @@ function hexToRgb(hex: string): [number, number, number] {
 }
 
 interface BgStar {
-  x: number; y: number;
+  bx: number; by: number;  // base/drift position
+  rx: number; ry: number;  // repulsion offset (springs back to 0)
   vx: number; vy: number;
   size: number;
   opacity: number;
@@ -41,10 +42,12 @@ interface BgStar {
 
 function genBgStars(count: number): BgStar[] {
   return Array.from({ length: count }, () => ({
-    x: Math.random(),
-    y: Math.random(),
-    vx: (Math.random() - 0.5) * 0.0062,
-    vy: (Math.random() - 0.5) * 0.0042,
+    bx: Math.random(),
+    by: Math.random(),
+    rx: 0,
+    ry: 0,
+    vx: (Math.random() - 0.5) * 0.034,
+    vy: (Math.random() - 0.5) * 0.022,
     size: 0.28 + Math.random() * 0.88,
     opacity: 0.06 + Math.random() * 0.22,
     twinkleOffset: Math.random() * Math.PI * 2,
@@ -335,19 +338,42 @@ export function ConstellationBackground({ page }: { page: ConstellationPage }) {
         }
       }
 
-      // ── Drift background stars ──
+      // ── Drift + cursor repulsion for background stars ──
       if (!s.reduced) {
+        // Global oscillation — entire field breathes/flows together like homepage rotation
+        const fieldX = Math.sin(s.time * 0.22) * 0.007;
+        const fieldY = Math.cos(s.time * 0.16) * 0.004;
+
+        // Cursor in canvas-normalized space (0–1)
+        const rect = s.canvasRect;
+        const mcx = rect ? (s.mouseX - rect.left) / W : -2;
+        const mcy = rect ? (s.mouseY - rect.top) / H : -2;
+        const repelR = 200 / W; // 200px radius, normalized to canvas width
+
         for (const star of bgStars) {
-          // Global oscillation makes the entire field breathe/drift together
-          // like the homepage particle sphere rotation
-          const fieldX = Math.sin(s.time * 0.18) * 0.0014;
-          const fieldY = Math.cos(s.time * 0.13) * 0.0008;
-          star.x += (star.vx + fieldX) * dt;
-          star.y += (star.vy + fieldY) * dt;
-          if (star.x < -0.01) star.x += 1.02;
-          if (star.x > 1.01) star.x -= 1.02;
-          if (star.y < -0.01) star.y += 1.02;
-          if (star.y > 1.01) star.y -= 1.02;
+          // Drift base position
+          star.bx += (star.vx + fieldX) * dt;
+          star.by += (star.vy + fieldY) * dt;
+          if (star.bx < -0.02) star.bx += 1.04;
+          if (star.bx > 1.02) star.bx -= 1.04;
+          if (star.by < -0.02) star.by += 1.04;
+          if (star.by > 1.02) star.by -= 1.04;
+
+          // Cursor repulsion — same push-then-spring mechanic as homepage particles
+          const dx = star.bx - mcx;
+          const dy = star.by - mcy;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < repelR && dist > 0.001) {
+            // Push star away from cursor, proportional to proximity
+            const force = (1 - dist / repelR) * 0.11;
+            star.rx = (dx / dist) * force;
+            star.ry = (dy / dist) * force;
+          } else {
+            // Spring back to base position when cursor moves away
+            star.rx += (0 - star.rx) * 0.055;
+            star.ry += (0 - star.ry) * 0.055;
+          }
         }
       }
 
@@ -358,7 +384,7 @@ export function ConstellationBackground({ page }: { page: ConstellationPage }) {
         const tw = s.reduced ? 0 : Math.sin(s.time * star.twinkleSpeed + star.twinkleOffset) * 0.10;
         const op = Math.max(0.04, star.opacity + tw);
         ctx.beginPath();
-        ctx.arc(star.x * W, star.y * H, star.size, 0, Math.PI * 2);
+        ctx.arc((star.bx + star.rx) * W, (star.by + star.ry) * H, star.size, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255,255,255,${op.toFixed(2)})`;
         ctx.fill();
       }
@@ -422,58 +448,76 @@ export function ConstellationBackground({ page }: { page: ConstellationPage }) {
   return (
     <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
 
-      {/* ── Primary nebula blob — upper-right, large atmospheric glow ── */}
+      {/* ── Primary nebula — upper-right, dominant ── */}
       <motion.div
         className="absolute rounded-full"
         style={{
-          top: '-20%',
-          right: '-8%',
-          width: 680,
-          height: 680,
-          background: `radial-gradient(circle, rgba(${config.glow1},0.22) 0%, rgba(${config.glow1},0.06) 55%, transparent 70%)`,
-          filter: 'blur(90px)',
+          top: '-30%',
+          right: '-15%',
+          width: 950,
+          height: 950,
+          background: `radial-gradient(circle, rgba(${config.glow1},0.30) 0%, rgba(${config.glow1},0.08) 50%, transparent 70%)`,
+          filter: 'blur(100px)',
         }}
         animate={reducedMotion ? {} : {
-          scale: [1, 1.08, 1],
-          opacity: [0.65, 1, 0.65],
+          scale: [1, 1.09, 1],
+          opacity: [0.8, 1, 0.8],
         }}
         transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
       />
 
-      {/* ── Secondary accent blob — center-right, smaller, offset color ── */}
+      {/* ── Secondary — mid-right, second color ── */}
       <motion.div
         className="absolute rounded-full"
         style={{
-          top: '18%',
-          right: '4%',
-          width: 420,
-          height: 420,
-          background: `radial-gradient(circle, rgba(${config.glow2},0.16) 0%, transparent 70%)`,
-          filter: 'blur(70px)',
+          top: '15%',
+          right: '-8%',
+          width: 620,
+          height: 620,
+          background: `radial-gradient(circle, rgba(${config.glow2},0.22) 0%, rgba(${config.glow2},0.04) 60%, transparent 70%)`,
+          filter: 'blur(85px)',
         }}
         animate={reducedMotion ? {} : {
           scale: [1, 1.12, 1],
-          opacity: [0.45, 0.78, 0.45],
+          opacity: [0.6, 0.95, 0.6],
         }}
         transition={{ duration: 13, repeat: Infinity, ease: 'easeInOut', delay: 2.5 }}
       />
 
-      {/* ── Tertiary ambient — bottom right, very subtle ── */}
+      {/* ── Tertiary — lower-right, fills the bottom corner ── */}
       <motion.div
         className="absolute rounded-full"
         style={{
-          bottom: '-5%',
-          right: '15%',
-          width: 320,
-          height: 320,
-          background: `radial-gradient(circle, rgba(${config.glow1},0.08) 0%, transparent 70%)`,
-          filter: 'blur(60px)',
+          bottom: '-25%',
+          right: '5%',
+          width: 520,
+          height: 520,
+          background: `radial-gradient(circle, rgba(${config.glow1},0.16) 0%, transparent 70%)`,
+          filter: 'blur(80px)',
         }}
         animate={reducedMotion ? {} : {
-          scale: [1, 1.15, 1],
-          opacity: [0.3, 0.55, 0.3],
+          scale: [1, 1.14, 1],
+          opacity: [0.5, 0.8, 0.5],
         }}
         transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut', delay: 5 }}
+      />
+
+      {/* ── Left ambient — disperses glow across full width of hero ── */}
+      <motion.div
+        className="absolute rounded-full"
+        style={{
+          top: '20%',
+          left: '-10%',
+          width: 420,
+          height: 420,
+          background: `radial-gradient(circle, rgba(${config.glow2},0.12) 0%, transparent 70%)`,
+          filter: 'blur(90px)',
+        }}
+        animate={reducedMotion ? {} : {
+          scale: [1, 1.10, 1],
+          opacity: [0.4, 0.65, 0.4],
+        }}
+        transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut', delay: 7 }}
       />
 
       {/* ── Star field canvas with constellation reveal ── */}
