@@ -26,9 +26,4 @@ export const contactCapsules: AnswerCapsule[] = [
     answer:
       'Our expertise is deepest in B2B technology — SaaS, HR tech, fintech, cybersecurity, and adjacent verticals. If your company sells to businesses and you need marketing that compounds, we should talk.',
   },
-  {
-    question: 'Is there a minimum engagement size?',
-    answer:
-      'Subscriptions start at $15K per month. Projects start at $30K minimum. These floors exist because we staff engagements with senior talent, not junior account managers. The investment reflects the caliber of the team and the outcomes we drive.',
-  },
 ];
