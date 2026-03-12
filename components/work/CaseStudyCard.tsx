@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { AnimatedSection } from '@/components/AnimatedSection';
 import type { CaseStudy } from '@/lib/work-data';
 
@@ -17,11 +18,25 @@ export function CaseStudyCard({ study, index }: CaseStudyCardProps) {
         scroll={true}
         className="group block relative overflow-hidden rounded-2xl border border-white/10 hover:border-white/30 transition-all duration-300"
       >
-        {/* Colored accent bar */}
-        <div
-          className="absolute top-0 left-0 right-0 h-1 transition-all duration-300 group-hover:h-1.5"
-          style={{ backgroundColor: study.color }}
-        />
+        {/* Card image */}
+        {study.cardImage ? (
+          <div className="relative w-full aspect-[16/9] overflow-hidden">
+            <Image
+              src={study.cardImage}
+              alt={study.client}
+              fill
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60" />
+          </div>
+        ) : (
+          /* Colored accent bar fallback for cards without images */
+          <div
+            className="w-full h-1.5 group-hover:h-2 transition-all duration-300"
+            style={{ backgroundColor: study.color }}
+          />
+        )}
 
         <div className="p-8 md:p-10">
           {/* Tags */}

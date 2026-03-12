@@ -13,6 +13,10 @@ export interface CaseStudy {
   quote?: { text: string; attribution: string };
   tags: string[];
   color: string;
+  /** Card thumbnail shown in the /examples grid */
+  cardImage?: string;
+  /** Work sample images shown in the detail page gallery */
+  images?: string[];
 }
 
 export const CASE_STUDIES: CaseStudy[] = [
@@ -40,6 +44,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     },
     tags: ['PR', 'Share of Voice', 'Global Payroll'],
     color: '#73F5FF',
+    cardImage: '/images/work/papaya-global/card.jpg',
   },
   {
     slug: 'unmind',
@@ -64,6 +69,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     },
     tags: ['PR', 'Mental Health Tech', 'Share of Voice'],
     color: '#E1FF00',
+    cardImage: '/images/work/unmind/card.png',
   },
   {
     slug: 'archetype',
@@ -78,6 +84,15 @@ export const CASE_STUDIES: CaseStudy[] = [
       'TSC partnered with ASG\'s senior leadership team to evolve the brand from the inside out. We refined the logo and identity system, rebuilt the website from scratch (UX to dev), and shaped a messaging strategy that illuminated the full breadth of ASG\'s engagement model and investment thesis. The result was a bold, modern brand experience that matched their ambition.',
     tags: ['Brand', 'Website', 'Messaging'],
     color: '#FF5910',
+    cardImage: '/images/work/archetype/card.jpg',
+    images: [
+      '/images/work/archetype/gallery-1.jpg',
+      '/images/work/archetype/gallery-2.jpg',
+      '/images/work/archetype/gallery-3.jpg',
+      '/images/work/archetype/gallery-4.jpg',
+      '/images/work/archetype/gallery-5.jpg',
+      '/images/work/archetype/gallery-6.jpg',
+    ],
   },
   {
     slug: 'mobile-health',
@@ -100,6 +115,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     },
     tags: ['Brand', 'GTM', 'Wellbeing Tech'],
     color: '#73F5FF',
+    cardImage: '/images/work/mobile-health/card.jpg',
   },
   {
     slug: 'axonify',
@@ -118,6 +134,13 @@ export const CASE_STUDIES: CaseStudy[] = [
     ],
     tags: ['Brand', 'Research', 'Frontline Tech'],
     color: '#E1FF00',
+    cardImage: '/images/work/axonify/card.png',
+    images: [
+      '/images/work/axonify/gallery-1.png',
+      '/images/work/axonify/gallery-2.png',
+      '/images/work/axonify/gallery-3.png',
+      '/images/work/axonify/gallery-4.png',
+    ],
   },
   {
     slug: 'searchlight',
@@ -135,6 +158,16 @@ export const CASE_STUDIES: CaseStudy[] = [
       'Not long after the new brand hit the market, Searchlight was acquired by Multiverse, a clear signal that the story landed and the vision resonated.',
     tags: ['Brand', 'Positioning', 'Talent Tech'],
     color: '#FF5910',
+    cardImage: '/images/work/searchlight/card.jpg',
+    images: [
+      '/images/work/searchlight/gallery-1.jpg',
+      '/images/work/searchlight/gallery-2.jpg',
+      '/images/work/searchlight/gallery-3.jpg',
+      '/images/work/searchlight/gallery-4.jpg',
+      '/images/work/searchlight/gallery-5.jpg',
+      '/images/work/searchlight/gallery-6.jpg',
+      '/images/work/searchlight/gallery-7.jpg',
+    ],
   },
   {
     slug: 'talent-lms',
@@ -186,6 +219,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     },
     tags: ['Research', 'Content', 'HCM'],
     color: '#E1FF00',
+    cardImage: '/images/work/cornerstone/card.webp',
   },
   {
     slug: 'docebo',
@@ -207,6 +241,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     },
     tags: ['Analyst Relations', 'Events', 'Learning Tech'],
     color: '#FF5910',
+    cardImage: '/images/work/docebo/card.png',
   },
   {
     slug: 'nudge',
@@ -231,6 +266,17 @@ export const CASE_STUDIES: CaseStudy[] = [
     },
     tags: ['Brand', 'Strategy', 'Frontline Tech'],
     color: '#73F5FF',
+    cardImage: '/images/work/nudge/card.jpg',
+    images: [
+      '/images/work/nudge/gallery-1.jpg',
+      '/images/work/nudge/gallery-2.jpg',
+      '/images/work/nudge/gallery-3.jpg',
+      '/images/work/nudge/gallery-4.jpg',
+      '/images/work/nudge/gallery-5.jpg',
+      '/images/work/nudge/gallery-6.jpg',
+      '/images/work/nudge/gallery-7.jpg',
+      '/images/work/nudge/gallery-8.jpg',
+    ],
   },
 ];
 

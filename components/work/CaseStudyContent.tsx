@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { AnimatedSection } from '@/components/AnimatedSection';
 import type { CaseStudy } from '@/lib/work-data';
 
@@ -58,6 +59,22 @@ export function CaseStudyContent({ study, prev, next }: CaseStudyContentProps) {
               {study.subheading}
             </p>
           </AnimatedSection>
+
+          {/* Hero image */}
+          {study.cardImage && (
+            <AnimatedSection delay={0.2}>
+              <div className="relative w-full aspect-[16/9] mt-12 rounded-2xl overflow-hidden">
+                <Image
+                  src={study.cardImage}
+                  alt={`${study.client} — work`}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1280px) 100vw, 1280px"
+                  priority
+                />
+              </div>
+            </AnimatedSection>
+          )}
         </div>
       </section>
 
@@ -107,6 +124,30 @@ export function CaseStudyContent({ study, prev, next }: CaseStudyContentProps) {
           </AnimatedSection>
         </div>
       </section>
+
+      {/* Work gallery */}
+      {study.images && study.images.length > 0 && (
+        <section className="pb-16 md:pb-24">
+          <div className="section-wide">
+            <AnimatedSection>
+              <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
+                {study.images.map((src, i) => (
+                  <div key={i} className="break-inside-avoid overflow-hidden rounded-xl">
+                    <Image
+                      src={src}
+                      alt={`${study.client} work sample ${i + 1}`}
+                      width={800}
+                      height={600}
+                      className="w-full h-auto object-cover hover:scale-[1.02] transition-transform duration-300"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
+                  </div>
+                ))}
+              </div>
+            </AnimatedSection>
+          </div>
+        </section>
+      )}
 
       {/* Outcome section */}
       {study.outcomeHeading && study.outcomeBody && (
