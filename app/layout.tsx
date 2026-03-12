@@ -84,6 +84,14 @@ export default function RootLayout({
     <html lang="en" className={`dark ${workSans.variable} ${pressStart.variable}`}>
       <head>
         <meta name="theme-color" content="#141213" />
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-NJYRJBMYL2" />
+        <script dangerouslySetInnerHTML={{ __html: `
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-NJYRJBMYL2');
+        `}} />
       </head>
       <body className="bg-heart-of-darkness text-white antialiased font-sans">
         <a
