@@ -278,6 +278,14 @@ function calcButtons(w: number, h: number, g: Game): TBtn[] {
   btns.push({ id: 'close', x: 28, y: 28, r: 18, label: '\u2715' });
   btns.push({ id: 'mute', x: w - 28, y: 28, r: 18, label: '\u266B' });
 
+  if (!g.over) {
+    /* Movement buttons — large thumb targets at bottom corners */
+    const mr = Math.max(40, Math.min(52, Math.min(w, h) * 0.09));
+    const my = h - mr - 12;
+    btns.push({ id: 'moveleft', x: mr + 16, y: my, r: mr, label: '\u25C0' });
+    btns.push({ id: 'moveright', x: w - mr - 16, y: my, r: mr, label: '\u25B6' });
+  }
+
   if (g.over && g.overTimer >= 40) {
     if (g.enteringInitials) {
       const cy = h * 0.68;
@@ -402,6 +410,10 @@ export function BreakoutGame({ onClose }: { onClose: () => void }) {
     el.addEventListener('click', onMouseClick);
 
     /* ── Touch helpers ── */
+    function isTouchOnBtn(tx: number, ty: number): boolean {
+      return btnsRef.current.some(b => Math.hypot(tx - b.x, ty - b.y) < b.r * 1.5);
+    }
+
     function updateTouchState(e: TouchEvent) {
       const state: Record<string, boolean> = {};
       const btns = btnsRef.current;
@@ -417,23 +429,38 @@ export function BreakoutGame({ onClose }: { onClose: () => void }) {
       touchActive.current = state;
     }
 
+    function updateDragX(e: TouchEvent) {
+      /* Find the first touch that isn't on a button — use that for paddle drag */
+      for (let t = 0; t < e.touches.length; t++) {
+        const tx = e.touches[t].clientX;
+        const ty = e.touches[t].clientY;
+        if (!isTouchOnBtn(tx, ty)) {
+          touchX.current = tx;
+          return;
+        }
+      }
+      /* All touches are on buttons — don't override drag position */
+    }
+
     const onTouchStart = (e: TouchEvent) => {
       e.preventDefault();
       showTouch.current = true;
+      btnsRef.current = calcButtons(el.width, el.height, game.current!);
       updateTouchState(e);
-      if (e.touches.length > 0) touchX.current = e.touches[0].clientX;
+      updateDragX(e);
       tryLaunch();
     };
     const onTouchMove = (e: TouchEvent) => {
       e.preventDefault();
       showTouch.current = true;
       updateTouchState(e);
-      if (e.touches.length > 0) touchX.current = e.touches[0].clientX;
+      updateDragX(e);
     };
     const onTouchEnd = (e: TouchEvent) => {
       e.preventDefault();
       updateTouchState(e);
       if (e.touches.length === 0) touchX.current = null;
+      else updateDragX(e);
     };
 
     el.addEventListener('touchstart', onTouchStart, { passive: false });
@@ -561,15 +588,16 @@ export function BreakoutGame({ onClose }: { onClose: () => void }) {
       /* ═══ GAME LOGIC ═══ */
       if (!g.over && g.levelFlash <= 0) {
         /* ── Move paddle ── */
-        const trackX = touchX.current ?? mouseX.current;
-        if (trackX !== null) {
-          g.paddleX = Math.max(g.paddleW / 2, Math.min(w - g.paddleW / 2, trackX));
-        }
-        if (k.has('arrowleft') || k.has('a')) {
+        if (ta['moveleft'] || k.has('arrowleft') || k.has('a')) {
           g.paddleX = Math.max(g.paddleW / 2, g.paddleX - PADDLE_SPEED);
-        }
-        if (k.has('arrowright') || k.has('d')) {
+        } else if (ta['moveright'] || k.has('arrowright') || k.has('d')) {
           g.paddleX = Math.min(w - g.paddleW / 2, g.paddleX + PADDLE_SPEED);
+        } else {
+          /* Drag or mouse fallback */
+          const trackX = touchX.current ?? mouseX.current;
+          if (trackX !== null) {
+            g.paddleX = Math.max(g.paddleW / 2, Math.min(w - g.paddleW / 2, trackX));
+          }
         }
 
         /* ── Ball on paddle (not launched) ── */
@@ -818,7 +846,7 @@ export function BreakoutGame({ onClose }: { onClose: () => void }) {
         ctx.globalAlpha = 0.5 + 0.3 * Math.sin(g.frame * 0.06);
         ctx.font = '16px monospace'; ctx.textAlign = 'center';
         ctx.fillText(
-          showTouch.current ? 'TAP TO LAUNCH' : 'SPACE OR CLICK TO LAUNCH',
+          showTouch.current ? 'TAP TO LAUNCH  \u00B7  USE \u25C0 \u25B6 TO MOVE' : 'SPACE OR CLICK TO LAUNCH',
           w / 2, paddleY - 60,
         );
         ctx.globalAlpha = 1;
