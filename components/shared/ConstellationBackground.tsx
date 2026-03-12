@@ -43,8 +43,8 @@ function genBgStars(count: number): BgStar[] {
   return Array.from({ length: count }, () => ({
     x: Math.random(),
     y: Math.random(),
-    vx: (Math.random() - 0.5) * 0.00028,
-    vy: (Math.random() - 0.5) * 0.00015,
+    vx: (Math.random() - 0.5) * 0.0062,
+    vy: (Math.random() - 0.5) * 0.0042,
     size: 0.28 + Math.random() * 0.88,
     opacity: 0.06 + Math.random() * 0.22,
     twinkleOffset: Math.random() * Math.PI * 2,
@@ -338,8 +338,12 @@ export function ConstellationBackground({ page }: { page: ConstellationPage }) {
       // ── Drift background stars ──
       if (!s.reduced) {
         for (const star of bgStars) {
-          star.x += star.vx * dt;
-          star.y += star.vy * dt;
+          // Global oscillation makes the entire field breathe/drift together
+          // like the homepage particle sphere rotation
+          const fieldX = Math.sin(s.time * 0.18) * 0.0014;
+          const fieldY = Math.cos(s.time * 0.13) * 0.0008;
+          star.x += (star.vx + fieldX) * dt;
+          star.y += (star.vy + fieldY) * dt;
           if (star.x < -0.01) star.x += 1.02;
           if (star.x > 1.01) star.x -= 1.02;
           if (star.y < -0.01) star.y += 1.02;
