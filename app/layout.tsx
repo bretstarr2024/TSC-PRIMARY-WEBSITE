@@ -10,6 +10,7 @@ import { ConsoleGreeting } from "@/components/ConsoleGreeting";
 import { KonamiCode } from "@/components/KonamiCode";
 import { PageTransition } from "@/components/PageTransition";
 import { CookieConsent } from "@/components/CookieConsent";
+import { ArcadeScoreCapture } from "@/components/arcade/ArcadeScoreCapture";
 
 const workSans = Work_Sans({
   subsets: ["latin"],
@@ -109,6 +110,7 @@ export default function RootLayout({
             <div id="main-content" tabIndex={-1}>{children}</div>
           </PageTransition>
           <CookieConsent />
+          <ArcadeScoreCapture />
           <Analytics />
           <SpeedInsights />
         </SmoothScroll>

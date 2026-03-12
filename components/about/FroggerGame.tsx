@@ -601,6 +601,7 @@ export function FroggerGame({ onClose }: { onClose: () => void }) {
             g.scoreIndex = scores.indexOf(entry);
             g.enteringInitials = false;
             g.scoreSubmitted = true;
+            window.dispatchEvent(new CustomEvent('arcade-score', { detail: { game: 'frogger', initials, score: g.score } }));
             if (g.scoreIndex === 0 && !localStorage.getItem('tsc-frogger-boss')) {
               localStorage.setItem('tsc-frogger-boss', '1');
               bossActive.current = true;
@@ -689,6 +690,7 @@ export function FroggerGame({ onClose }: { onClose: () => void }) {
             g.scoreIndex = scores.indexOf(entry);
             g.enteringInitials = false;
             g.scoreSubmitted = true;
+            window.dispatchEvent(new CustomEvent('arcade-score', { detail: { game: 'frogger', initials, score: g.score } }));
             if (g.scoreIndex === 0 && !localStorage.getItem('tsc-frogger-boss')) {
               localStorage.setItem('tsc-frogger-boss', '1');
               bossActive.current = true;

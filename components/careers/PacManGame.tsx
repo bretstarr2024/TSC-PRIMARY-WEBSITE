@@ -696,6 +696,7 @@ export function PacManGame({ onClose }: { onClose: () => void }) {
             g.scoreIndex = scores.indexOf(entry);
             g.enteringInitials = false;
             g.scoreSubmitted = true;
+            window.dispatchEvent(new CustomEvent('arcade-score', { detail: { game: 'pacman', initials, score: g.score } }));
             if (g.scoreIndex === 0 && !localStorage.getItem('tsc-pacman-boss')) {
               localStorage.setItem('tsc-pacman-boss', '1');
               bossActive.current = true;
@@ -770,6 +771,7 @@ export function PacManGame({ onClose }: { onClose: () => void }) {
             g.scoreIndex = scores.indexOf(entry);
             g.enteringInitials = false;
             g.scoreSubmitted = true;
+            window.dispatchEvent(new CustomEvent('arcade-score', { detail: { game: 'pacman', initials, score: g.score } }));
             if (g.scoreIndex === 0 && !localStorage.getItem('tsc-pacman-boss')) {
               localStorage.setItem('tsc-pacman-boss', '1');
               bossActive.current = true;

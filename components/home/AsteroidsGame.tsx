@@ -609,6 +609,7 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
             g.scoreIndex = scores.indexOf(entry);
             g.enteringInitials = false;
             g.scoreSubmitted = true;
+            window.dispatchEvent(new CustomEvent('arcade-score', { detail: { game: 'asteroids', initials, score: g.score } }));
             if (g.scoreIndex === 0 && !sessionStorage.getItem('tsc-asteroids-boss')) {
               sessionStorage.setItem('tsc-asteroids-boss', '1');
               bossActive.current = true;
@@ -693,6 +694,7 @@ export function AsteroidsGame({ onClose }: { onClose: () => void }) {
             g.scoreIndex = scores.indexOf(entry);
             g.enteringInitials = false;
             g.scoreSubmitted = true;
+            window.dispatchEvent(new CustomEvent('arcade-score', { detail: { game: 'asteroids', initials, score: g.score } }));
             if (g.scoreIndex === 0 && !sessionStorage.getItem('tsc-asteroids-boss')) {
               sessionStorage.setItem('tsc-asteroids-boss', '1');
               bossActive.current = true;

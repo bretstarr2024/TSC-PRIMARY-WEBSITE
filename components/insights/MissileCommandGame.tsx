@@ -691,6 +691,7 @@ export function MissileCommandGame({ onClose }: Props) {
             hs.push({ score: g.score, initials, wave: g.wave });
             hs.sort((a, b) => b.score - a.score);
             saveHS(hs.slice(0, HS_MAX));
+            window.dispatchEvent(new CustomEvent('arcade-score', { detail: { game: 'missile-command', initials, score: g.score, wave: g.wave } }));
             g.enteringInitials = false;
             setIsOver(true);
           }

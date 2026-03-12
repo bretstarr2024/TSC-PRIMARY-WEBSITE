@@ -499,6 +499,7 @@ export function TronGame({ onClose }: { onClose: () => void }) {
             g.scoreIndex = scores.indexOf(entry);
             g.enteringInitials = false;
             g.scoreSubmitted = true;
+            window.dispatchEvent(new CustomEvent('arcade-score', { detail: { game: 'tron', initials, score: g.score } }));
             if (g.scoreIndex === 0 && !localStorage.getItem('tsc-tron-boss')) {
               localStorage.setItem('tsc-tron-boss', '1');
               bossActive.current = true;
@@ -578,6 +579,7 @@ export function TronGame({ onClose }: { onClose: () => void }) {
             g.scoreIndex = scores.indexOf(entry);
             g.enteringInitials = false;
             g.scoreSubmitted = true;
+            window.dispatchEvent(new CustomEvent('arcade-score', { detail: { game: 'tron', initials, score: g.score } }));
             if (g.scoreIndex === 0 && !localStorage.getItem('tsc-tron-boss')) {
               localStorage.setItem('tsc-tron-boss', '1');
               bossActive.current = true;

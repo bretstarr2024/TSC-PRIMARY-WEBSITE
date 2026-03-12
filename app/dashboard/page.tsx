@@ -8,6 +8,7 @@ import { TrafficSection } from '@/components/dashboard/TrafficSection';
 import { SearchSection } from '@/components/dashboard/SearchSection';
 import { AhrefsSection } from '@/components/dashboard/AhrefsSection';
 import { InternalSection } from '@/components/dashboard/InternalSection';
+import { ArcadeSection } from '@/components/dashboard/ArcadeSection';
 
 function SectionError({ title }: { title: string }) {
   return (
@@ -110,6 +111,10 @@ export default function DashboardPage() {
               ? <AhrefsSection data={data.ahrefs} />
               : <SectionError title="Ahrefs" />
             }
+
+            <hr className="border-white/5" />
+
+            <ArcadeSection />
           </div>
 
           {/* Sidebar — 1 col */}

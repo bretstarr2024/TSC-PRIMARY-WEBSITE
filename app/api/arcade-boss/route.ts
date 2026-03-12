@@ -19,6 +19,7 @@ const GAME_NAMES: Record<string, string> = {
   invaders: 'Space Invaders',
   galaga: 'Galaga',
   pacman: 'Pac-Man',
+  'missile-command': 'Missile Command',
 };
 
 export async function POST(request: Request) {

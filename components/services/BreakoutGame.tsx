@@ -500,6 +500,7 @@ export function BreakoutGame({ onClose }: { onClose: () => void }) {
             g.scoreIndex = scores.indexOf(entry);
             g.enteringInitials = false;
             g.scoreSubmitted = true;
+            window.dispatchEvent(new CustomEvent('arcade-score', { detail: { game: 'breakout', initials, score: g.score } }));
             if (g.scoreIndex === 0 && !localStorage.getItem('tsc-breakout-boss')) {
               localStorage.setItem('tsc-breakout-boss', '1');
               bossActive.current = true;
@@ -567,6 +568,7 @@ export function BreakoutGame({ onClose }: { onClose: () => void }) {
             g.scoreIndex = scores.indexOf(entry);
             g.enteringInitials = false;
             g.scoreSubmitted = true;
+            window.dispatchEvent(new CustomEvent('arcade-score', { detail: { game: 'breakout', initials, score: g.score } }));
             if (g.scoreIndex === 0 && !localStorage.getItem('tsc-breakout-boss')) {
               localStorage.setItem('tsc-breakout-boss', '1');
               bossActive.current = true;

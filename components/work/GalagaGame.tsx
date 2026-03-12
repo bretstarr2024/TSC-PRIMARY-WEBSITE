@@ -984,6 +984,7 @@ export function GalagaGame({ onClose }: { onClose: () => void }) {
             g.scoreIndex = scores.indexOf(entry);
             g.enteringInitials = false;
             g.scoreSubmitted = true;
+            window.dispatchEvent(new CustomEvent('arcade-score', { detail: { game: 'galaga', initials, score: g.score } }));
             if (g.scoreIndex === 0 && !localStorage.getItem('tsc-galaga-boss')) { localStorage.setItem('tsc-galaga-boss', '1'); bossActive.current = true; setBossData({ game: 'galaga', score: g.score, initials }); }
           } else if (/^[a-zA-Z]$/.test(key)) {
             g.initialsChars[g.initialsPos] = key.toUpperCase().charCodeAt(0) - 65;

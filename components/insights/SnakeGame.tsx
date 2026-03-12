@@ -386,6 +386,7 @@ export function SnakeGame({ onClose }: { onClose: () => void }) {
       const scores = [...g.highScores, entry].sort((a, b) => b.score - a.score).slice(0, HS_MAX);
       saveHighScores(scores); g.highScores = scores; g.scoreIndex = scores.indexOf(entry);
       g.enteringInitials = false; g.scoreSubmitted = true;
+      window.dispatchEvent(new CustomEvent('arcade-score', { detail: { game: 'snake', initials, score: g.score } }));
       if (g.scoreIndex === 0 && !localStorage.getItem('tsc-snake-boss')) { localStorage.setItem('tsc-snake-boss', '1'); bossActive.current = true; setBossData({ game: 'snake', score: g.score, initials }); }
     }
 
