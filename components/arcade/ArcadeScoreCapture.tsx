@@ -3,7 +3,6 @@
 import { useEffect, useState, useRef } from 'react';
 
 const EMAIL_KEY = 'tsc-arcade-email';
-const SKIP_KEY  = 'tsc-arcade-skip';
 
 interface ScoreEvent {
   game: string;
@@ -113,19 +112,11 @@ export function ArcadeScoreCapture() {
         }
       } catch { /* graceful degradation */ }
 
-      // Show overlay only if no email stored yet and not permanently skipped
-      let skipped = false;
-      try { skipped = !!localStorage.getItem(SKIP_KEY); } catch {}
-
-      if (!storedEmail && !skipped) {
+      if (!storedEmail) {
+        // No email yet — ask every time
         setEmailDone(false);
         setEmail('');
         setVisible(true);
-      } else if (!storedEmail) {
-        // Skipped before — show brief rank toast instead
-        setEmailDone(true);
-        setVisible(true);
-        setTimeout(() => setVisible(false), 4000);
       } else {
         // Email already stored — show brief rank toast
         setEmailDone(true);
@@ -167,7 +158,6 @@ export function ArcadeScoreCapture() {
   };
 
   const handleSkip = () => {
-    try { localStorage.setItem(SKIP_KEY, '1'); } catch {}
     setVisible(false);
   };
 
