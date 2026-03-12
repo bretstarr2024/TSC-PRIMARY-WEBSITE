@@ -63,7 +63,7 @@ export function CaseStudyContent({ study, prev, next }: CaseStudyContentProps) {
           {/* Hero image */}
           {study.cardImage && (
             <AnimatedSection delay={0.2}>
-              <div className="relative w-full aspect-[16/9] mt-12 rounded-2xl overflow-hidden">
+              <div className="relative w-full h-48 md:h-64 lg:h-80 mt-12 rounded-2xl overflow-hidden">
                 <Image
                   src={study.cardImage}
                   alt={`${study.client} — work`}
