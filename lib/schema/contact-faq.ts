@@ -14,7 +14,7 @@ export const contactCapsules: AnswerCapsule[] = [
   {
     question: 'How fast will I hear back?',
     answer:
-      'Within one business day. If you need to talk sooner, book a call directly using the calendar on this page — you can get on our schedule today.',
+      'Within one business day. If you need to talk sooner, book a call directly using the calendar on this page. You can get on our schedule today.',
   },
   {
     question: 'What does a first conversation look like?',
@@ -24,6 +24,6 @@ export const contactCapsules: AnswerCapsule[] = [
   {
     question: 'Do you work with companies outside B2B tech?',
     answer:
-      'Our expertise is deepest in B2B technology — SaaS, HR tech, fintech, cybersecurity, and adjacent verticals. If your company sells to businesses and you need marketing that compounds, we should talk.',
+      'Our expertise is deepest in B2B technology: SaaS, HR tech, fintech, cybersecurity, and adjacent verticals. If your company sells to businesses and you need marketing that compounds, we should talk.',
   },
 ];
