@@ -53,58 +53,54 @@ export async function getAhrefsMetrics(period: TimePeriod): Promise<AhrefsMetric
   const prevPeriodStart = daysAgoStr(days * 2);
 
   try {
-    const [dr, drPrev, bstats, refs, refsPrev, organic, topDomains, topLinks] = await Promise.all([
+    const [dr, drPrev, bstats, refs, refsPrev, topDomains] = await Promise.all([
       get('/site-explorer/domain-rating', { target, date: today, output: 'json' }, token),
       get('/site-explorer/domain-rating', { target, date: periodStart, output: 'json' }, token),
       get('/site-explorer/backlinks-stats', { target, mode: 'domain', date: today, output: 'json' }, token),
       get('/site-explorer/refdomains-history', { target, mode: 'domain', date_from: periodStart, date_to: today, output: 'json' }, token),
       get('/site-explorer/refdomains-history', { target, mode: 'domain', date_from: prevPeriodStart, date_to: periodStart, output: 'json' }, token),
-      get('/site-explorer/organic-keywords', { target, mode: 'domain', output: 'json', limit: '1', select: 'sum_traffic,keywords_count' }, token).catch(() => null),
-      get('/site-explorer/best-by-links', { target, mode: 'domain', output: 'json', limit: '10', select: 'url_from,domain_rating_source,anchors,first_seen' }, token).catch(() => ({ refdomains: [] })),
-      get('/site-explorer/backlinks', { target, mode: 'domain', output: 'json', limit: '10', select: 'url_from,domain_rating_source,anchor,first_seen', where: '{"dofollow": true}' }, token).catch(() => ({ backlinks: [] })),
+      get('/site-explorer/refdomains', { target, mode: 'domain', output: 'json', limit: '10', select: 'domain,domain_rating,links_to_target,dofollow_links' }, token).catch(() => ({ refdomains: [] })),
     ]);
 
-    const currentDR = dr.domain?.domain_rating ?? 0;
-    const prevDR = drPrev.domain?.domain_rating ?? 0;
-    const bsData = bstats.stats ?? {};
-    const currentRefs = refs.history?.slice(-1)?.[0]?.refdomains ?? 0;
-    const prevRefsVal = refsPrev.history?.slice(-1)?.[0]?.refdomains ?? 0;
+    const currentDR = dr.domain_rating?.domain_rating ?? 0;
+    const prevDR = drPrev.domain_rating?.domain_rating ?? 0;
+    const bsData = bstats.metrics ?? {};
+    const currentRefs = refs.refdomains?.slice(-1)?.[0]?.refdomains ?? 0;
+    const prevRefsVal = refsPrev.refdomains?.slice(-1)?.[0]?.refdomains ?? 0;
 
-    // Build DR trend from refdomains history
-    const drTrend = (refs.history ?? []).map((h: any) => ({
-      date: h.date,
+    const drTrend = (refs.refdomains ?? []).map((h: any) => ({
+      date: typeof h.date === 'string' ? h.date.slice(0, 10) : h.date,
       value: h.refdomains ?? 0,
     }));
+
+    const liveBacklinks = bsData.live ?? 0;
+    const allBacklinks = bsData.all_time ?? 0;
+    const liveRefs = bsData.live_refdomains ?? currentRefs;
 
     const result: AhrefsMetrics = {
       domainRating: currentDR,
       domainRatingChange: Math.round((currentDR - prevDR) * 10) / 10,
-      ahrefsRank: dr.domain?.ahrefs_rank ?? 0,
+      ahrefsRank: dr.domain_rating?.ahrefs_rank ?? 0,
       backlinks: {
-        total: bsData.all?.backlinks ?? 0,
-        live: bsData.live?.backlinks ?? 0,
-        dofollow: bsData.live_dofollow?.backlinks ?? 0,
-        nofollow: (bsData.live?.backlinks ?? 0) - (bsData.live_dofollow?.backlinks ?? 0),
-        newThisPeriod: bsData.live?.new ?? 0,
-        lostThisPeriod: bsData.live?.lost ?? 0,
+        total: allBacklinks,
+        live: liveBacklinks,
+        dofollow: 0,
+        nofollow: 0,
+        newThisPeriod: bsData.new ?? 0,
+        lostThisPeriod: bsData.lost ?? 0,
       },
-      referringDomains: currentRefs,
-      referringDomainsChange: prevRefsVal ? Math.round(((currentRefs - prevRefsVal) / prevRefsVal) * 100) : 0,
-      organicKeywords: organic?.total ?? 0,
-      organicTraffic: organic?.metrics?.[0]?.sum_traffic ?? 0,
+      referringDomains: liveRefs,
+      referringDomainsChange: prevRefsVal ? Math.round(((liveRefs - prevRefsVal) / prevRefsVal) * 100) : 0,
+      organicKeywords: 0,
+      organicTraffic: 0,
       organicValue: 0,
       topReferringDomains: (topDomains.refdomains ?? []).slice(0, 10).map((d: any) => ({
-        domain: d.domain ?? d.refdomains,
-        dr: d.domain_rating ?? 0,
-        backlinks: d.backlinks ?? 0,
-        dofollow: d.dofollow ?? true,
+        domain: d.domain ?? '',
+        dr: Math.round(d.domain_rating ?? 0),
+        backlinks: d.links_to_target ?? 0,
+        dofollow: d.dofollow_links > 0,
       })),
-      topBacklinks: (topLinks.backlinks ?? []).slice(0, 10).map((b: any) => ({
-        url: b.url_from ?? '',
-        dr: b.domain_rating_source ?? 0,
-        anchor: b.anchor ?? '',
-        firstSeen: b.first_seen ?? '',
-      })),
+      topBacklinks: [],
       drTrend,
       _health: { configured: true },
     };
