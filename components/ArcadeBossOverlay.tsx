@@ -15,14 +15,32 @@ interface ArcadeBossOverlayProps {
 }
 
 export function ArcadeBossOverlay({ game, score, initials, onClose }: ArcadeBossOverlayProps) {
-  const [email, setEmail] = useState('');
+  // Pre-populate from localStorage — email is already stored since score submission requires it
+  const storedEmail = (() => { try { return localStorage.getItem(EMAIL_KEY) || ''; } catch { return ''; } })();
+  const [email, setEmail] = useState(storedEmail);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const emailRef = useRef('');
+  const emailRef = useRef(storedEmail);
   const submittedRef = useRef(false);
 
   emailRef.current = email;
   submittedRef.current = submitted;
+
+  // If email already stored, auto-submit boss notification immediately
+  useEffect(() => {
+    if (storedEmail && !submittedRef.current) {
+      setSubmitting(true);
+      fetch('/api/arcade-boss', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: storedEmail, game, score, initials }),
+      }).finally(() => {
+        setSubmitted(true);
+        setSubmitting(false);
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const [confetti] = useState(() =>
     Array.from({ length: CONFETTI_COUNT }, (_, i) => ({
@@ -44,19 +62,11 @@ export function ArcadeBossOverlay({ game, score, initials, onClose }: ArcadeBoss
     try { localStorage.setItem(EMAIL_KEY, currentEmail.toLowerCase().trim()); } catch {}
 
     try {
-      await Promise.allSettled([
-        fetch('/api/arcade-boss', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: currentEmail, game, score, initials }),
-        }),
-        // Also post to arcade/score so email appears in main stats dashboard
-        fetch('/api/arcade/score', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: currentEmail.toLowerCase().trim(), game, score, initials }),
-        }),
-      ]);
+      await fetch('/api/arcade-boss', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: currentEmail, game, score, initials }),
+      });
     } catch { /* graceful degradation */ }
     setSubmitted(true);
     setSubmitting(false);

@@ -49,10 +49,11 @@ export async function POST(request: Request) {
       createdAt: new Date(),
     });
 
-    // Calculate rank for this game
+    // Calculate rank — email-only scores to match leaderboard
+    const emailFilter = { email: { $exists: true, $nin: [null, ''] } };
     const [rank, total] = await Promise.all([
-      col.countDocuments({ game, score: { $gt: safeScore } }).then(n => n + 1),
-      col.countDocuments({ game }),
+      col.countDocuments({ game, score: { $gt: safeScore }, ...emailFilter }).then(n => n + 1),
+      col.countDocuments({ game, ...emailFilter }),
     ]);
 
     return NextResponse.json({
