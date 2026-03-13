@@ -110,7 +110,7 @@ export function SolveCTA() {
           <p className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold tracking-tight text-white leading-[1.05] mt-2">
             looks like.
           </p>
-          <p className="text-xl text-shroomy max-w-2xl mx-auto mt-8 leading-relaxed">
+          <p className="text-xl text-white/90 max-w-2xl mx-auto mt-8 leading-relaxed">
             A GTM system that actually works. Pipeline that compounds. Teams that execute with clarity. It starts with one conversation.
           </p>
         </AnimatedSection>
