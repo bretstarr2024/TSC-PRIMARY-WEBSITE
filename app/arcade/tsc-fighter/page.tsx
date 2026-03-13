@@ -10,9 +10,9 @@ const TSCFighterGame = dynamic(
 );
 
 const FIGHTERS = [
-  { id: 'bret',    name: 'Bret Starr',    title: 'Founder & CEO',           color: '#FF5910', img: '/images/Bret.png'    },
-  { id: 'jj',      name: 'JJ La Pata',    title: 'Strategy Lead',           color: '#73F5FF', img: '/images/JJ.png'      },
-  { id: 'racheal', name: 'Racheal Bates', title: 'Experience Lead',         color: '#ED0AD2', img: '/images/Racheal.png' },
+  { id: 'bret',    name: 'Bret Starr',    title: 'Chief AI Officer',         color: '#FF5910', img: '/images/Bret.png'    },
+  { id: 'jj',      name: 'JJ La Pata',    title: 'Chief Strategy Officer',  color: '#73F5FF', img: '/images/JJ.png'      },
+  { id: 'racheal', name: 'Racheal Bates', title: 'Chief Experience Officer', color: '#ED0AD2', img: '/images/Racheal.png' },
   { id: 'dan',     name: 'Dan McCarron',  title: 'Chief Operating Officer', color: '#E1FF00', img: '/images/Dan.png'     },
 ];
 

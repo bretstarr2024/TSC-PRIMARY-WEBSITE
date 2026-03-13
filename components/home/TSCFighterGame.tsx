@@ -37,9 +37,9 @@ interface G {
 
 // ── Static data ───────────────────────────────────────────────────
 const FIGHTERS = [
-  { id: 'bret',    name: 'BRET STARR',    title: 'FOUNDER & CEO',           color: '#FF5910', img: '/images/Bret.png'    },
-  { id: 'jj',      name: 'JJ LA PATA',    title: 'STRATEGY LEAD',           color: '#73F5FF', img: '/images/JJ.png'      },
-  { id: 'racheal', name: 'RACHEAL BATES', title: 'EXPERIENCE LEAD',         color: '#ED0AD2', img: '/images/Racheal.png' },
+  { id: 'bret',    name: 'BRET STARR',    title: 'CHIEF AI OFFICER',         color: '#FF5910', img: '/images/Bret.png'    },
+  { id: 'jj',      name: 'JJ LA PATA',    title: 'CHIEF STRATEGY OFFICER',  color: '#73F5FF', img: '/images/JJ.png'      },
+  { id: 'racheal', name: 'RACHEAL BATES', title: 'CHIEF EXPERIENCE OFFICER', color: '#ED0AD2', img: '/images/Racheal.png' },
   { id: 'dan',     name: 'DAN MCCARRON',  title: 'CHIEF OPERATING OFFICER', color: '#E1FF00', img: '/images/Dan.png'     },
 ] as const;
 
