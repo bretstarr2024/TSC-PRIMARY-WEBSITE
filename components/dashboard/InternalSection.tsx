@@ -1,9 +1,19 @@
 'use client';
 
+import { useState } from 'react';
 import type { InternalMetrics } from '@/lib/reporting/types';
 import { MetricsCard } from './MetricsCard';
 
 interface Props { data: InternalMetrics }
+
+interface Lead {
+  name: string;
+  email: string;
+  message?: string;
+  source?: string;
+  ctaId?: string;
+  timestamp?: string;
+}
 
 const STATUS_COLORS: Record<string, string> = {
   pending: '#6D6D69',
@@ -16,16 +26,80 @@ export function InternalSection({ data }: Props) {
   const totalPublished = data.content.reduce((s, c) => s + c.published, 0);
   const totalThisPeriod = data.content.reduce((s, c) => s + c.thisPeriod, 0);
 
+  const [showLeads, setShowLeads] = useState(false);
+  const [leads, setLeads] = useState<Lead[]>([]);
+  const [leadsLoading, setLeadsLoading] = useState(false);
+
+  async function toggleLeads() {
+    if (showLeads) { setShowLeads(false); return; }
+    if (leads.length === 0) {
+      setLeadsLoading(true);
+      try {
+        const res = await fetch('/api/dashboard/leads');
+        const json = await res.json();
+        setLeads(json.leads ?? []);
+      } finally {
+        setLeadsLoading(false);
+      }
+    }
+    setShowLeads(true);
+  }
+
   return (
     <section>
       <h2 className="text-lg font-semibold text-white mb-4">Internal Stats</h2>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <MetricsCard title="Total Leads" value={data.leads.total.toLocaleString()} subtext={`+${data.leads.thisPeriod} this period`} accent="#E1FF00" />
+        <button onClick={toggleLeads} className="text-left hover:opacity-80 transition-opacity cursor-pointer">
+          <MetricsCard title="Total Leads" value={data.leads.total.toLocaleString()} subtext={`+${data.leads.thisPeriod} this period`} accent="#E1FF00" />
+        </button>
         <MetricsCard title="Published Content" value={totalPublished.toLocaleString()} subtext={`+${totalThisPeriod} this period`} accent="#73F5FF" />
         <MetricsCard title="Pipeline Queue" value={data.pipeline.pending + data.pipeline.generating} subtext={`${data.pipeline.pending} pending · ${data.pipeline.generating} generating`} accent="#ED0AD2" />
         <MetricsCard title="Published (Pipeline)" value={data.pipeline.published} subtext={`${data.pipeline.failed} failed this period`} accent="#FF5910" />
       </div>
+
+      {/* Leads table */}
+      {showLeads && (
+        <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5 mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <p className="text-xs font-semibold uppercase tracking-widest text-[#6D6D69]">All Leads</p>
+            <button onClick={() => setShowLeads(false)} className="text-xs text-[#6D6D69] hover:text-white transition-colors">Hide</button>
+          </div>
+          {leadsLoading ? (
+            <p className="text-sm text-[#6D6D69]">Loading...</p>
+          ) : leads.length === 0 ? (
+            <p className="text-sm text-[#6D6D69]">No leads yet.</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-white/10">
+                    <th className="text-left text-xs text-[#6D6D69] font-medium pb-2 pr-4">Name</th>
+                    <th className="text-left text-xs text-[#6D6D69] font-medium pb-2 pr-4">Email</th>
+                    <th className="text-left text-xs text-[#6D6D69] font-medium pb-2 pr-4">Source</th>
+                    <th className="text-left text-xs text-[#6D6D69] font-medium pb-2 pr-4">Message</th>
+                    <th className="text-left text-xs text-[#6D6D69] font-medium pb-2">Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {leads.map((lead, i) => (
+                    <tr key={i} className="border-b border-white/5 last:border-0">
+                      <td className="py-2 pr-4 text-white">{lead.name || '—'}</td>
+                      <td className="py-2 pr-4 text-[#73F5FF]">{lead.email}</td>
+                      <td className="py-2 pr-4 text-[#d1d1c6]">{lead.source || '—'}</td>
+                      <td className="py-2 pr-4 text-[#d1d1c6] max-w-xs truncate">{lead.message || '—'}</td>
+                      <td className="py-2 text-[#6D6D69] whitespace-nowrap">
+                        {lead.timestamp ? new Date(lead.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—'}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <p className="text-xs text-[#6D6D69] mt-3">{leads.length} total leads</p>
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Leads by source */}
