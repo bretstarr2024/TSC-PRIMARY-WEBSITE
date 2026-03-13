@@ -9,6 +9,7 @@ export const GAME_LABELS: Record<string, string> = {
   galaga:            'Galaga',
   pacman:            'Pac-Man',
   'missile-command': 'Missile Command',
+  'tsc-fighter':     'TSC Fighter',
 };
 
 /**
@@ -33,6 +34,7 @@ export const GAME_SCORE_SCALE: Record<string, number> = {
   pong:               3000,  // rally multiplier + set bonuses
   tron:               2000,  // 100 × level per kill
   frogger:            1000,  // 10 × level per completion, inherently low ceiling
+  'tsc-fighter':      3000,  // 3 bosses × 500 + health × 3 + time bonus
 };
 
 /**
