@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { GAME_LABELS } from '@/lib/arcade/games';
+import { GAME_LABELS, normalizeScore } from '@/lib/arcade/games';
 
 export const revalidate = 30; // ISR — refresh every 30s
 
@@ -9,43 +9,18 @@ export async function GET() {
     const db = await getDatabase();
     const col = db.collection('arcade_scores');
 
-    // ── Aggregate leaderboard: best score per player per game, summed ──
-    // Group by email (always present now) — initials as display name
-    const aggregatePipeline = [
-      // Only include scores that have an email
+    // ── Aggregate leaderboard: best score per player per game, normalized then summed ──
+    // Normalization prevents high-ceiling games (Galaga, Asteroids) from dominating.
+    // Each game contributes 0–1000 normalized points to the total (max 10,000 across all 10 games).
+    // Per-game leaderboards always show raw scores.
+    const bestPerPlayerGamePipeline = [
       { $match: { email: { $exists: true, $nin: [null, ''] } } },
-      // Step 1: best score per (player, game)
+      // Best raw score per (player, game)
       {
         $group: {
-          _id: {
-            player: '$email',
-            game: '$game',
-          },
+          _id: { player: '$email', game: '$game' },
           bestScore: { $max: '$score' },
           initials: { $first: '$initials' },
-        },
-      },
-      // Step 2: sum across games per player
-      {
-        $group: {
-          _id: '$_id.player',
-          totalScore: { $sum: '$bestScore' },
-          gamesPlayed: { $sum: 1 },
-          initials: { $first: '$initials' },
-          gameBreakdown: {
-            $push: { game: '$_id.game', score: '$bestScore' },
-          },
-        },
-      },
-      { $sort: { totalScore: -1 } },
-      { $limit: 100 },
-      {
-        $project: {
-          _id: 0,
-          initials: 1,
-          totalScore: 1,
-          gamesPlayed: 1,
-          gameBreakdown: 1,
         },
       },
     ];
@@ -83,13 +58,38 @@ export async function GET() {
       },
     ];
 
-    const [aggregateRaw, perGameRaw] = await Promise.all([
-      col.aggregate(aggregatePipeline).toArray(),
+    const [bestPerPlayerGame, perGameRaw] = await Promise.all([
+      col.aggregate(bestPerPlayerGamePipeline).toArray(),
       col.aggregate(perGamePipeline).toArray(),
     ]);
 
-    // Add rank to aggregate
-    const aggregate = aggregateRaw.map((p, i) => ({ ...p, rank: i + 1 }));
+    // Apply normalization in JS: group by player, sum normalized scores
+    const playerMap = new Map<string, {
+      initials: string;
+      totalScore: number;
+      gamesPlayed: number;
+      gameBreakdown: { game: string; score: number; normalizedScore: number }[];
+    }>();
+
+    for (const { _id, bestScore, initials } of bestPerPlayerGame) {
+      const player = _id.player as string;
+      const game = _id.game as string;
+      const normalized = normalizeScore(game, bestScore as number);
+
+      if (!playerMap.has(player)) {
+        playerMap.set(player, { initials, totalScore: 0, gamesPlayed: 0, gameBreakdown: [] });
+      }
+      const entry = playerMap.get(player)!;
+      entry.totalScore += normalized;
+      entry.gamesPlayed += 1;
+      entry.gameBreakdown.push({ game, score: bestScore as number, normalizedScore: normalized });
+    }
+
+    // Sort by normalized total, limit to top 100, add rank
+    const aggregate = Array.from(playerMap.values())
+      .sort((a, b) => b.totalScore - a.totalScore)
+      .slice(0, 100)
+      .map((p, i) => ({ ...p, rank: i + 1 }));
 
     // Convert perGame array to map
     const perGame: Record<string, { initials: string; score: number; rank: number }[]> = {};
