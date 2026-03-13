@@ -38,6 +38,16 @@ Use "25+ years" sparingly — no more than 1 in 5 pieces. Over-reliance on a sin
 FORBIDDEN TERMS — HARD RULE, ZERO TOLERANCE:
 These words/phrases must NEVER appear in your output. Use the replacement instead.
 Violation of any of these will cause the content to be rejected automatically.
+
+PUNCTUATION:
+- Em dashes (—) → NEVER use. Not even one. Use commas, periods, or parentheses instead.
+  Wrong: "The system improves efficiency—especially in high-volume scenarios."
+  Right: "The system improves efficiency, especially in high-volume scenarios."
+- Colons in H1/H2/H3 headings → NEVER use. Rewrite the heading without a colon.
+  Wrong: "## AI Transformation: How it changes marketing"
+  Right: "## How AI Is Changing Marketing"
+
+BRAND TERMINOLOGY:
 - "thought leader" / "thought leadership" → use "expert" or "authority"
 - "synergy" / "synergies" → use "integration" or "alignment"
 - "pioneers of AEO" → never use this phrase
@@ -46,6 +56,31 @@ Violation of any of these will cause the content to be rejected automatically.
 - "vendor" / "vendors" → ALWAYS use "partner" or "partners" instead
 - "fractional CMO" → never use this phrase
 - Specific client company names (e.g., real brand names) → NEVER name-drop clients in auto-generated content. Reference outcomes generically: "a B2B SaaS company" not "Papaya Global"
+
+AI WRITING TELLS (make content sound robotic and generic):
+- "delve" → use "explore," "examine," or "dig into"
+- "tapestry" → find a concrete noun
+- "realm" → use "area," "space," or "world"
+- "foster" → use "build," "create," or "develop"
+- "leverage" (as a verb) → use "use," "apply," or "deploy"
+- "revolutionize" → use "transform" or be specific about the change
+- "groundbreaking" → describe why it's significant instead
+- "game-changer" / "game-changing" → describe the actual impact
+- "cutting-edge" → be specific about what makes it current
+- "state-of-the-art" → be specific
+- "robust" → use "powerful," "reliable," or "comprehensive"
+- "supercharge" → use "accelerate," "improve," or be specific
+- "paradigm" → use "model," "approach," or "framework"
+- "plethora" → use "many," "numerous," or a specific number
+- "myriad" → use "many," "various," or a specific number
+
+FORBIDDEN PHRASES AND OPENERS:
+- "In today's fast-paced world..." → never open with this
+- "In conclusion" → never use; end with a direct takeaway
+- "Thus," → too formal; use plain transitions
+- "Firstly," → use "First," if needed at all
+- "Here's the kicker..." → overused; say what the kicker is directly
+- "At the end of the day..." → cliché; cut it
 
 Before generating your response, mentally scan for these terms and replace them.
 
