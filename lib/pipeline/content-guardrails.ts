@@ -77,11 +77,11 @@ const BRAND_VOICE_POSITIVE = [
 
 export const DAILY_CAPS: Record<ContentType, number> = {
   blog_post: 1,
-  faq_item: 5,
-  glossary_term: 3,
-  expert_qa: 2,
+  faq_item: 1,
+  glossary_term: 1,
+  expert_qa: 1,
   comparison: 1,
-  news_item: 2,
+  news_item: 1,
   case_study: 1,
   industry_brief: 1,
   video: 1,
