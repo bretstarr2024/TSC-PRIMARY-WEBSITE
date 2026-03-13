@@ -221,8 +221,7 @@ export function SystemReveal() {
             <StaggerItem>
               <KernelMockup />
               <div className="mt-4 px-1">
-                <h4 className="text-base font-extrabold text-white mb-1">GTM Kernel</h4>
-                <p className="text-xs font-bold text-greige mb-2 font-mono">tscgtmkernel.com</p>
+                <h4 className="text-base font-extrabold text-white mb-2">GTM Kernel</h4>
                 <p className="text-sm text-shroomy leading-relaxed">
                   The strategic operating system. 20 components, machine-readable, governs every downstream system.
                 </p>
@@ -231,8 +230,7 @@ export function SystemReveal() {
             <StaggerItem>
               <IntelligenceMockup />
               <div className="mt-4 px-1">
-                <h4 className="text-base font-extrabold text-white mb-1">Intelligence Engine</h4>
-                <p className="text-xs font-bold text-greige mb-2 font-mono">intelligence.tscgtmkernel.com</p>
+                <h4 className="text-base font-extrabold text-white mb-2">Intelligence Engine</h4>
                 <p className="text-sm text-shroomy leading-relaxed">
                   Deep query analysis and buyer intent mapping. See exactly where pipeline opportunities exist.
                 </p>
@@ -241,8 +239,7 @@ export function SystemReveal() {
             <StaggerItem>
               <ContentMockup />
               <div className="mt-4 px-1">
-                <h4 className="text-base font-extrabold text-white mb-1">Content Engine</h4>
-                <p className="text-xs font-bold text-greige mb-2 font-mono">content.tscgtmkernel.com</p>
+                <h4 className="text-base font-extrabold text-white mb-2">Content Engine</h4>
                 <p className="text-sm text-shroomy leading-relaxed">
                   AI-native content production at scale. On-strategy by default, optimized for AI-driven discovery.
                 </p>

@@ -142,7 +142,7 @@ export function KernelMockup() {
   ];
 
   return (
-    <BrowserFrame url="tscgtmkernel.com" accentColor="#FF5910">
+    <BrowserFrame url="••••••••••" accentColor="#FF5910">
       <div className="p-4 md:p-5 h-full flex flex-col gap-3 text-[10px]">
         {/* Top bar */}
         <div className="flex items-center justify-between">
@@ -242,7 +242,7 @@ export function IntelligenceMockup() {
   ];
 
   return (
-    <BrowserFrame url="intelligence.tscgtmkernel.com" accentColor="#73F5FF">
+    <BrowserFrame url="••••••••••" accentColor="#73F5FF">
       <div className="p-4 md:p-5 h-full flex flex-col gap-3 text-[10px]">
         {/* Top bar */}
         <div className="flex items-center justify-between">
@@ -333,7 +333,7 @@ export function ContentMockup() {
   ];
 
   return (
-    <BrowserFrame url="content.tscgtmkernel.com" accentColor="#E1FF00">
+    <BrowserFrame url="••••••••••" accentColor="#E1FF00">
       <div className="p-4 md:p-5 h-full flex flex-col gap-3 text-[10px]">
         {/* Top bar */}
         <div className="flex items-center justify-between">

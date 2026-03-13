@@ -119,8 +119,8 @@ export function SolveCTA() {
           {ctaOptions.map((option) => (
             <StaggerItem key={option.ctaId} journey>
               <motion.div
-                className="glass rounded-2xl border p-8 h-full flex flex-col relative overflow-hidden group backdrop-blur-xl"
-                style={{ borderColor: `${option.color}33` }}
+                className="rounded-2xl border p-8 h-full flex flex-col relative overflow-hidden group backdrop-blur-xl bg-black/70"
+                style={{ borderColor: `${option.color}44` }}
                 whileHover={reducedMotion ? {} : { y: -4 }}
                 transition={{ duration: 0.3 }}
               >
@@ -137,14 +137,14 @@ export function SolveCTA() {
                   >
                     {option.label}
                   </p>
-                  <p className="text-shroomy leading-relaxed mb-4 flex-1">
+                  <p className="text-white/90 leading-relaxed mb-4 flex-1">
                     {option.description}
                   </p>
                   <div className="mb-6">
-                    <p className="text-xs font-bold text-greige uppercase tracking-wider mb-2">
+                    <p className="text-xs font-bold text-[#d1d1c6] uppercase tracking-wider mb-2">
                       Who it&apos;s for
                     </p>
-                    <p className="text-sm text-shroomy">{option.whoFor}</p>
+                    <p className="text-sm text-white/80">{option.whoFor}</p>
                   </div>
                   <Link
                     href={option.href}
