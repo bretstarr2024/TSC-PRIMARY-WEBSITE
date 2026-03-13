@@ -461,7 +461,7 @@ export async function GET(request: NextRequest) {
 
         // Post-process: enforce brand voice substitutions the LLM sometimes misses
         // "customer(s)" → "client(s)" per TSC brand guidelines
-        function applyBrandSubstitutions(val: unknown): unknown {
+        const applyBrandSubstitutions = (val: unknown): unknown => {
           if (typeof val === 'string') {
             return val
               .replace(/\bcustomers\b/gi, 'clients')
@@ -474,7 +474,7 @@ export async function GET(request: NextRequest) {
             );
           }
           return val;
-        }
+        };
         const cleanData = applyBrandSubstitutions(data) as Record<string, unknown>;
 
         // Resolve [INTERNAL_LINK: topic] placeholders — only uses DB-verified URLs, strips if no match

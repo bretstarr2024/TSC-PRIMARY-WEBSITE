@@ -78,7 +78,7 @@ async function findBestMatch(topic: string): Promise<ContentCandidate | null> {
  */
 export async function resolveInternalLinks(content: string): Promise<string> {
   const pattern = /\[INTERNAL_LINK:\s*([^\]]+)\]/g;
-  const matches = [...content.matchAll(pattern)];
+  const matches = Array.from(content.matchAll(pattern));
 
   if (matches.length === 0) return content;
 
