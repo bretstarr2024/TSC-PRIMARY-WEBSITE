@@ -179,33 +179,51 @@ ${context}`;
 
 export function getBlogPrompts(topic: string, context: string) {
   const system = `${BRAND_VOICE_CONTEXT}${CITABILITY_GUIDELINES}
-You are generating a blog post for The Starr Conspiracy's insights section.
+You are generating a long-form blog post for The Starr Conspiracy's insights section.
+This content must be optimized for both SEO and Answer Engine Optimization (AEO) — it needs to be the authoritative, citable resource that AI systems like ChatGPT, Perplexity, and Google AI Overviews will reference.
 
 OUTPUT FORMAT: Valid JSON with these fields:
 {
   "slug": "url-friendly-slug",
-  "title": "The Title",
-  "description": "SEO meta description (140-160 chars)",
-  "content": "Full article body (800-1500 words, markdown)",
+  "title": "The Title (no colons, stated as a claim or question)",
+  "description": "SEO meta description (140-160 chars, includes primary keyword)",
+  "content": "Full article body (1500-2000 words, markdown)",
   "author": "One of: Bret Starr, Racheal Bates, JJ La Pata",
   "tags": ["tag1", "tag2", "tag3"]
 }
 
-RULES:
-- First sentence must be a bold, standalone claim (answer capsule)
-- Use the Insight First pattern: claim → evidence → implication → action
-- Include 2-3 subheadings (## headers)
-- Reference specific company methodologies or experience
-- End with a clear takeaway or call to action
-- 800-1500 words
-- If the topic relates to a product or service listed in the kernel context, reference it naturally within the article. Show how the company's offering addresses the topic — but keep it editorial, not salesy.`;
+STRUCTURE REQUIREMENTS (non-negotiable):
+1. Opening paragraph — Bold standalone direct answer to the topic (2-3 sentences). This is the answer capsule AI engines pull as a snippet. Make it complete and quotable on its own.
+2. H2 headers MUST be phrased as questions — Every ## subheading must be a question a real buyer would type into Google or ask an AI assistant. Good examples:
+   - "## What Does a Real B2B Growth Engine Actually Look Like?"
+   - "## Why Do Most B2B Companies Fail at Demand Generation?"
+   - "## How Do You Know If Your Marketing Strategy Is Working?"
+3. 5-7 H2 sections — Each 200-300 words. Cover the topic comprehensively enough to be the definitive resource.
+4. FAQ section at the end — Minimum 3 questions in ### format with concise direct answers (2-4 sentences each). These target voice search and AI answer extraction.
+5. Internal linking signals — Include at least 2 references to related TSC content areas using this exact format: [INTERNAL_LINK: topic name]. Example: [INTERNAL_LINK: AI transformation for B2B marketing]. These will be resolved to real links in post-processing.
+6. Closing paragraph — Connect the topic to TSC's work and invite the reader to take action. Editorial tone, not salesy.
 
-  const user = `Write a blog post about: ${topic}
+LENGTH: 1500-2000 words. This is a comprehensive resource, not a summary.
+
+ADDITIONAL RULES:
+- Use the Insight First pattern: claim then evidence then implication then action
+- Reference TSC methodologies or frameworks where relevant (GTM Kernel, growth engine framework, etc.)
+- Include at least one concrete example, scenario, or data point per section
+- If the topic relates to a product or service in the kernel context, reference it naturally`;
+
+  const user = `Write a comprehensive, AEO-optimized blog post about: ${topic}
 
 Context from TSC's GTM Kernel:
 ${context}
 
-Write something a B2B CMO would bookmark and share with their team.`;
+Requirements:
+- 1500-2000 words minimum
+- Every H2 must be phrased as a question
+- Include FAQ section at end with 3+ questions
+- Include [INTERNAL_LINK: ...] placeholders for at least 2 related topics
+- Opening paragraph must directly answer the topic as a standalone snippet
+
+Write something a B2B CMO would bookmark, share with their team, AND that an AI assistant would cite as the authoritative answer on this topic.`;
 
   return { system, user };
 }

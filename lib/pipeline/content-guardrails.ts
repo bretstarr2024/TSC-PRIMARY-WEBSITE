@@ -189,7 +189,7 @@ export function checkContentLength(
   const wordCount = content.split(/\s+/).filter((w) => w.length > 0).length;
 
   const limits: Record<ContentType, { min: number; max: number }> = {
-    blog_post: { min: 400, max: 1500 },
+    blog_post: { min: 1200, max: 2500 },
     faq_item: { min: 50, max: 500 },
     glossary_term: { min: 50, max: 500 },
     comparison: { min: 200, max: 1200 },

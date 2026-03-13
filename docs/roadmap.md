@@ -1887,3 +1887,20 @@ Chatbot dropped from scope. No AEO value (AI models don't crawl chatbot response
 - [ ] Source monitor expansion
 - [ ] SEO technical audit
 - [ ] A/B testing framework
+
+---
+
+### Phase 7: Pipeline & GTM Engine Productization
+
+**Goal:** Make the content pipeline and GTM Kernel integration sellable as a client product.
+
+This is the same infrastructure powering TSC's own site — package it so it can be deployed for clients.
+
+- [ ] Multi-tenant pipeline architecture (clientId already in place — formalize the pattern)
+- [ ] GTM Kernel → tsc.json sync tooling as a client onboarding step
+- [ ] Dashboard white-label mode (client-facing version of /dashboard)
+- [ ] Kernel update workflow (drive-based YAML → deploy pipeline without dev intervention)
+- [ ] Per-client content guardrails (forbidden terms, brand voice, topic blacklists configurable per client)
+- [ ] AEO query cluster import tooling (replicate what we did manually for TSC — make it a UI or CLI)
+- [ ] Client reporting exports (PDF or shareable link from dashboard data)
+- [ ] Pricing / packaging model for the platform tier
