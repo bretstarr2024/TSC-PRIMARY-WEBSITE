@@ -167,22 +167,25 @@ export async function enqueueContent(
   const collection = await getContentQueueCollection();
   const clientId = getClientId();
 
-  // Idempotent upsert: skip if a pending item with same title+type already exists
-  const result = await collection.updateOne(
-    { clientId, contentType: item.contentType, title: item.title, status: 'pending' },
-    {
-      $setOnInsert: {
-        ...item,
-        clientId,
-        statusHistory: [{ status: item.status, timestamp: new Date() }],
-        createdAt: new Date(),
-        retryCount: 0,
-      },
-    },
-    { upsert: true }
-  );
+  // Idempotent: skip if any non-published item with same title+type already exists
+  // (prevents re-queueing items that failed, were rejected, or are already pending)
+  const existing = await collection.findOne({
+    clientId,
+    contentType: item.contentType,
+    title: item.title,
+    status: { $in: ['pending', 'generating', 'failed', 'rejected'] },
+  });
+  if (existing) return existing._id?.toString() || 'existing';
 
-  return result.upsertedId?.toString() || 'existing';
+  const result = await collection.insertOne({
+    ...item,
+    clientId,
+    statusHistory: [{ status: item.status, timestamp: new Date() }],
+    createdAt: new Date(),
+    retryCount: 0,
+  } as ContentQueueItem);
+
+  return result.insertedId?.toString() || 'existing';
 }
 
 export async function getNextPendingItems(

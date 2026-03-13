@@ -509,6 +509,14 @@ export async function GET(request: NextRequest) {
 
         results.push({ contentType, title: item.title || (data.title as string) || '', status: 'published' });
       } catch (error) {
+        // Duplicate key = content ID already exists; permanently reject so it never retries
+        const isDuplicate = error instanceof Error && /E11000|duplicate key/i.test(error.message);
+        if (isDuplicate) {
+          await updateQueueItemStatus(itemId, 'rejected', 'Rejected: content ID already exists in DB');
+          results.push({ contentType, title: item.title || '', status: 'skipped', reason: 'duplicate ID' });
+          continue;
+        }
+
         const phase = detectPhaseFromError(error, itemId);
         const classified = classifyError(error, phase);
 
