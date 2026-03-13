@@ -58,7 +58,7 @@ export function ContentRenderer({ content }: ContentRendererProps) {
         const linkMatch = lp.match(/\[([^\]]+)\]\(([^)]+)\)/);
         if (linkMatch) {
           return (
-            <a key={`${i}-${j}`} href={linkMatch[2]} className="text-atomic-tangerine hover:text-white/80 underline">
+            <a key={`${i}-${j}`} href={linkMatch[2]} className="text-atomic-tangerine hover:text-[#d1d1c6] underline">
               {linkMatch[1]}
             </a>
           );
@@ -105,7 +105,7 @@ export function ContentRenderer({ content }: ContentRendererProps) {
       elements.push(
         <blockquote
           key={key++}
-          className="relative pl-12 md:pl-16 py-2 my-6 italic before:content-['\201C'] before:absolute before:left-0 before:-top-2 before:text-8xl before:font-serif before:leading-none before:text-atomic-tangerine/50"
+          className="relative pl-12 md:pl-16 py-2 my-6 italic before:content-['\201C'] before:absolute before:left-0 before:-top-2 before:text-8xl before:font-serif before:leading-none before:text-hot-sauce"
         >
           {renderInline(trimmed.slice(2))}
         </blockquote>

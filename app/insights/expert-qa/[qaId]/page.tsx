@@ -99,11 +99,11 @@ export default async function ExpertQaDetailPage({
           />
 
           <nav className="flex items-center gap-2 text-sm text-shroomy mb-8">
-            <Link href="/" className="hover:text-white/80">Home</Link>
+            <Link href="/" className="hover:text-[#d1d1c6]">Home</Link>
             <span>/</span>
-            <Link href="/insights" className="hover:text-white/80">Insights</Link>
+            <Link href="/insights" className="hover:text-[#d1d1c6]">Insights</Link>
             <span>/</span>
-            <Link href="/insights/expert-qa" className="hover:text-white/80">Expert Q&A</Link>
+            <Link href="/insights/expert-qa" className="hover:text-[#d1d1c6]">Expert Q&A</Link>
             <span>/</span>
             <span className="text-shroomy">{qa.question}</span>
           </nav>
@@ -126,23 +126,23 @@ export default async function ExpertQaDetailPage({
           </div>
 
           {/* Answer */}
-          <div className="mb-10">
+          <div className="glass rounded-xl p-8 mb-10">
             <ContentRenderer content={qa.answer} />
           </div>
 
           {/* Quotable snippets */}
           {qa.quotableSnippets.length > 0 && (
-            <div className="space-y-6 mb-10">
+            <div className="space-y-4 mb-10">
               {qa.quotableSnippets.map((snippet, i) => (
                 <blockquote
                   key={i}
-                  className="border-l-4 border-atomic-tangerine pl-6 py-3"
+                  className="glass rounded-xl border-l-4 border-atomic-tangerine pl-6 pr-6 py-5"
                 >
                   <p className="text-white text-lg italic leading-relaxed">
                     &ldquo;{snippet}&rdquo;
                   </p>
-                  <footer className="text-shroomy text-sm mt-2">
-                    &mdash; {qa.expert.name}
+                  <footer className="text-[#d1d1c6] text-sm mt-3">
+                    {qa.expert.name}
                   </footer>
                 </blockquote>
               ))}
