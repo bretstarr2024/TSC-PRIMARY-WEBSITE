@@ -67,6 +67,7 @@ import {
 import { getClientConfig } from '@/lib/kernel/client';
 import { buildKernelContext } from '@/lib/pipeline/context-builder';
 import { searchForNewsArticle, searchForBriefSources } from '@/lib/pipeline/news-search';
+import { resolveInternalLinks } from '@/lib/pipeline/internal-link-resolver';
 import { verifyCronAuth } from '@/lib/cron-auth';
 
 export const maxDuration = 300; // 5 minutes
@@ -475,6 +476,14 @@ export async function GET(request: NextRequest) {
           return val;
         }
         const cleanData = applyBrandSubstitutions(data) as Record<string, unknown>;
+
+        // Resolve [INTERNAL_LINK: topic] placeholders — only uses DB-verified URLs, strips if no match
+        const markdownFields = ['content', 'answer', 'fullDefinition', 'commentary', 'approach', 'results'];
+        for (const field of markdownFields) {
+          if (typeof cleanData[field] === 'string') {
+            cleanData[field] = await resolveInternalLinks(cleanData[field] as string);
+          }
+        }
 
         // Quality checks
         const primaryText = getPrimaryTextField(contentType, cleanData);
