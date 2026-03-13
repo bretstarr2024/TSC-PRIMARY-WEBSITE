@@ -99,7 +99,7 @@ export function GameOverHero() {
   return (
     <section className="relative min-h-screen overflow-hidden">
       {/* ═══ Galaga — persistent across both faces ═══ */}
-      <div className="absolute inset-0 z-[3]">
+      <div className="absolute inset-0 z-[3] pointer-events-none">
         <GalagaBackground ref={galagaRef} />
       </div>
 
