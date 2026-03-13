@@ -30,9 +30,11 @@ export async function POST(request: Request) {
     const safeScore = typeof score === 'number' && Number.isFinite(score) && score >= 0
       ? Math.floor(score) : 0;
 
-    // Validate email if provided
-    const safeEmail = typeof email === 'string' && email.length <= 320 && emailRe.test(email)
-      ? email.toLowerCase().trim() : undefined;
+    // Validate email (required)
+    if (typeof email !== 'string' || email.length > 320 || !emailRe.test(email)) {
+      return NextResponse.json({ error: 'Valid email required' }, { status: 400 });
+    }
+    const safeEmail = email.toLowerCase().trim();
 
     const { getDatabase } = await import('@/lib/mongodb');
     const db = await getDatabase();

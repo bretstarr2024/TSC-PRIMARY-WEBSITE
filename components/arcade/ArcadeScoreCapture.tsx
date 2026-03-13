@@ -67,14 +67,6 @@ const btnPrimary: React.CSSProperties = {
   marginBottom: 10,
 };
 
-const btnGhost: React.CSSProperties = {
-  background: 'none',
-  border: 'none',
-  color: '#6D6D69',
-  fontSize: 12,
-  cursor: 'pointer',
-  fontFamily: 'monospace',
-};
 
 export function ArcadeScoreCapture() {
   const [visible, setVisible] = useState(false);
@@ -94,34 +86,33 @@ export function ArcadeScoreCapture() {
       let storedEmail: string | undefined;
       try { storedEmail = localStorage.getItem(EMAIL_KEY) || undefined; } catch {}
 
-      // Submit score to server
-      try {
-        const res = await fetch('/api/arcade/score', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            game: detail.game,
-            initials: detail.initials,
-            score: detail.score,
-            email: storedEmail,
-          }),
-        });
-        if (res.ok) {
-          const data = await res.json();
-          setRankResult({ rank: data.rank, total: data.total, gameLabel: data.gameLabel });
-        }
-      } catch { /* graceful degradation */ }
-
-      if (!storedEmail) {
-        // No email yet — ask every time
-        setEmailDone(false);
-        setEmail('');
-        setVisible(true);
-      } else {
-        // Email already stored — show brief rank toast
+      if (storedEmail) {
+        // Email already stored — submit immediately and show rank toast
+        try {
+          const res = await fetch('/api/arcade/score', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              game: detail.game,
+              initials: detail.initials,
+              score: detail.score,
+              email: storedEmail,
+            }),
+          });
+          if (res.ok) {
+            const data = await res.json();
+            setRankResult({ rank: data.rank, total: data.total, gameLabel: data.gameLabel });
+          }
+        } catch { /* graceful degradation */ }
         setEmailDone(true);
         setVisible(true);
         setTimeout(() => setVisible(false), 4000);
+      } else {
+        // No email yet — show form; score held until email provided
+        setEmailDone(false);
+        setEmail('');
+        setRankResult(null);
+        setVisible(true);
       }
     };
 
@@ -135,21 +126,26 @@ export function ArcadeScoreCapture() {
     if (!emailRe.test(email)) return;
     setSubmitting(true);
 
-    try { localStorage.setItem(EMAIL_KEY, email.toLowerCase().trim()); } catch {}
+    const cleanEmail = email.toLowerCase().trim();
+    try { localStorage.setItem(EMAIL_KEY, cleanEmail); } catch {}
 
-    // Re-submit with email to associate it with this score
+    // Submit score now that we have an email
     if (pendingRef.current) {
       try {
-        await fetch('/api/arcade/score', {
+        const res = await fetch('/api/arcade/score', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             game: pendingRef.current.game,
             initials: pendingRef.current.initials,
             score: pendingRef.current.score,
-            email: email.toLowerCase().trim(),
+            email: cleanEmail,
           }),
         });
+        if (res.ok) {
+          const data = await res.json();
+          setRankResult({ rank: data.rank, total: data.total, gameLabel: data.gameLabel });
+        }
       } catch {}
     }
 
@@ -157,21 +153,19 @@ export function ArcadeScoreCapture() {
     setEmailDone(true);
   };
 
-  const handleSkip = () => {
-    setVisible(false);
-  };
-
   if (!visible) return null;
 
   return (
-    <div style={overlayStyle} onClick={(e) => { if (e.target === e.currentTarget) setVisible(false); }}>
+    <div style={overlayStyle}>
       <div style={cardStyle}>
-        {/* Close */}
-        <button
-          onClick={() => setVisible(false)}
-          style={{ position: 'absolute', top: 12, right: 14, background: 'none', border: 'none', color: '#6D6D69', fontSize: 18, cursor: 'pointer', lineHeight: 1 }}
-          aria-label="Close"
-        >×</button>
+        {/* Close only available after email is submitted */}
+        {emailDone && (
+          <button
+            onClick={() => setVisible(false)}
+            style={{ position: 'absolute', top: 12, right: 14, background: 'none', border: 'none', color: '#6D6D69', fontSize: 18, cursor: 'pointer', lineHeight: 1 }}
+            aria-label="Close"
+          >×</button>
+        )}
 
         {/* Rank badge */}
         {rankResult && (
@@ -191,7 +185,7 @@ export function ArcadeScoreCapture() {
         {!emailDone ? (
           <>
             <p style={{ color: '#fff', fontSize: 14, marginBottom: 6, lineHeight: 1.5 }}>
-              Add your email to track your score across all games and appear on the global leaderboard.
+              Enter your email to post your score and appear on the global leaderboard.
             </p>
             <p style={{ color: '#6D6D69', fontSize: 11, marginBottom: 18 }}>
               One time. All games. Never spammed.
@@ -210,18 +204,7 @@ export function ArcadeScoreCapture() {
               disabled={!email || submitting}
               style={{ ...btnPrimary, opacity: !email || submitting ? 0.5 : 1 }}
             >
-              {submitting ? 'SAVING...' : 'JOIN THE LEADERBOARD'}
-            </button>
-            <a
-              href="/arcade-leaderboard"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ display: 'block', color: '#73F5FF', fontSize: 12, marginBottom: 10, textDecoration: 'none' }}
-            >
-              See full leaderboard →
-            </a>
-            <button onClick={handleSkip} style={btnGhost}>
-              No thanks, just here for the glory
+              {submitting ? 'SAVING...' : 'POST MY SCORE'}
             </button>
           </>
         ) : (

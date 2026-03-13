@@ -10,13 +10,15 @@ export async function GET() {
     const col = db.collection('arcade_scores');
 
     // ── Aggregate leaderboard: best score per player per game, summed ──
-    // Group by initials (case-insensitive) as canonical player identity
+    // Group by email (always present now) — initials as display name
     const aggregatePipeline = [
+      // Only include scores that have an email
+      { $match: { email: { $exists: true, $nin: [null, ''] } } },
       // Step 1: best score per (player, game)
       {
         $group: {
           _id: {
-            player: { $toLower: '$initials' },
+            player: '$email',
             game: '$game',
           },
           bestScore: { $max: '$score' },
@@ -50,11 +52,12 @@ export async function GET() {
 
     // ── Per-game top 10 ──
     const perGamePipeline = [
-      // Best score per player per game (grouped by initials)
+      { $match: { email: { $exists: true, $nin: [null, ''] } } },
+      // Best score per player per game (grouped by email)
       {
         $group: {
           _id: {
-            player: { $toLower: '$initials' },
+            player: '$email',
             game: '$game',
           },
           bestScore: { $max: '$score' },
