@@ -10,18 +10,17 @@ export async function GET() {
     const col = db.collection('arcade_scores');
 
     // ── Aggregate leaderboard: best score per player per game, summed ──
-    // Group by email (if present) else by initials as proxy
+    // Group by initials (case-insensitive) as canonical player identity
     const aggregatePipeline = [
       // Step 1: best score per (player, game)
       {
         $group: {
           _id: {
-            player: { $ifNull: ['$email', { $concat: ['anon:', '$initials'] }] },
+            player: { $toLower: '$initials' },
             game: '$game',
           },
           bestScore: { $max: '$score' },
           initials: { $first: '$initials' },
-          hasEmail: { $first: { $cond: [{ $gt: ['$email', null] }, true, false] } },
         },
       },
       // Step 2: sum across games per player
@@ -31,7 +30,6 @@ export async function GET() {
           totalScore: { $sum: '$bestScore' },
           gamesPlayed: { $sum: 1 },
           initials: { $first: '$initials' },
-          hasEmail: { $first: '$hasEmail' },
           gameBreakdown: {
             $push: { game: '$_id.game', score: '$bestScore' },
           },
@@ -39,7 +37,6 @@ export async function GET() {
       },
       { $sort: { totalScore: -1 } },
       { $limit: 100 },
-      // Strip email from output — initials only for public view
       {
         $project: {
           _id: 0,
@@ -53,11 +50,11 @@ export async function GET() {
 
     // ── Per-game top 10 ──
     const perGamePipeline = [
-      // Best score per player per game
+      // Best score per player per game (grouped by initials)
       {
         $group: {
           _id: {
-            player: { $ifNull: ['$email', { $concat: ['anon:', '$initials'] }] },
+            player: { $toLower: '$initials' },
             game: '$game',
           },
           bestScore: { $max: '$score' },
