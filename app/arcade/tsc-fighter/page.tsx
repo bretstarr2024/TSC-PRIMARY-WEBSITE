@@ -10,9 +10,10 @@ const TSCFighterGame = dynamic(
 );
 
 const FIGHTERS = [
-  { id: 'bret',    name: 'Bret Starr',    title: 'Founder & CEO',    color: '#FF5910', img: '/images/arcade/bret.png' },
-  { id: 'jj',      name: 'JJ La Pata',    title: 'Strategy Lead',    color: '#73F5FF', img: '/images/arcade/jj.png' },
-  { id: 'racheal', name: 'Racheal Bates', title: 'Experience Lead',  color: '#ED0AD2', img: '/images/arcade/racheal.png' },
+  { id: 'bret',    name: 'Bret Starr',    title: 'Founder & CEO',           color: '#FF5910', img: '/images/Bret.png'    },
+  { id: 'jj',      name: 'JJ La Pata',    title: 'Strategy Lead',           color: '#73F5FF', img: '/images/JJ.png'      },
+  { id: 'racheal', name: 'Racheal Bates', title: 'Experience Lead',         color: '#ED0AD2', img: '/images/Racheal.png' },
+  { id: 'dan',     name: 'Dan McCarron',  title: 'Chief Operating Officer', color: '#E1FF00', img: '/images/Dan.png'     },
 ];
 
 const BOSSES = [
@@ -71,7 +72,7 @@ export default function TSCFighterPage() {
         <p style={{ fontSize: 8, color: '#555', textAlign: 'center', marginBottom: 32, letterSpacing: '0.15em' }}>
           — SELECT YOUR FIGHTER —
         </p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20 }}>
           {FIGHTERS.map(f => (
             <div key={f.id} style={{
               border: `2px solid ${f.color}33`,

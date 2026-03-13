@@ -37,9 +37,10 @@ interface G {
 
 // ── Static data ───────────────────────────────────────────────────
 const FIGHTERS = [
-  { id: 'bret',    name: 'BRET STARR',    title: 'FOUNDER & CEO',    color: '#FF5910', img: '/images/arcade/bret.png'    },
-  { id: 'jj',      name: 'JJ LA PATA',    title: 'STRATEGY LEAD',    color: '#73F5FF', img: '/images/arcade/jj.png'      },
-  { id: 'racheal', name: 'RACHEAL BATES', title: 'EXPERIENCE LEAD',  color: '#ED0AD2', img: '/images/arcade/racheal.png' },
+  { id: 'bret',    name: 'BRET STARR',    title: 'FOUNDER & CEO',           color: '#FF5910', img: '/images/Bret.png'    },
+  { id: 'jj',      name: 'JJ LA PATA',    title: 'STRATEGY LEAD',           color: '#73F5FF', img: '/images/JJ.png'      },
+  { id: 'racheal', name: 'RACHEAL BATES', title: 'EXPERIENCE LEAD',         color: '#ED0AD2', img: '/images/Racheal.png' },
+  { id: 'dan',     name: 'DAN MCCARRON',  title: 'CHIEF OPERATING OFFICER', color: '#E1FF00', img: '/images/Dan.png'     },
 ] as const;
 
 const BOSSES = [
@@ -397,9 +398,9 @@ function drawCharacterSelect(
   ctx.fillStyle = BG; ctx.fillRect(0, 0, w, h);
   txt(ctx, 'SELECT YOUR FIGHTER', w / 2, 70, SCORE_C, 14);
 
-  const cardW = Math.min(200, (w - 80) / 3 - 10);
+  const cardW = Math.min(180, (w - 100) / 4 - 10);
   const cardH = cardW * 1.4;
-  const totalW = cardW * 3 + 40;
+  const totalW = cardW * 4 + 30 * 3;
   const startX = (w - totalW) / 2;
 
   for (let i = 0; i < FIGHTERS.length; i++) {
@@ -700,8 +701,8 @@ export function TSCFighterGame({ onClose }: { onClose: () => void }) {
       if (e.key === 'm' || e.key === 'M') { sfx.toggle(); return; }
 
       if (g.phase === 'CHARACTER_SELECT') {
-        if (e.key === 'ArrowLeft')  g.hovered = (g.hovered + 2) % 3;
-        if (e.key === 'ArrowRight') g.hovered = (g.hovered + 1) % 3;
+        if (e.key === 'ArrowLeft')  g.hovered = (g.hovered + 3) % 4;
+        if (e.key === 'ArrowRight') g.hovered = (g.hovered + 1) % 4;
         if (e.key === 'Enter' || e.key === 'z' || e.key === 'Z') {
           g.selected = g.hovered; sfx.select();
           g.phase = 'VS_SCREEN'; g.vsTimer = 0;
@@ -763,8 +764,8 @@ export function TSCFighterGame({ onClose }: { onClose: () => void }) {
       // ─ Character Select ─
       if (g.phase === 'CHARACTER_SELECT') {
         if (showTouch.current) {
-          if (justTouch('left'))  g.hovered = (g.hovered + 2) % 3;
-          if (justTouch('right')) g.hovered = (g.hovered + 1) % 3;
+          if (justTouch('left'))  g.hovered = (g.hovered + 3) % 4;
+          if (justTouch('right')) g.hovered = (g.hovered + 1) % 4;
           if (justTouch('punch')) {
             g.selected = g.hovered; sfx.select();
             g.phase = 'VS_SCREEN'; g.vsTimer = 0;
