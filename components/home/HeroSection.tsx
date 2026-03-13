@@ -29,7 +29,7 @@ export function HeroSection({ variant = 'gameover' }: HeroSectionProps) {
   if (variant === 'rebirth') {
     const rebirthWords = ['See', 'marketing', 'in', 'a'];
     return (
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
         <HeroParticles />
         {playing && <AsteroidsGame onClose={() => setPlaying(false)} />}
 
@@ -78,7 +78,7 @@ export function HeroSection({ variant = 'gameover' }: HeroSectionProps) {
         </div>
 
         {!playing && (
-          <div className="absolute bottom-[13vh] left-1/2 -translate-x-1/2 z-10">
+          <div className="relative z-10 mt-14">
             <ArcadeButton onClick={() => setPlaying(true)} delay={2.0} />
           </div>
         )}
@@ -103,7 +103,7 @@ export function HeroSection({ variant = 'gameover' }: HeroSectionProps) {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
       <HeroParticles />
 
       {playing && <AsteroidsGame onClose={() => setPlaying(false)} />}
@@ -194,9 +194,9 @@ export function HeroSection({ variant = 'gameover' }: HeroSectionProps) {
         </motion.p>
       </div>
 
-      {/* Arcade button — centered between sphere bottom and section bottom */}
+      {/* Arcade button — in flow below content so it never overlaps on short screens */}
       {!playing && (
-        <div className="absolute bottom-[13vh] left-1/2 -translate-x-1/2 z-10">
+        <div className="relative z-10 mt-14">
           <ArcadeButton onClick={() => setPlaying(true)} delay={2.8} />
         </div>
       )}
