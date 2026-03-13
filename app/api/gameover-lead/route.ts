@@ -162,7 +162,7 @@ export async function POST(request: Request) {
         </table>
         <p style="color: #666; font-size: 13px;">Submitted: ${timestampCT} CT</p>
         <hr style="border: none; border-top: 1px solid #333; margin: 20px 0;">
-        <p style="color: #666; font-size: 12px;">thestarrconspiracy.com/gameover</p>
+        <p style="color: #666; font-size: 12px;">thestarrconspiracy.com/game-over</p>
       </div>
     `;
 
