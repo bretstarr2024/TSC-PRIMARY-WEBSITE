@@ -167,13 +167,13 @@ export async function enqueueContent(
   const collection = await getContentQueueCollection();
   const clientId = getClientId();
 
-  // Idempotent: skip if any non-published item with same title+type already exists
-  // (prevents re-queueing items that failed, were rejected, or are already pending)
+  // Idempotent: skip if same title+type already exists in any status
+  // (prevents re-queueing items that are pending, generating, failed, rejected, OR already published)
   const existing = await collection.findOne({
     clientId,
     contentType: item.contentType,
     title: item.title,
-    status: { $in: ['pending', 'generating', 'failed', 'rejected'] },
+    status: { $in: ['pending', 'generating', 'failed', 'rejected', 'published'] },
   });
   if (existing) return existing._id?.toString() || 'existing';
 

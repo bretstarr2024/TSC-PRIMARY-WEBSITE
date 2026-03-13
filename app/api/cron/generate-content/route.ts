@@ -458,8 +458,26 @@ export async function GET(request: NextRequest) {
 
         const data = parsed.data as Record<string, unknown>;
 
+        // Post-process: enforce brand voice substitutions the LLM sometimes misses
+        // "customer(s)" → "client(s)" per TSC brand guidelines
+        function applyBrandSubstitutions(val: unknown): unknown {
+          if (typeof val === 'string') {
+            return val
+              .replace(/\bcustomers\b/gi, 'clients')
+              .replace(/\bcustomer\b/gi, 'client');
+          }
+          if (Array.isArray(val)) return val.map(applyBrandSubstitutions);
+          if (val && typeof val === 'object') {
+            return Object.fromEntries(
+              Object.entries(val as Record<string, unknown>).map(([k, v]) => [k, applyBrandSubstitutions(v)])
+            );
+          }
+          return val;
+        }
+        const cleanData = applyBrandSubstitutions(data) as Record<string, unknown>;
+
         // Quality checks
-        const primaryText = getPrimaryTextField(contentType, data);
+        const primaryText = getPrimaryTextField(contentType, cleanData);
         const quality = runPostGenerationChecks(primaryText, contentType);
 
         if (!quality.passed) {
@@ -469,7 +487,7 @@ export async function GET(request: NextRequest) {
         }
 
         // Write to DB
-        const contentId = await writeContentToDb(contentType, data, item);
+        const contentId = await writeContentToDb(contentType, cleanData, item);
 
         // Mark queue item as published
         await updateQueueItemStatus(itemId, 'published');
