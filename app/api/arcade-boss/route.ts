@@ -135,15 +135,12 @@ export async function POST(request: Request) {
             <p style="font-size: 24px; margin-bottom: 4px;">&#x1F3C6;</p>
             <h2 style="color: #FF5910; margin-top: 0;">You're the Boss.</h2>
             <p>
-              Congratulations, <strong>${playerInitials}</strong> &mdash; you just set the all-time high score
+              Congratulations, <strong>${playerInitials}</strong>. You just set the all-time high score
               in <strong>${gameName}</strong> with <strong>${scoreStr}</strong> points.
             </p>
             <p>
-              Not many people find our arcade, and even fewer claim the top spot. We like that.
-            </p>
-            <p>
-              The grand prize goes to the highest aggregate scorer across all TSC arcade games — so keep playing.
-              In the meantime, if you want to talk about leveling up your marketing:
+              The grand prize goes to the highest aggregate scorer across all TSC arcade games, so keep playing.
+              If you want to talk about leveling up your marketing:
             </p>
             <p style="margin: 24px 0;">
               <a href="https://thestarrconspiracy.com/book"
@@ -151,7 +148,7 @@ export async function POST(request: Request) {
                 Book a Call
               </a>
             </p>
-            <p style="margin-top: 32px; color: #666;">&mdash; The Starr Conspiracy</p>
+            <p style="margin-top: 32px; color: #666;">The Starr Conspiracy</p>
           </div>
         `;
 

@@ -173,7 +173,7 @@ export async function POST(request: Request) {
         <p>We'll follow up within 48 hours to schedule your 30-minute walkthrough. Real data. Real analysis. Your competitors. Your market.</p>
         <p>No credit card. No auto-renewal. No surprise upsell. You get the assessment, you get 15 days to use it, and you decide if there's a deeper conversation worth having.</p>
         <p>In the meantime, take a look around <a href="https://thestarrconspiracy.com" style="color: #FF5910;">thestarrconspiracy.com</a>. We built the whole thing in a day. That's not a metaphor.</p>
-        <p style="margin-top: 32px; color: #666;">&mdash; The Starr Conspiracy</p>
+        <p style="margin-top: 32px; color: #666;">The Starr Conspiracy</p>
       </div>
     `;
 

@@ -175,7 +175,7 @@ export async function POST(request: Request) {
         <p>Hey ${safeName},</p>
         <p>We received your application. A real human reads every one of these — we'll reach out directly if there's a match.</p>
         <p>No follow-up needed on your end. We'll be in touch if we see a fit.</p>
-        <p style="margin-top: 32px; color: #666;">&mdash; The Starr Conspiracy</p>
+        <p style="margin-top: 32px; color: #666;">The Starr Conspiracy</p>
       </div>
     ` : `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
@@ -188,7 +188,7 @@ export async function POST(request: Request) {
             Book a Call
           </a>
         </p>
-        <p style="margin-top: 32px; color: #666;">&mdash; The Starr Conspiracy</p>
+        <p style="margin-top: 32px; color: #666;">The Starr Conspiracy</p>
       </div>
     `;
 
