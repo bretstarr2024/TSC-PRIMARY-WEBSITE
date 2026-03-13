@@ -38,7 +38,7 @@ export function OfferSection() {
             <span className="font-extrabold">the new game?</span>
           </h2>
           <p className="text-xl text-shroomy leading-relaxed max-w-3xl mt-8 mb-20">
-            We&apos;ll build you a real AI-Era Competitive Intelligence Assessment. Not a PDF with charts you&apos;ll never look at again. A live analysis, delivered in a lightpaper format, built from your actual competitive landscape. It expires in 15 days because competitive intelligence has a shelf life, and we want you to use it, not file it.
+            We&apos;ll build you a real AI-Era Competitive Intelligence Assessment. Not a PDF with charts you&apos;ll never look at again. A live analysis, delivered in an interactive format, built from your actual competitive landscape. It expires in 15 days because competitive intelligence has a shelf life, and we want you to use it, not file it.
           </p>
         </AnimatedSection>
 
@@ -107,7 +107,7 @@ export function OfferSection() {
                   Think of this as the boss-level intelligence briefing. Most companies are fighting competitors they can see. This shows you the ones operating in channels you&apos;re not even monitoring yet.
                 </p>
                 <p className="text-sm font-bold text-atomic-tangerine" style={{ filter: 'drop-shadow(0 0 4px rgba(255,89,16,0.3))' }}>
-                  Delivered as a lightpaper. Expires in 15 days. Because intelligence that sits in a folder isn&apos;t intelligence. It&apos;s a souvenir.
+                  Delivered as an interactive report. Expires in 15 days. Because intelligence that sits in a folder isn&apos;t intelligence. It&apos;s a souvenir.
                 </p>
               </div>
             </div>
