@@ -4,7 +4,7 @@ import { getAllPublishedExpertQa, getAllPublishedNews } from '@/lib/resources-db
 
 export const dynamic = 'force-dynamic'; // DB-backed, generate at request time
 
-const SITE_URL = 'https://tsc-primary-website.vercel.app';
+const SITE_URL = 'https://thestarrconspiracy.com';
 
 export async function GET() {
   const feed = new Feed({

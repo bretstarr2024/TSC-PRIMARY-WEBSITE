@@ -15,7 +15,7 @@ import {
   getAllPublishedInfographics,
 } from '@/lib/resources-db';
 
-const BASE_URL = 'https://tsc-primary-website.vercel.app';
+const BASE_URL = 'https://thestarrconspiracy.com';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static pages

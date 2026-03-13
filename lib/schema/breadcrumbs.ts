@@ -3,7 +3,7 @@
  */
 
 // Base URL — will be updated when domain is configured
-const BASE_URL = 'https://tsc-primary-website.vercel.app';
+const BASE_URL = 'https://thestarrconspiracy.com';
 
 function breadcrumb(items: Array<{ name: string; url: string }>) {
   return {

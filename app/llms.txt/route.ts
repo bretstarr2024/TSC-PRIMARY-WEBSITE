@@ -11,7 +11,7 @@ import {
   getAllPublishedTools,
 } from '@/lib/resources-db';
 
-const BASE_URL = 'https://tsc-primary-website.vercel.app';
+const BASE_URL = 'https://thestarrconspiracy.com';
 
 export async function GET() {
   const [blogs, faqs, glossary, comparisons, expertQa, news, briefs, videos, tools] = await Promise.all([
