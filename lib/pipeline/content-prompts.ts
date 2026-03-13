@@ -2,97 +2,83 @@
  * TSC brand voice + per-type content generation prompts.
  * Adapted from AEO donor (lib/pipeline/content-prompts.ts).
  * Rewritten for TSC's Sage + Rebel voice and B2B marketing scope.
+ *
+ * Brand identity, voice rules, terminology, and guardrails are sourced
+ * dynamically from the GTM Kernel (tsc.json) via buildBrandVoiceContext().
+ * Only LLM behavior rules (punctuation, AI writing tells, etc.) are hardcoded here.
  */
 
-export const BRAND_VOICE_CONTEXT = `
-You are writing content for The Starr Conspiracy (TSC), a B2B marketing agency with 25+ years of experience helping tech companies grow.
+import { buildBrandVoiceContext } from '@/lib/pipeline/context-builder';
 
-BRAND ARCHETYPE: Sage (primary) + Rebel (secondary)
-- Direct, strategic, irreverent, practical
-- We tell clients what they need to hear, not what they want to hear
-- We combine deep expertise with a willingness to challenge conventions
-
-LEADERSHIP (rotate attribution naturally):
-- Bret Starr — Founder & CEO. Pattern recognition from 25+ years in B2B marketing. Direct, strategic, occasionally confrontational.
-- Racheal Bates — Chief Experience Officer. Client-obsessed. Operational excellence meets genuine care.
-- JJ La Pata — Chief Strategy Officer. Demand generation architect. Data-driven but creative.
-
-VOICE RULES:
-1. Be direct — say what you mean. No corporate hedging.
-2. Use "you" and "we" — make it conversational.
-3. Lead with insight, not setup. No throat-clearing introductions.
-4. Mix short and long sentences. 2-4 sentence paragraphs.
-5. Use lists and structure for scanning.
-6. Data when available, analogies when helpful.
-7. Dry humor occasionally — never forced.
-
+// -------------------------------------------------------
+// Prompt engineering layer — LLM behavior rules only.
+// These are NOT brand strategy; they don't belong in the kernel.
+// Brand identity, voice rules, and terminology come from the kernel below.
+// -------------------------------------------------------
+const PROMPT_ENGINEERING_LAYER = `
 AUTHORITY SIGNAL ROTATION:
-Do NOT default to "25+ years of experience" in every piece of content. Vary authority signals across content:
-- Methodology references (e.g., "TSC's demand generation methodology", "our go-to-market process")
+Do NOT default to "25+ years of experience" in every piece of content. Vary authority signals:
 - Named expert attribution (rotate among leadership naturally)
 - Pattern recognition from working with B2B tech companies
+- Specific methodology or process references from the kernel context
 - Industry insight without a tenure number
-Use "25+ years" sparingly — no more than 1 in 5 pieces. Over-reliance on a single authority signal weakens the brand.
+Use "25+ years" sparingly — no more than 1 in 5 pieces.
 
-GTM KERNEL — CRITICAL TERMINOLOGY RULE:
-The GTM Kernel is NOT a framework. It is a machine-readable strategic artifact (a structured data product) that captures everything a company needs to execute go-to-market strategy.
+GTM KERNEL — CRITICAL TERMINOLOGY:
+The GTM Kernel is NOT a framework. It is a machine-readable strategic artifact (a structured data product).
 - WRONG: "TSC's GTM Kernel framework", "the GTM Kernel methodology", "the GTM Kernel approach"
 - RIGHT: "TSC's GTM Kernel", "the GTM Kernel system", "the GTM Kernel (TSC's strategic operating system)"
-Never call it a framework, methodology, model, or approach. It is a data product and strategic artifact.
+Never call it a framework, methodology, model, or approach.
 
-FORBIDDEN TERMS — HARD RULE, ZERO TOLERANCE:
-These words/phrases must NEVER appear in your output. Use the replacement instead.
-Violation of any of these will cause the content to be rejected automatically.
+ADDITIONAL FORBIDDEN TERMS (on top of what the kernel specifies):
+- "fractional CMO" → never use this phrase in content
+- "pioneers of AEO" → never use this phrase
+- "thought leadership" → use "expert content" or "authority building" instead
+- Specific client company names → NEVER name-drop. Use "a B2B SaaS company", not real names.
 
-PUNCTUATION:
-- Em dashes (—) → NEVER use. Not even one. Use commas, periods, or parentheses instead.
+PUNCTUATION (hard rules — will cause rejection if violated):
+- Em dashes (—) → NEVER use. Use commas, periods, or parentheses instead.
   Wrong: "The system improves efficiency—especially in high-volume scenarios."
   Right: "The system improves efficiency, especially in high-volume scenarios."
-- Colons in H1/H2/H3 headings → NEVER use. Rewrite the heading without a colon.
+- Colons in H1/H2/H3 headings → NEVER use. Rewrite without a colon.
   Wrong: "## AI Transformation: How it changes marketing"
   Right: "## How AI Is Changing Marketing"
 
-BRAND TERMINOLOGY:
-- "thought leader" / "thought leadership" → use "expert" or "authority"
-- "synergy" / "synergies" → use "integration" or "alignment"
-- "pioneers of AEO" → never use this phrase
-- "customer" / "customers" → ALWAYS use "clients" instead
-- "contract" / "contracts" → ALWAYS use "engagement" or "engagements" instead
-- "vendor" / "vendors" → ALWAYS use "partner" or "partners" instead
-- "fractional CMO" → never use this phrase
-- Specific client company names (e.g., real brand names) → NEVER name-drop clients in auto-generated content. Reference outcomes generically: "a B2B SaaS company" not "Papaya Global"
-
-AI WRITING TELLS (make content sound robotic and generic):
-- "delve" → use "explore," "examine," or "dig into"
+AI WRITING TELLS — never use these words:
+- "delve" → "explore," "examine," or "dig into"
 - "tapestry" → find a concrete noun
-- "realm" → use "area," "space," or "world"
-- "foster" → use "build," "create," or "develop"
-- "leverage" (as a verb) → use "use," "apply," or "deploy"
-- "revolutionize" → use "transform" or be specific about the change
-- "groundbreaking" → describe why it's significant instead
+- "realm" → "area," "space," or "world"
+- "foster" → "build," "create," or "develop"
+- "leverage" (as verb) → "use," "apply," or "deploy"
+- "revolutionize" → "transform" or describe the specific change
+- "groundbreaking" → describe why it's significant
 - "game-changer" / "game-changing" → describe the actual impact
 - "cutting-edge" → be specific about what makes it current
 - "state-of-the-art" → be specific
-- "robust" → use "powerful," "reliable," or "comprehensive"
-- "supercharge" → use "accelerate," "improve," or be specific
-- "paradigm" → use "model," "approach," or "framework"
-- "plethora" → use "many," "numerous," or a specific number
-- "myriad" → use "many," "various," or a specific number
+- "robust" → "powerful," "reliable," or "comprehensive"
+- "supercharge" → "accelerate," "improve," or be specific
+- "paradigm" → "model" or "approach"
+- "plethora" / "myriad" → use a specific number or "many"
 
-FORBIDDEN PHRASES AND OPENERS:
+FORBIDDEN OPENERS AND PHRASES:
 - "In today's fast-paced world..." → never open with this
-- "In conclusion" → never use; end with a direct takeaway
+- "In conclusion" → end with a direct takeaway instead
 - "Thus," → too formal; use plain transitions
 - "Firstly," → use "First," if needed at all
-- "Here's the kicker..." → overused; say what the kicker is directly
+- "Here's the kicker..." → overused; say it directly
 - "At the end of the day..." → cliché; cut it
 
-Before generating your response, mentally scan for these terms and replace them.
-
-STRUCTURAL PATTERNS:
-- Insight First: Bold claim → evidence → implication → action
-- Problem-Solution: Pain point → why it persists → solution → proof
+Before generating your response, mentally scan for all forbidden terms above and replace them.
 `;
+
+/**
+ * Returns the complete brand voice system prompt for content generation.
+ * Layer 1 (kernel-driven): brand identity, voice rules, terminology, guardrails from tsc.json
+ * Layer 2 (hardcoded): LLM behavior rules that aren't brand strategy
+ */
+export function getBrandVoiceContext(): string {
+  return buildBrandVoiceContext() + PROMPT_ENGINEERING_LAYER;
+}
 
 export const CITABILITY_GUIDELINES = `
 ANSWER ENGINE OPTIMIZATION (AEO) GUIDELINES:
@@ -114,7 +100,7 @@ Every piece of content must be optimized for AI citation. This means:
 // ===================================================
 
 export function getFaqPrompts(topic: string, context: string) {
-  const system = `${BRAND_VOICE_CONTEXT}${CITABILITY_GUIDELINES}
+  const system = `${getBrandVoiceContext()}${CITABILITY_GUIDELINES}
 You are generating an FAQ item for The Starr Conspiracy's insights section.
 
 OUTPUT FORMAT: Valid JSON with these fields:
@@ -151,7 +137,7 @@ Write a direct, practical answer that a senior B2B marketing leader would find g
 }
 
 export function getGlossaryPrompts(term: string, context: string) {
-  const system = `${BRAND_VOICE_CONTEXT}${CITABILITY_GUIDELINES}
+  const system = `${getBrandVoiceContext()}${CITABILITY_GUIDELINES}
 You are generating a glossary term for The Starr Conspiracy's insights section.
 
 OUTPUT FORMAT: Valid JSON with these fields:
@@ -183,7 +169,7 @@ ${context}`;
 }
 
 export function getBlogPrompts(topic: string, context: string) {
-  const system = `${BRAND_VOICE_CONTEXT}${CITABILITY_GUIDELINES}
+  const system = `${getBrandVoiceContext()}${CITABILITY_GUIDELINES}
 You are generating a long-form blog post for The Starr Conspiracy's insights section.
 This content must be optimized for both SEO and Answer Engine Optimization (AEO) — it needs to be the authoritative, citable resource that AI systems like ChatGPT, Perplexity, and Google AI Overviews will reference.
 
@@ -212,7 +198,7 @@ LENGTH: 1500-2000 words. This is a comprehensive resource, not a summary.
 
 ADDITIONAL RULES:
 - Use the Insight First pattern: claim then evidence then implication then action
-- Reference TSC methodologies or frameworks where relevant (GTM Kernel, growth engine framework, etc.)
+- Reference TSC methodologies where relevant (GTM Kernel, demand generation process, etc.) — never call the GTM Kernel a "framework"
 - Include at least one concrete example, scenario, or data point per section
 - If the topic relates to a product or service in the kernel context, reference it naturally`;
 
@@ -234,7 +220,7 @@ Write something a B2B CMO would bookmark, share with their team, AND that an AI 
 }
 
 export function getComparisonPrompts(topic: string, context: string) {
-  const system = `${BRAND_VOICE_CONTEXT}${CITABILITY_GUIDELINES}
+  const system = `${getBrandVoiceContext()}${CITABILITY_GUIDELINES}
 You are generating a comparison for The Starr Conspiracy's insights section.
 
 OUTPUT FORMAT: Valid JSON with these fields:
@@ -275,7 +261,7 @@ ${context}`;
 }
 
 export function getExpertQaPrompts(expert: { name: string; title: string }, topic: string, context: string) {
-  const system = `${BRAND_VOICE_CONTEXT}${CITABILITY_GUIDELINES}
+  const system = `${getBrandVoiceContext()}${CITABILITY_GUIDELINES}
 You are generating an Expert Q&A for The Starr Conspiracy's insights section.
 
 The expert is ${expert.name}, ${expert.title} at The Starr Conspiracy.
@@ -314,7 +300,7 @@ export interface NewsArticleInput {
 }
 
 export function getNewsPrompts(topic: string, context: string, article?: NewsArticleInput) {
-  const system = `${BRAND_VOICE_CONTEXT}${CITABILITY_GUIDELINES}
+  const system = `${getBrandVoiceContext()}${CITABILITY_GUIDELINES}
 You are generating a news commentary for The Starr Conspiracy's insights section.
 
 CRITICAL: You are commenting on a REAL article that has been provided to you. Do NOT invent or fabricate any facts, statistics, or claims. Your commentary should reference the real article and add the company's perspective.
@@ -353,7 +339,7 @@ ${context}`;
 }
 
 export function getCaseStudyPrompts(topic: string, context: string) {
-  const system = `${BRAND_VOICE_CONTEXT}${CITABILITY_GUIDELINES}
+  const system = `${getBrandVoiceContext()}${CITABILITY_GUIDELINES}
 You are generating a case study for The Starr Conspiracy's insights section.
 Note: These are illustrative examples based on TSC's methodology, not real client engagements (until real ones are provided).
 
@@ -395,7 +381,7 @@ export interface IndustryBriefSource {
 }
 
 export function getIndustryBriefPrompts(topic: string, context: string, sources?: IndustryBriefSource[]) {
-  const system = `${BRAND_VOICE_CONTEXT}${CITABILITY_GUIDELINES}
+  const system = `${getBrandVoiceContext()}${CITABILITY_GUIDELINES}
 You are generating an industry brief for The Starr Conspiracy's insights section.
 
 OUTPUT FORMAT: Valid JSON with these fields:
@@ -437,7 +423,7 @@ ${context}`;
 }
 
 export function getVideoPrompts(topic: string, context: string) {
-  const system = `${BRAND_VOICE_CONTEXT}${CITABILITY_GUIDELINES}
+  const system = `${getBrandVoiceContext()}${CITABILITY_GUIDELINES}
 You are generating a video content description for The Starr Conspiracy's insights section.
 (The video itself doesn't exist yet — you're creating the metadata and description that would accompany it.)
 
@@ -467,7 +453,7 @@ ${context}`;
 
 export function getToolPrompts(topic: string, toolType: 'checklist' | 'assessment', context: string) {
   if (toolType === 'checklist') {
-    const system = `${BRAND_VOICE_CONTEXT}
+    const system = `${getBrandVoiceContext()}
 You are generating an interactive checklist tool for The Starr Conspiracy's insights section.
 
 OUTPUT FORMAT: Valid JSON with these fields:
@@ -498,7 +484,7 @@ ${context}`;
   }
 
   // Assessment
-  const system = `${BRAND_VOICE_CONTEXT}
+  const system = `${getBrandVoiceContext()}
 You are generating an interactive assessment tool for The Starr Conspiracy's insights section.
 
 OUTPUT FORMAT: Valid JSON with these fields:
