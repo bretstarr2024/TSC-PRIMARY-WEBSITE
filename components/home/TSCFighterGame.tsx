@@ -180,150 +180,214 @@ function hbar(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h:
   ctx.strokeRect(x, y, w, h);
 }
 
-// ── Sprite: player ────────────────────────────────────────────────
-// Origin: (0,0) = feet center. Sprite draws facing right; caller flips for facing left.
-function drawPlayer(ctx: CanvasRenderingContext2D, f: Fighter, color: string, fr: number) {
-  const bob  = Math.sin(fr * 0.08) * 1.5 + (f.anim === 'walk' ? Math.sin(fr * 0.22) * 2.5 : 0);
-  const bodyY = -FH + bob;
-  const legPhase = f.anim === 'walk' ? Math.sin(fr * 0.22) * 6 : 0;
+// ── Sprite: portrait fighter ──────────────────────────────────────
+// Uses the actual portrait photo as the in-game sprite.
+// Origin: (0,0) = feet center. Drawn facing right; caller flips for left.
+const PH = 155, PW = 112; // portrait height/width in arena
 
-  ctx.fillStyle = color;
-  // Legs
-  ctx.fillRect(-FW / 2,     -32 + bob,             FW / 2 - 3, 32);
-  ctx.fillRect(3,            -32 + bob + legPhase, FW / 2 - 3, 32);
-  // Body
-  ctx.fillRect(-FW / 2 + 4, bodyY, FW - 8, FH - 32);
-  // Head
-  ctx.beginPath(); ctx.arc(0, bodyY - HR + 6, HR, 0, Math.PI * 2); ctx.fill();
-  // Eyes
-  ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(6, bodyY - HR + 2, 3, 0, Math.PI * 2); ctx.fill();
-  ctx.fillStyle = '#000'; ctx.beginPath(); ctx.arc(7, bodyY - HR + 2, 1.5, 0, Math.PI * 2); ctx.fill();
+function drawPortraitFighter(
+  ctx: CanvasRenderingContext2D,
+  f: Fighter,
+  img: HTMLImageElement | undefined,
+  color: string,
+  fr: number
+) {
+  const bob   = Math.sin(fr * 0.09) * 3;
+  const lunge = (f.anim === 'punch' || f.anim === 'kick' || f.anim === 'special')
+    ? Math.min(1, f.animTimer / 8) * 10 : 0;
 
-  // Attack extensions
-  if (f.anim === 'punch') {
-    const ext = Math.min(1, f.animTimer / (PUNCH_DUR * 0.5));
-    ctx.fillStyle = color;
-    ctx.fillRect(FW / 2 - 4, bodyY + 8, ext * 38, 14);
-    ctx.beginPath(); ctx.arc(FW / 2 - 4 + ext * 38 + 8, bodyY + 15, 10, 0, Math.PI * 2); ctx.fill();
-  } else if (f.anim === 'kick') {
-    const ext = Math.min(1, f.animTimer / (KICK_DUR * 0.5));
-    ctx.save(); ctx.translate(FW / 2 - 4, -24); ctx.rotate(-0.3 + ext * 1.4);
-    ctx.fillStyle = color; ctx.fillRect(0, 0, 44, 14);
-    ctx.restore();
-  } else if (f.anim === 'special') {
-    const ext = Math.min(1, f.animTimer / (SPECIAL_DUR * 0.4));
-    // aura
-    ctx.save(); ctx.globalAlpha = ext * 0.55; ctx.fillStyle = SCORE_C;
-    ctx.beginPath(); ctx.ellipse(0, bodyY - HR, 44 + ext * 24, 96 + ext * 32, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.restore();
-    ctx.fillStyle = color;
-    ctx.fillRect( FW / 2 - 4,           bodyY + 8, 54 * ext, 14);
-    ctx.fillRect(-FW / 2 + 4 - 54 * ext, bodyY + 8, 54 * ext, 14);
-  } else {
-    // idle arms
-    ctx.fillStyle = color;
-    ctx.fillRect( FW / 2 - 6,      bodyY + 8, 14, 12);
-    ctx.fillRect(-FW / 2 + 6 - 14, bodyY + 8, 14, 12);
+  ctx.save();
+
+  // Dead: fall sideways
+  if (f.anim === 'dead') {
+    const angle = Math.min(Math.PI / 2, (f.animTimer / 25) * Math.PI / 2);
+    ctx.translate(PW / 2, -PH / 2);
+    ctx.rotate(angle);
+    ctx.translate(-PW / 2, PH / 2);
   }
+
+  // Special: gold glow aura
+  if (f.anim === 'special') {
+    const ext = Math.min(1, f.animTimer / 12);
+    ctx.shadowBlur  = 50 * ext;
+    ctx.shadowColor = SCORE_C;
+    ctx.save();
+    ctx.globalAlpha = ext * 0.35;
+    ctx.fillStyle   = SCORE_C;
+    ctx.beginPath();
+    ctx.ellipse(lunge, -PH / 2 + bob, PW * 0.6 + ext * 22, PH * 0.55 + ext * 18, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // Draw portrait (or colored fallback)
+  if (img && img.complete && img.naturalWidth > 0) {
+    ctx.drawImage(img, -PW / 2 + lunge, -PH + bob, PW, PH);
+  } else {
+    ctx.fillStyle   = color + '33';
+    ctx.fillRect(-PW / 2 + lunge, -PH + bob, PW, PH);
+    ctx.strokeStyle = color; ctx.lineWidth = 3;
+    ctx.strokeRect(-PW / 2 + lunge, -PH + bob, PW, PH);
+    px(ctx, 20); ctx.textAlign = 'center';
+    ctx.fillStyle = color;
+    ctx.fillText('?', lunge, -PH / 2 + bob + 8);
+  }
+
+  // Hit flash: red overlay
+  if (f.anim === 'hit' && Math.floor(fr / 3) % 2 === 0) {
+    ctx.fillStyle = 'rgba(255,30,30,0.45)';
+    ctx.fillRect(-PW / 2 + lunge, -PH + bob, PW, PH);
+  }
+
+  ctx.shadowBlur = 0;
+
+  // Attack swoosh effect (extends from front edge, fades out)
+  if (f.anim === 'punch' || f.anim === 'kick' || f.anim === 'special') {
+    const dur  = f.anim === 'punch' ? PUNCH_DUR : f.anim === 'kick' ? KICK_DUR : SPECIAL_DUR;
+    const ext  = Math.min(1, f.animTimer / (dur * 0.5));
+    const fade = Math.max(0, 1 - (f.animTimer / dur) * 1.4);
+    const ex   = PW / 2 + lunge + 4;
+
+    ctx.globalAlpha = fade;
+    ctx.strokeStyle = color;
+    ctx.lineCap     = 'round';
+
+    if (f.anim === 'punch') {
+      ctx.lineWidth = 5;
+      ctx.beginPath(); ctx.moveTo(ex, -PH * 0.6 + bob); ctx.lineTo(ex + 65 * ext, -PH * 0.55 + bob); ctx.stroke();
+      ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(ex + 8, -PH * 0.72 + bob); ctx.lineTo(ex + 55 * ext, -PH * 0.68 + bob); ctx.stroke();
+    } else if (f.anim === 'kick') {
+      ctx.lineWidth = 5;
+      ctx.beginPath(); ctx.moveTo(ex - 10, -PH * 0.35 + bob); ctx.lineTo(ex + 60 * ext, -PH * 0.2 + bob); ctx.stroke();
+      ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(ex, -PH * 0.5 + bob); ctx.lineTo(ex + 50 * ext, -PH * 0.3 + bob); ctx.stroke();
+    } else {
+      ctx.lineWidth = 4;
+      ctx.beginPath(); ctx.arc(ex + 20, -PH * 0.5 + bob, 18 + 22 * ext, 0, Math.PI * 2); ctx.stroke();
+      ctx.beginPath(); ctx.arc(ex + 8,  -PH * 0.3 + bob, 10 + 14 * ext, 0, Math.PI * 2); ctx.stroke();
+    }
+
+    ctx.globalAlpha = 1;
+    ctx.lineCap     = 'butt';
+  }
+
+  ctx.restore();
 }
 
 // ── Sprite: boss ──────────────────────────────────────────────────
+// All bosses target ~150px total height to match portrait fighters.
 // Origin: (0,0) = feet center. Drawn facing right; caller flips if needed.
 function drawBoss(ctx: CanvasRenderingContext2D, f: Fighter, idx: number, fr: number) {
-  const bob   = Math.sin(fr * 0.06) * 2.2;
-  const boss  = BOSSES[idx];
-  const color = boss.color;
+  const bob    = Math.sin(fr * 0.06) * 2.5;
+  const color  = BOSSES[idx].color;
   const atkExt = (f.anim === 'punch' || f.anim === 'kick' || f.anim === 'special')
     ? Math.min(1, f.animTimer / 10) : 0;
+  const hitFlash = f.anim === 'hit' && Math.floor(fr / 3) % 2 === 0;
+
+  ctx.save();
+  if (hitFlash) { ctx.fillStyle = 'rgba(255,30,30,0)'; } // handled per-shape below
 
   if (idx === 0) {
-    // MISALIGNED STRATEGY — fat body, 5 stacked hats, confused X-eyes
-    const bw = FW + 24;
-    const bodyY = -FH - 18 + bob;
-    ctx.fillStyle = color;
-    ctx.fillRect(-bw / 2, bodyY, bw, FH + 18);
-    // 5 hats
-    const hc = ['#7C3AED','#8B5CF6','#A78BFA','#C4B5FD','#DDD6FE'];
-    for (let i = 0; i < 5; i++) {
-      const hw = bw - i * 8;
-      ctx.fillStyle = hc[i];
-      ctx.fillRect(-hw / 2, bodyY - 22 - i * 18, hw, 18);
-      ctx.fillRect(-hw / 2 - 6, bodyY - 22 - i * 18 + 14, hw + 12, 5);
+    // MISALIGNED STRATEGY — wide body, 3 stacked hats, X-eyes
+    const bw = 80, bodyH = 95;
+    const bodyY = -bodyH + bob;
+    ctx.fillStyle = hitFlash ? '#FF6666' : color;
+    ctx.fillRect(-bw / 2, bodyY, bw, bodyH);
+    // 3 hats (tower of wrong priorities)
+    const hc = ['#7C3AED','#A78BFA','#DDD6FE'];
+    for (let i = 0; i < 3; i++) {
+      const hw = bw - i * 12;
+      ctx.fillStyle = hitFlash ? '#FF6666' : hc[i];
+      ctx.fillRect(-hw / 2, bodyY - 16 - i * 16, hw, 16);
+      ctx.fillRect(-hw / 2 - 5, bodyY - 16 - i * 16 + 12, hw + 10, 4);
     }
     // X eyes
-    ctx.strokeStyle = '#fff'; ctx.lineWidth = 3;
-    [[-10, bodyY + 14], [10, bodyY + 14]].forEach(([ex, ey]) => {
-      ctx.beginPath(); ctx.moveTo(ex - 5, ey - 5); ctx.lineTo(ex + 5, ey + 5); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(ex + 5, ey - 5); ctx.lineTo(ex - 5, ey + 5); ctx.stroke();
+    ctx.strokeStyle = hitFlash ? '#fff' : '#fff'; ctx.lineWidth = 3.5;
+    [[-16, bodyY + 22], [16, bodyY + 22]].forEach(([ex, ey]) => {
+      ctx.beginPath(); ctx.moveTo(ex - 6, ey - 6); ctx.lineTo(ex + 6, ey + 6); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(ex + 6, ey - 6); ctx.lineTo(ex - 6, ey + 6); ctx.stroke();
     });
+    // squiggly mouth (confused)
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(-12, bodyY + 48);
+    for (let i = 0; i < 5; i++) ctx.lineTo(-12 + i * 6 + 3, bodyY + 48 + (i % 2 === 0 ? 5 : -5));
+    ctx.stroke();
     if (atkExt > 0) {
-      ctx.fillStyle = color; ctx.fillRect(bw / 2, bodyY + 22, 46 * atkExt, 18);
+      ctx.fillStyle = hitFlash ? '#FF6666' : color;
+      ctx.fillRect(bw / 2, bodyY + 30, 55 * atkExt, 18);
     }
 
   } else if (idx === 1) {
-    // BROKEN PIPELINE — cylindrical pipe body with animated leaks
-    const bw = 46;
-    const bodyY = -FH + bob;
-    ctx.fillStyle = color;
-    ctx.fillRect(-bw / 2, bodyY, bw, FH);
-    // pipe bands
-    ctx.fillStyle = '#991B1B';
-    for (let i = 0; i < 3; i++) ctx.fillRect(-bw / 2 - 5, bodyY + i * 24, bw + 10, 6);
-    // animated drips
-    ctx.fillStyle = '#FCA5A5';
-    ([-bw / 2 - 5, bw / 2 - 1]).forEach(lx => {
+    // BROKEN PIPELINE — pipe body with leaks, pressure-gauge head
+    const bw = 58, bodyH = 100;
+    const bodyY = -bodyH + bob;
+    ctx.fillStyle = hitFlash ? '#FF6666' : color;
+    ctx.fillRect(-bw / 2, bodyY, bw, bodyH);
+    // pipe flange bands
+    ctx.fillStyle = hitFlash ? '#FF9999' : '#991B1B';
+    for (let i = 0; i < 3; i++) ctx.fillRect(-bw / 2 - 6, bodyY + 10 + i * 28, bw + 12, 7);
+    // animated drips (left and right)
+    ctx.fillStyle = hitFlash ? '#FFB0B0' : '#FCA5A5';
+    [-bw / 2 - 6, bw / 2 - 2].forEach(lx => {
       for (let d = 0; d < 3; d++) {
-        const dy = (fr * 2 + d * 20) % 60;
-        ctx.beginPath(); ctx.arc(lx + (lx < 0 ? -4 : 4), bodyY + 10 + dy, 4, 0, Math.PI * 2); ctx.fill();
+        const dy = (fr * 2 + d * 22) % 70;
+        ctx.beginPath(); ctx.arc(lx + (lx < 0 ? -5 : 5), bodyY + 14 + dy, 5, 0, Math.PI * 2); ctx.fill();
       }
     });
     // pressure-gauge head
-    ctx.fillStyle = color;
-    ctx.beginPath(); ctx.arc(0, bodyY - 22, HR, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = '#fff'; ctx.fillRect(-7, bodyY - 28, 14, 7);
-    ctx.strokeStyle = '#FF0000'; ctx.lineWidth = 2.5;
-    ctx.beginPath(); ctx.moveTo(-11, bodyY - 14); ctx.lineTo(-4, bodyY - 11); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(11, bodyY - 14); ctx.lineTo(4, bodyY - 11); ctx.stroke();
+    const headR = 22;
+    ctx.fillStyle = hitFlash ? '#FF6666' : color;
+    ctx.beginPath(); ctx.arc(0, bodyY - headR, headR, 0, Math.PI * 2); ctx.fill();
+    // steam release gauge
+    ctx.fillStyle = '#fff'; ctx.fillRect(-8, bodyY - headR - 8, 16, 8);
+    // angry eyebrows
+    ctx.strokeStyle = '#FF0000'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(-13, bodyY - headR + 6); ctx.lineTo(-5, bodyY - headR + 10); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(13, bodyY - headR + 6); ctx.lineTo(5, bodyY - headR + 10); ctx.stroke();
     if (atkExt > 0) {
-      ctx.fillStyle = color; ctx.fillRect(bw / 2, bodyY + 10, 52 * atkExt, 14);
-      if (f.anim === 'special') {
-        ctx.fillStyle = '#FCA5A5';
-        for (let i = 0; i < 5; i++) {
-          ctx.beginPath();
-          ctx.arc(bw / 2 + 52 * atkExt + (i * 7 - 14), bodyY + (i * 6 - 10), 5, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
+      ctx.fillStyle = hitFlash ? '#FF6666' : color;
+      ctx.fillRect(bw / 2, bodyY + 20, 58 * atkExt, 16);
     }
 
   } else {
-    // THE AI IMPOSTOR — glitchy dashed outline, binary eyes, color artifacts
+    // THE AI IMPOSTOR — dashed glitchy body, binary face
+    const bw = 65, bodyH = 100;
     const glitch = Math.sin(fr * 0.31) > 0.72 ? (fr % 3) - 1 : 0;
-    const bodyY  = -FH + bob;
-    ctx.strokeStyle = color; ctx.lineWidth = 3; ctx.setLineDash([8, 4]);
-    ctx.strokeRect(-FW / 2 + glitch, bodyY, FW, FH);
+    const bodyY  = -bodyH + bob;
+    ctx.strokeStyle = hitFlash ? '#FF6666' : color;
+    ctx.lineWidth   = 3.5;
+    ctx.setLineDash([9, 5]);
+    ctx.strokeRect(-bw / 2 + glitch, bodyY, bw, bodyH);
     ctx.setLineDash([]);
-    ctx.fillStyle = color + '44';
-    ctx.fillRect(-FW / 2 + glitch, bodyY, FW, FH);
-    // head
-    ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.setLineDash([6, 3]);
-    ctx.beginPath(); ctx.arc(glitch, bodyY - HR, HR, 0, Math.PI * 2); ctx.stroke();
+    ctx.fillStyle = (hitFlash ? '#FF000033' : color + '33');
+    ctx.fillRect(-bw / 2 + glitch, bodyY, bw, bodyH);
+    // glitchy head
+    const headR = 22;
+    ctx.strokeStyle = hitFlash ? '#FF6666' : color;
+    ctx.lineWidth   = 2.5;
+    ctx.setLineDash([7, 4]);
+    ctx.beginPath(); ctx.arc(glitch, bodyY - headR, headR, 0, Math.PI * 2); ctx.stroke();
     ctx.setLineDash([]);
-    // binary label
-    px(ctx, 7); ctx.textAlign = 'center';
-    ctx.fillStyle = color; ctx.fillText('01', glitch, bodyY - HR + 5);
-    // random artifact (deterministic by frame)
-    if ((fr * 7) % 13 < 3) {
-      ctx.fillStyle = color + '88';
-      ctx.fillRect(-FW / 2 + (fr % 18), bodyY + (fr % FH), (fr % 24) + 8, 4);
+    // binary display face
+    px(ctx, 8); ctx.textAlign = 'center';
+    ctx.fillStyle = hitFlash ? '#FF6666' : color;
+    ctx.fillText('01', glitch, bodyY - headR + 6);
+    // scan-line artifact (deterministic)
+    if ((fr * 7) % 11 < 3) {
+      ctx.fillStyle = color + '77';
+      ctx.fillRect(-bw / 2 + (fr % 20), bodyY + (fr % bodyH), (fr % 26) + 10, 4);
     }
     if (atkExt > 0) {
-      ctx.setLineDash([4, 2]);
-      ctx.strokeStyle = color; ctx.lineWidth = 4;
-      ctx.strokeRect(FW / 2, bodyY + 14, 46 * atkExt, 13);
+      ctx.setLineDash([5, 3]);
+      ctx.strokeStyle = hitFlash ? '#FF6666' : color; ctx.lineWidth = 4;
+      ctx.strokeRect(bw / 2, bodyY + 20, 52 * atkExt, 15);
       ctx.setLineDash([]);
     }
   }
+
+  ctx.restore();
 }
 
 // ── Portrait helper ───────────────────────────────────────────────
@@ -521,15 +585,15 @@ function drawArena(
   // Shadows
   const p = g.player, b = g.boss;
   ctx.fillStyle = 'rgba(0,0,0,0.3)';
-  ctx.beginPath(); ctx.ellipse(p.x, g.groundY + 6, 28, 8, 0, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.ellipse(b.x, g.groundY + 6, 32, 9, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(p.x, g.groundY + 6, 48, 10, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(b.x, g.groundY + 6, 42, 10, 0, 0, Math.PI * 2); ctx.fill();
 
-  // Player sprite
+  // Player sprite (portrait photo)
   ctx.save();
   ctx.translate(p.x, p.y);
   if (p.facing === -1) ctx.scale(-1, 1);
   if (p.iframes > 0 && Math.floor(g.frame / 4) % 2 === 0) ctx.globalAlpha = 0.3;
-  drawPlayer(ctx, p, fi.color, g.frame);
+  drawPortraitFighter(ctx, p, imgs[fi.id], fi.color, g.frame);
   ctx.globalAlpha = 1;
   ctx.restore();
 
