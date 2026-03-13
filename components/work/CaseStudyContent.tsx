@@ -68,7 +68,7 @@ export function CaseStudyContent({ study, prev, next }: CaseStudyContentProps) {
                   src={study.cardImage}
                   alt={`${study.client} — work`}
                   fill
-                  className="object-cover"
+                  className="object-contain"
                   sizes="(max-width: 1280px) 100vw, 1280px"
                   priority
                 />

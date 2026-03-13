@@ -25,7 +25,7 @@ export function CaseStudyCard({ study, index }: CaseStudyCardProps) {
               src={study.cardImage}
               alt={study.client}
               fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              className="object-contain transition-transform duration-500 group-hover:scale-105"
               sizes="(max-width: 768px) 100vw, 50vw"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60" />
