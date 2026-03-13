@@ -7,6 +7,7 @@ import { ScrollProgress } from '@/components/ScrollProgress';
 import { RelatedContent } from '@/components/insights/RelatedContent';
 import { CtaStrip } from '@/components/insights/CtaStrip';
 import { getPublishedNewsItemById, getAllNewsIds, NewsItem } from '@/lib/resources-db';
+import { ContentRenderer } from '@/components/insights/ContentRenderer';
 import { newsBreadcrumb } from '@/lib/schema/breadcrumbs';
 
 export const dynamicParams = true;
@@ -150,13 +151,7 @@ export default async function NewsDetailPage({
           {item.commentary && (
             <section className="glass rounded-xl p-8 mb-10 border-l-4 border-[#088BA0]">
               <h2 className="text-xl font-semibold text-white mb-4">Our Take</h2>
-              <div>
-                {item.commentary.split('\n\n').map((paragraph, i) => (
-                  <p key={i} className="leading-relaxed mb-4 last:mb-0">
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
+              <ContentRenderer content={item.commentary} />
             </section>
           )}
 
