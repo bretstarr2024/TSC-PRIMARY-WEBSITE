@@ -211,15 +211,18 @@ ADDITIONAL RULES:
 - Include at least one concrete example, scenario, or data point per section
 - If the topic relates to a product or service in the kernel context, reference it naturally`;
 
-  const user = `Write a comprehensive, AEO-optimized blog post about: ${topic}
+  const user = `MINIMUM LENGTH REQUIREMENT: The "content" field MUST contain at least 1,500 words. Do not stop writing until you reach 1,500 words. Shorter responses will be automatically rejected and regenerated.
+
+Write a comprehensive, AEO-optimized blog post about: ${topic}
 
 Context from TSC's GTM Kernel:
 ${context}
 
 Requirements:
-- 1500-2000 words minimum
+- "content" field: 1,500 words MINIMUM — count your words, write until you reach this count
 - Every H2 must be phrased as a question
-- Include FAQ section at end with 3+ questions
+- 5-7 H2 sections, each 200-300 words
+- Include FAQ section at end with 3+ questions (adds ~300 more words)
 - Include [INTERNAL_LINK: ...] placeholders for at least 2 related topics
 - Opening paragraph must directly answer the topic as a standalone snippet
 
