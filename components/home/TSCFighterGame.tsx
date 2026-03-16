@@ -20,6 +20,12 @@ interface Fighter {
 
 interface HighScore { initials: string; score: number; }
 
+interface Impact {
+  x: number; y: number;
+  timer: number; maxTimer: number;
+  color: string; type: 'punch' | 'kick' | 'special';
+}
+
 interface G {
   phase: Phase; frame: number;
   hovered: number; selected: number;
@@ -33,6 +39,7 @@ interface G {
   initialsChars: number[]; initialsPos: number;
   scoreSubmitted: boolean; scoreIndex: number;
   highScores: HighScore[];
+  impacts: Impact[];
 }
 
 // ── Static data ───────────────────────────────────────────────────
@@ -137,22 +144,24 @@ function initState(w: number, h: number): G {
     initialsChars: [0, 0, 0], initialsPos: 0,
     scoreSubmitted: false, scoreIndex: -1,
     highScores: loadHS(),
+    impacts: [],
   };
 }
 
 // ── Combat ────────────────────────────────────────────────────────
-function tryAttack(atk: Fighter, def: Fighter, move: 'punch' | 'kick' | 'special', sfx: SFX) {
-  if (def.iframes > 0 || def.anim === 'dead') return;
+function tryAttack(atk: Fighter, def: Fighter, move: 'punch' | 'kick' | 'special', sfx: SFX): boolean {
+  if (def.iframes > 0 || def.anim === 'dead') return false;
   const range = move === 'punch' ? PUNCH_RANGE : move === 'kick' ? KICK_RANGE : SPEC_RANGE;
   const dmg   = move === 'punch' ? PUNCH_DMG   : move === 'kick' ? KICK_DMG   : SPECIAL_DMG;
   const dx = (def.x - atk.x) * atk.facing;
-  if (dx < -20 || dx > range) return;
-  if (Math.abs(def.y - atk.y) > 90) return;
+  if (dx < -20 || dx > range) return false;
+  if (Math.abs(def.y - atk.y) > 90) return false;
   def.health    = Math.max(0, def.health - dmg);
   def.anim      = 'hit'; def.animTimer = 0; def.iframes = IFRAME_DUR;
   def.vx        = atk.facing * (move === 'special' ? 7 : move === 'kick' ? 4.5 : 3);
   if (move === 'special') def.vy = -6;
   sfx.hit();
+  return true;
 }
 
 // ── Drawing helpers ───────────────────────────────────────────────
@@ -241,35 +250,80 @@ function drawPortraitFighter(
 
   ctx.shadowBlur = 0;
 
-  // Attack swoosh effect (extends from front edge, fades out)
+  // Attack swoosh — fan of speed lines extending from front edge
   if (f.anim === 'punch' || f.anim === 'kick' || f.anim === 'special') {
     const dur  = f.anim === 'punch' ? PUNCH_DUR : f.anim === 'kick' ? KICK_DUR : SPECIAL_DUR;
-    const ext  = Math.min(1, f.animTimer / (dur * 0.5));
-    const fade = Math.max(0, 1 - (f.animTimer / dur) * 1.4);
-    const ex   = PW / 2 + lunge + 4;
+    const ext  = Math.min(1, f.animTimer / (dur * 0.45));
+    const fade = Math.max(0, 1 - (f.animTimer / dur) * 1.3);
+    const ex   = PW / 2 + lunge + 6;
 
+    ctx.save();
     ctx.globalAlpha = fade;
-    ctx.strokeStyle = color;
-    ctx.lineCap     = 'round';
+    ctx.lineCap = 'round';
+    ctx.shadowBlur = 12; ctx.shadowColor = color;
 
     if (f.anim === 'punch') {
-      ctx.lineWidth = 5;
-      ctx.beginPath(); ctx.moveTo(ex, -PH * 0.6 + bob); ctx.lineTo(ex + 65 * ext, -PH * 0.55 + bob); ctx.stroke();
-      ctx.lineWidth = 3;
-      ctx.beginPath(); ctx.moveTo(ex + 8, -PH * 0.72 + bob); ctx.lineTo(ex + 55 * ext, -PH * 0.68 + bob); ctx.stroke();
+      // 7 speed lines fanning around mid-chest height
+      const cy = -PH * 0.58 + bob;
+      const angles = [-22, -12, -4, 2, 8, 16, 26];
+      const lens   = [ 44,  58, 72, 80, 72, 58, 44];
+      const widths = [  2,   3,  5,  6,  5,  3,  2];
+      angles.forEach((deg, i) => {
+        const rad = deg * Math.PI / 180;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = widths[i];
+        ctx.beginPath();
+        ctx.moveTo(ex, cy);
+        ctx.lineTo(ex + Math.cos(rad) * lens[i] * ext, cy + Math.sin(rad) * lens[i] * ext);
+        ctx.stroke();
+      });
+      // bright center flash on earliest frames
+      if (ext < 0.4) {
+        ctx.globalAlpha = fade * (1 - ext / 0.4) * 0.7;
+        ctx.fillStyle = '#fff';
+        ctx.beginPath(); ctx.arc(ex, cy, 8, 0, Math.PI * 2); ctx.fill();
+      }
     } else if (f.anim === 'kick') {
-      ctx.lineWidth = 5;
-      ctx.beginPath(); ctx.moveTo(ex - 10, -PH * 0.35 + bob); ctx.lineTo(ex + 60 * ext, -PH * 0.2 + bob); ctx.stroke();
-      ctx.lineWidth = 3;
-      ctx.beginPath(); ctx.moveTo(ex, -PH * 0.5 + bob); ctx.lineTo(ex + 50 * ext, -PH * 0.3 + bob); ctx.stroke();
+      // 7 lines fanning downward-forward from hip height
+      const cy = -PH * 0.32 + bob;
+      const angles = [-5, 8, 18, 28, 38, 50, 62];
+      const lens   = [40, 55, 70, 78, 70, 55, 40];
+      const widths = [ 2,  3,  5,  6,  5,  3,  2];
+      angles.forEach((deg, i) => {
+        const rad = deg * Math.PI / 180;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = widths[i];
+        ctx.beginPath();
+        ctx.moveTo(ex, cy);
+        ctx.lineTo(ex + Math.cos(rad) * lens[i] * ext, cy + Math.sin(rad) * lens[i] * ext);
+        ctx.stroke();
+      });
+      if (ext < 0.4) {
+        ctx.globalAlpha = fade * (1 - ext / 0.4) * 0.7;
+        ctx.fillStyle = '#fff';
+        ctx.beginPath(); ctx.arc(ex, cy, 8, 0, Math.PI * 2); ctx.fill();
+      }
     } else {
-      ctx.lineWidth = 4;
-      ctx.beginPath(); ctx.arc(ex + 20, -PH * 0.5 + bob, 18 + 22 * ext, 0, Math.PI * 2); ctx.stroke();
-      ctx.beginPath(); ctx.arc(ex + 8,  -PH * 0.3 + bob, 10 + 14 * ext, 0, Math.PI * 2); ctx.stroke();
+      // Special: expanding ring burst with spikes
+      const cy = -PH * 0.5 + bob;
+      const r1 = (16 + 30 * ext);
+      const r2 = r1 * 0.5;
+      const spikes = 10;
+      ctx.strokeStyle = SCORE_C; ctx.lineWidth = 3;
+      ctx.beginPath();
+      for (let i = 0; i < spikes * 2; i++) {
+        const a = (i / (spikes * 2)) * Math.PI * 2 - Math.PI / 2;
+        const r = i % 2 === 0 ? r1 : r2;
+        if (i === 0) ctx.moveTo(ex + Math.cos(a) * r, cy + Math.sin(a) * r);
+        else ctx.lineTo(ex + Math.cos(a) * r, cy + Math.sin(a) * r);
+      }
+      ctx.closePath(); ctx.stroke();
+      // second smaller ring
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(ex, cy, r1 * 1.3, 0, Math.PI * 2); ctx.stroke();
     }
 
-    ctx.globalAlpha = 1;
-    ctx.lineCap     = 'butt';
+    ctx.restore();
   }
 
   ctx.restore();
@@ -386,6 +440,51 @@ function drawBoss(ctx: CanvasRenderingContext2D, f: Fighter, idx: number, fr: nu
       ctx.setLineDash([]);
     }
   }
+
+  ctx.restore();
+}
+
+// ── Impact burst ──────────────────────────────────────────────────
+// Drawn in world space at the defender's position when a hit lands.
+function drawImpact(ctx: CanvasRenderingContext2D, imp: Impact) {
+  const t = imp.timer / imp.maxTimer;       // 0→1
+  const fade  = Math.pow(1 - t, 0.6);       // fast fade
+  const scale = 0.3 + t * 1.1;             // expands outward
+
+  const r1 = (imp.type === 'special' ? 46 : imp.type === 'kick' ? 32 : 24) * scale;
+  const r2 = r1 * 0.42;
+  const spikes = imp.type === 'special' ? 14 : imp.type === 'kick' ? 10 : 8;
+
+  ctx.save();
+  ctx.globalAlpha = fade;
+  ctx.translate(imp.x, imp.y);
+  ctx.shadowBlur  = 28 * fade;
+  ctx.shadowColor = imp.color;
+
+  // Starburst fill
+  ctx.fillStyle = imp.color;
+  ctx.beginPath();
+  for (let i = 0; i < spikes * 2; i++) {
+    const a = (i / (spikes * 2)) * Math.PI * 2 - Math.PI / 2;
+    const r = i % 2 === 0 ? r1 : r2;
+    if (i === 0) ctx.moveTo(Math.cos(a) * r, Math.sin(a) * r);
+    else ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r);
+  }
+  ctx.closePath();
+  ctx.fill();
+
+  // White-hot core flash (first ~30% of life only)
+  if (t < 0.3) {
+    ctx.globalAlpha = fade * ((0.3 - t) / 0.3);
+    ctx.fillStyle = '#FFFFFF';
+    ctx.beginPath(); ctx.arc(0, 0, r2 * 0.9, 0, Math.PI * 2); ctx.fill();
+  }
+
+  // Outer ring
+  ctx.globalAlpha = fade * 0.5;
+  ctx.strokeStyle = imp.color;
+  ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.arc(0, 0, r1 * 1.25, 0, Math.PI * 2); ctx.stroke();
 
   ctx.restore();
 }
@@ -605,6 +704,9 @@ function drawArena(
   drawBoss(ctx, b, g.bossIndex, g.frame);
   ctx.globalAlpha = 1;
   ctx.restore();
+
+  // Impact bursts
+  g.impacts.forEach(imp => drawImpact(ctx, imp));
 
   // Controls hint
   if (!showTouch) txt(ctx, '← → MOVE   ↑ JUMP   Z PUNCH   X KICK   S SPECIAL   M MUTE', w / 2, h - 12, '#444', 5);
@@ -941,7 +1043,10 @@ export function TSCFighterGame({ onClose }: { onClose: () => void }) {
       if (p.anim === 'punch' || p.anim === 'kick' || p.anim === 'special') {
         p.animTimer++;
         const dur = p.anim === 'punch' ? PUNCH_DUR : p.anim === 'kick' ? KICK_DUR : SPECIAL_DUR;
-        if (p.animTimer === Math.floor(dur / 2)) tryAttack(p, b, p.anim, sfx);
+        if (p.animTimer === Math.floor(dur / 2)) {
+          const hit = tryAttack(p, b, p.anim, sfx);
+          if (hit) g.impacts.push({ x: b.x, y: b.y - 80, timer: 0, maxTimer: 22, color: FIGHTERS[g.selected].color, type: p.anim });
+        }
         if (p.animTimer >= dur) { p.anim = p.onGround ? 'idle' : 'jump'; p.animTimer = 0; }
       }
       if (p.anim === 'hit') { p.animTimer++; if (p.animTimer >= HIT_DUR) { p.anim = p.onGround ? 'idle' : 'jump'; p.animTimer = 0; } }
@@ -980,7 +1085,10 @@ export function TSCFighterGame({ onClose }: { onClose: () => void }) {
       if (b.anim === 'punch' || b.anim === 'kick' || b.anim === 'special') {
         b.animTimer++;
         const dur = b.anim === 'punch' ? PUNCH_DUR : b.anim === 'kick' ? KICK_DUR : SPECIAL_DUR;
-        if (b.animTimer === Math.floor(dur / 2)) tryAttack(b, p, b.anim, sfx);
+        if (b.animTimer === Math.floor(dur / 2)) {
+          const hit = tryAttack(b, p, b.anim, sfx);
+          if (hit) g.impacts.push({ x: p.x, y: p.y - 80, timer: 0, maxTimer: 22, color: BOSSES[g.bossIndex].color, type: b.anim });
+        }
         if (b.animTimer >= dur) { b.anim = b.onGround ? 'idle' : 'walk'; b.animTimer = 0; g.bossAttackTimer = rnd(BOSS_ATK_MIN, BOSS_ATK_MAX); }
       }
       if (b.anim === 'hit') { b.animTimer++; if (b.animTimer >= HIT_DUR) { b.anim = b.onGround ? 'idle' : 'walk'; b.animTimer = 0; } }
@@ -997,6 +1105,9 @@ export function TSCFighterGame({ onClose }: { onClose: () => void }) {
         g.phase = 'ROUND_WIN'; g.phaseTimer = 0;
         sfx.ko(); setTimeout(() => sfx.victory(), 500);
       }
+
+      // Tick impact effects
+      g.impacts = g.impacts.filter(imp => { imp.timer++; return imp.timer < imp.maxTimer; });
 
       drawArena(ctx, g, imgs.current, w, h, btnsRef.current, ta, showTouch.current);
       prevTouch.current = { ...ta };
