@@ -447,11 +447,13 @@ export async function GET(request: NextRequest) {
             ? prompts.user
             : `CORRECTION REQUIRED — your previous draft was rejected for the following reasons:\n${lastFailureReasons.map(r => `- ${r}`).join('\n')}\n\nFix ALL issues listed above, then regenerate the full content.\n\n---\n\n${prompts.user}`;
 
-          // Call OpenAI
+          // Call OpenAI — give all types generous headroom; long-form gets max
+          const maxTokens = ['blog_post', 'case_study', 'industry_brief'].includes(contentType) ? 16000 : 8000;
           const openaiResult = await callOpenAI({
             systemPrompt: prompts.system,
             userPrompt,
             contentId: itemId,
+            maxTokens,
           });
           totalSpend += openaiResult.estimatedCost;
 
