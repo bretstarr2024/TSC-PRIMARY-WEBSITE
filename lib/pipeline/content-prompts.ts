@@ -30,11 +30,20 @@ The GTM Kernel is NOT a framework. It is a machine-readable strategic artifact (
 - RIGHT: "TSC's GTM Kernel", "the GTM Kernel system", "the GTM Kernel (TSC's strategic operating system)"
 Never call it a framework, methodology, model, or approach.
 
-ADDITIONAL FORBIDDEN TERMS (on top of what the kernel specifies):
-- "fractional CMO" → never use this phrase in content
+ZERO-TOLERANCE FORBIDDEN TERMS — content will be automatically rejected if any of these appear:
+Brand terminology (TSC-specific — these apply to how we talk about our OWN business):
+- "customer" or "customers" → ALWAYS write "client" or "clients" (TSC calls its buyers clients, never customers)
+- "contract" → ALWAYS write "engagement"
+- "vendor" → ALWAYS write "partner"
+- "thought leader" or "thought leadership" → write "expert content," "authority building," or "subject matter expert"
+- "synergy" → write "alignment," "integration," or describe the specific connection
+- "fractional CMO" → never use this phrase
 - "pioneers of AEO" → never use this phrase
-- "thought leadership" → use "expert content" or "authority building" instead
-- Specific client company names → NEVER name-drop. Use "a B2B SaaS company", not real names.
+- Specific client company names → NEVER name-drop. Use "a B2B SaaS company" or "a mid-market tech company," never real names.
+
+NOTE: When writing about OTHER companies' customers (e.g., "B2B companies and their buyers"), you may use industry-standard terms like "buyers," "end users," or "prospects" — but never "customer/customers" in any context.
+
+Before generating your response, scan for ALL terms above and replace every instance. Zero exceptions.
 
 PUNCTUATION (hard rules — will cause rejection if violated):
 - Em dashes (—) → NEVER use. Use commas, periods, or parentheses instead.
@@ -108,7 +117,7 @@ OUTPUT FORMAT: Valid JSON with these fields:
   "faqId": "url-friendly-id",
   "question": "The question",
   "answer": "The answer (200-400 words, markdown allowed)",
-  "category": "One of: strategy, demand-generation, ai-transformation, leadership, operations",
+  "category": "strategy",  // MUST be exactly one of: strategy | demand-generation | ai-transformation | leadership | operations
   "tags": ["tag1", "tag2", "tag3"],
   "answerCapsule": "20-25 word standalone answer for AI citation"
 }
@@ -150,7 +159,7 @@ OUTPUT FORMAT: Valid JSON with these fields:
   "examples": ["Example 1", "Example 2"],
   "synonyms": ["synonym1"],
   "relatedTerms": ["related-term-id"],
-  "category": "One of: strategy, marketing, technology, analytics, leadership",
+  "category": "strategy",  // MUST be exactly one of: strategy | marketing | technology | analytics | leadership
   "tags": ["tag1", "tag2", "tag3"]
 }
 
@@ -179,7 +188,7 @@ OUTPUT FORMAT: Valid JSON with these fields:
   "title": "The Title (no colons, stated as a claim or question)",
   "description": "SEO meta description (140-160 chars, includes primary keyword)",
   "content": "Full article body (1500-2000 words, markdown)",
-  "author": "One of: Bret Starr, Racheal Bates, JJ La Pata",
+  "author": "Bret Starr",  // MUST be exactly one of: "Bret Starr" | "Racheal Bates" | "JJ La Pata" — rotate naturally, use exact string
   "tags": ["tag1", "tag2", "tag3"]
 }
 
@@ -312,9 +321,9 @@ OUTPUT FORMAT: Valid JSON with these fields:
   "summary": "2-3 sentence summary of the actual news",
   "commentary": "The company's perspective and analysis (200-400 words, markdown with ## headers)",
   "source": {"name": "${article?.sourceName || 'Source Name'}", "url": "${article?.url || ''}", "publishedAt": "${article?.publishedAt || new Date().toISOString()}"},
-  "category": "One of: marketing, ai, industry, research",
-  "sentiment": "positive, neutral, or negative",
-  "impact": "high, medium, or low",
+  "category": "marketing",  // MUST be exactly one of: marketing | ai | industry | research
+  "sentiment": "neutral",  // MUST be exactly one of: positive | neutral | negative
+  "impact": "medium",  // MUST be exactly one of: high | medium | low
   "tags": ["tag1", "tag2"]
 }
 
@@ -394,7 +403,7 @@ OUTPUT FORMAT: Valid JSON with these fields:
   "keyFindings": ["Finding 1", "Finding 2", "Finding 3"],
   "recommendations": ["Recommendation 1", "Recommendation 2"],
   "sources": [{"name": "Source Name", "url": "https://...", "publishedAt": "2026-01-01"}],
-  "author": "One of: Bret Starr, Racheal Bates, JJ La Pata",
+  "author": "Bret Starr",  // MUST be exactly one of: "Bret Starr" | "Racheal Bates" | "JJ La Pata" — rotate naturally, use exact string
   "tags": ["tag1", "tag2"]
 }
 
@@ -434,7 +443,7 @@ OUTPUT FORMAT: Valid JSON with these fields:
   "description": "Detailed description of what the video covers (300-500 words, markdown)",
   "duration": "Estimated duration (e.g., '8:30')",
   "answerCapsule": "20-25 word standalone summary for AI citation",
-  "speaker": "One of: Bret Starr, Racheal Bates, JJ La Pata",
+  "speaker": "Bret Starr",  // MUST be exactly one of: "Bret Starr" | "Racheal Bates" | "JJ La Pata" — rotate naturally, use exact string
   "tags": ["tag1", "tag2"]
 }
 

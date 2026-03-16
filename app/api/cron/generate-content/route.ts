@@ -435,65 +435,93 @@ export async function GET(request: NextRequest) {
           continue;
         }
 
-        // Call OpenAI
-        const openaiResult = await callOpenAI({
-          systemPrompt: prompts.system,
-          userPrompt: prompts.user,
-          contentId: itemId,
-        });
-        totalSpend += openaiResult.estimatedCost;
+        // Generate with up to 1 retry on quality failure
+        const MAX_ATTEMPTS = 2;
+        let cleanData: Record<string, unknown> | null = null;
+        let quality: ReturnType<typeof runPostGenerationChecks> | null = null;
+        let lastFailureReasons: string[] = [];
 
-        // Parse + validate with Zod
-        const parsed = parseGeneratedContent(openaiResult.content, contentType);
-        if (!parsed.success) {
-          await markQueueItemFailed(itemId, parsed.error);
-          await logClassifiedError(
-            itemId,
-            classifyError(new Error(parsed.error), 'content_validation'),
-            Date.now() - startTime,
-            { pipelineRunId, rawResponse: parsed.rawResponse }
-          );
-          results.push({ contentType, title: item.title || '', status: 'failed', reason: parsed.error });
-          continue;
-        }
+        for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+          // On retry, prepend correction instruction to user prompt
+          const userPrompt = attempt === 1
+            ? prompts.user
+            : `CORRECTION REQUIRED — your previous draft was rejected for the following reasons:\n${lastFailureReasons.map(r => `- ${r}`).join('\n')}\n\nFix ALL issues listed above, then regenerate the full content.\n\n---\n\n${prompts.user}`;
 
-        const data = parsed.data as Record<string, unknown>;
+          // Call OpenAI
+          const openaiResult = await callOpenAI({
+            systemPrompt: prompts.system,
+            userPrompt,
+            contentId: itemId,
+          });
+          totalSpend += openaiResult.estimatedCost;
 
-        // Post-process: enforce brand voice substitutions the LLM sometimes misses
-        // "customer(s)" → "client(s)" per TSC brand guidelines
-        const applyBrandSubstitutions = (val: unknown): unknown => {
-          if (typeof val === 'string') {
-            return val
-              .replace(/\bcustomers\b/gi, 'clients')
-              .replace(/\bcustomer\b/gi, 'client');
-          }
-          if (Array.isArray(val)) return val.map(applyBrandSubstitutions);
-          if (val && typeof val === 'object') {
-            return Object.fromEntries(
-              Object.entries(val as Record<string, unknown>).map(([k, v]) => [k, applyBrandSubstitutions(v)])
+          // Parse + validate with Zod
+          const parsed = parseGeneratedContent(openaiResult.content, contentType);
+          if (!parsed.success) {
+            // Parse errors are not retryable — bad JSON structure won't improve on retry
+            await markQueueItemFailed(itemId, parsed.error);
+            await logClassifiedError(
+              itemId,
+              classifyError(new Error(parsed.error), 'content_validation'),
+              Date.now() - startTime,
+              { pipelineRunId, rawResponse: parsed.rawResponse }
             );
+            results.push({ contentType, title: item.title || '', status: 'failed', reason: parsed.error });
+            break;
           }
-          return val;
-        };
-        const cleanData = applyBrandSubstitutions(data) as Record<string, unknown>;
 
-        // Resolve [INTERNAL_LINK: topic] placeholders — only uses DB-verified URLs, strips if no match
-        const markdownFields = ['content', 'answer', 'fullDefinition', 'commentary', 'approach', 'results'];
-        for (const field of markdownFields) {
-          if (typeof cleanData[field] === 'string') {
-            cleanData[field] = await resolveInternalLinks(cleanData[field] as string);
+          const data = parsed.data as Record<string, unknown>;
+
+          // Post-process: enforce brand voice substitutions the LLM sometimes misses
+          const applyBrandSubstitutions = (val: unknown): unknown => {
+            if (typeof val === 'string') {
+              return val
+                .replace(/\bcustomers\b/gi, 'clients')
+                .replace(/\bcustomer\b/gi, 'client');
+            }
+            if (Array.isArray(val)) return val.map(applyBrandSubstitutions);
+            if (val && typeof val === 'object') {
+              return Object.fromEntries(
+                Object.entries(val as Record<string, unknown>).map(([k, v]) => [k, applyBrandSubstitutions(v)])
+              );
+            }
+            return val;
+          };
+          const substituted = applyBrandSubstitutions(data) as Record<string, unknown>;
+
+          // Resolve [INTERNAL_LINK: topic] placeholders
+          const markdownFields = ['content', 'answer', 'fullDefinition', 'commentary', 'approach', 'results'];
+          for (const field of markdownFields) {
+            if (typeof substituted[field] === 'string') {
+              substituted[field] = await resolveInternalLinks(substituted[field] as string);
+            }
           }
+
+          // Quality checks
+          const primaryText = getPrimaryTextField(contentType, substituted);
+          const qualityResult = runPostGenerationChecks(primaryText, contentType);
+
+          if (qualityResult.passed) {
+            cleanData = substituted;
+            quality = qualityResult;
+            break; // success
+          }
+
+          // Quality failed
+          lastFailureReasons = qualityResult.issues;
+          console.log(`[Generate] Attempt ${attempt}/${MAX_ATTEMPTS} failed for "${item.title}": ${qualityResult.issues.join('; ')}`);
+
+          if (attempt === MAX_ATTEMPTS) {
+            // All attempts exhausted
+            const reason = `Quality check failed after ${MAX_ATTEMPTS} attempts: ${qualityResult.issues.join('; ')}`;
+            await markQueueItemFailed(itemId, reason);
+            results.push({ contentType, title: item.title || '', status: 'failed', reason });
+          }
+          // else: loop continues with correction prompt
         }
 
-        // Quality checks
-        const primaryText = getPrimaryTextField(contentType, cleanData);
-        const quality = runPostGenerationChecks(primaryText, contentType);
-
-        if (!quality.passed) {
-          await markQueueItemFailed(itemId, `Quality check failed: ${quality.issues.join('; ')}`);
-          results.push({ contentType, title: item.title || '', status: 'failed', reason: quality.issues.join('; ') });
-          continue;
-        }
+        // If generation didn't produce clean data (parse error or all retries failed), skip to next item
+        if (!cleanData || !quality) continue;
 
         // Write to DB
         const contentId = await writeContentToDb(contentType, cleanData, item);
@@ -534,7 +562,7 @@ export async function GET(request: NextRequest) {
           pipelineRunId,
         });
 
-        results.push({ contentType, title: item.title || (data.title as string) || '', status: 'published' });
+        results.push({ contentType, title: item.title || (cleanData.title as string) || '', status: 'published' });
       } catch (error) {
         // Duplicate key = content ID already exists; permanently reject so it never retries
         const isDuplicate = error instanceof Error && /E11000|duplicate key/i.test(error.message);
