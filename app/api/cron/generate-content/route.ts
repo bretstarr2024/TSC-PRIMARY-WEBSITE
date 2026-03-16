@@ -64,7 +64,7 @@ import {
   getVideoPrompts,
   getToolPrompts,
 } from '@/lib/pipeline/content-prompts';
-import { getClientConfig } from '@/lib/kernel/client';
+import { getClientConfigAsync } from '@/lib/kernel/client';
 import { buildKernelContext } from '@/lib/pipeline/context-builder';
 import { searchForNewsArticle, searchForBriefSources } from '@/lib/pipeline/news-search';
 import { resolveInternalLinks } from '@/lib/pipeline/internal-link-resolver';
@@ -80,7 +80,7 @@ async function getPromptsForItem(
   item: ContentQueueItem,
   context: string
 ): Promise<{ system: string; user: string } | null> {
-  const kernel = getClientConfig();
+  const kernel = await getClientConfigAsync();
   const title = item.title || '';
 
   switch (item.contentType) {

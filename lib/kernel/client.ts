@@ -2,9 +2,14 @@
  * Client config accessor.
  * Reads the generated kernel JSON for the current CLIENT_ID.
  * All components/pages import from here instead of hardcoding values.
+ *
+ * Two access modes:
+ *   getClientConfig()      — sync, reads build-time generated JSON (for SSR/components)
+ *   getClientConfigAsync() — async, fetches live from REST API if env vars are set (for cron jobs)
  */
 
 import type { ClientConfig } from './types';
+import { extractConfig } from './extract';
 
 // Cache the loaded config in memory
 let cachedConfig: ClientConfig | null = null;
@@ -41,6 +46,49 @@ export function getClientConfig(): ClientConfig {
     console.warn(`[kernel/client] Config not found for client "${clientId}", using fallback`);
     return getFallbackConfig(clientId);
   }
+}
+
+/**
+ * Fetch the latest kernel from the REST API and return a fresh ClientConfig.
+ * Falls back to getClientConfig() (build-time JSON) if env vars are not set or the API fails.
+ *
+ * Use this in cron jobs and server actions where freshness matters more than speed.
+ * env vars required: KERNEL_REST_URL, KERNEL_API_KEY, KERNEL_ID
+ */
+export async function getClientConfigAsync(): Promise<ClientConfig> {
+  const restUrl = process.env.KERNEL_REST_URL;
+  const apiKey = process.env.KERNEL_API_KEY;
+  const kernelId = process.env.KERNEL_ID;
+  const clientId = getClientId();
+
+  if (restUrl && apiKey && kernelId) {
+    try {
+      const response = await fetch(`${restUrl}/kernels/${kernelId}`, {
+        headers: { Authorization: `Bearer ${apiKey}` },
+        // Cache for 1 hour in Next.js fetch cache
+        next: { revalidate: 3600 },
+      });
+
+      if (response.ok) {
+        const json = await response.json();
+
+        // API response shape: { data: { identity, radical_buyer, product, ... } }
+        if (json.data) {
+          const config = extractConfig(json.data, clientId);
+          // Warm the sync cache so subsequent getClientConfig() calls in the same process get fresh data
+          cachedConfig = config;
+          cachedClientId = clientId;
+          return config;
+        }
+      } else {
+        console.warn(`[kernel/client] API returned ${response.status} — falling back to build-time config`);
+      }
+    } catch (err) {
+      console.warn('[kernel/client] API fetch failed — falling back to build-time config:', err);
+    }
+  }
+
+  return getClientConfig();
 }
 
 /**

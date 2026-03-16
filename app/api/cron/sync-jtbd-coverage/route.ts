@@ -13,7 +13,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getClientConfig } from '@/lib/kernel/client';
+import { getClientConfigAsync } from '@/lib/kernel/client';
 import { upsertQueryCoverage } from '@/lib/resources-db';
 import { logPipelineEvent } from '@/lib/pipeline/logger';
 import { verifyCronAuth } from '@/lib/cron-auth';
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'MONGODB_URI not configured' }, { status: 500 });
   }
 
-  const kernel = getClientConfig();
+  const kernel = await getClientConfigAsync();
   let totalUpserted = 0;
   const perCluster: Record<string, number> = {};
 
