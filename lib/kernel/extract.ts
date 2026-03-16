@@ -155,17 +155,47 @@ export function extractConfig(kernel: any, clientId: string): ClientConfig {
       hiringCriteria: j.hiring_criteria || [],
     })),
 
+    // offerings.provided can be either:
+    //   - object { categoryKey: [service, ...] }  (local YAML shape)
+    //   - array  [{ name, offering_type, ... }]    (REST API shape)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    offerings: Object.entries(offerings.provided || {}).map(([key, services]: [string, any]) => ({
-      categoryKey: key,
+    offerings: (() => {
+      const provided = offerings.provided;
+      if (Array.isArray(provided)) {
+        // API shape: flat array — group by offering_type
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const byType: Record<string, any[]> = {};
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        for (const s of (provided as any[])) {
+          const key = s.offering_type || 'services';
+          if (!byType[key]) byType[key] = [];
+          byType[key].push(s);
+        }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return Object.entries(byType).map(([key, services]: [string, any[]]) => ({
+          categoryKey: key,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          services: services.map((s: any) => ({
+            name: s.name || '',
+            description: s.description || '',
+            deliveryModel: s.delivery_model || '',
+            typicalScope: s.typical_scope || '',
+          })),
+        }));
+      }
+      // YAML shape: object keyed by category
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      services: (services || []).map((s: any) => ({
-        name: s.name || '',
-        description: s.description || '',
-        deliveryModel: s.delivery_model || '',
-        typicalScope: s.typical_scope || '',
-      })),
-    })),
+      return Object.entries(provided || {}).map(([key, services]: [string, any]) => ({
+        categoryKey: key,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        services: (services || []).map((s: any) => ({
+          name: s.name || '',
+          description: s.description || '',
+          deliveryModel: s.delivery_model || '',
+          typicalScope: s.typical_scope || '',
+        })),
+      }));
+    })(),
 
     constraints: {
       forbiddenTopics: constraints.content_restrictions?.forbidden_topics || [],
