@@ -14,7 +14,7 @@ export async function GET() {
     // Each game contributes 0–1000 normalized points to the total (max 10,000 across all 10 games).
     // Per-game leaderboards always show raw scores.
     const bestPerPlayerGamePipeline = [
-      { $match: { email: { $exists: true, $nin: [null, ''] } } },
+      { $match: { email: { $exists: true, $nin: [null, ''] }, game: { $ne: 'tsc-fighter' } } },
       // Best raw score per (player, game)
       {
         $group: {
@@ -27,7 +27,7 @@ export async function GET() {
 
     // ── Per-game top 10 ──
     const perGamePipeline = [
-      { $match: { email: { $exists: true, $nin: [null, ''] } } },
+      { $match: { email: { $exists: true, $nin: [null, ''] }, game: { $ne: 'tsc-fighter' } } },
       // Best score per player per game (grouped by email)
       {
         $group: {

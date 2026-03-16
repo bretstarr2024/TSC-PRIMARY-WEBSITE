@@ -21,9 +21,8 @@ interface LeaderboardData {
 }
 
 const GAME_ORDER = [
-  'tsc-fighter',
   'galaga', 'invaders', 'asteroids', 'breakout', 'pacman',
-  'snake', 'frogger', 'tron', 'pong', 'missile-command',
+  'frogger', 'tron', 'pong', 'missile-command',
 ];
 
 function Spinner() {

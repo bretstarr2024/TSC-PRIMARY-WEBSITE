@@ -14,6 +14,7 @@ interface RankResult {
   rank: number;
   total: number;
   gameLabel: string;
+  top5: { initials: string; score: number }[];
 }
 
 const overlayStyle: React.CSSProperties = {
@@ -101,12 +102,11 @@ export function ArcadeScoreCapture() {
           });
           if (res.ok) {
             const data = await res.json();
-            setRankResult({ rank: data.rank, total: data.total, gameLabel: data.gameLabel });
+            setRankResult({ rank: data.rank, total: data.total, gameLabel: data.gameLabel, top5: data.top5 ?? [] });
           }
         } catch { /* graceful degradation */ }
         setEmailDone(true);
         setVisible(true);
-        setTimeout(() => setVisible(false), 4000);
       } else {
         // No email yet — show form; score held until email provided
         setEmailDone(false);
@@ -144,7 +144,7 @@ export function ArcadeScoreCapture() {
         });
         if (res.ok) {
           const data = await res.json();
-          setRankResult({ rank: data.rank, total: data.total, gameLabel: data.gameLabel });
+          setRankResult({ rank: data.rank, total: data.total, gameLabel: data.gameLabel, top5: data.top5 ?? [] });
         }
       } catch {}
     }
@@ -209,19 +209,59 @@ export function ArcadeScoreCapture() {
           </>
         ) : (
           <>
-            <p style={{ color: '#73F5FF', fontSize: 14, marginBottom: 4 }}>
+            <p style={{ color: '#73F5FF', fontSize: 13, marginBottom: 16 }}>
               {email ? "You're on the board." : "Score recorded."}
             </p>
-            <p style={{ color: '#6D6D69', fontSize: 12, marginBottom: 20 }}>
-              {email ? 'All your game scores are now tracked together.' : 'Play more games to climb the leaderboard.'}
-            </p>
+
+            {/* Mini leaderboard */}
+            {rankResult && rankResult.top5.length > 0 && (
+              <div style={{ marginBottom: 20, textAlign: 'left' }}>
+                <p style={{ fontSize: 9, color: '#6D6D69', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 10 }}>
+                  Top scores — {rankResult.gameLabel}
+                </p>
+                {rankResult.top5.map((entry, i) => {
+                  const isMe = rankNum === rankResult.rank;
+                  const rankNum = i + 1;
+                  return (
+                    <div key={i} style={{
+                      display: 'flex', alignItems: 'center', gap: 10,
+                      padding: '7px 10px',
+                      marginBottom: 4,
+                      borderRadius: 6,
+                      background: isMe ? 'rgba(225,255,0,0.08)' : 'rgba(255,255,255,0.03)',
+                      border: isMe ? '1px solid rgba(225,255,0,0.25)' : '1px solid transparent',
+                    }}>
+                      <span style={{
+                        fontSize: 11, fontWeight: 'bold', minWidth: 20, textAlign: 'center',
+                        color: rankNum === 1 ? '#E1FF00' : rankNum === 2 ? '#73F5FF' : rankNum === 3 ? '#FF5910' : '#6D6D69',
+                      }}>
+                        {rankNum === 1 ? '🏆' : `#${rankNum}`}
+                      </span>
+                      <span style={{ fontSize: 12, fontWeight: 'bold', color: isMe ? '#E1FF00' : '#fff', letterSpacing: 1, flex: 1 }}>
+                        {entry.initials}
+                        {isMe && <span style={{ fontSize: 9, color: '#E1FF00', marginLeft: 6 }}>YOU</span>}
+                      </span>
+                      <span style={{ fontSize: 12, color: isMe ? '#E1FF00' : '#d1d1c6', fontFamily: 'monospace' }}>
+                        {entry.score.toLocaleString()}
+                      </span>
+                    </div>
+                  );
+                })}
+                {rankResult.rank > 5 && (
+                  <p style={{ fontSize: 10, color: '#6D6D69', textAlign: 'center', marginTop: 8 }}>
+                    You're #{rankResult.rank} of {rankResult.total.toLocaleString()}
+                  </p>
+                )}
+              </div>
+            )}
+
             <a
               href="/arcade-leaderboard"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ display: 'inline-block', color: '#E1FF00', fontSize: 13, fontWeight: 'bold', textDecoration: 'none' }}
+              style={{ display: 'inline-block', color: '#E1FF00', fontSize: 12, fontWeight: 'bold', textDecoration: 'none', letterSpacing: 1 }}
             >
-              View full leaderboard →
+              Full leaderboard →
             </a>
           </>
         )}

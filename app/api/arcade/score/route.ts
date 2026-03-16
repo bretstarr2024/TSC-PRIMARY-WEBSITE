@@ -51,9 +51,16 @@ export async function POST(request: Request) {
 
     // Calculate rank — email-only scores to match leaderboard
     const emailFilter = { email: { $exists: true, $nin: [null, ''] } };
-    const [rank, total] = await Promise.all([
+    const [rank, total, top5Raw] = await Promise.all([
       col.countDocuments({ game, score: { $gt: safeScore }, ...emailFilter }).then(n => n + 1),
       col.countDocuments({ game, ...emailFilter }),
+      col.aggregate([
+        { $match: { game, ...emailFilter } },
+        { $group: { _id: '$email', bestScore: { $max: '$score' }, initials: { $first: '$initials' } } },
+        { $sort: { bestScore: -1 } },
+        { $limit: 5 },
+        { $project: { _id: 0, initials: 1, score: '$bestScore' } },
+      ]).toArray(),
     ]);
 
     return NextResponse.json({
@@ -61,6 +68,7 @@ export async function POST(request: Request) {
       rank,
       total,
       gameLabel: GAME_LABELS[game],
+      top5: top5Raw,
     });
   } catch (err) {
     console.error('[arcade/score]', err);
